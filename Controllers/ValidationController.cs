@@ -23,10 +23,32 @@ public class ValidationController : Controller
     }
 
     [AcceptVerbs("GET", "POST")]
-    public bool CheckBirthDate(DateTime? BirhDate)
+    public bool CheckBirthDate(DateTime BirthDate)
     {
-        return !(BirhDate > DateTime.UtcNow) || !(BirhDate < DateTime.UtcNow.AddYears(-100));
+        if (BirthDate > DateTime.UtcNow)
+            return false;
+        else if (BirthDate < DateTime.UtcNow.AddYears(-100))
+            return false;
+        else
+            return true;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> EditCheckPhoneNumber(string value)
+    {
+        User? currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser!= null)
+            if (currentUser.PhoneNumber == value)
+                return Ok(true);
+        return Ok(CheckPhoneNumber(value));
+    }
+    
+    [AcceptVerbs("GET", "POST")]
+    public bool CheckPhoneNumber(string PhoneNumber)
+    {
+        return !_db.Users.Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
+    }
+
     
     [AcceptVerbs("GET", "POST")]
     public bool CheckUsername(string UserName)

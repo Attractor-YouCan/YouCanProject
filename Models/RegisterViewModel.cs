@@ -10,6 +10,7 @@ public class RegisterViewModel
     public string Email { get; set; }
     [Required(ErrorMessage = "Заполните поле Phone Number")]
     [RegularExpression(@"^0\d{9}$", ErrorMessage = "Заполните в формате x-цифра(0-9): 0 xxx xx xx xx")]
+    [Remote(action: "CheckPhoneNumber", controller:"Validation", ErrorMessage = "Данный PhoneNumber уже занят!")]
     public string PhoneNumber { get; set; }
     [Required(ErrorMessage = "Заполните поле Username")]
     [Remote(action: "CheckUsername", controller:"Validation", ErrorMessage = "Данный UserName уже занят!")]

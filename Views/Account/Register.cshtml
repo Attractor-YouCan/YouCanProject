@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col col-12 border border-1 py-4 px-5">
                             <h5> Регистрация </h5>
-                            <form asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+                            <form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
                                 <div class="input-group mt-5">
                                     <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
                                     <label for="email"><span class="text-danger" asp-validation-for="Email"></span></label>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="mt-2">
                                     <label for="file">Выберите фото профиля</label>
-                                    <input id="file" type="file" name="uploadedFile" class="form-control" required="required">
+                                    <input id="file" type="file" name="uploadedFile" class="form-control">
                                 </div>
                                 <div class="input-group mt-2">
                                     <label for="pass"><span class="text-danger" asp-validation-for="Password"></span></label>

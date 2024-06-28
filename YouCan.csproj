@@ -10,6 +10,9 @@
       <Compile Update="Models\RegisterViewModel.cs">
         <DependentUpon>User.cs</DependentUpon>
       </Compile>
+      <Compile Update="Models\LoginViewModel.cs">
+        <DependentUpon>User.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

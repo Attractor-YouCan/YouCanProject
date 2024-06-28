@@ -136,6 +136,8 @@ public class AccountController : Controller
         {
             User? user = await _userManager.FindByEmailAsync(model.LoginValue);
             if (user == null)
+                user = await _userManager.FindByNameAsync(model.LoginValue);
+            if (user == null)
                 user = await _db.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(model.LoginValue));
             if (user != null)
             {

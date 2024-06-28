@@ -6,6 +6,10 @@
 }
 
 <div class="row g-0 pt-5" id="profile">
+    <div class="col-md-4 pb-5 text-center border-bottom">
+        <img src="@Model.PhotoUrl" width="200" height="200" class="rounded-circle mx-auto ">
+    </div>
+    
     <div class="col-md-8 border-bottom">
         <div class="card-body">
             <div class="row">
@@ -140,7 +144,7 @@
             });
         }
     
-        
+   
         
         function onChange() {
             let password = document.querySelector('input[name=password]');
@@ -155,6 +159,22 @@
                     let phoneInput = document.querySelector('input[id=phone]');
                     let phoneError = document.getElementById('phoneError');
                     let phonePattern = /^0\d{9}$/;
+                    
+                    $.ajax({
+                                    type: 'GET',
+                                    url: '@Url.Action("EditCheckPhoneNumber", "Validation")',
+                                    contentType: 'application/json;charset=utf-8',
+                                    dataType: 'json',
+                                    data: { 'value': phoneInput.value},
+                                    success: function(result) {
+                                        if (!result) {
+                                            phoneInput.setCustomValidity(phoneInput.value + ' уже занят!');
+                                        } else {
+                                            phoneInput.setCustomValidity('');
+                                        }
+                                    }
+                                });
+                    
         
                     if (phonePattern.test(phoneInput.value)) {
                         phoneInput.setCustomValidity('');
