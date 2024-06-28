@@ -59,13 +59,17 @@ public class QuestionsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(int id, Question question)
+    public async Task<IActionResult> Create(int id, Question question, string? returnUrl)
     {
         if (ModelState.IsValid)
         {
             _context.Add(question);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index");
         }
         ViewBag.TestId = await _context.Tests.FindAsync(id);
         return View(question);

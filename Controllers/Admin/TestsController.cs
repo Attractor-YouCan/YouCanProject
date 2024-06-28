@@ -32,6 +32,8 @@ public class TestsController : Controller
 
         var test = await _context.Tests
             .Include(t => t.Lesson)
+            .Include(t => t.Questions)
+            .ThenInclude(q => q.Answers)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (test == null)
         {

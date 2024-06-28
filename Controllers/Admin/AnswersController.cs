@@ -42,9 +42,13 @@ public class AnswersController : Controller
     }
 
     // GET: Answers/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create(int id)
     {
-        ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id");
+        var question = await _context.Questions.FindAsync(id);
+        if (question != null)
+        {
+            ViewBag.QuestionId = question.Id;    
+        }
         return View();
     }
 
@@ -53,7 +57,7 @@ public class AnswersController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Text,IsCorrect,QuestionId")] Answer answer)
+    public async Task<IActionResult> Create(int id, Answer answer)
     {
         if (ModelState.IsValid)
         {
@@ -61,7 +65,11 @@ public class AnswersController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id", answer.QuestionId);
+        var question = await _context.Questions.FindAsync(id);
+        if (question != null)
+        {
+            ViewBag.QuestionId = question.Id;
+        }
         return View(answer);
     }
 

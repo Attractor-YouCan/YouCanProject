@@ -55,6 +55,7 @@
                 @Html.DisplayFor(modelItem => item.User.Id)
             </td>
             <td>
+                <a asp-action="Create" asp-controller="Answers" asp-route-id="@item.Id">Добавить вариант ответа</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
