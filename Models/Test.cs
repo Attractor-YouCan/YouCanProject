@@ -4,7 +4,7 @@ public class Test
 {
     public int Id { get; set; }
     public int GainingExperience { get; set; }
-    public int TimeForTest { get; set; }
+    public TimeSpan TimeForTest { get; set; }
 
     public int? LessonId { get; set; }
     public Lesson? Lesson { get; set; }
