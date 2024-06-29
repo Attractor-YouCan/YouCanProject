@@ -101,13 +101,10 @@ public class AccountController : Controller
                 Email = model.Email,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber,
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                PhotoUrl = path,
-                District = model.District,
+                FullName = model.LastName+ " " + model.FirstName,
+                AvatarUrl = path,
                 BirthDate = model.BirthDate,
-                Age = DateTime.UtcNow.Year - model.BirthDate.Year,
-                CreatedDate = DateTime.UtcNow.AddHours(6)
+                CreatedAt = DateTime.UtcNow.AddHours(6)
                 
             };
             var result = await _userManager.CreateAsync(user, model.Password);
