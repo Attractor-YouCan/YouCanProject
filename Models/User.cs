@@ -1,15 +1,26 @@
+﻿
 using Microsoft.AspNetCore.Identity;
 
 namespace YouCan.Models;
 
 public class User : IdentityUser<int>
 {
-    public string? PhotoUrl { get; set; }
-    public string? LastName { get; set; }
-    public string? FirstName { get; set; }
-    public DateTime? BirthDate { get; set; }
-    public DateTime? CreatedDate { get; set; }
-    public int? Age { get; set; }
-    public string? District { get; set; }
-    
+    public string AvatarUrl { get; set; }
+    public string FullName { get; set; }
+    public DateTime BirthDate { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public Statistic? Statistic { get; set; }
+    public List<UserLessons> Lessons { get; set; }
+    public List<UserLevel> UserLevels { get; set; }
+    public List<UserORTTests> Tests { get; set; }
+    public List<Question> Questions { get; set; }
+
+    public User()
+    {
+        Questions = new List<Question>();
+        Lessons = new List<UserLessons>();
+        UserLevels = new List<UserLevel>();
+        Tests = new();
+    }
 }
