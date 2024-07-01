@@ -55,7 +55,7 @@ public class TestsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,GainingExperience,TimeForTest,LessonId")] Test test)
+    public async Task<IActionResult> Create(Test test)
     {
         if (ModelState.IsValid)
         {
