@@ -57,6 +57,10 @@ public class TestsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Test test)
     {
+        if (test.MinutesForTest != null)
+        {
+            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+        }
         if (ModelState.IsValid)
         {
             _context.Add(test);
@@ -89,13 +93,16 @@ public class TestsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,GainingExperience,TimeForTest,LessonId")] Test test)
+    public async Task<IActionResult> Edit(int id, Test test)
     {
         if (id != test.Id)
         {
             return NotFound();
         }
-
+        if (test.MinutesForTest != null)
+        {
+            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+        }
         if (ModelState.IsValid)
         {
             try
