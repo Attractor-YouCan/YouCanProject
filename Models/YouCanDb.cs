@@ -6,7 +6,6 @@ namespace YouCan.Models;
 
 public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Statistic> Statistics { get; set; }
     public DbSet<Topic> Topics { get; set; }
     public DbSet<Subtopic> Subtopics { get; set; }
