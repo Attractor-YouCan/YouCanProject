@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class QuestionsController : Controller
 {
     private readonly YouCanContext _context;
@@ -18,8 +19,8 @@ public class QuestionsController : Controller
     // GET: Questions
     public async Task<IActionResult> Index()
     {
-        var youCanContext = _context.Questions.Include(q => q.Test).Include(q => q.User);
-        return View(await youCanContext.ToListAsync());
+        var questions = _context.Questions.Include(q => q.Test).Include(q => q.User);
+        return View(await questions.ToListAsync());
     }
 
     // GET: Questions/Details/5
@@ -33,6 +34,7 @@ public class QuestionsController : Controller
         var question = await _context.Questions
             .Include(q => q.Test)
             .Include(q => q.User)
+            .Include(q => q.Answers)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (question == null)
         {
@@ -43,12 +45,13 @@ public class QuestionsController : Controller
     }
 
     // GET: Questions/Create
-    public async Task<IActionResult> Create(int id)
+    public async Task<IActionResult> Create(int id, string? returnUrl)
     {
         var test = await _context.Tests.FindAsync(id);
         if (test != null)
         {
             ViewBag.TestId = test.Id;
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
         return NotFound();
@@ -71,8 +74,13 @@ public class QuestionsController : Controller
             }
             return RedirectToAction("Index");
         }
-        ViewBag.TestId = await _context.Tests.FindAsync(id);
-        return View(question);
+        var test = await _context.Tests.FindAsync(id);
+        if (test != null)
+        {
+            ViewBag.TestId = test.Id;
+            return View(question);
+        }
+        return NotFound();
     }
 
     // GET: Questions/Edit/5

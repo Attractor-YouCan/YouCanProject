@@ -22,12 +22,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TimeForTest)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lesson)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Lesson.Id)
-        </dd>
+        @if (Model.Lesson != null)
+        {
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Lesson)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Lesson.Id)
+            </dd>
+        }
     </dl>
     <h2>Вопросы</h2>
     <a asp-action="Create" asp-controller="Questions" asp-route-id="@Model.Id" asp-route-returnUrl="@Url.Action("Details", "Tests", new{id = Model.Id})">Добавить вопрос</a>
@@ -38,8 +41,8 @@
             <a asp-action="Details" asp-controller="Questions" asp-route-id="@q.Id">Заголовок: @q.Title</a>
             <p>Контент: @q.Content</p>
             <p>Опубликован: @q.IsPublished</p>
-            <h4>Ваарианты ответа</h4>
-            <a asp-action="Create" asp-controller="Answers" asp-route-id="@q.Id">Добавить вариант ответа</a>
+            <h4>Варианты ответа</h4>
+            <a asp-action="Create" asp-controller="Answers" asp-route-id="@q.Id" asp-route-returnUrl="@Url.Action("Details", "Tests", new{id = Model.Id})">Добавить вариант ответа</a>
             @foreach (var a in q.Answers)
             {
                 <ul>
@@ -60,3 +63,4 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+

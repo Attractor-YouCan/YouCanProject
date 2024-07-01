@@ -5,7 +5,7 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class TestsController : Controller
 {
     private readonly YouCanContext _context;
@@ -18,8 +18,8 @@ public class TestsController : Controller
     // GET: Tests
     public async Task<IActionResult> Index()
     {
-        var youCanContext = _context.Tests.Include(t => t.Lesson);
-        return View(await youCanContext.ToListAsync());
+        var tests = _context.Tests.Include(t => t.Lesson);
+        return View(await tests.ToListAsync());
     }
 
     // GET: Tests/Details/5
@@ -46,7 +46,7 @@ public class TestsController : Controller
     // GET: Tests/Create
     public IActionResult Create()
     {
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Id");
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title");
         return View();
     }
 
@@ -63,7 +63,7 @@ public class TestsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Id", test.LessonId);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
         return View(test);
     }
 
@@ -80,7 +80,7 @@ public class TestsController : Controller
         {
             return NotFound();
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Id", test.LessonId);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
         return View(test);
     }
 
@@ -116,7 +116,7 @@ public class TestsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Id", test.LessonId);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
         return View(test);
     }
 

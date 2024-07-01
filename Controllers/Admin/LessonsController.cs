@@ -9,7 +9,7 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class LessonsController : Controller
 {
     private readonly YouCanContext _context;
@@ -22,8 +22,8 @@ public class LessonsController : Controller
     // GET: Lessons
     public async Task<IActionResult> Index()
     {
-        var youCanContext = _context.Lessons.Include(l => l.Subtopic);
-        return View(await youCanContext.ToListAsync());
+        var lesson = _context.Lessons.Include(l => l.Subtopic);
+        return View(await lesson.ToListAsync());
     }
 
     // GET: Lessons/Details/5
@@ -48,7 +48,7 @@ public class LessonsController : Controller
     // GET: Lessons/Create
     public IActionResult Create()
     {
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Id");
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name");
         return View();
     }
 
@@ -57,7 +57,7 @@ public class LessonsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,StudyMaterial,RequiredLevel,SubtopicId")] Lesson lesson)
+    public async Task<IActionResult> Create(Lesson lesson)
     {
         if (ModelState.IsValid)
         {
@@ -65,7 +65,7 @@ public class LessonsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Id", lesson.SubtopicId);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
         return View(lesson);
     }
 
@@ -82,7 +82,7 @@ public class LessonsController : Controller
         {
             return NotFound();
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Id", lesson.SubtopicId);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
         return View(lesson);
     }
 
@@ -91,7 +91,7 @@ public class LessonsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Title,StudyMaterial,RequiredLevel,SubtopicId")] Lesson lesson)
+    public async Task<IActionResult> Edit(int id, Lesson lesson)
     {
         if (id != lesson.Id)
         {
@@ -118,7 +118,7 @@ public class LessonsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Id", lesson.SubtopicId);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
         return View(lesson);
     }
 

@@ -5,7 +5,7 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class AnswersController : Controller
 {
     private readonly YouCanContext _context;
@@ -18,8 +18,8 @@ public class AnswersController : Controller
     // GET: Answers
     public async Task<IActionResult> Index()
     {
-        var youCanContext = _context.Answers.Include(a => a.Question);
-        return View(await youCanContext.ToListAsync());
+        var answers = _context.Answers.Include(a => a.Question);
+        return View(await answers.ToListAsync());
     }
 
     // GET: Answers/Details/5
@@ -42,12 +42,13 @@ public class AnswersController : Controller
     }
 
     // GET: Answers/Create
-    public async Task<IActionResult> Create(int id)
+    public async Task<IActionResult> Create(int id, string? returnUrl)
     {
         var question = await _context.Questions.FindAsync(id);
         if (question != null)
         {
             ViewBag.QuestionId = question.Id;    
+            ViewBag.ReturnUrl = returnUrl;
         }
         return View();
     }
@@ -57,12 +58,16 @@ public class AnswersController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(int id, Answer answer)
+    public async Task<IActionResult> Create(int id, Answer answer, string? returnUrl)
     {
         if (ModelState.IsValid)
         {
             _context.Add(answer);
             await _context.SaveChangesAsync();
+            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction(nameof(Index));
         }
         var question = await _context.Questions.FindAsync(id);

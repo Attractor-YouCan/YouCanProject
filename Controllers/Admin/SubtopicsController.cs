@@ -5,7 +5,7 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class SubtopicsController : Controller
 {
     private readonly YouCanContext _context;
@@ -18,8 +18,8 @@ public class SubtopicsController : Controller
     // GET: Subtopics
     public async Task<IActionResult> Index()
     {
-        var youCanContext = _context.Subtopics.Include(s => s.Topic);
-        return View(await youCanContext.ToListAsync());
+        var subtopic = _context.Subtopics.Include(s => s.Topic);
+        return View(await subtopic.ToListAsync());
     }
 
     // GET: Subtopics/Details/5

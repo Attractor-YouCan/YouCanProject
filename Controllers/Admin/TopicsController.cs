@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
-[Route("Admin/[controller]/[action]")]
+[Route("Admin/[controller]/{action=index}")]
 public class TopicsController : Controller
 {
     private readonly YouCanContext _context;
