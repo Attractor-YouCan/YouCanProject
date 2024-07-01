@@ -34,7 +34,14 @@
                 @Html.DisplayFor(modelItem => item.TimeForTest)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Lesson.Id)
+                @if(item.Lesson is not null)
+                {
+                        @Html.DisplayFor(modelItem => item.Lesson.Id)
+                }
+                else
+                {
+                    @:-
+                }
             </td>
             <td>
                 <a asp-action="Create" asp-controller="Questions" asp-route-id="@item.Id">Добавить вопрос</a> |
