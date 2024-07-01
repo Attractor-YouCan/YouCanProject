@@ -15,7 +15,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<UserLessons> UserLessons { get; set; }
     public DbSet<UserLevel> UserLevels { get; set; }
-    public DbSet<UserORTTests> UserORTTests { get; set; }
+    public DbSet<UserOrtTest> UserORTTests { get; set; }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
 
 }
