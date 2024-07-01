@@ -1,0 +1,261 @@
+@model User
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="row g-0 pt-5" id="profile">
+    <div class="col-md-4 pb-5 text-center border-bottom">
+        <img src="@Model.AvatarUrl" width="200" height="200" class="rounded-circle mx-auto ">
+    </div>
+    
+    <div class="col-md-8 border-bottom">
+        <div class="card-body">
+            <div class="row">
+                <div class=" col col-3"><h5 id="profileEmail">@Model.Email</h5></div>
+                @if (ViewBag.EditAccess)
+                {
+                    <div class="col col-3 d-flex ms-4">
+                        <span class="my-auto btn btn-light me-auto" id="edit" role="button">Редактировать</span>
+                    </div>
+                }
+                <div class="col col-12 mt-4">UserName: &nbsp;<h5 id="profileUserName">@Model.UserName</h5></div>
+                <div class="col col-12 mt-4">Phone number: &nbsp;<h5 id="profilePhone">@Model.PhoneNumber</h5></div>
+                <div class="col col-12 mt-4">FullName: &nbsp;<h5 id="lastNameProfile">@Model.FullName</h5></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать профиль</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Edit" id="editForm" asp-controller="Account" asp-anti-forgery="true">
+                <div class="modal-body">
+                    <div class="input-group mt-5">
+                        <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
+                        <label for="email"><span id="errorTakenEmail" class="text-danger"></span></label>
+                        <div class="input-group">
+                            <input asp-for="Email" onkeyup="checkEmail()" type="email" class="form-control" placeholder="Email" value="@Model.Email" id="email" required="required">
+                        </div>
+                    </div>
+                    <div class="input-group mt-2">
+                        <label for="userName" ><span id="errorTakenUserName" class="text-danger" ></span></label>
+                        <div class="input-group">
+                            <input asp-for="UserName" onkeyup="checkUserName()" type="text" class="form-control" placeholder="Username" value="@Model.UserName" id="userName" required="required">
+                        </div>
+                    </div>
+                    <div class="input-group mt-2">
+                        <label for="phone"><span class="text-danger" ></span></label>
+                        <div class="input-group">
+                            <input asp-for="PhoneNumber" oninput="validatePhoneNumber()"  type="text" class="form-control" placeholder="Phone number" id="phone"  value="@Model.PhoneNumber" required="required">
+                        </div>
+                    </div>
+                    <div class="input-group mt-2">
+                        <input type="password" class="form-control" name="currentPassword" placeholder="Current Password" id="pass3" aria-describedby="button-addon3">
+                        <button type="button" id="button-addon3" class="btn password-toggle-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="input-group mt-2">
+                        <input type="password" oninput="validatePassword()" onchange="onChange()" class="form-control" name="password" placeholder="Password" id="pass" aria-describedby="button-addon1">
+                        <button type="button" id="button-addon1" class="btn password-toggle-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-group mt-2">
+                        <input type="password" onChange="onChange()" class="form-control" name="confirm" placeholder="Confirm Password" id="confPass" aria-describedby="button-addon2">
+                        <button type="button" id="button-addon2" class="btn password-toggle-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="hidden" name="userId" value="@Model.Id"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Редактировать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function checkEmail() {
+            let valueEmail = $('#email').val();
+            let email = document.querySelector('input[id=email]');
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("EditCheckUsernameEmail", "Validation")',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: { 'value': valueEmail, 'id': @Model.Id },
+                success: function(result) {
+                    if (!result) {
+                        $('#errorTakenEmail').text(valueEmail + ' уже занят!');
+                        email.setCustomValidity(valueEmail + ' уже занят!');
+                    } else {
+                        $('#errorTakenEmail').text('');
+                        email.setCustomValidity('');
+                    }
+                }
+            });
+        }
+    
+        function checkUserName() {
+            let valueUserName = $('#userName').val();
+            let userName = document.querySelector('input[id=userName]');
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("EditCheckUsernameEmail", "Validation")',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: { 'value': valueUserName, 'id': @Model.Id },
+                success: function(result) {
+                    if (!result) {
+                        $('#errorTakenUserName').text(valueUserName + ' уже занят!');
+                        userName.setCustomValidity(valueUserName + ' уже занят!');
+                    } else {
+                        $('#errorTakenUserName').text('');
+                        userName.setCustomValidity('');
+                    }
+                }
+            });
+        }
+    
+   
+        
+        function onChange() {
+            let password = document.querySelector('input[name=password]');
+            let confirm = document.querySelector('input[name=confirm]');
+            if (confirm.value === password.value) {
+                confirm.setCustomValidity('');
+            } else {
+                confirm.setCustomValidity('Passwords do not match');
+            }
+        }
+        function validatePhoneNumber() {
+                    let phoneInput = document.querySelector('input[id=phone]');
+                    let phoneError = document.getElementById('phoneError');
+                    let phonePattern = /^0\d{9}$/;
+                    
+                    $.ajax({
+                                    type: 'GET',
+                                    url: '@Url.Action("EditCheckPhoneNumber", "Validation")',
+                                    contentType: 'application/json;charset=utf-8',
+                                    dataType: 'json',
+                                    data: { 'value': phoneInput.value},
+                                    success: function(result) {
+                                        if (!result) {
+                                            phoneInput.setCustomValidity(phoneInput.value + ' уже занят!');
+                                        } else {
+                                            phoneInput.setCustomValidity('');
+                                        }
+                                    }
+                                });
+                    
+        
+                    if (phonePattern.test(phoneInput.value)) {
+                        phoneInput.setCustomValidity('');
+                        phoneError.textContent = '';
+                    } else {
+                        phoneInput.setCustomValidity('Заполните в формате x-цифра(0-9): 0 xxx xx xx xx');
+                        phoneError.textContent = 'Заполните в формате x-цифра(0-9): 0 xxx xx xx xx';
+                    }
+                }
+        
+        function validatePassword() {
+                    let password = document.querySelector('input[name=password]');
+                    let passwordError = document.getElementById('passwordError');
+                    let passwordValue = password.value;
+        
+                    let lengthCheck = passwordValue.length >= 6;
+                    let nonAlphanumericCheck = /[^\w]/.test(passwordValue);
+                    let digitCheck = /\d/.test(passwordValue);
+                    let uppercaseCheck = /[A-Z]/.test(passwordValue);
+                    let lowercaseCheck = /[a-z]/.test(passwordValue);
+        
+                    let errorMessage = '';
+                    if (!lengthCheck) {
+                        errorMessage += 'Passwords must be at least 6 characters.\n';
+                    }
+                    if (!nonAlphanumericCheck) {
+                        errorMessage += 'Passwords must have at least one non-alphanumeric character.\n';
+                    }
+                    if (!digitCheck) {
+                        errorMessage += 'Passwords must have at least one digit (\'0\'-\'9\').\n';
+                    }
+                    if (!uppercaseCheck) {
+                        errorMessage += 'Passwords must have at least one uppercase (\'A\'-\'Z\').\n';
+                    }
+                    if (!lowercaseCheck) {
+                        errorMessage += 'Passwords must have at least one lowercase (\'a\'-\'z\').\n';
+                    }
+        
+                    if (errorMessage === '') {
+                        password.setCustomValidity('');
+                        passwordError.textContent = '';
+                    } else {
+                        password.setCustomValidity(errorMessage);
+                        passwordError.innerHTML = errorMessage.replace(/\n/g, '<br>');
+                    }
+                }
+    
+        $(document).ready(function() {
+           
+            
+           
+           
+            $('#edit').click(function(e) {
+                e.preventDefault();
+                $('#editModal').modal('show');
+            });
+    
+            $('#editForm').submit(function(event) {
+                event.preventDefault();
+                let form = $('#editForm')[0];
+                let formData = new FormData(form);
+                $.ajax({
+                    url: '@Url.Action("Edit", "Account")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response) {
+                            $('#profileEmail').text(response.email);
+                            $('#profileUserName').text(response.userName);
+                            $('#profilePhone').text(response.phoneNumber);
+                            alert('Данные успешно обновлены!');
+                        } else {
+                            alert('Ошибка: при редактировании профиля');
+                        }
+                    },
+                    error: function() {
+                        alert('Произошла ошибка при отправке данных');
+                    }
+                });
+            });
+        });
+    </script>
+}
