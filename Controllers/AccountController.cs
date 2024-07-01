@@ -9,13 +9,13 @@ namespace YouCan.Controllers;
 public class AccountController : Controller
 {
     
-    private YouCanDb _db;
+    private YouCanContext _db;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
 
 
-    public AccountController(YouCanDb db, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+    public AccountController(YouCanContext db, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
     {
         _db = db;
         _userManager = userManager;
