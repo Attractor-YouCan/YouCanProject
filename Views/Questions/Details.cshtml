@@ -1,0 +1,63 @@
+﻿@model YouCan.Models.Question
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Question</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsPublished)
+        </dd>
+        @if (Model.Test != null)
+        {
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Test)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Test.Id)
+            </dd>
+        }
+        @if (Model.User != null)
+        {
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.User)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.User.Id)
+            </dd>
+        }
+    </dl>
+    <h4>Варианты ответа</h4>
+    <a asp-action="Create" asp-controller="Answers" asp-route-id="@Model.Id" asp-route-returnUrl="@Url.Action("Details", "Questions", new{id = Model.Id})>Добавить вариант ответа</a>
+    @foreach (var a in Model.Answers)
+    {
+        <ul>
+            @if (a.IsCorrect)
+            {
+                <li class="text-success">@a.Text</li>
+            }
+            else
+            {
+                <li class="text-danger">@a.Text</li>
+            }
+        </ul>
+    }
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

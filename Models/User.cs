@@ -13,7 +13,7 @@ public class User : IdentityUser<int>
     public Statistic? Statistic { get; set; }
     public List<UserLessons>? Lessons { get; set; }
     public List<UserLevel>? UserLevels { get; set; }
-    public List<UserORTTests>? Tests { get; set; }
+    public List<UserOrtTest>? Tests { get; set; }
     public List<Question>? Questions { get; set; }
 
     public User()

@@ -1,10 +1,14 @@
-﻿namespace YouCan.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace YouCan.Models;
 
 public class Test
 {
     public int Id { get; set; }
     public int GainingExperience { get; set; }
     public TimeSpan? TimeForTest { get; set; }
+    [NotMapped]
+    public int? MinutesForTest { get; set; }
 
     public int? LessonId { get; set; }
     public Lesson? Lesson { get; set; }
