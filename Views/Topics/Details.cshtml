@@ -17,6 +17,14 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
+    <h2>Подтемы</h2>
+    <a asp-action="Create" asp-controller="Subtopics" asp-route-id="@Model.Id" asp-route-returnUrl="@Url.Action("Details", "Topics", new{id = Model.Id})">Добавить подтему</a>
+    @foreach (var s in Model.Subtopics)
+    {
+        <div class="border border-1">
+            <a asp-action="Details" asp-controller="Subtopic" asp-route-id="@s.Id">@s.Name</a>
+        </div>
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

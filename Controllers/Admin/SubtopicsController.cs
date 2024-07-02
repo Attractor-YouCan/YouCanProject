@@ -5,7 +5,6 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/{action=index}")]
 public class SubtopicsController : Controller
 {
     private readonly YouCanContext _context;
@@ -42,9 +41,17 @@ public class SubtopicsController : Controller
     }
 
     // GET: Subtopics/Create
-    public IActionResult Create()
+    public IActionResult Create(int? id, string? returnUrl)
     {
-        ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name");
+        ViewBag.ReturnUrl = returnUrl; 
+        if (id != null)
+        {
+            ViewBag.TopicId = id;
+        }
+        else
+        {
+            ViewBag.Topics = new SelectList(_context.Topics, "Id", "Name");
+        }
         return View();
     }
 
@@ -53,15 +60,19 @@ public class SubtopicsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,TopicId")] Subtopic subtopic)
+    public async Task<IActionResult> Create(Subtopic subtopic, string? returnUrl)
     {
         if (ModelState.IsValid)
         {
             _context.Add(subtopic);
             await _context.SaveChangesAsync();
+            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", subtopic.TopicId);
+        ViewBag.ReturnUrl = returnUrl;
         return View(subtopic);
     }
 
@@ -87,7 +98,7 @@ public class SubtopicsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TopicId")] Subtopic subtopic)
+    public async Task<IActionResult> Edit(int id, Subtopic subtopic)
     {
         if (id != subtopic.Id)
         {

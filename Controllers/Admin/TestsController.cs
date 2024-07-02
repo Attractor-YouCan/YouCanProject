@@ -5,7 +5,6 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-[Route("Admin/[controller]/{action=index}")]
 public class TestsController : Controller
 {
     private readonly YouCanContext _context;
