@@ -28,6 +28,7 @@ public class TopicsController : Controller
         }
 
         var topic = await _context.Topics
+            .Include(t => t.Subtopics)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (topic == null)
         {

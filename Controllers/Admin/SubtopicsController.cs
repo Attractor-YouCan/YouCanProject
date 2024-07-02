@@ -41,12 +41,12 @@ public class SubtopicsController : Controller
     }
 
     // GET: Subtopics/Create
-    public IActionResult Create(int? id, string? returnUrl)
+    public IActionResult Create(int? TopicId, string? returnUrl)
     {
         ViewBag.ReturnUrl = returnUrl; 
-        if (id != null)
+        if (TopicId != null)
         {
-            ViewBag.TopicId = id;
+            ViewBag.TopicId = TopicId;
         }
         else
         {
@@ -60,7 +60,7 @@ public class SubtopicsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Subtopic subtopic, string? returnUrl)
+    public async Task<IActionResult> Create(Subtopic subtopic, int? TopicId, string? returnUrl)
     {
         if (ModelState.IsValid)
         {
