@@ -1,11 +1,27 @@
 ﻿@{
     Layout = "_Layout";
 }
+<style>
+    .card-title {
+        height: 40px;
+    }
+</style>
 <nav class="navbar navbar-light border-bottom">
     <div class="container-fluid">
         <span class="navbar-text mx-auto">Тренировка</span>
     </div>
 </nav>
+<a class="navbar-brand" href="javascript:history.back()" style="margin-left: 30px; text-decoration: none; color: inherit;">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="30"
+         height="30"
+         fill="currentColor"
+         class="bi bi-arrow-left"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+    </svg>
+</a>
 <div class="container text-center my-3">
     <p class="mb-3">
         <strong>
@@ -14,8 +30,8 @@
         </strong>
     </p>
     <div class="row justify-content-center">
-        <div class="col-md-2">
-            <a href="#" style="text-decoration: none;">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="#" style="text-decoration: none; color: inherit;">
                 <div class="card mb-3">
                     <div class="card-body">
                         <img src="/TestCreateAndTakePageImage/icons8-математика-100.png"
@@ -26,8 +42,8 @@
                 </div>
             </a>
         </div>
-        <div class="col-md-2">
-            <a href="#" style="text-decoration: none;">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="#" style="text-decoration: none; color: inherit;">
                 <div class="card mb-3">
                     <div class="card-body">
                         <img src="/TestCreateAndTakePageImage/icons8-формула-fx-100 1.png"
@@ -41,10 +57,10 @@
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-2">
-            <a href="#" style="text-decoration: none;">
-                <div class="card mb-3">
-                    <div class="card-body">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="@Url.Action("CreateAnalogyOrAddition")" style="text-decoration: none; color: inherit;">
+                <div class="card">
+                    <div class="card-body mt-3 h-100">
                         <img src="/TestCreateAndTakePageImage/icons8-биология-100.png"
                              class="card-img-top"
                              alt="Аналогия" />
@@ -53,14 +69,13 @@
                 </div>
             </a>
         </div>
-        <div class="col-md-2">
-            <a href="#" style="text-decoration: none;">
-                <div class="card mb-3">
-                    <div class="card-body">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="#" style="text-decoration: none; color: inherit;">
+                <div class="card">
+                    <div class="card-body mt-3 h-100">
                         <img src="/TestCreateAndTakePageImage/icons8-история-100.png"
                              class="card-img-top"
-                             alt="Чтение и понимание"
-                             height="138px" />
+                             alt="Чтение и понимание" />
                         <h5 class="card-title mt-2">Чтение и понимание</h5>
                     </div>
                 </div>
@@ -69,11 +84,11 @@
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-2">
-            <a href="#" style="text-decoration: none;">
-                <div class="card mb-3">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="#" style="text-decoration: none; color: inherit;">
+                <div class="card mt-3">
                     <div class="card-body">
-                        <img src="/TestCreateAndTakePageImage/grammer.png"
+                        <img src="/TestCreateandTakePageImage/grammer.png"
                              class="card-img-top"
                              alt="Грамматика" />
                         <h5 class="card-title mt-2">Грамматика</h5>

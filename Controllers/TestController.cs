@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YouCan.Models;
 
 namespace YouCan.Controllers
 {
@@ -17,5 +16,14 @@ namespace YouCan.Controllers
         {
             return View();
         }
+        public IActionResult CreateAnalogyOrAddition()
+        {
+            return View();
+        }
+        public IActionResult TakeAnalogyOrAddition()
+        {
+            return View();
+        }
+
     }
 }
