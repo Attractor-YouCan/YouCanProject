@@ -28,3 +28,23 @@ body {
   stroke-width:2px;
   stroke:rgb(0,0,0);
 }
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+}
+
+.levels {
+  position: relative;
+  z-index: 2;
+  padding: 0 5%; /* Adjust padding as needed */
+}
+.level img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
