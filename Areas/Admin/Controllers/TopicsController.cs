@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
-namespace YouCan.Controllers.Admin;
-
+namespace YouCan.Areas.Admin.Controllers;
+[Area("Admin")]
 public class TopicsController : Controller
 {
     private readonly YouCanContext _context;

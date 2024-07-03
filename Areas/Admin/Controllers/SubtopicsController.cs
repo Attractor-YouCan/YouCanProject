@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
-namespace YouCan.Controllers.Admin;
-
+namespace YouCan.Areas.Admin.Controllers;
+[Area("Admin")]
 public class SubtopicsController : Controller
 {
     private readonly YouCanContext _context;
@@ -43,7 +43,7 @@ public class SubtopicsController : Controller
     // GET: Subtopics/Create
     public IActionResult Create(int? TopicId, string? returnUrl)
     {
-        ViewBag.ReturnUrl = returnUrl; 
+        ViewBag.ReturnUrl = returnUrl;
         if (TopicId != null)
         {
             ViewBag.TopicId = TopicId;

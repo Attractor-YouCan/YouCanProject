@@ -9,6 +9,10 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@if(User?.Identity?.IsAuthenticated == true)
+{
+    @:Вы авторизованы!
+}
 <table class="table">
     <thead>
         <tr>

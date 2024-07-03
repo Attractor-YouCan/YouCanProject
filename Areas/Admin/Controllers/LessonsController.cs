@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
-namespace YouCan.Controllers.Admin;
-
-[Route("Admin/[controller]/{action=index}")]
+namespace YouCan.Areas.Admin.Controllers;
+[Area("Admin")]
 public class LessonsController : Controller
 {
     private readonly YouCanContext _context;

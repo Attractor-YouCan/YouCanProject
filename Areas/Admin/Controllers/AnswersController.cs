@@ -3,25 +3,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
-namespace YouCan.Controllers.Admin;
-
-public class TestsController : Controller
+namespace YouCan.Areas.Admin.Controllers;
+[Area("Admin")]
+public class AnswersController : Controller
 {
     private readonly YouCanContext _context;
 
-    public TestsController(YouCanContext context)
+    public AnswersController(YouCanContext context)
     {
         _context = context;
     }
 
-    // GET: Tests
+    // GET: Answers
     public async Task<IActionResult> Index()
     {
-        var tests = _context.Tests.Include(t => t.Lesson);
-        return View(await tests.ToListAsync());
+        var answers = _context.Answers.Include(a => a.Question);
+        return View(await answers.ToListAsync());
     }
 
-    // GET: Tests/Details/5
+    // GET: Answers/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -29,48 +29,55 @@ public class TestsController : Controller
             return NotFound();
         }
 
-        var test = await _context.Tests
-            .Include(t => t.Lesson)
-            .Include(t => t.Questions)
-            .ThenInclude(q => q.Answers)
+        var answer = await _context.Answers
+            .Include(a => a.Question)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (test == null)
+        if (answer == null)
         {
             return NotFound();
         }
 
-        return View(test);
+        return View(answer);
     }
 
-    // GET: Tests/Create
-    public IActionResult Create()
+    // GET: Answers/Create
+    public async Task<IActionResult> Create(int id, string? returnUrl)
     {
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title");
+        var question = await _context.Questions.FindAsync(id);
+        if (question != null)
+        {
+            ViewBag.QuestionId = question.Id;
+            ViewBag.ReturnUrl = returnUrl;
+        }
         return View();
     }
 
-    // POST: Tests/Create
+    // POST: Answers/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Test test)
+    public async Task<IActionResult> Create(int id, Answer answer, string? returnUrl)
     {
-        if (test.MinutesForTest != null)
-        {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
-        }
         if (ModelState.IsValid)
         {
-            _context.Add(test);
+            _context.Add(answer);
             await _context.SaveChangesAsync();
+            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
-        return View(test);
+        var question = await _context.Questions.FindAsync(id);
+        if (question != null)
+        {
+            ViewBag.QuestionId = question.Id;
+        }
+        return View(answer);
     }
 
-    // GET: Tests/Edit/5
+    // GET: Answers/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -78,40 +85,37 @@ public class TestsController : Controller
             return NotFound();
         }
 
-        var test = await _context.Tests.FindAsync(id);
-        if (test == null)
+        var answer = await _context.Answers.FindAsync(id);
+        if (answer == null)
         {
             return NotFound();
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
-        return View(test);
+        ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id", answer.QuestionId);
+        return View(answer);
     }
 
-    // POST: Tests/Edit/5
+    // POST: Answers/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Test test)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Text,IsCorrect,QuestionId")] Answer answer)
     {
-        if (id != test.Id)
+        if (id != answer.Id)
         {
             return NotFound();
         }
-        if (test.MinutesForTest != null)
-        {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
-        }
+
         if (ModelState.IsValid)
         {
             try
             {
-                _context.Update(test);
+                _context.Update(answer);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TestExists(test.Id))
+                if (!AnswerExists(answer.Id))
                 {
                     return NotFound();
                 }
@@ -122,11 +126,11 @@ public class TestsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
-        return View(test);
+        ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id", answer.QuestionId);
+        return View(answer);
     }
 
-    // GET: Tests/Delete/5
+    // GET: Answers/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -134,34 +138,34 @@ public class TestsController : Controller
             return NotFound();
         }
 
-        var test = await _context.Tests
-            .Include(t => t.Lesson)
+        var answer = await _context.Answers
+            .Include(a => a.Question)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (test == null)
+        if (answer == null)
         {
             return NotFound();
         }
 
-        return View(test);
+        return View(answer);
     }
 
-    // POST: Tests/Delete/5
+    // POST: Answers/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var test = await _context.Tests.FindAsync(id);
-        if (test != null)
+        var answer = await _context.Answers.FindAsync(id);
+        if (answer != null)
         {
-            _context.Tests.Remove(test);
+            _context.Answers.Remove(answer);
         }
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool TestExists(int id)
+    private bool AnswerExists(int id)
     {
-        return _context.Tests.Any(e => e.Id == id);
+        return _context.Answers.Any(e => e.Id == id);
     }
 }

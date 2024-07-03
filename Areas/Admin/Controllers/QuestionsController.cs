@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace YouCan.Controllers.Admin;
-
-[Route("Admin/[controller]/{action=index}")]
+namespace YouCan.Areas.Admin.Controllers;
+[Area("Admin")]
 public class QuestionsController : Controller
 {
     private readonly YouCanContext _context;
