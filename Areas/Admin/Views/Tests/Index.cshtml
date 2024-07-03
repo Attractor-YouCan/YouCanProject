@@ -9,10 +9,6 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-@if(User?.Identity?.IsAuthenticated == true)
-{
-    @:Вы авторизованы!
-}
 <table class="table">
     <thead>
         <tr>
@@ -38,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.TimeForTest)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Lesson.Id)
+                @Html.DisplayFor(modelItem => item.LessonId)
             </td>
             <td>
                 <a asp-action="Create" asp-controller="Questions" asp-route-id="@item.Id">Добавить вопрос</a> |
