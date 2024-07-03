@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Services;
 
 namespace YouCan.Models;
 
@@ -18,5 +19,12 @@ public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<UserLevel> UserLevels { get; set; }
     public DbSet<UserORTTests> UserORTTests { get; set; }
     public YouCanDb(DbContextOptions<YouCanDb> options) : base(options){}
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        new TopicInitializer(modelBuilder).Seed();
+        new LessonInitializer(modelBuilder).Seed();
+    }
 
 }

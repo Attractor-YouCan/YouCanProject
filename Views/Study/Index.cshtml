@@ -1,0 +1,37 @@
+@model List<Lesson>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<div class="mb-auto bg-warning">
+    <h2>Раздел 1</h2>
+    <p>Узнайте основные фразы, расскажите откуда вы</p>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h4>Уроков еще нет!</h4>
+}
+else
+{
+    <div class="levels mx-5 px-5">
+        <div class="row row-cols-1 position-relative" id="imageContainer">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="col col-12 col-md-8 mx-auto mt-5 position-relative">
+                    <div class="col col-4 level @(i % 4 == 0 || i % 4 == 3 ? "me-auto" : "ms-auto")" role="button">
+                        <img src="studyImages/@(Model[i].RequiredLevel+1)Access.svg" class="w-100" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        
+    </script>
+}
+
