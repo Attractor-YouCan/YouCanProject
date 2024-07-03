@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
