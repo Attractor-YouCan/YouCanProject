@@ -1,0 +1,164 @@
+@model List<Lesson>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<div class="mb-auto bg-warning p-5">
+    <h2>Раздел 1</h2>
+    <p>Узнайте основные фразы, расскажите откуда вы</p>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h4>Уроков еще нет!</h4>
+}
+else
+{
+    <canvas id="connectionCanvas" style="position:absolute; top:0; left:0; z-index:1;"></canvas>
+    <div class="levels mx-5 px-5">
+        <div class="row row-cols-1 position-relative px-lg-5" id="imageContainer" style="position:relative; z-index:2;">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="col col-12 col-md-8 mx-auto mt-2 mt-md-5 position-relative">
+                    <div class="col col-4 level @(i % 4 == 0 || i % 4 == 3 ? "me-auto" : "ms-auto")"
+                         data-lessonLevel="@Model[i].LessonLevel"
+                         data-lessonTitle="@Model[i].Title"
+                         data-lessonId="@Model[i].Id"
+                         onclick="levelButton(this)"
+                         role="button">
+                        <img src="~/studyImages/@(Model[i].RequiredLevel + 1)@(ViewBag.CurrentLessonLevel >= Model[i].LessonLevel ? "Passed.svg" : ViewBag.CurrentLessonLevel == Model[i].RequiredLevel ? "Access.svg" : "NoAccess.svg")" class="w-100 rounded-3"/>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        function levelButton(element) {
+            $('.level').popover('dispose');
+
+            const lessonLevel = parseInt(element.getAttribute('data-lessonLevel'));
+            const lessonTitle = element.getAttribute('data-lessonTitle');
+            const lessonId = element.getAttribute('data-lessonId');
+            const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
+
+            let popoverContent = '';
+
+            if (lessonLevel <= currentLessonLevel) {
+                popoverContent = `
+                <div class="row text-center">
+                    <div class="col-12">
+                        <span class="popover-lesson-title">${lessonTitle}</span>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <span class="">Урок номер ${lessonLevel}</span>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <a href="Lessons?lessonId=${lessonId}" class="btn popover-button px-5 mt-2"><strong>Изучать снова</strong></a>
+                    </div>
+                </div>`;
+            } else if ((lessonLevel - 1) === currentLessonLevel) {
+                popoverContent = `
+                <div class="row text-center">
+                    <div class="col-12">
+                        <span class="popover-lesson-title">${lessonTitle}</span>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <span class="">Урок номер ${lessonLevel}</span>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <a href="Lessons?lessonId=${lessonId}" class="btn popover-button px-5">
+                            <img src="../studyImages/openButton.svg" class="h-100">
+                            <strong>Открыть</strong>
+                        </a>
+                    </div>
+                </div>`;
+            } else {
+                popoverContent = `
+                <div class="row text-center">
+                    <div class="col-12">
+                        <strong class="popover-lesson-title">${lessonTitle}</strong>
+                    </div>
+                    <div class="col-12 mt-3">
+                        Пройдите предыдущий урок, чтобы открыть
+                    </div>
+                </div>`;
+            }
+
+            $(element).popover({
+                trigger: 'manual',
+                content: popoverContent,
+                html: true,
+                placement: 'top',
+                template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+                container: 'body'
+            });
+
+            $(element).popover('show');
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById('connectionCanvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                const levels = document.querySelectorAll('.level');
+                const lessonLevels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(lesson => lesson.RequiredLevel).ToList()));
+                const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
+
+                function resizeCanvas() {
+                    canvas.width = document.documentElement.clientWidth;
+                    canvas.height = document.querySelector('.levels').offsetHeight;
+                    drawLines(); // Redraw lines when canvas is resized
+                }
+
+                function drawLines() {
+                    // Clear canvas and set styles
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.lineWidth = 3;
+
+                    // Iterate through levels to draw lines
+                    for (let i = 0; i < levels.length - 1; i++) {
+                        const start = levels[i].getBoundingClientRect();
+                        const end = levels[i + 1].getBoundingClientRect();
+
+                        // Adjust coordinates for canvas position
+                        const startX = start.left + start.width / 2 - canvas.offsetLeft;
+                        const startY = start.top + start.height / 2 - canvas.offsetTop + window.scrollY;
+                        const endX = end.left + end.width / 2 - canvas.offsetLeft;
+                        const endY = end.top + end.height / 2 - canvas.offsetTop + window.scrollY;
+
+                        // Determine the color based on the lesson level
+                        const color = currentLessonLevel > lessonLevels[i] ? '#FFBE00' // Yellow color for passed
+                                     : '#A3A3A3'; // Grey color for not accessible
+
+                        // Set stroke style and draw the line
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
+                }
+
+                resizeCanvas();
+
+                window.addEventListener('resize', function() {
+                    resizeCanvas();
+                });
+
+                // Hide popovers when clicking anywhere outside
+                document.addEventListener('click', function(event) {
+                    const isLevel = event.target.closest('.level');
+                    if (!isLevel) {
+                        $('.level').popover('dispose');
+                    }
+                });
+            } else {
+                console.error('Canvas element not found');
+            }
+        });
+    </script>
+}

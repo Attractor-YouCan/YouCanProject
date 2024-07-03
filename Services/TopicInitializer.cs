@@ -18,11 +18,11 @@ public class TopicInitializer
             new Topic(){Id = 2, Name = "Russian"}
         );
         _modelBuilder.Entity<Subtopic>().HasData(
-            new Subtopic() { Id = 1, Name = "Mathematics1", TopicId = 1 },
-            new Subtopic() { Id = 2, Name = "Mathematics2", TopicId = 1 },
-            new Subtopic() { Id = 3, Name = "Analogy", TopicId = 2},
-            new Subtopic() { Id = 4, Name = "Grammar", TopicId = 2 },
-            new Subtopic() { Id = 5, Name = "Reading and Understanding", TopicId = 2 }
+            new Subtopic() { Id = 1, Name = "Mathematics1", ImageUrl = "/topicImages/mathematics1icon.png", TopicId = 1 },
+            new Subtopic() { Id = 2, Name = "Mathematics2", ImageUrl = "/topicImages/mathematics2icon.png", TopicId = 1 },
+            new Subtopic() { Id = 3, Name = "Analogy", ImageUrl = "/topicImages/analogyIcon.png", TopicId = 2},
+            new Subtopic() { Id = 4, Name = "Grammar", ImageUrl = "/topicImages/grammarIcon.png", TopicId = 2 },
+            new Subtopic() { Id = 5, Name = "Reading and Understanding", ImageUrl = "/topicImages/readUnderstIcon.png", TopicId = 2 }
             );
         
     }

@@ -11,6 +11,7 @@ public class Lesson
     public List<LessonModule>? LessonModules { get; set; }
     
     public int RequiredLevel { get; set; }
+    public int? LessonLevel { get; set; }
 
     public int SubtopicId { get; set; }
     public Subtopic? Subtopic { get; set; }

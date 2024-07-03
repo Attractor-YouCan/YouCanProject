@@ -1,84 +1,58 @@
-@model List<Lesson>
+@model List<Subtopic>
 @{
-    ViewBag.Title = "title";
     Layout = "_Layout";
 }
-<div class="mb-auto bg-warning">
-    <h2>Раздел 1</h2>
-    <p>Узнайте основные фразы, расскажите откуда вы</p>
-</div>
-
-@if (Model == null || Model.Count == 0)
-{
-    <h4>Уроков еще нет!</h4>
-}
-else
-{
-    <canvas id="connectionCanvas"  style="position:absolute;  top:0;  left:0; z-index:1;"></canvas>
-    <div class="levels mx-5 px-5">
-        <div class="row row-cols-1 position-relative px-lg-5" id="imageContainer" style="position:relative; z-index:2;">
-            @for (int i = 0; i < Model.Count; i++)
+<style>
+    .card-title {
+        height: 40px;
+    }
+</style>
+<nav class="navbar navbar-light border-bottom">
+    <div class="container-fluid">
+        <span class="navbar-text mx-auto">Обучение</span>
+    </div>
+</nav>
+<a class="navbar-brand" href="javascript:history.back()" style="margin-left: 30px; text-decoration: none; color: inherit;">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="30"
+         height="30"
+         fill="currentColor"
+         class="bi bi-arrow-left"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+    </svg>
+</a>
+<div class="container text-center my-5 px-3 px-sm-4 px-md-5">
+    <p class="mb-3">
+        <strong>
+            Выберите один проект чтобы обучаться:
+        </strong>
+    </p>
+    <div class="row justify-content-center mt-5">
+        @if (Model.Count == 0 || Model == null)
+        {
+            <h3>Предметов еще пока что нет!</h3>
+        }
+        else
+        {
+            @foreach (var subtopic in Model)
             {
-                <div class="col col-12 col-md-8 mx-auto mt-2 mt-md-5 position-relative">
-                    <div class="col col-4 level @(i % 4 == 0 || i % 4 == 3 ? "me-auto" : "ms-auto")" role="button">
-                        <img src="studyImages/@(Model[i].RequiredLevel+1)Access.svg" class="w-100" />
-                    </div>
+                <div class="col-6 col-md-4 col-lg-2 subtopic">
+                    <a asp-action="Lessons" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <img src=@subtopic.ImageUrl
+                                     class="card-img-top"
+                                     alt="Математика 1"/>
+                                <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             }
-        </div>
+        }
     </div>
-}
+</div>
 
-@section Scripts
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const canvas = document.getElementById('connectionCanvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const levels = document.querySelectorAll('.level');
-
-                function resizeCanvas() {
-                    canvas.width = document.documentElement.clientWidth;
-                    canvas.height = document.querySelector('.levels').offsetHeight;
-                    drawLines(); // Перерисовываем линии при изменении размера холста
-                }
-
-                function drawLines() {
-                    // Clear canvas and set styles
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.strokeStyle = '#A3A3A3';
-                    ctx.lineWidth = 4;
-                
-                    // Iterate through levels to draw lines
-                    for (let i = 0; i < levels.length - 1; i++) {
-                        const start = levels[i].getBoundingClientRect();
-                        const end = levels[i + 1].getBoundingClientRect();
-                
-                        // Adjust coordinates for canvas position
-                        const startX = start.left + start.width / 2 - canvas.offsetLeft;
-                        const startY = start.top + start.height / 2 - canvas.offsetTop + window.scrollY;
-                        const endX = end.left + end.width / 2 - canvas.offsetLeft;
-                        const endY = end.top + end.height / 2 - canvas.offsetTop + window.scrollY;
-                
-                        // Draw line between elements
-                        ctx.beginPath();
-                        ctx.moveTo(startX, startY);
-                        ctx.lineTo(endX, endY);
-                        ctx.stroke();
-                    }
-                }
-
-                
-                resizeCanvas();
-
-                window.addEventListener('resize', function() {
-                    resizeCanvas();
-                });
-            } else {
-                console.error('Canvas element not found');
-            }
-        });
-    </script>
-}
 
