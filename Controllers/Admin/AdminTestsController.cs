@@ -5,23 +5,23 @@ using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-public class SubtopicsController : Controller
+public class AdminTestsController : Controller
 {
     private readonly YouCanContext _context;
 
-    public SubtopicsController(YouCanContext context)
+    public AdminTestsController(YouCanContext context)
     {
         _context = context;
     }
 
-    // GET: Subtopics
+    // GET: Tests
     public async Task<IActionResult> Index()
     {
-        var subtopic = _context.Subtopics.Include(s => s.Topic);
-        return View(await subtopic.ToListAsync());
+        var tests = _context.Tests.Include(t => t.Lesson);
+        return View(await tests.ToListAsync());
     }
 
-    // GET: Subtopics/Details/5
+    // GET: Tests/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -29,54 +29,48 @@ public class SubtopicsController : Controller
             return NotFound();
         }
 
-        var subtopic = await _context.Subtopics
-            .Include(s => s.Topic)
+        var test = await _context.Tests
+            .Include(t => t.Lesson)
+            .Include(t => t.Questions)
+            .ThenInclude(q => q.Answers)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (subtopic == null)
+        if (test == null)
         {
             return NotFound();
         }
 
-        return View(subtopic);
+        return View(test);
     }
 
-    // GET: Subtopics/Create
-    public IActionResult Create(int? TopicId, string? returnUrl)
+    // GET: Tests/Create
+    public IActionResult Create()
     {
-        ViewBag.ReturnUrl = returnUrl; 
-        if (TopicId != null)
-        {
-            ViewBag.TopicId = TopicId;
-        }
-        else
-        {
-            ViewBag.Topics = new SelectList(_context.Topics, "Id", "Name");
-        }
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title");
         return View();
     }
 
-    // POST: Subtopics/Create
+    // POST: Tests/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Subtopic subtopic, int? TopicId, string? returnUrl)
+    public async Task<IActionResult> Create(Test test)
     {
+        if (test.MinutesForTest != null)
+        {
+            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+        }
         if (ModelState.IsValid)
         {
-            _context.Add(subtopic);
+            _context.Add(test);
             await _context.SaveChangesAsync();
-            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.ReturnUrl = returnUrl;
-        return View(subtopic);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
+        return View(test);
     }
 
-    // GET: Subtopics/Edit/5
+    // GET: Tests/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -84,37 +78,40 @@ public class SubtopicsController : Controller
             return NotFound();
         }
 
-        var subtopic = await _context.Subtopics.FindAsync(id);
-        if (subtopic == null)
+        var test = await _context.Tests.FindAsync(id);
+        if (test == null)
         {
             return NotFound();
         }
-        ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", subtopic.TopicId);
-        return View(subtopic);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
+        return View(test);
     }
 
-    // POST: Subtopics/Edit/5
+    // POST: Tests/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Subtopic subtopic)
+    public async Task<IActionResult> Edit(int id, Test test)
     {
-        if (id != subtopic.Id)
+        if (id != test.Id)
         {
             return NotFound();
         }
-
+        if (test.MinutesForTest != null)
+        {
+            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+        }
         if (ModelState.IsValid)
         {
             try
             {
-                _context.Update(subtopic);
+                _context.Update(test);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SubtopicExists(subtopic.Id))
+                if (!TestExists(test.Id))
                 {
                     return NotFound();
                 }
@@ -125,11 +122,11 @@ public class SubtopicsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", subtopic.TopicId);
-        return View(subtopic);
+        ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title", test.LessonId);
+        return View(test);
     }
 
-    // GET: Subtopics/Delete/5
+    // GET: Tests/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -137,34 +134,34 @@ public class SubtopicsController : Controller
             return NotFound();
         }
 
-        var subtopic = await _context.Subtopics
-            .Include(s => s.Topic)
+        var test = await _context.Tests
+            .Include(t => t.Lesson)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (subtopic == null)
+        if (test == null)
         {
             return NotFound();
         }
 
-        return View(subtopic);
+        return View(test);
     }
 
-    // POST: Subtopics/Delete/5
+    // POST: Tests/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var subtopic = await _context.Subtopics.FindAsync(id);
-        if (subtopic != null)
+        var test = await _context.Tests.FindAsync(id);
+        if (test != null)
         {
-            _context.Subtopics.Remove(subtopic);
+            _context.Tests.Remove(test);
         }
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool SubtopicExists(int id)
+    private bool TestExists(int id)
     {
-        return _context.Subtopics.Any(e => e.Id == id);
+        return _context.Tests.Any(e => e.Id == id);
     }
 }

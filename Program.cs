@@ -1,16 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(opts =>
+    {
+        opts.ViewLocationExpanders.Add(new AdminViewLocationExpander());
+    });
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection))
     .AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<YouCanContext>();
+
+
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

@@ -1,25 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
 namespace YouCan.Controllers.Admin;
 
-public class TopicsController : Controller
+[Route("Admin/[controller]/{action=index}")]
+public class AdminLessonsController : Controller
 {
     private readonly YouCanContext _context;
 
-    public TopicsController(YouCanContext context)
+    public AdminLessonsController(YouCanContext context)
     {
         _context = context;
     }
 
-    // GET: Topics
+    // GET: Lessons
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Topics.ToListAsync());
+        var lesson = _context.Lessons.Include(l => l.Subtopic);
+        return View(await lesson.ToListAsync());
     }
 
-    // GET: Topics/Details/5
+    // GET: Lessons/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -27,40 +34,42 @@ public class TopicsController : Controller
             return NotFound();
         }
 
-        var topic = await _context.Topics
-            .Include(t => t.Subtopics)
+        var lesson = await _context.Lessons
+            .Include(l => l.Subtopic)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (topic == null)
+        if (lesson == null)
         {
             return NotFound();
         }
 
-        return View(topic);
+        return View(lesson);
     }
 
-    // GET: Topics/Create
+    // GET: Lessons/Create
     public IActionResult Create()
     {
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name");
         return View();
     }
 
-    // POST: Topics/Create
+    // POST: Lessons/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Topic topic)
+    public async Task<IActionResult> Create(Lesson lesson)
     {
         if (ModelState.IsValid)
         {
-            _context.Add(topic);
+            _context.Add(lesson);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(topic);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        return View(lesson);
     }
 
-    // GET: Topics/Edit/5
+    // GET: Lessons/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -68,22 +77,23 @@ public class TopicsController : Controller
             return NotFound();
         }
 
-        var topic = await _context.Topics.FindAsync(id);
-        if (topic == null)
+        var lesson = await _context.Lessons.FindAsync(id);
+        if (lesson == null)
         {
             return NotFound();
         }
-        return View(topic);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        return View(lesson);
     }
 
-    // POST: Topics/Edit/5
+    // POST: Lessons/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Topic topic)
+    public async Task<IActionResult> Edit(int id, Lesson lesson)
     {
-        if (id != topic.Id)
+        if (id != lesson.Id)
         {
             return NotFound();
         }
@@ -92,12 +102,12 @@ public class TopicsController : Controller
         {
             try
             {
-                _context.Update(topic);
+                _context.Update(lesson);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TopicExists(topic.Id))
+                if (!LessonExists(lesson.Id))
                 {
                     return NotFound();
                 }
@@ -108,10 +118,11 @@ public class TopicsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        return View(topic);
+        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        return View(lesson);
     }
 
-    // GET: Topics/Delete/5
+    // GET: Lessons/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -119,33 +130,34 @@ public class TopicsController : Controller
             return NotFound();
         }
 
-        var topic = await _context.Topics
+        var lesson = await _context.Lessons
+            .Include(l => l.Subtopic)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (topic == null)
+        if (lesson == null)
         {
             return NotFound();
         }
 
-        return View(topic);
+        return View(lesson);
     }
 
-    // POST: Topics/Delete/5
+    // POST: Lessons/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var topic = await _context.Topics.FindAsync(id);
-        if (topic != null)
+        var lesson = await _context.Lessons.FindAsync(id);
+        if (lesson != null)
         {
-            _context.Topics.Remove(topic);
+            _context.Lessons.Remove(lesson);
         }
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool TopicExists(int id)
+    private bool LessonExists(int id)
     {
-        return _context.Topics.Any(e => e.Id == id);
+        return _context.Lessons.Any(e => e.Id == id);
     }
 }

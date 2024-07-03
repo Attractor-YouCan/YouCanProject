@@ -22,128 +22,128 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Views\Lessons\Create.cshtml">
+      <Content Update="Views\Admin\AdminLessons\Create.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Views\Lessons\Delete.cshtml">
+      <Content Update="Views\Admin\AdminLessons\Delete.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Views\Lessons\Details.cshtml">
+      <Content Update="Views\Admin\AdminLessons\Details.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Views\Lessons\Edit.cshtml">
+      <Content Update="Views\Admin\AdminLessons\Edit.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Views\Lessons\Index.cshtml">
+      <Content Update="Views\Admin\AdminLessons\Index.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Views\Questions\Index.cshtml">
+      <Content Update="Views\Admin\AdminQuestions\Index.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Answers\Create.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminAnswers\Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Answers\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Answers\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Answers\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Answers\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Answers\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Questions\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Questions\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Questions\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Questions\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Tests\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Tests\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Tests\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Tests\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Tests\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminAnswers\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminAnswers\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminAnswers\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminAnswers\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminAnswers\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminQuestions\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminQuestions\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminQuestions\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminQuestions\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminSubtopics\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminSubtopics\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminSubtopics\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminSubtopics\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminSubtopics\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminTests\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminTests\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminTests\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminTests\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\AdminTests\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Answers\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminAnswers\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Answers\Details.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminAnswers\Details.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Answers\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminAnswers\Edit.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Answers\Index.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminAnswers\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Tests\Create.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminTests\Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Tests\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminTests\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Tests\Details.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminTests\Details.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Tests\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminTests\Edit.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Tests\Index.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminTests\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Create.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminSubtopics\Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminSubtopics\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Details.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminSubtopics\Details.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminSubtopics\Edit.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Index.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminSubtopics\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Questions\Create.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminQuestions\Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Questions\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminQuestions\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Questions\Details.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminQuestions\Details.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Questions\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Views\Admin\AdminQuestions\Edit.cshtml" />
     </ItemGroup>
 
 </Project>
