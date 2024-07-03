@@ -4,6 +4,10 @@ body {
     margin: 0;
     color: #fff;
     font-family: 'Montserrat', sans-serif;
+    height: 100%;
+}
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .section1_container {

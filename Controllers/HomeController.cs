@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace YouCan.Controllers;
 
-public class LandingController : Controller
+public class HomeController : Controller
 {
     public IActionResult Index()
     {

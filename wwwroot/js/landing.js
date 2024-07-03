@@ -39,3 +39,5 @@ Object.values(breakpoints).forEach(breakpoint => {
 });
 
 updateStars();
+
+
