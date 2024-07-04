@@ -1,6 +1,6 @@
 ﻿namespace YouCan.Models;
 
-public class UserORTTests
+public class UserOrtTest
 {
     public int Id { get; set; }
     public bool IsPassed { get; set; }

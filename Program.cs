@@ -8,9 +8,9 @@ builder.Services.AddControllersWithViews();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<YouCanDb>(options => options.UseNpgsql(connection))
+builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection))
     .AddIdentity<User, IdentityRole<int>>()
-    .AddEntityFrameworkStores<YouCanDb>();
+    .AddEntityFrameworkStores<YouCanContext>();
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -42,6 +42,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+app.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

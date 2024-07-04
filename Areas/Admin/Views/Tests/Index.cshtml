@@ -1,0 +1,48 @@
+﻿@model IEnumerable<YouCan.Models.Test>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GainingExperience)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeForTest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lesson)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GainingExperience)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeForTest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessonId)
+            </td>
+            <td>
+                <a asp-action="Create" asp-controller="Questions" asp-route-id="@item.Id">Добавить вопрос</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
