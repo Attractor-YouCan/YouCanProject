@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-<<<<<<< HEAD
       <Content Update="Areas\Admin\Views\Lessons\Create.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -146,9 +145,7 @@
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Areas\Admin\Views\Questions\Edit.cshtml" />
-=======
       <Folder Include="wwwroot\authIcons\" />
->>>>>>> 6c9d4fd (Добавил представление Авторизации, с логикой и с валидациями, Удалил  navbar и footer с _Layout.cshtml)
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
