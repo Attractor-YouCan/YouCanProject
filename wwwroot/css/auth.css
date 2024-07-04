@@ -183,3 +183,37 @@
         line-height: 20px;
     }
 }
+@media (max-width: 425px){
+    .auth-main .authForm {
+        margin-top: 110px;
+        gap: 10px;
+    }
+    .auth-main .back-button {
+        left: 40px;
+        top: 110px;
+    }
+}
+@media (max-width: 375px){
+    .section1_container {
+        padding: 0;
+    }
+    nav{
+        width: initial;
+        gap: 8px;
+    }
+    .auth-main .back-button {
+        left: 15px;
+        top: 100px;
+    }
+    .auth-main .authForm {
+        margin-top: 90px;
+        gap: 10px;
+    }
+    .auth-main form {
+        gap: 0;
+    }
+    .auth-main form .input-group {
+        margin-bottom: 10px;
+    }
+    
+}

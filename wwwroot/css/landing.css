@@ -248,6 +248,7 @@ input:checked + .slider:before {
     font-size: 22px;
     font-weight: 700;
     text-transform: capitalize;
+    text-decoration: none;
     cursor: pointer;
 }
 .section1_content_actions  .register:hover{
@@ -271,6 +272,7 @@ input:checked + .slider:before {
     font-size: 22px;
     font-weight: 600;
     text-transform: uppercase;
+    text-decoration: none;
     cursor: pointer;
 }
 .section1_content_actions  .login:hover{
@@ -412,6 +414,7 @@ input:checked + .slider:before {
     font-size: 30px;
     font-weight: 700;
     line-height: 36.57px;
+    margin-bottom: 50px;
 }
 .section3_topContent_content p{
     color: #6D6D6D;
@@ -519,9 +522,12 @@ input:checked + .slider:before {
     .section3_card h4 {
         font-size: 21px;
     }
-    .section3_card p {
+    .section3_card p {   
         font-size: 18px;
     }
+    .section3 h2 span {
+         width: 200px;
+         height: 200px;
 }
 @media (max-width: 1420px) {
     .section1_content_img img {
@@ -832,5 +838,16 @@ input:checked + .slider:before {
         width: 250px;
         padding: 8px 15px;
         font-size: 12px;
+    }
+    .section3_benefits h2 span {
+        width: 120px;
+        height: 120px;
+    }
+    
+}
+@media (max-width: 375px) {
+    nav{
+        width: initial;
+        gap: 8px;
     }
 }
