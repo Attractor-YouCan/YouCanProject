@@ -526,8 +526,9 @@ input:checked + .slider:before {
         font-size: 18px;
     }
     .section3 h2 span {
-         width: 200px;
-         height: 200px;
+        width: 200px;
+        height: 200px;
+    }
 }
 @media (max-width: 1420px) {
     .section1_content_img img {
