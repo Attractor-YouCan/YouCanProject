@@ -3,9 +3,9 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-<div class="mb-auto bg-warning p-5">
+<div class="mb-auto chapter text-white p-2 p-sm-3 p-md-4">
     <h2>Раздел 1</h2>
-    <p>Узнайте основные фразы, расскажите откуда вы</p>
+    <p><b>Узнайте основные фразы, расскажите откуда вы</b></p>
 </div>
 
 @if (Model == null || Model.Count == 0)
@@ -15,7 +15,7 @@
 else
 {
     <canvas id="connectionCanvas" style="position:absolute; top:0; left:0; z-index:1;"></canvas>
-    <div class="levels mx-5 px-5">
+    <div class="levels mx-5 p-1 px-sm-3 px-md-4 px-lg-5">
         <div class="row row-cols-1 position-relative px-lg-5" id="imageContainer" style="position:relative; z-index:2;">
             @for (int i = 0; i < Model.Count; i++)
             {
@@ -39,14 +39,14 @@ else
     <script>
         function levelButton(element) {
             $('.level').popover('dispose');
-
+        
             const lessonLevel = parseInt(element.getAttribute('data-lessonLevel'));
             const lessonTitle = element.getAttribute('data-lessonTitle');
             const lessonId = element.getAttribute('data-lessonId');
             const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
-
+        
             let popoverContent = '';
-
+        
             if (lessonLevel <= currentLessonLevel) {
                 popoverContent = `
                 <div class="row text-center">
@@ -57,7 +57,7 @@ else
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="Lessons?lessonId=${lessonId}" class="btn popover-button px-5 mt-2"><strong>Изучать снова</strong></a>
+                        <a href="Lesson?lessonId=${lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
                     </div>
                 </div>`;
             } else if ((lessonLevel - 1) === currentLessonLevel) {
@@ -70,7 +70,7 @@ else
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="Lessons?lessonId=${lessonId}" class="btn popover-button px-5">
+                        <a href="Lesson?lessonId=${lessonId}" class="btn  popover-button" role="button">
                             <img src="../studyImages/openButton.svg" class="h-100">
                             <strong>Открыть</strong>
                         </a>
@@ -87,16 +87,16 @@ else
                     </div>
                 </div>`;
             }
-
+        
             $(element).popover({
                 trigger: 'manual',
                 content: popoverContent,
                 html: true,
                 placement: 'top',
-                template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+                template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
                 container: 'body'
             });
-
+        
             $(element).popover('show');
         }
 
@@ -110,8 +110,8 @@ else
 
                 function resizeCanvas() {
                     canvas.width = document.documentElement.clientWidth;
-                    canvas.height = document.querySelector('.levels').offsetHeight;
-                    drawLines(); // Redraw lines when canvas is resized
+                    canvas.height = document.querySelector('.levels').offsetHeight+200;
+                    drawLines(); 
                 }
 
                 function drawLines() {
@@ -148,6 +148,10 @@ else
                 window.addEventListener('resize', function() {
                     resizeCanvas();
                 });
+                window.addEventListener('scroll', function() {
+                    resizeCanvas();
+                });
+                
 
                 // Hide popovers when clicking anywhere outside
                 document.addEventListener('click', function(event) {

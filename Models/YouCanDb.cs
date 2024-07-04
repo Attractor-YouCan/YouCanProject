@@ -25,6 +25,7 @@ public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
         base.OnModelCreating(modelBuilder);
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
+        new TestInitializer(modelBuilder).Seed();
     }
 
 }

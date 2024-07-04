@@ -1,0 +1,36 @@
+@model Test
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="questions mx-auto">
+    @if (Model.Questions.Count == 0 || Model.Questions == null)
+    {
+        <h5> Вопросов еще пока что нет!</h5>
+    }
+    else
+    {
+        @foreach (var question in Model.Questions)
+        {
+            <div class="question mx-auto mt-5 text-center">
+                <div class="instruction">
+                    <span> @question.Instruction</span>
+                </div>
+                <div class="question-content">
+                    <span>@question.Content</span>
+                </div>
+                <div class="question-answers">
+                    @foreach (var answer in @question.Answers)
+                    {
+                        <div class="question-answer mt-3">
+                            <button class="btn btn-light btn-outline-success">@answer.Text</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    
+</div>
