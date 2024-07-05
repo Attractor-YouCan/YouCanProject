@@ -40,4 +40,83 @@ Object.values(breakpoints).forEach(breakpoint => {
 
 updateStars();
 
+document.addEventListener("DOMContentLoaded", function () {
+    let toggleBtn1 = document.querySelector("#toggleAboutBtn1");
+    let briefContent1 = document.querySelector("#briefContent1");
+    let fullContent1 = document.querySelector("#fullContent1");
+    let closeBtn1 = document.querySelector("#closeFullContent1");
 
+    toggleBtn1.addEventListener("click", function () {
+        if (!briefContent1.classList.contains("collapse")) {
+            briefContent1.classList.add("collapse");
+        }
+    });
+
+    closeBtn1.addEventListener("click", function () {
+        if (briefContent1.classList.contains("collapse")) {
+            briefContent1.classList.remove("collapse");
+        }
+    });
+
+    fullContent1.addEventListener("shown.bs.collapse", function () {
+        briefContent1.classList.add("collapse");
+    });
+
+    fullContent1.addEventListener("hidden.bs.collapse", function () {
+        briefContent1.classList.remove("collapse");
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    let toggleBtn2 = document.querySelector("#toggleAboutBtn2");
+    let briefContent2 = document.querySelector("#briefContent2");
+    let fullContent2 = document.querySelector("#fullContent2");
+    let closeBtn2 = document.querySelector("#closeFullContent2");
+
+    toggleBtn2.addEventListener("click", function () {
+        if (!briefContent2.classList.contains("collapse")) {
+            briefContent2.classList.add("collapse");
+        }
+    });
+
+    closeBtn2.addEventListener("click", function () {
+        if (briefContent2.classList.contains("collapse")) {
+            briefContent2.classList.remove("collapse");
+        }
+    });
+
+    fullContent2.addEventListener("shown.bs.collapse", function () {
+        briefContent2.classList.add("collapse");
+    });
+
+    fullContent2.addEventListener("hidden.bs.collapse", function () {
+        briefContent2.classList.remove("collapse");
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    let toggleBtn3 = document.querySelector("#toggleAboutBtn3");
+    let briefContent3 = document.querySelector("#briefContent3");
+    let fullContent3 = document.querySelector("#fullContent3");
+    let closeBtn3 = document.querySelector("#closeFullContent3");
+
+    toggleBtn3.addEventListener("click", function () {
+        if (!briefContent3.classList.contains("collapse")) {
+            briefContent3.classList.add("collapse");
+        }
+    });
+
+    closeBtn3.addEventListener("click", function () {
+        if (briefContent3.classList.contains("collapse")) {
+            briefContent3.classList.remove("collapse");
+        }
+    });
+
+    fullContent3.addEventListener("shown.bs.collapse", function () {
+        briefContent3.classList.add("collapse");
+    });
+
+    fullContent3.addEventListener("hidden.bs.collapse", function () {
+        briefContent3.classList.remove("collapse");
+    });
+});
