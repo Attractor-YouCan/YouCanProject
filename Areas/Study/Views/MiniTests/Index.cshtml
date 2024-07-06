@@ -1,0 +1,172 @@
+@model Test
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<link rel="stylesheet" href="~/css/lesson-test.css" asp-append-version="true"/>
+<div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
+    @if (Model.Questions.Count == 0 || Model.Questions == null)
+    {
+        <h5> Вопросов еще пока что нет !</h5>
+    }
+    else
+    {
+        @foreach (var question in Model.Questions)
+        {
+            <div class="question-container text-center" data-questionId="@question.Id">
+                <span class="fw-bold fs-5">@question.Instruction</span>
+                <div class="question mt-4">
+                    @question.Content
+                </div>
+                @foreach (var answer in question.Answers)
+                {
+                    <label class="answer mt-4" role="button">
+                        <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
+                        <span class="answer-number">A</span>
+                        <span class="answer-content h-100 w-100">@answer.Text</span>
+                    </label>
+                }
+            </div>
+        }
+        <div class="text-center mt-5" id="pagination-container">
+            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Предыдущий</button>
+            <span id="page-info"></span>
+            <button class="btn btn-success shadow py-2 px-1 px-lg-4" id="next-page">Сделующий</button>
+        </div>
+    }
+</div>
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+    
+   
+    
+    document.addEventListener("DOMContentLoaded", function() {
+                const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const questionsPerPage = 1; // Number of questions to show per page
+                let currentPage = 1;
+                let selectedAnswers = []; // Array to store selected answers
+
+                
+                document.querySelectorAll('.question-container').forEach(function(container) {
+                    const answers = container.querySelectorAll('.answer-number');
+                    answers.forEach(function(answer, index) {
+                        answer.textContent = letters[index] ;
+                    });
+                });
+                
+                function updatePaginationButtonState() {
+                            const questionContainers = document.querySelectorAll('.question-container');
+                            const currentPageContainer = questionContainers[currentPage - 1];
+                            const currentPageAnswers = currentPageContainer.querySelectorAll('.answer-radio');
+                            let isAnySelected = Array.from(currentPageAnswers).some(radio => radio.checked);
+                            
+                            // Update "Next" or "Finish" button based on currentPage and selected answers
+                            if (currentPage === Math.ceil(questionContainers.length / questionsPerPage)) {
+                                document.getElementById('next-page').textContent = isAnySelected ? 'Закончить' : 'Следующий';
+                            } else {
+                                document.getElementById('next-page').textContent = 'Следующий';
+                            }
+                
+                            document.getElementById('next-page').disabled = !isAnySelected || (currentPage === Math.ceil(questionContainers.length / questionsPerPage) && !isAllAnswersSelected());
+                            document.getElementById('prev-page').disabled = currentPage === 1;
+                
+                            currentPageAnswers.forEach(function(radio) {
+                                if (radio.checked) {
+                                    radio.parentElement.style.backgroundColor = '#58CC02';
+                                    radio.parentElement.classList.add('text-white');
+                                } else {
+                                    radio.parentElement.style.backgroundColor = '';
+                                    radio.parentElement.classList.remove('text-white');
+                                }
+                            });
+                        }
+                function isAllAnswersSelected() {
+                            const questionContainers = document.querySelectorAll('.question-container');
+                            for (let i = 0; i < questionContainers.length; i++) {
+                                const answers = questionContainers[i].querySelectorAll('.answer-radio');
+                                if (!Array.from(answers).some(radio => radio.checked)) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                document.querySelectorAll('.answer-radio').forEach(function(radio) {
+                            radio.addEventListener('click', function() {
+                                // Reset all answer styles to default
+                                document.querySelectorAll('.answer-radio').forEach(function(radio) {
+                                    radio.parentElement.style.backgroundColor = '';
+                                    radio.parentElement.classList.remove('text-white');
+                                });
+                                const questionContainer = radio.closest('.question-container');
+                                const questionId = questionContainer.dataset.questionid;
+                                // Set the clicked answer's style
+                                if (radio.checked) {
+                                    radio.parentElement.style.backgroundColor = '#58CC02';
+                                    radio.parentElement.classList.add('text-white');
+                                    selectedAnswers[radio.name] = {
+                                        testId: @Model.Id,
+                                        questionId: questionId, 
+                                        answerId: radio.value
+                                    }; // Assuming radio.value is answer ID or similar
+                                } else {
+                                    radio.parentElement.style.backgroundColor = '';
+                                    radio.parentElement.classList.remove('text-white');
+                                    delete selectedAnswers[radio.name];
+                                }
+                                updatePaginationButtonState();
+                            });
+                        });
+
+                                
+                function renderQuestions() {
+                        const questionContainers = document.querySelectorAll('.question-container');
+                
+                        // Calculate start and end indices for current page
+                        const start = (currentPage - 1) * questionsPerPage;
+                        const end = start + questionsPerPage;
+                
+                        questionContainers.forEach(function(questionContainer, index) {
+                            if (index >= start && index < end) {
+                                questionContainer.style.display = 'block';
+                            } else {
+                                questionContainer.style.display = 'none';
+                            }
+                        });
+                
+                        updatePaginationButtonState();
+                    }
+                    
+                    
+                
+                document.getElementById('prev-page').addEventListener('click', function() {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderQuestions();
+                    }
+                });            
+                
+                document.getElementById('next-page').addEventListener('click', function() {
+                            const totalQuestions = document.querySelectorAll('.question-container').length;
+                            if (currentPage < Math.ceil(totalQuestions / questionsPerPage)) {
+                                currentPage++;
+                                renderQuestions();
+                            } else {
+                                let arrayOfObjects = Object.values(selectedAnswers);
+                                axios.post('@Url.Action("Index", "MiniTests")', arrayOfObjects)
+                                    .then(response => {
+                                        window.location.href = `@Url.Action("Result", "MiniTests")/?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
+                                    })
+                                    .catch(error => {
+                                        console.error('Error sending data:', error);
+                                    });
+                            }
+                });              
+                
+                   // Initial render
+                renderQuestions();
+            });
+    </script>
+}

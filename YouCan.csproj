@@ -14,6 +14,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -63,11 +64,11 @@
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Questions\Delete.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Questions\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Questions\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Subtopics\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Subtopics\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Subtopics\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Subtopics\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Subtopics\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Subtopics\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Tests\Create.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Tests\Delete.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Tests\Details.cshtml" />
@@ -112,23 +113,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Details.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Details.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Edit.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Subtopics\Index.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -280,6 +281,16 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\authIcons\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\0682ea35-3ad5-4435-8c71-1f9b4be30753.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\2d14ccde-7e61-4166-98ed-f57b2320e35c.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\4415dcdb-c9ee-4627-93a1-0c8690b4fd92.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\a2aa909e-0883-4f88-8bb2-e4442bd57a99.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\eb8beee6-4897-4ef0-a3ef-f1da7b98b0ee.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\f0083cf9-53a9-47d0-9afa-11da3ed8c56f.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\images\fbb99f09-7ae8-4e80-9e59-3ea6377ba0cb.png" />
     </ItemGroup>
 
 </Project>

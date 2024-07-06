@@ -12,11 +12,50 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
   margin-bottom: 60px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+}
+
+.levels {
+  position: relative;
+  z-index: 2;
+  padding: 0 5%; /* Adjust padding as needed */
+}
+.level img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.popover-button {
+  color: white;
+  background-color: #FF5C00; 
+}
+
+.popover-lesson-title{
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 18px;
+
+  color: #000000;
+}
+
+.chapter{
+  background-color: #FF5C00;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: bold;
 }

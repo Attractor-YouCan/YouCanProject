@@ -48,7 +48,6 @@ public class ValidationController : Controller
     {
         return !_db.Users.Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
     }
-
     
     [AcceptVerbs("GET", "POST")]
     public bool CheckUsername(string UserName)
