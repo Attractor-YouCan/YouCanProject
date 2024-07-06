@@ -65,9 +65,9 @@
                             
                             // Update "Next" or "Finish" button based on currentPage and selected answers
                             if (currentPage === Math.ceil(questionContainers.length / questionsPerPage)) {
-                                document.getElementById('next-page').textContent = isAnySelected ? 'Закончить' : 'Сделующий';
+                                document.getElementById('next-page').textContent = isAnySelected ? 'Закончить' : 'Следующий';
                             } else {
-                                document.getElementById('next-page').textContent = 'Сделующий';
+                                document.getElementById('next-page').textContent = 'Следующий';
                             }
                 
                             document.getElementById('next-page').disabled = !isAnySelected || (currentPage === Math.ceil(questionContainers.length / questionsPerPage) && !isAllAnswersSelected());
@@ -155,9 +155,9 @@
                                 renderQuestions();
                             } else {
                                 let arrayOfObjects = Object.values(selectedAnswers);
-                                axios.post('/Study/Test/', arrayOfObjects)
+                                axios.post('@Url.Action("Index", "MiniTests")', arrayOfObjects)
                                     .then(response => {
-                                        window.location.href = `/Study/TestResultPage?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
+                                        window.location.href = `@Url.Action("Result", "MiniTests")/?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
                                     })
                                     .catch(error => {
                                         console.error('Error sending data:', error);

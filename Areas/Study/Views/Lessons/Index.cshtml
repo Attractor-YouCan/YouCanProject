@@ -26,7 +26,7 @@ else
                          data-lessonId="@Model[i].Id"
                          onclick="levelButton(this)"
                          role="button">
-                        <img src="~/studyImages/@(Model[i].RequiredLevel + 1)@(ViewBag.CurrentLessonLevel >= Model[i].LessonLevel ? "Passed.svg" : ViewBag.CurrentLessonLevel == Model[i].RequiredLevel ? "Access.svg" : "NoAccess.svg")" class="w-100 rounded-3"/>
+                        <img src="@Url.Content($"~/studyImages/{Model[i].RequiredLevel + 1}{(ViewBag.CurrentLessonLevel>= Model[i].LessonLevel ? "Passed.svg" : ViewBag.CurrentLessonLevel == Model[i].RequiredLevel ? "Access.svg" : "NoAccess.svg")}")" class="w-100 rounded-3"/>
                     </div>
                 </div>
             }
@@ -53,11 +53,11 @@ else
                     <div class="col-12">
                         <span class="popover-lesson-title">${lessonTitle}</span>
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-12 mt-3">{
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="Lesson?lessonId=${lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
+                        <a href="@Url.Action("Details", "Lessons")/{lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
                     </div>
                 </div>`;
             } else if ((lessonLevel - 1) === currentLessonLevel) {
@@ -70,8 +70,8 @@ else
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="Lesson?lessonId=${lessonId}" class="btn  popover-button" role="button">
-                            <img src="../studyImages/openButton.svg" class="h-100">
+                        <a href="@Url.Action("Details", "Lessons")/${lessonId}" class="btn  popover-button" role="button">
+                            <img src="@Url.Content("~/studyImages/openButton.svg")" class="h-100">
                             <strong>Открыть</strong>
                         </a>
                     </div>

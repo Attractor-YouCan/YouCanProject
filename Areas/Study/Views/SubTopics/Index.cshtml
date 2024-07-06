@@ -26,7 +26,7 @@
 <div class="container text-center my-5 px-4">
     <p class="mb-3">
         <strong>
-            Выберите один проект чтобы обучаться:
+            Выберите один проект, чтобы обучаться:
         </strong>
     </p>
     <div class="row justify-content-center mt-5">
@@ -39,12 +39,12 @@
             @foreach (var subtopic in Model)
             {
                 <div class="col-6 col-md-4 col-lg-2 subtopic">
-                    <a asp-action="Lessons" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                    <a asp-controller="Lessons" asp-action="Index" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <img src=@subtopic.ImageUrl
                                      class="card-img-top"
-                                     alt="Математика 1"/>
+                                     alt="@subtopic.Name"/>
                                 <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
                             </div>
                         </div>

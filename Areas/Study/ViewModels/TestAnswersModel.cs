@@ -1,4 +1,4 @@
-namespace YouCan.Models;
+namespace YouCan.Areas.Study.ViewModels;
 
 public class TestAnswersModel
 {
