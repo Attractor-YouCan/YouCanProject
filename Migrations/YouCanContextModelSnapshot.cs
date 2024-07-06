@@ -177,6 +177,92 @@ namespace YouCan.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsCorrect = false,
+                            QuestionId = 1,
+                            Text = "A больше"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsCorrect = true,
+                            QuestionId = 1,
+                            Text = "B больше"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsCorrect = false,
+                            QuestionId = 1,
+                            Text = " оба равны"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsCorrect = false,
+                            QuestionId = 1,
+                            Text = "нельзя сравнить"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsCorrect = false,
+                            QuestionId = 2,
+                            Text = "Площадь под функции f(x)"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsCorrect = false,
+                            QuestionId = 2,
+                            Text = "интеграл от f(x) от 0 до x"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsCorrect = true,
+                            QuestionId = 2,
+                            Text = "Функция, производная которой равна f(x)"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsCorrect = false,
+                            QuestionId = 2,
+                            Text = "Функция, производная которой равна Y(f-k)"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsCorrect = false,
+                            QuestionId = 3,
+                            Text = "Грамматика это чудо"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsCorrect = false,
+                            QuestionId = 3,
+                            Text = "Грамматика это таска"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsCorrect = false,
+                            QuestionId = 3,
+                            Text = "Грамматика это пипец"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsCorrect = true,
+                            QuestionId = 3,
+                            Text = "Грамматика это 5 по русскому"
+                        });
                 });
 
             modelBuilder.Entity("YouCan.Models.Lesson", b =>
@@ -187,18 +273,28 @@ namespace YouCan.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Lecture")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("LessonLevel")
+                        .HasColumnType("integer");
+
                     b.Property<int>("RequiredLevel")
                         .HasColumnType("integer");
 
-                    b.Property<string>("StudyMaterial")
-                        .IsRequired()
+                    b.Property<string>("SubTitle")
                         .HasColumnType("text");
 
                     b.Property<int>("SubtopicId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VideoUrl")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -206,6 +302,167 @@ namespace YouCan.Migrations
                     b.HasIndex("SubtopicId");
 
                     b.ToTable("Lessons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 1,
+                            RequiredLevel = 0,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 2,
+                            RequiredLevel = 1,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 3,
+                            RequiredLevel = 2,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 4,
+                            RequiredLevel = 3,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 5,
+                            RequiredLevel = 4,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 6,
+                            RequiredLevel = 5,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 7,
+                            RequiredLevel = 6,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 8,
+                            RequiredLevel = 7,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 9,
+                            RequiredLevel = 8,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 10,
+                            RequiredLevel = 9,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "понятие интеграла;\nзамена переменной при интегрировании и интегрирование по частям;\nприменение определённых интегралов в геометрии и физике;\nдифференциальные уравнения.",
+                            Lecture = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            LessonLevel = 11,
+                            RequiredLevel = 10,
+                            SubTitle = "Интеграл — одно из важнейших понятий математического анализа, которое возникает при решении задач",
+                            SubtopicId = 1,
+                            Title = "Integrals",
+                            VideoUrl = "/userImages/defProf-ProfileN=1.png"
+                        });
+                });
+
+            modelBuilder.Entity("YouCan.Models.LessonModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("LessonId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.ToTable("LessonModule");
                 });
 
             modelBuilder.Entity("YouCan.Models.Question", b =>
@@ -220,11 +477,18 @@ namespace YouCan.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Instruction")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsPublished")
                         .HasColumnType("boolean");
 
                     b.Property<int?>("TestId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -236,6 +500,62 @@ namespace YouCan.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "23 : 34",
+                            Instruction = "Что больше?",
+                            IsPublished = false,
+                            TestId = 1,
+                            Type = "analogy"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Что такое интеграл?",
+                            Instruction = "Отвечайте на следующие вопросы",
+                            IsPublished = false,
+                            TestId = 1,
+                            Type = "general"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Грамматика это___",
+                            Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
+                            IsPublished = false,
+                            TestId = 1,
+                            Type = "general"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Content = "Птица : Гнездо",
+                            Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
+                            IsPublished = false,
+                            TestId = 2,
+                            Type = "analogy"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Content = "Что такое интеграл?",
+                            Instruction = "Отвечайте на следующие вопросы",
+                            IsPublished = false,
+                            TestId = 2,
+                            Type = "general"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Content = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
+                            Instruction = "Отвечайте на следующие вопросы",
+                            IsPublished = false,
+                            TestId = 2,
+                            Type = "general"
+                        });
                 });
 
             modelBuilder.Entity("YouCan.Models.Statistic", b =>
@@ -274,6 +594,9 @@ namespace YouCan.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -286,6 +609,43 @@ namespace YouCan.Migrations
                     b.HasIndex("TopicId");
 
                     b.ToTable("Subtopics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ImageUrl = "/topicImages/mathematics1icon.png",
+                            Name = "Mathematics1",
+                            TopicId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ImageUrl = "/topicImages/mathematics2icon.png",
+                            Name = "Mathematics2",
+                            TopicId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ImageUrl = "/topicImages/analogyIcon.png",
+                            Name = "Analogy",
+                            TopicId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ImageUrl = "/topicImages/grammarIcon.png",
+                            Name = "Grammar",
+                            TopicId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ImageUrl = "/topicImages/readUnderstIcon.png",
+                            Name = "Reading and Understanding",
+                            TopicId = 2
+                        });
                 });
 
             modelBuilder.Entity("YouCan.Models.Test", b =>
@@ -310,6 +670,20 @@ namespace YouCan.Migrations
                     b.HasIndex("LessonId");
 
                     b.ToTable("Tests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GainingExperience = 0,
+                            LessonId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GainingExperience = 0,
+                            LessonId = 2
+                        });
                 });
 
             modelBuilder.Entity("YouCan.Models.Topic", b =>
@@ -327,6 +701,18 @@ namespace YouCan.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Topics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mathematics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Russian"
+                        });
                 });
 
             modelBuilder.Entity("YouCan.Models.User", b =>
@@ -421,7 +807,13 @@ namespace YouCan.Migrations
                     b.Property<bool>("IsPassed")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("LessonId")
+                    b.Property<int?>("LessonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PassedLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SubtopicId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserId")
@@ -430,6 +822,8 @@ namespace YouCan.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LessonId");
+
+                    b.HasIndex("SubtopicId");
 
                     b.HasIndex("UserId");
 
@@ -561,6 +955,15 @@ namespace YouCan.Migrations
                     b.Navigation("Subtopic");
                 });
 
+            modelBuilder.Entity("YouCan.Models.LessonModule", b =>
+                {
+                    b.HasOne("YouCan.Models.Lesson", "Lesson")
+                        .WithMany("LessonModules")
+                        .HasForeignKey("LessonId");
+
+                    b.Navigation("Lesson");
+                });
+
             modelBuilder.Entity("YouCan.Models.Question", b =>
                 {
                     b.HasOne("YouCan.Models.Test", "Test")
@@ -611,9 +1014,11 @@ namespace YouCan.Migrations
                 {
                     b.HasOne("YouCan.Models.Lesson", "Lesson")
                         .WithMany()
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LessonId");
+
+                    b.HasOne("YouCan.Models.Subtopic", "Subtopic")
+                        .WithMany()
+                        .HasForeignKey("SubtopicId");
 
                     b.HasOne("YouCan.Models.User", "User")
                         .WithMany("Lessons")
@@ -622,6 +1027,8 @@ namespace YouCan.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
+
+                    b.Navigation("Subtopic");
 
                     b.Navigation("User");
                 });
@@ -666,6 +1073,8 @@ namespace YouCan.Migrations
 
             modelBuilder.Entity("YouCan.Models.Lesson", b =>
                 {
+                    b.Navigation("LessonModules");
+
                     b.Navigation("Tests");
                 });
 

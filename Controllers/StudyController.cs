@@ -7,12 +7,12 @@ namespace YouCan.Controllers;
 
 public class StudyController : Controller
 {
-    private YouCanDb _db;
+    private YouCanContext _db;
 
     private UserManager<User> _userManager;
     
     // GET
-    public StudyController(YouCanDb db, UserManager<User> userManager)
+    public StudyController(YouCanContext db, UserManager<User> userManager)
     {
         _db = db;
         _userManager = userManager;
