@@ -12,44 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item ms-auto">
-                            <form method="post" asp-controller="Account" asp-action="LogOut"><input type="submit" value="Выход" class="btn btn-light border-1 border-primary rounded-3 order-1 text-primary"/></form>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item ms-auto me-3">
-                            <a class="btn btn-light border-1 border-primary rounded-3 order-1 text-primary" asp-action="Login" asp-controller="Account"> Войти </a>
-                        </li>
-                        
-                    }
-                    
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
+
+
+    <main role="main">
         @RenderBody()
     </main>
-</div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-    </div>
-</footer>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
