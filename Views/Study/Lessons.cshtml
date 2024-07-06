@@ -1,7 +1,9 @@
+@using Newtonsoft.Json
 @model List<Lesson>
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    
 }
 <div class="mb-auto chapter text-white p-2 p-sm-3 p-md-4">
     <h2>Раздел 1</h2>
@@ -105,7 +107,7 @@ else
             if (canvas) {
                 const ctx = canvas.getContext('2d');
                 const levels = document.querySelectorAll('.level');
-                const lessonLevels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(lesson => lesson.RequiredLevel).ToList()));
+                const lessonLevels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(lesson => lesson.RequiredLevel).ToList()));
                 const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
 
                 function resizeCanvas() {
