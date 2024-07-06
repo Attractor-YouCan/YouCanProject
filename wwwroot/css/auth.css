@@ -1,0 +1,219 @@
+.section1{
+    width: 100%;
+    min-height: 100vh;
+}
+.auth-main {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+}
+.auth-main .authForm{
+    display: flex;
+    flex-direction: column;
+     margin-top: 200px; 
+    gap: 20px;
+}
+
+.auth-main .back-button {
+    position: absolute;
+    top: 120px;
+    left: 40px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.auth-main h1 {
+    text-align: center;
+    font-size: 45px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.auth-main form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-main form .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+.auth-main form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.auth-main form input {
+    width: 380px;
+    height: 60px;
+    padding: 10px;
+    border: 1.5px solid #9b9898;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 22px;
+}
+.auth-main form input:active {
+    background: transparent;
+    color: #fff;
+}
+.auth-main form input:focus {
+    background: transparent;
+    color: #fff;
+}
+
+
+.auth-main form input::placeholder {
+    color: #fff; 
+}
+
+.auth-main form .password-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.auth-main form .password-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.auth-main form .toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+}
+
+.auth-main form .forgot-password {
+    color: #6E86AD;
+    margin-bottom: 20px;
+    text-decoration: none;
+    line-height: 14px;
+    font-size: 18px;
+}
+
+.auth-main form .loginBtn {
+    width: 420px;
+    height: 60px;
+    padding: 10px;
+    background-color: #58CC02;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 700;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.auth-main form .loginBtn:hover {
+    background-color: #50b105;
+}
+
+.auth-main .terms {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #5B7CB2;
+    font-weight: 500;
+    line-height: 22px;
+}
+
+.auth-main .terms a {
+    color: #6E86AD;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+@media (max-width: 720px){
+    .auth-main h1 {
+        font-size: 40px;
+        line-height: 27px;
+    }
+    .auth-main form input {
+        width: 300px;
+        height: 50px;
+    }
+    .auth-main form .loginBtn {
+        width: 350px;
+    }
+    .back-button img{
+        width: 35px;
+        height: 30px;
+    }
+    .auth-main .back-button {
+        left: 50px;
+    }
+}
+
+@media (max-width: 576px){
+    .auth-main .back-button {
+        top: 140px;
+    }
+}
+@media (max-width: 490px){
+    .auth-main form input {
+        width: 220px;
+        font-size: 18px;
+    }
+    .auth-main form .loginBtn {
+        width: 300px;
+    }
+    .auth-main form .forgot-password {
+        line-height: 12px;
+        font-size: 16px;
+    }
+    .auth-main .terms {
+        font-size: 14px;
+        line-height: 20px;
+    }
+}
+@media (max-width: 425px){
+    .auth-main .authForm {
+        margin-top: 110px;
+        gap: 10px;
+    }
+    .auth-main .back-button {
+        left: 40px;
+        top: 110px;
+    }
+}
+@media (max-width: 375px){
+    .section1_container {
+        padding: 0;
+    }
+    nav{
+        width: initial;
+        gap: 8px;
+    }
+    .auth-main .back-button {
+        left: 15px;
+        top: 100px;
+    }
+    .auth-main .authForm {
+        margin-top: 90px;
+        gap: 10px;
+    }
+    .auth-main form {
+        gap: 0;
+    }
+    .auth-main form .input-group {
+        margin-bottom: 10px;
+    }
+    
+}
