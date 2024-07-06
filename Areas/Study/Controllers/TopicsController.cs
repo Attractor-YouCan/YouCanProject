@@ -1,18 +1,21 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
 
-namespace YouCan.Controllers;
+namespace YouCan.Areas.Study.Controllers;
 
-public class StudyController : Controller
+[Area("Study")]
+[Authorize]
+public class TopicsController : Controller
 {
     private YouCanContext _db;
 
     private UserManager<User> _userManager;
-    
+
     // GET
-    public StudyController(YouCanContext db, UserManager<User> userManager)
+    public TopicsController(YouCanContext db, UserManager<User> userManager)
     {
         _db = db;
         _userManager = userManager;
@@ -32,13 +35,13 @@ public class StudyController : Controller
         User? currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
             return NotFound("No user");
-        
+
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
                                        && ul.SubtopicId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubtopicId = subTopicId, PassedLevel = 0, IsPassed = true};
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubtopicId = subTopicId, PassedLevel = 0, IsPassed = true };
             _db.UserLessons.Add(userLessons);
             await _db.SaveChangesAsync();
         }
@@ -46,7 +49,7 @@ public class StudyController : Controller
         return View(lessons);
     }
 
-    
+
     public async Task<IActionResult> Lesson(int lessonId)
     {
         User? currentUser = await _userManager.GetUserAsync(User);
@@ -58,11 +61,11 @@ public class StudyController : Controller
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
             && ul.SubtopicId == lesson.SubtopicId);
-        if (lesson.LessonLevel > userLessons.PassedLevel+1)
-            return RedirectToAction("Lessons", new {subTopicId = lesson.SubtopicId});
+        if (lesson.LessonLevel > userLessons.PassedLevel + 1)
+            return RedirectToAction("Lessons", new { subTopicId = lesson.SubtopicId });
         if (userLessons == null)
             return NotFound("NO UserLesson!");
-        if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel+1 == lesson.LessonLevel)
+        if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)
             return View(lesson);
         return NotFound("Пройдите предыдущий урок, чтобы открыть");
     }
@@ -94,8 +97,8 @@ public class StudyController : Controller
             join selectedAnswer in selectedAnswers on answer.Id equals selectedAnswer.AnswerId
             select selectedAnswer
         ).Count();
-        int n =0;
-        if (passingCount >=2)
+        int n = 0;
+        if (passingCount >= 2)
         {
             userLessons.PassedLevel = lesson.LessonLevel;
             userLessons.IsPassed = true;
@@ -103,12 +106,13 @@ public class StudyController : Controller
             _db.UserLessons.Update(userLessons);
             n = await _db.SaveChangesAsync();
         }
-        var testResult = new {
+        var testResult = new
+        {
             isPassed = n > 0,
             lessonId = lesson.Id,
             subtopicId = lesson.SubtopicId
         };
-        return Ok(testResult);    
+        return Ok(testResult);
     }
 
     [HttpGet]
