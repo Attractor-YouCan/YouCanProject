@@ -87,7 +87,7 @@ public class StudyController : Controller
         Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == test.LessonId);
         UserLessons? userLessons = await _db.UserLessons.FirstOrDefaultAsync(ul =>
             ul.UserId == currentUser.Id && ul.SubtopicId == lesson.SubtopicId);
-
+        
         int passingCount = (
             from question in test.Questions
             from answer in question.Answers.Where(a => a.IsCorrect)
