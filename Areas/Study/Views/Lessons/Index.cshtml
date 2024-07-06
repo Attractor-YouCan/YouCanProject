@@ -53,11 +53,11 @@ else
                     <div class="col-12">
                         <span class="popover-lesson-title">${lessonTitle}</span>
                     </div>
-                    <div class="col-12 mt-3">{
+                    <div class="col-12 mt-3">
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="@Url.Action("Details", "Lessons")/{lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
+                        <a href="@Url.Action("Details", "Lessons")?lessonId=${lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
                     </div>
                 </div>`;
             } else if ((lessonLevel - 1) === currentLessonLevel) {
@@ -70,7 +70,7 @@ else
                         <span class="">Урок номер ${lessonLevel}</span>
                     </div>
                     <div class="col-12 mt-4">
-                        <a href="@Url.Action("Details", "Lessons")/${lessonId}" class="btn  popover-button" role="button">
+                        <a href="@Url.Action("Details", "Lessons")?lessonId=${lessonId}" class="btn  popover-button" role="button">
                             <img src="@Url.Content("~/studyImages/openButton.svg")" class="h-100">
                             <strong>Открыть</strong>
                         </a>
@@ -105,8 +105,7 @@ else
             if (canvas) {
                 const ctx = canvas.getContext('2d');
                 const levels = document.querySelectorAll('.level');
-                const lessonLevels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(lesson => lesson.RequiredLevel).ToList()));
-                const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
+                const lessonLevels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(lesson => lesson.RequiredLevel).ToList()));                const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
 
                 function resizeCanvas() {
                     canvas.width = document.documentElement.clientWidth;

@@ -13,7 +13,7 @@
             <h5 class="mt-5 text-success">Конец Урока!</h5>
             <img class="mt-4" src="~/topicImages/testPassedEmoji.svg"/>
             <p class="mt-3 text-success">Развивайся такими темпами!</p>
-            <a asp-action="Lessons" asp-route-subTopicId="@ViewBag.SubtopicId" class="btn btn-success px-5 py-2">ПРОДОЛЖИТЬ</a>
+            <a asp-action="Index" asp-controller="Lessons" asp-route-subTopicId="@ViewBag.SubtopicId" class="btn btn-success px-5 py-2">ПРОДОЛЖИТЬ</a>
         </div>
     }
     else
@@ -23,7 +23,7 @@
             <h5 class="mt-5 text-danger">Неудача!</h5>
             <img class="mt-4" src="~/topicImages/testNotPassedEmoji.svg"/>
             <p class="mt-3 text-danger">Ты плохо освоил данный урок!</p>
-            <a asp-action="Test" asp-route-lessonId="@ViewBag.LessonId" class="btn btn-danger px-5 py-2">Повторить</a>
+            <a asp-action="Index" asp-controller="MiniTests" asp-route-lessonId="@ViewBag.LessonId" class="btn btn-danger px-5 py-2">Повторить</a>
         </div>
     }
 </div>

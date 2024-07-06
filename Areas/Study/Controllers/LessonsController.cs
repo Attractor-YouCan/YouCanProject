@@ -43,17 +43,17 @@ public class LessonsController : Controller
     }
 
 
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(int lessonId)
     {
         User? currentUser = await _userManager.GetUserAsync(User);
-        Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == id);
+        Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == lessonId);
         if (lesson == null)
             return NotFound("No Lesson!");
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
             && ul.SubtopicId == lesson.SubtopicId);
         if (lesson.LessonLevel > userLessons.PassedLevel + 1)
-            return RedirectToAction("Lessons", new { subTopicId = lesson.SubtopicId });
+            return RedirectToAction("Index", new { subTopicId = lesson.SubtopicId });
         if (userLessons == null)
             return NotFound("NO UserLesson!");
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)

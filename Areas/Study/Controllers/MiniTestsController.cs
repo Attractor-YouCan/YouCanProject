@@ -21,11 +21,11 @@ public class MiniTestsController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int id)
+    public async Task<IActionResult> Index(int lessonId)
     {
         Test? test = await _db.Tests.Include(q => q.Questions)
             .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.LessonId == id);
+            .FirstOrDefaultAsync(t => t.LessonId == lessonId);
         if (test == null)
             return NotFound("No Test!");
         return View(test);

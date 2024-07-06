@@ -5,6 +5,16 @@
     Layout = "_Layout";
 }
 <link rel="stylesheet" href="~/css/lesson-test.css" asp-append-version="true"/>
+
+<div class="top-layout">
+    <a class="close-button" asp-action="Details" asp-controller="Lessons" asp-route-lessonId="@Model.LessonId">
+        <img src="~/topicImages/exitButton.svg">
+    </a>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+</div>
+
 <div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
     @if (Model.Questions.Count == 0 || Model.Questions == null)
     {
@@ -48,7 +58,6 @@
                 const questionsPerPage = 1; // Number of questions to show per page
                 let currentPage = 1;
                 let selectedAnswers = []; // Array to store selected answers
-
                 
                 document.querySelectorAll('.question-container').forEach(function(container) {
                     const answers = container.querySelectorAll('.answer-number');
@@ -62,7 +71,7 @@
                             const currentPageContainer = questionContainers[currentPage - 1];
                             const currentPageAnswers = currentPageContainer.querySelectorAll('.answer-radio');
                             let isAnySelected = Array.from(currentPageAnswers).some(radio => radio.checked);
-                            
+                            const totalQuestions = questionContainers.length;
                             // Update "Next" or "Finish" button based on currentPage and selected answers
                             if (currentPage === Math.ceil(questionContainers.length / questionsPerPage)) {
                                 document.getElementById('next-page').textContent = isAnySelected ? 'Закончить' : 'Следующий';
@@ -73,6 +82,10 @@
                             document.getElementById('next-page').disabled = !isAnySelected || (currentPage === Math.ceil(questionContainers.length / questionsPerPage) && !isAllAnswersSelected());
                             document.getElementById('prev-page').disabled = currentPage === 1;
                 
+                            let progressBar = document.getElementById('progress-bar');
+                            let percentage = (currentPage / Math.ceil(totalQuestions / questionsPerPage)) * 100;
+                            progressBar.style.width = percentage + '%';
+                            
                             currentPageAnswers.forEach(function(radio) {
                                 if (radio.checked) {
                                     radio.parentElement.style.backgroundColor = '#58CC02';
