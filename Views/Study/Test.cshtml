@@ -157,7 +157,7 @@
                                 let arrayOfObjects = Object.values(selectedAnswers);
                                 axios.post('/Study/Test/', arrayOfObjects)
                                     .then(response => {
-                                        console.log('Data sent successfully:', response.data);
+                                        window.location.href = `/Study/TestResultPage?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
                                     })
                                     .catch(error => {
                                         console.error('Error sending data:', error);

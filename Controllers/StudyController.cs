@@ -58,11 +58,12 @@ public class StudyController : Controller
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
             && ul.SubtopicId == lesson.SubtopicId);
+        if (lesson.LessonLevel > userLessons.PassedLevel+1)
+            return RedirectToAction("Lessons", new {subTopicId = lesson.SubtopicId});
         if (userLessons == null)
             return NotFound("NO UserLesson!");
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel+1 == lesson.LessonLevel)
             return View(lesson);
-        
         return NotFound("Пройдите предыдущий урок, чтобы открыть");
     }
 
@@ -93,29 +94,29 @@ public class StudyController : Controller
             join selectedAnswer in selectedAnswers on answer.Id equals selectedAnswer.AnswerId
             select selectedAnswer
         ).Count();
+        int n =0;
         if (passingCount >=2)
         {
             userLessons.PassedLevel = lesson.LessonLevel;
             userLessons.IsPassed = true;
             userLessons.LessonId = lesson.Id;
             _db.UserLessons.Update(userLessons);
-            int n = await _db.SaveChangesAsync();
-            if (n > 0)
-                return Ok("Вы прошли тест");
+            n = await _db.SaveChangesAsync();
         }
-        return Ok("Вы ответили неправильно");
+        var testResult = new {
+            isPassed = n > 0,
+            lessonId = lesson.Id,
+            subtopicId = lesson.SubtopicId
+        };
+        return Ok(testResult);    
     }
 
-    public async Task<IActionResult> TestResultPage(bool isPassed, Test? test)
+    [HttpGet]
+    public async Task<IActionResult> TestResultPage(bool isPassed, int lessonId, int subtopicId)
     {
-        if (isPassed)
-        {
-            return View();
-        }
-        else
-        {
-            return View();
-        }
+        ViewBag.LessonId = lessonId;
+        ViewBag.SubtopicId = subtopicId;
+        return View(isPassed);
     }
 
 }
