@@ -54,3 +54,8 @@ canvas {
 .chapter{
   background-color: #FF5C00;
 }
+
+.title {
+  font-size: 22px;
+  font-weight: bold;
+}

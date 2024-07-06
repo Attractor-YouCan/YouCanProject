@@ -21,7 +21,9 @@
     <h5 class="mt-4">Lecture</h5>
     <p class="mt-4">@Model.Lecture</p>
     
-    <a class="btn btn-success mx-auto mt-5" asp-action="Test" asp-route-lessonId="@Model.Id">Пройти тест</a>
+    <div class="text-center">
+        <a class="btn btn-primary px-5 mt-5" asp-action="Test" asp-route-lessonId="@Model.Id">Пройти тест</a>
+    </div>
     
 </div>
 
