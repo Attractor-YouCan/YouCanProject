@@ -14,7 +14,6 @@ public class TopicsController : Controller
 
     private UserManager<User> _userManager;
 
-    // GET
     public TopicsController(YouCanContext db, UserManager<User> userManager)
     {
         _db = db;
