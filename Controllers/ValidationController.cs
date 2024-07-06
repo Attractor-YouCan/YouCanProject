@@ -7,10 +7,10 @@ namespace YouCan.Controllers;
 
 public class ValidationController : Controller
 {
-    private YouCanDb _db;
+    private YouCanContext _db;
     private UserManager<User> _userManager;
 
-    public ValidationController(YouCanDb context, UserManager<User> userManager)
+    public ValidationController(YouCanContext context, UserManager<User> userManager)
     {
         _db = context;
         _userManager = userManager;

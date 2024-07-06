@@ -5,7 +5,7 @@ using YouCan.Services;
 
 namespace YouCan.Models;
 
-public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
+public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Statistic> Statistics { get; set; }
@@ -17,8 +17,7 @@ public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<UserLessons> UserLessons { get; set; }
     public DbSet<UserLevel> UserLevels { get; set; }
-    public DbSet<UserORTTests> UserORTTests { get; set; }
-    public YouCanDb(DbContextOptions<YouCanDb> options) : base(options){}
+    public DbSet<UserOrtTest> UserORTTests { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,5 +26,6 @@ public class YouCanDb : IdentityDbContext<User, IdentityRole<int>, int>
         new LessonInitializer(modelBuilder).Seed();
         new TestInitializer(modelBuilder).Seed();
     }
+    public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
 
 }
