@@ -93,7 +93,7 @@
 }
 
 
-.auth-main form .toggle-password {
+.auth-main form .toggle-password, .auth-main form .toggle-password2 {
     position: absolute;
     right: 15px;
     cursor: pointer;
@@ -139,6 +139,41 @@
     text-decoration: none;
     font-weight: 700;
 }
+
+.aboutUsRegister{
+    margin-top: 300px;
+    margin-bottom: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.aboutUsRegister h2{
+    text-align: center;
+    font-size: 45px;
+    font-weight: 700;
+}
+.aboutUsRegister button{
+    width: 420px;
+    height: 60px;
+    padding: 10px;
+    background-color: #58CC02;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 700;
+    margin-top: 30px;
+    cursor: pointer;
+}
+.aboutUsRegister button:hover{
+    background-color: #50b105;
+}
+@media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
+    .aboutUsRegister h2{ 
+        line-height: 30px;
+    }
+}}
 
 @media (max-width: 720px){
     .auth-main h1 {

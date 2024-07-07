@@ -100,7 +100,7 @@ public class AccountController : Controller
         return View(model);
     }
     
-    public async Task<IActionResult> Register()
+    public IActionResult Register()
     {
         return View();
     }
