@@ -169,6 +169,23 @@
 .aboutUsRegister button:hover{
     background-color: #50b105;
 }
+.progress-container {
+    width: 100%;
+    background-color: #5B7CB2;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0;
+    height: 23px;
+    background-color: #58CC02;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 10px 0 0 10px;
+    transition: ease-in-out .4s;
+}
+
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
     .aboutUsRegister h2{ 
         line-height: 30px;
