@@ -15,11 +15,14 @@
      margin-top: 200px; 
     gap: 20px;
 }
-
+.underNavbarSection{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
 .auth-main .back-button {
-    position: absolute;
-    top: 120px;
-    left: 40px;
+    display: flex;
     color: #fff;
     text-decoration: none;
     font-size: 24px;
@@ -141,11 +144,15 @@
 }
 
 .aboutUsRegister{
-    margin-top: 300px;
-    margin-bottom: 200px;
+    margin-top: 150px;
+    margin-bottom: 100px;
+   
+}
+.aboutUsRegister_content{
     display: flex;
+    align-items: center;
     flex-direction: column;
-    gap: 20px;
+    gap: 90px;
 }
 .aboutUsRegister h2{
     text-align: center;
@@ -163,7 +170,7 @@
     font-size: 16px;
     line-height: 18px;
     font-weight: 700;
-    margin-top: 30px;
+    margin-top: 100px;
     cursor: pointer;
 }
 .aboutUsRegister button:hover{
@@ -184,6 +191,24 @@
     line-height: 30px;
     border-radius: 10px 0 0 10px;
     transition: ease-in-out .4s;
+}
+.input-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.code-input {
+    width: 80px;
+    height: 80px;
+    margin: 0 5px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    background: #5B7CB2;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
 }
 
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
