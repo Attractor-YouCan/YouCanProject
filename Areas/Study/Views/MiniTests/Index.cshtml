@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="~/css/lesson-test.css" asp-append-version="true"/>
 
 <div class="top-layout">
-    <a class="close-button" asp-action="Details" asp-controller="Lessons" asp-route-lessonId="@Model.LessonId">
+    <a class="close-button" href="javascript:history.back()">
         <img src="~/topicImages/exitButton.svg">
     </a>
     <div class="progress-container">
@@ -42,7 +42,7 @@
         <div class="text-center mt-5" id="pagination-container">
             <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Предыдущий</button>
             <span id="page-info"></span>
-            <button class="btn btn-success shadow py-2 px-1 px-lg-4" id="next-page">Сделующий</button>
+            <button class="btn btn-success shadow py-2 ms-3 px-1 px-lg-4" id="next-page">Сделующий</button>
         </div>
     }
 </div>

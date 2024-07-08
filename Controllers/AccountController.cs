@@ -96,6 +96,7 @@ public class AccountController : Controller
                     await uploadedFile.CopyToAsync(fileStream);
                 }
             }
+            
             User user = new User
             {
                 Email = model.Email,
@@ -118,6 +119,12 @@ public class AccountController : Controller
         }
         ModelState.AddModelError("", "Something went wrong! Please check all info");
         return View(model);
+    }
+
+    public async Task<IActionResult> ConfirmEmail()
+    {
+        int code = 1234;
+        return Ok();
     }
 
     [HttpGet]
