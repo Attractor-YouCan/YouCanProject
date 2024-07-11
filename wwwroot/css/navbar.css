@@ -1,5 +1,33 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
 
+@media screen and (max-width: 768px) {
+    #nav-bar {
+        display: none
+    }
+
+    #header {
+        display: none;
+    }
+
+    #bottom-navbar {
+        display: flex;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    #nav-bar {
+        display: block;
+    }
+
+    #header {
+        display: block;
+    }
+
+    #bottom-navbar {
+        display: none;
+    }
+}
+
 .coiny-regular {
     font-family: "Coiny", system-ui;
     font-weight: 400;
@@ -36,8 +64,8 @@ a {
 }
 
 .header {
-    width: 100%;
-    height: var(--header-height);
+    width: 20px;
+    height: 20px;
     position: fixed;
     top: 0;
     left: 0;
@@ -47,7 +75,8 @@ a {
     padding: 0 1rem;
     background-color: var(--white-color);
     z-index: var(--z-fixed);
-    transition: .5s
+    transition: .5s;
+    background-color: white;
 }
 
 .header_toggle {
@@ -258,4 +287,12 @@ a {
     width: 40px;
     height: 10.87px;
     left: 52px;
+}
+
+.navbar-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
 }
