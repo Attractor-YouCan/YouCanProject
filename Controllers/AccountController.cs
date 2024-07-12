@@ -170,4 +170,11 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login", "Account");
     }
+    [Authorize]
+    public async Task<IActionResult> Delete()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        await _userManager.DeleteAsync(user);
+        return RedirectToAction("Login", "Account");
+    }
 }
