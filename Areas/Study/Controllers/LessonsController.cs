@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Repository;
 
 namespace YouCan.Areas.Study.Controllers;
 

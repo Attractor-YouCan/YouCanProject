@@ -1,6 +1,10 @@
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Repository;
+using YouCan.Repository.Repository;
+using YouCan.Service.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +12,49 @@ builder.Services.AddControllersWithViews();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection))
+builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection, x => x.MigrationsAssembly("YouCan.Repository")))
     .AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<YouCanContext>();
+
+builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
+builder.Services.AddTransient<ICRUDService<User>, UserCRUD>();
+
+builder.Services.AddTransient<IRepository<Topic>, Repository<Topic>>();
+builder.Services.AddTransient<ICRUDService<Topic>, CRUDService<Topic>>();
+
+builder.Services.AddTransient<IRepository<Subtopic>, Repository<Subtopic>>();
+builder.Services.AddTransient<ICRUDService<Subtopic>, CRUDService<Subtopic>>();
+
+builder.Services.AddTransient<IRepository<Answer>, Repository<Answer>>();
+builder.Services.AddTransient<ICRUDService<Answer>, CRUDService<Answer>>();
+
+builder.Services.AddTransient<IRepository<Lesson>, Repository<Lesson>>();
+builder.Services.AddTransient<ICRUDService<Lesson>, CRUDService<Lesson>>();
+
+builder.Services.AddTransient<IRepository<LessonModule>, Repository<LessonModule>>();
+builder.Services.AddTransient<ICRUDService<LessonModule>, CRUDService<LessonModule>>();
+
+builder.Services.AddTransient<IRepository<OrtTest>, Repository<OrtTest>>();
+builder.Services.AddTransient<ICRUDService<OrtTest>, CRUDService<OrtTest>>();
+
+builder.Services.AddTransient<IRepository<Question>, Repository<Question>>();
+builder.Services.AddTransient<ICRUDService<Question>, CRUDService<Question>>();
+
+builder.Services.AddTransient<IRepository<Statistic>, Repository<Statistic>>();
+builder.Services.AddTransient<ICRUDService<Statistic>, CRUDService<Statistic>>();
+
+builder.Services.AddTransient<IRepository<Test>, Repository<Test>>();
+builder.Services.AddTransient<ICRUDService<Test>, CRUDService<Test>>();
+
+builder.Services.AddTransient<IRepository<UserLessons>, Repository<UserLessons>>();
+builder.Services.AddTransient<ICRUDService<UserLessons>, CRUDService<UserLessons>>();
+
+builder.Services.AddTransient<IRepository<UserLevel>, Repository<UserLevel>>();
+builder.Services.AddTransient<ICRUDService<UserLevel>, CRUDService<UserLevel>>();
+
+builder.Services.AddTransient<IRepository<UserOrtTest>, Repository<UserOrtTest>>();
+builder.Services.AddTransient<ICRUDService<UserOrtTest>, CRUDService<UserOrtTest>>();
+
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
