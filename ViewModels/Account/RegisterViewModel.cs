@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YouCan.Models;
+namespace YouCan.Models.Account;
 
 public class RegisterViewModel
 {
