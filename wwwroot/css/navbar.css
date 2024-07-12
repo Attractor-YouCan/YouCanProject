@@ -20,7 +20,7 @@
     }
 
     #header {
-        display: block;
+        display: flex;
     }
 
     #bottom-navbar {
@@ -64,8 +64,8 @@ a {
 }
 
 .header {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     position: fixed;
     top: 0;
     left: 0;
@@ -73,10 +73,8 @@ a {
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
-    background-color: var(--white-color);
-    z-index: var(--z-fixed);
     transition: .5s;
-    background-color: white;
+    background-color: transparent;
 }
 
 .header_toggle {
@@ -102,7 +100,7 @@ a {
     position: fixed;
     top: 0;
     left: -30%;
-    width: var(--nav-width);
+    width: 90px;
     height: 100vh;
     background-color: var(--first-color);
     padding: .5rem 1rem 0 0;
@@ -291,8 +289,10 @@ a {
 
 .navbar-bottom {
     position: fixed;
+    height: 75px;
     bottom: 0;
     left: 0;
     width: 100%;
     background-color: #f8f9fa;
+    z-index: 100;
 }
