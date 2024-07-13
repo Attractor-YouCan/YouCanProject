@@ -6,25 +6,39 @@
     Layout = "_NavBar";
 }
 
-<div class="row g-0 pt-5" id="profile">
-    <div class="col-md-4 pb-5 text-center border-bottom">
-        <img src="@Model.AvatarUrl" width="200" height="200" class="rounded-circle mx-auto ">
-    </div>
-    
-    <div class="col-md-8 border-bottom">
-        <div class="card-body">
-            <div class="row">
-                <div class=" col col-3"><h5 id="profileEmail">@Model.Email</h5></div>
-                @if (ViewBag.EditAccess)
-                {
-                    <div class="col col-3 d-flex ms-4">
-                        <a asp-action="Edit" class="my-auto btn btn-light me-auto" id="edit">Редактировать</a>
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
+
+<div class="container">
+
+    <h1 class="d-md-none text-center profile-title">Профиль</h1>
+    <hr class="d-md-none">
+    <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col">
+            <div class="mt-md-5 mx-lg-0">
+                <div class="d-flex flex-row justify-content-between mx-2 mx-lg-0 mb-5">
+                    <div class="">
+                        <p class="profile-text-primary">@Model.FullName</p>
+                        <p class="profile-text-secondary">@Model.PhoneNumber</p>
+                        <div class="d-flex flex-row align-items-center">
+                            <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img>
+                            <p class="profile-text-secondary ms-1">Регистрация -</p>
+                        </div>
                     </div>
-                }
-                <div class="col col-12 mt-4">UserName: &nbsp;<h5 id="profileUserName">@Model.UserName</h5></div>
-                <div class="col col-12 mt-4">Phone number: &nbsp;<h5 id="profilePhone">@Model.PhoneNumber</h5></div>
-                <div class="col col-12 mt-4">FullName: &nbsp;<h5 id="lastNameProfile">@Model.FullName</h5></div>
+                    <div class="">
+                        <img class="profile-img" src="@Url.Content($"~{Model.AvatarUrl}")" alt="avatar">
+                    </div>
+                </div>
             </div>
+            <a asp-action="Edit" class="btn edit-profile-button d-inline-block p-0 d-flex flex-column justify-content-center">
+                <div class="edit-profile-button-body d-flex flex-row align-items-center justify-content-between">
+                    <img class="pencil-img" src="@Url.Content("/profileIcons/pencil.png")" alt="pencil">
+                    <p class="m-0 font-weight-bold">Редактировать</p>
+                    <img class="arrow-img" src="@Url.Content("/profileIcons/arrow.png")">
+                </div>
+            </a>
+            <hr>
         </div>
     </div>
+
 </div>
