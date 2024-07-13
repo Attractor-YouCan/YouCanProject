@@ -292,4 +292,8 @@
       <_ContentIncludedByDefault Remove="wwwroot\assets\images\fbb99f09-7ae8-4e80-9e59-3ea6377ba0cb.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\css\profile.css" />
+    </ItemGroup>
+
 </Project>
