@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
-using YouCan.Models.Account;
+using YouCan.ViewModels.Account;
 
 namespace YouCan.Controllers;
 
@@ -46,7 +46,7 @@ public class AccountController : Controller
         }
         return NotFound();
     }
-    
+
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Edit(User model, int userId, string? currentPassword, string? password)
