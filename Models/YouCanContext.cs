@@ -25,6 +25,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
         new TestInitializer(modelBuilder).Seed();
+        new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
 
