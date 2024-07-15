@@ -6,6 +6,7 @@ namespace YouCan.ViewModels.Account;
 public class RegisterViewModel
 {
     [Required(ErrorMessage = "Заполните поле Эл почта")]
+    [EmailAddress(ErrorMessage = "Некорректный адрес электронной почты")]
     [Remote(action: "CheckEmail", controller:"Validation", ErrorMessage = "Данный Email уже зарегистрирован!")]
     public string Email { get; set; }
     [Required(ErrorMessage = "Заполните поле Номер телефона")]
@@ -21,11 +22,9 @@ public class RegisterViewModel
     [Required(ErrorMessage = "Заполните поле Имя")]
     public string FirstName { get; set; }
     [Required(ErrorMessage = "Заполните поле Пароль")]
-    [DataType(DataType.Password)]
     public string Password { get; set; }
     [Required(ErrorMessage = "Заполните поле Подтвердить пароль")]
-    [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "Неверный Confirm Password, попробуйте еще раз!")]
+    [Compare("Password", ErrorMessage = "Не совпадают пароли, попробуйте еще раз!")]
     public string ConfirmPassword { get; set; }
     [Required(ErrorMessage = "Заполните поле Район!")]
     public string District { get; set; }

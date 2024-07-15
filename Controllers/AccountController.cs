@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services;
 using YouCan.ViewModels.Account;
 
 namespace YouCan.Controllers;
@@ -105,53 +106,178 @@ public class AccountController : Controller
     {
         return View();
     }
+    
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
+   public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
+   {  
+    if (ModelState.IsValid)
     {
-        if (ModelState.IsValid)
+        string path = "/userImages/defProf-ProfileN=1.png";
+        if (uploadedFile != null)
         {
-            string path = "/userImages/defProf-ProfileN=1.png";
-            if (uploadedFile != null)
+            string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
+            path = $"/userImages/" + newFileName.Trim();
+            using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
             {
-                string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
-                path= $"/userImages/" + newFileName.Trim();
-                using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
+                await uploadedFile.CopyToAsync(fileStream);
+            }
+        }
+
+        User user = new User
+        {
+            Email = model.Email,
+            UserName = model.UserName,
+            PhoneNumber = model.PhoneNumber,
+            FullName = model.LastName + " " + model.FirstName,
+            AvatarUrl = path,
+            BirthDate = model.BirthDate,
+            CreatedAt = DateTime.UtcNow.AddHours(6)
+        };
+        
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (result.Succeeded)
+        {
+            var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            var subject = "Ваш код подтверждения";
+            string message = $@"
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            background-color: #f4f4f4;
+                            padding: 20px;
+                        }}
+                        .container {{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                            border: 1px solid #ddd;
+                            border-radius: 10px;
+                            background-color: #fff;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }}
+                        .header {{
+                            text-align: center;
+                            background-color: #1252b3;
+                            color: white;
+                            padding: 10px;
+                            border-top-left-radius: 10px;
+                            border-top-right-radius: 10px;
+                        }}
+                        .header h1 {{
+                            margin: 0;
+                        }}
+                        .content {{
+                            padding: 20px;
+                        }}
+                        .content p {{
+                            margin: 10px 0;
+                        }}
+                        .content a {{
+                            color: #4CAF50;
+                            text-decoration: none;
+                        }}
+                        .button {{
+                            display: inline-block;
+                            padding: 10px 20px;
+                            margin: 20px 0;
+                            font-size: 16px;
+                            color: white;
+                            background-color: #1252b3;
+                            border: none;
+                            border-radius: 5px;
+                            text-align: center;
+                            text-decoration: none;
+                        }}
+                        .footer {{
+                            text-align: center;
+                            padding: 10px;
+                            font-size: 12px;
+                            color: #777;
+                            border-top: 1px solid #ddd;
+                            background-color: #f7f7f7;
+                            border-bottom-left-radius: 10px;
+                            border-bottom-right-radius: 10px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>
+                            <h1>Добро пожаловать в YouCan!</h1>
+                        </div>
+                        <div class='content'>
+                            <p>Твой никнейм:</p>
+                            <p><strong>{user.UserName}</strong></p>
+                            <p>Код активации:</p>
+                            <h2>{code}</h2>
+                        </div>
+                        <div class='footer'>
+                            <p>Благодарим что присоединилсь к YouCan!</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+            EmailSender emailSender = new EmailSender();
+            bool emailSent = emailSender.SendEmail(model.Email, subject, message);
+
+            if (!emailSent)
+            {
+                ModelState.AddModelError("", 
+                    "Не удалось отправить письмо с подтверждением. Пожалуйста, проверьте свой адрес электронной почты.");
+                return Json(new { success = false, errors = new List<string>
+                    { "Не удалось отправить письмо с подтверждением. Пожалуйста, проверьте свой адрес электронной почты." } });
             }
             
-            User user = new User
-            {
-                Email = model.Email,
-                UserName = model.UserName,
-                PhoneNumber = model.PhoneNumber,
-                Disctrict = model.District,
-                FullName = model.LastName+ " " + model.FirstName,
-                AvatarUrl = path,
-                BirthDate = model.BirthDate,
-                CreatedAt = DateTime.UtcNow.AddHours(6)
-                
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                return RedirectToAction("Profile", "Account", new {userId = user.Id});
-            }
-            foreach (var error in result.Errors)
-                ModelState.AddModelError(string.Empty, error.Description);
+            await _signInManager.SignInAsync(user, false);
+            return Json(new { success = true});
         }
-        ModelState.AddModelError("", "Something went wrong! Please check all info");
-        return View(model);
+        
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
     }
 
-    public async Task<IActionResult> ConfirmEmail()
+    ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
+    return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+  }
+
+    [HttpPost]
+    public async Task<IActionResult> ConfirmCode([FromBody]  ConfirmCodeRequest  model)
     {
-        int code = 1234;
-        return Ok();
+        if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Code))
+        {
+            ModelState.AddModelError("", "Ведите код!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            ModelState.AddModelError("", "Пользователь не найден!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+
+        var isCodeValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", model.Code);
+        if (!isCodeValid)
+        {
+            ModelState.AddModelError("", "Неправильный код!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+    
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
+        await _signInManager.SignInAsync(user, true);
+
+        return Json(new { success = true, userId = user.Id  });
     }
+    
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -196,156 +322,7 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login", "Account");
     }
-    [Authorize]
-    public async Task<IActionResult> Delete()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        string path = "/userImages/defProf-ProfileN=1.png";
-        if (user.AvatarUrl != path)
-        {
-            var fullPath = _environment.WebRootPath + user.AvatarUrl;
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-        }
-        await _signInManager.SignOutAsync();
-        await _userManager.DeleteAsync(user);
-        
-        return RedirectToAction("Login", "Account");
-    }
     
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SendConfirmationCode(string email)
-    {
-        if (string.IsNullOrEmpty(email))
-        {
-            return BadRequest("Email is required.");
-        }
-
-        var user = await _userManager.FindByEmailAsync(email);
-        if (user == null)
-        {
-            return BadRequest("User not found.");
-        }
-
-        var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-        var subject = "Your confirmation code";
-        // var message = $"Your confirmation code is: {code}";
-        string message = $@"
-            <html>
-            <head>
-                <style>
-                    body {{
-                        font-family: Arial, sans-serif;
-                        line-height: 1.6;
-                        color: #333;
-                        background-color: #f4f4f4;
-                        padding: 20px;
-                    }}
-                    .container {{
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 20px;
-                        border: 1px solid #ddd;
-                        border-radius: 10px;
-                        background-color: #fff;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                    }}
-                    .header {{
-                        text-align: center;
-                        background-color: #1252b3;
-                        color: white;
-                        padding: 10px;
-                        border-top-left-radius: 10px;
-                        border-top-right-radius: 10px;
-                    }}
-                    .header h1 {{
-                        margin: 0;
-                    }}
-                    .content {{
-                        padding: 20px;
-                    }}
-                    .content p {{
-                        margin: 10px 0;
-                    }}
-                    .content a {{
-                        color: #4CAF50;
-                        text-decoration: none;
-                    }}
-                    .button {{
-                        display: inline-block;
-                        padding: 10px 20px;
-                        margin: 20px 0;
-                        font-size: 16px;
-                        color: white;
-                        background-color: #1252b3;
-                        border: none;
-                        border-radius: 5px;
-                        text-align: center;
-                        text-decoration: none;
-                    }}
-                    .footer {{
-                        text-align: center;
-                        padding: 10px;
-                        font-size: 12px;
-                        color: #777;
-                        border-top: 1px solid #ddd;
-                        background-color: #f7f7f7;
-                        border-bottom-left-radius: 10px;
-                        border-bottom-right-radius: 10px;
-                    }}
-                </style>
-            </head>
-            <body>
-                <div class='container'>
-                    <div class='header'>
-                        <h1>Welcome to Insta!</h1>
-                    </div>
-                    <div class='content'>
-                        <p>Your profile username is:</p>
-                        <p><strong>{user.UserName}</strong></p>
-                        <p>Your activation code:</p>
-                            <h2>{code}</h2>
-                    </div>
-                    <div class='footer'>
-                        <p>Thank you for joining YouCan!</p>
-                    </div>
-                </div>
-            </body>
-            </html>";
-        
-        EmailSender emailSender = new EmailSender(); 
-        emailSender.SendEmail(email, subject, message);
-
-        return Ok("Confirmation code sent.");
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ConfirmCode(string email, string code)
-    {
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(code))
-        {
-            return BadRequest("Email and code are required.");
-        }
-
-        var user = await _userManager.FindByEmailAsync(email);
-        if (user == null)
-        {
-            return BadRequest("User not found.");
-        }
-
-        var isCodeValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", code);
-        if (!isCodeValid)
-        {
-            return BadRequest("Invalid code.");
-        }
-        
-        user.EmailConfirmed = true;
-        await _userManager.UpdateAsync(user);
-
-        return Ok("Email confirmed successfully.");
-    }
+   
+    
 }

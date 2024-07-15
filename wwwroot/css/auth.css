@@ -123,6 +123,9 @@
     font-weight: 700;
     margin-top: 30px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .auth-main form .loginBtn:hover {
@@ -159,7 +162,7 @@
     font-size: 45px;
     font-weight: 700;
 }
-.aboutUsRegister button{
+.next-btn{
     width: 420px;
     height: 60px;
     padding: 10px;
@@ -173,7 +176,7 @@
     margin-top: 100px;
     cursor: pointer;
 }
-.aboutUsRegister button:hover{
+.next-btn:hover{
     background-color: #50b105;
 }
 .progress-container {
@@ -209,6 +212,11 @@
     color: #fff;
     border: 2px solid #fff;
     border-radius: 5px;
+}
+.loader {
+    display: none;
+    width: 20px; 
+    height: 20px; 
 }
 
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
