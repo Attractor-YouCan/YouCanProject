@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.ViewModels.Account;
 
 namespace YouCan.Controllers;
 
@@ -45,35 +46,58 @@ public class AccountController : Controller
         }
         return NotFound();
     }
-    
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Edit()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        
+        ViewBag.User = user;
+        var viewModel = new EditViewModel()
+        {
+            BirthDate = DateOnly.FromDateTime(user.BirthDate.Value),
+            District = user.Disctrict,
+            FullName = user.FullName,
+            PhoneNumber = user.PhoneNumber,
+        };
+        return View(viewModel);
+    }
+
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Edit(User model, int userId, string? currentPassword, string? password)
+    public async Task<IActionResult> Edit(EditViewModel model)
     {
-        User? user = await _userManager.FindByIdAsync(userId.ToString());
-        if (user != null)
+        if(ModelState.IsValid)
         {
-            user.Email = model.Email;
-            user.UserName = model.UserName;
-            user.PhoneNumber = model.PhoneNumber;
-            if (password != null && currentPassword != null)
+            var user = await _userManager.GetUserAsync(User);
+            if (model.UploadedFile is not null)
             {
-                var result = await _userManager.ChangePasswordAsync(user, currentPassword, password);
-                if (!result.Succeeded)
+                string path = "/userImages/defProf-ProfileN=1.png";
+                if (user.AvatarUrl != path)
                 {
-                    foreach (var error in result.Errors)
+                    var fullPath = _environment.WebRootPath + user.AvatarUrl;
+                    if (System.IO.File.Exists(fullPath))
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        System.IO.File.Delete(fullPath);
                     }
-                    return NotFound();
                 }
+                string newFileName = Path.ChangeExtension($"{user.UserName.Trim()}-ProfileN=1", Path.GetExtension(model.UploadedFile.FileName));
+                path = $"/userImages/" + newFileName.Trim();
+                using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
+                {
+                    await model.UploadedFile.CopyToAsync(fileStream);
+                }
+                user.AvatarUrl = path;
             }
-            await _signInManager.RefreshSignInAsync(user);
+            user.FullName = model.FullName;
+            user.Disctrict = model.District;
+            user.BirthDate = model.BirthDate.ToDateTime(TimeOnly.MinValue);
+            user.PhoneNumber = model.PhoneNumber;
             await _userManager.UpdateAsync(user);
-            return new ObjectResult(user);
+            return RedirectToAction("Profile");
         }
-        ModelState.AddModelError("","Пользователь не найден");
-        return NotFound();
+        return View(model);
     }
     
     public async Task<IActionResult> Register()
@@ -102,6 +126,7 @@ public class AccountController : Controller
                 Email = model.Email,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber,
+                Disctrict = model.District,
                 FullName = model.LastName+ " " + model.FirstName,
                 AvatarUrl = path,
                 BirthDate = model.BirthDate,
@@ -168,6 +193,24 @@ public class AccountController : Controller
     public async Task<IActionResult> LogOut()
     {
         await _signInManager.SignOutAsync();
+        return RedirectToAction("Login", "Account");
+    }
+    [Authorize]
+    public async Task<IActionResult> Delete()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        string path = "/userImages/defProf-ProfileN=1.png";
+        if (user.AvatarUrl != path)
+        {
+            var fullPath = _environment.WebRootPath + user.AvatarUrl;
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+        await _signInManager.SignOutAsync();
+        await _userManager.DeleteAsync(user);
+        
         return RedirectToAction("Login", "Account");
     }
 }
