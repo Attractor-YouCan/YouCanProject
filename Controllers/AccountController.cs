@@ -130,6 +130,7 @@ public class AccountController : Controller
             UserName = model.UserName,
             PhoneNumber = model.PhoneNumber,
             FullName = model.LastName + " " + model.FirstName,
+            Disctrict = model.District,
             AvatarUrl = path,
             BirthDate = model.BirthDate,
             CreatedAt = DateTime.UtcNow.AddHours(6)
@@ -323,6 +324,24 @@ public class AccountController : Controller
         return RedirectToAction("Login", "Account");
     }
     
+    [Authorize]
+    public async Task<IActionResult> Delete()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        string path = "/userImages/defProf-ProfileN=1.png";
+        if (user.AvatarUrl != path)
+        {
+            var fullPath = _environment.WebRootPath + user.AvatarUrl;
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+        await _signInManager.SignOutAsync();
+        await _userManager.DeleteAsync(user);
+
+        return RedirectToAction("Register", "Account");
+    }
    
     
 }

@@ -61,7 +61,9 @@
             <input asp-for="BirthDate" type="date" class="col-auto form-control-theme" />
         </div>
     </form>
-    <a asp-action="Logout" asp-controller="Account" class="text-center d-block fw-bold text-decoration-none link-theme-secondary">Выйти</a>
+    <form class="d-flex justify-content-center" asp-action="LogOut" asp-controller="Account">
+        <button type="submit" class="border-0 bg-transparent p-0 text-center d-block fw-bold text-decoration-none link-theme-secondary">Выйти</button>
+    </form>
     <a asp-action="Delete" asp-controller="Account" class="text-center d-block fw-bold text-decoration-none link-theme-danger">
         Удалить аккаунт
     </a>
