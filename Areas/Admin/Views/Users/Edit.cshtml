@@ -1,0 +1,76 @@
+﻿@model User
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <form asp-action="Edit" id="editForm" asp-anti-forgery="true">
+        <div class="modal-body">
+            <div class="input-group mt-5">
+                <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
+                <label for="email"><span id="errorTakenEmail" class="text-danger"></span></label>
+                <div class="input-group">
+                    <input asp-for="Email" onkeyup="checkEmail()" type="email" class="form-control" placeholder="Email" value="@Model.Email" id="email" required="required">
+                </div>
+            </div>
+            <div class="input-group mt-2">
+                <label for="userName"><span id="errorTakenUserName" class="text-danger"></span></label>
+                <div class="input-group">
+                    <input asp-for="UserName" onkeyup="checkUserName()" type="text" class="form-control" placeholder="Username" value="@Model.UserName" id="userName" required="required">
+                </div>
+            </div>
+            <div class="input-group mt-2">
+                <label for="phone"><span class="text-danger"></span></label>
+                <div class="input-group">
+                    <input asp-for="PhoneNumber" oninput="validatePhoneNumber()" type="text" class="form-control" placeholder="Phone number" id="phone" value="@Model.PhoneNumber" required="required">
+                </div>
+            </div>
+            <div class="input-group mt-2">
+                <label for="fullname"><span class="text-danger"></span></label>
+                <div class="input-group">
+                    <input asp-for="FullName" type="text" class="form-control" placeholder="Full name" id="fullname" value="@Model.FullName" required="required">
+                </div>
+            </div>
+            <div class="input-group mt-2">
+                <label for="birth"><span class="text-danger"></span></label>
+                <div class="input-group">
+                    <input asp-for="BirthDate" type="text" class="form-control" placeholder="Birth date" id="birth" value="@Model.BirthDate" required="required">
+                </div>
+            </div>
+            <div class="input-group mt-2">
+                <input type="password" class="form-control" name="currentPassword" placeholder="Current Password" id="pass3" aria-describedby="button-addon3">
+                <button type="button" id="button-addon3" class="btn password-toggle-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="input-group mt-2">
+                <input type="password" oninput="validatePassword()" onchange="onChange()" class="form-control" name="password" placeholder="Password" id="pass" aria-describedby="button-addon1">
+                <button type="button" id="button-addon1" class="btn password-toggle-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="input-group mt-2">
+                <input type="password" onChange="onChange()" class="form-control" name="confirm" placeholder="Confirm Password" id="confPass" aria-describedby="button-addon2">
+                <button type="button" id="button-addon2" class="btn password-toggle-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <input type="hidden" name="userId" value="@Model.Id" />
+        </div>
+        <button type="submit" class="btn btn-primary">Изменить</button>
+    </form>
+</div>
