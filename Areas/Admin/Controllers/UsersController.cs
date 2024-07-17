@@ -22,6 +22,19 @@ public class UsersController : Controller
         var users = await _context.Users.ToListAsync();
         return View(users);
     }
+    [HttpPost]
+
+    public async Task<IActionResult> ChangeRole(int id, string role)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user != null)
+        {
+            await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+            await _userManager.AddToRoleAsync(user, role);
+            return RedirectToAction("Index");
+        }
+        return NotFound();
+    }
     public async Task<IActionResult> Details(int id)
     {
         var user = await _context.Users.FindAsync(id);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ try
 {
     var userManager = services.GetRequiredService<UserManager<User>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+    await AdminInitializer.SeedAdminUser(rolesManager, userManager);
 }
 catch (Exception ex)
 {

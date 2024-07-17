@@ -1,4 +1,6 @@
-﻿@model List<User>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> manager;
+@model List<User>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,25 +24,36 @@
             <th>
                 Email
             </th>
-            <th></th>
+            <th>
+                Роль
+            </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var user in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                @Html.DisplayFor(modelItem => user.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => user.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => user.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-userId="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @foreach (var role in await manager.GetRolesAsync(user))
+                {
+                    <span>@role</span>
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-userId="@user.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
             </td>
         </tr>
 }
