@@ -1,0 +1,30 @@
+@model YouCan.Areas.Train.ViewModels.TestResultViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
+    <h2>Результаты теста</h2>
+    <p>Правильных ответов: @Model.CorrectAnswers</p>
+
+    @foreach (var question in Model.Questions)
+    {
+    <div class="question-result mt-4">
+        <h5>Вопрос: @question.QuestionContent</h5>
+        <p>Ваш ответ: @question.Answers.FirstOrDefault(a => a.Id == question.SelectedAnswerId)?.Text</p>
+        <p>Правильный ответ: @question.Answers.FirstOrDefault(a => a.Id == question.CorrectAnswerId)?.Text</p>
+
+        @if (question.IsCorrect)
+        {
+        <span class="text-success">Правильно</span>
+        }
+        else
+        {
+        <span class="text-danger">Неправильно</span>
+        }
+    </div>
+    }
+</div>

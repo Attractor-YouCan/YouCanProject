@@ -1,0 +1,20 @@
+@model Question
+
+<div class="question-container text-center" data-question-id="@Model.Id">
+    <span class="fw-bold fs-5">@Model.Instruction</span>
+    <div class="question mt-4">
+        @Model.Content
+    </div>
+    @foreach (var answer in Model.Answers)
+    {
+        <label class="answer mt-4" role="button">
+            <input type="radio" name="answer-@Model.Id" value="@answer.Id" class="answer-radio">
+            <span class="answer-number">A</span>
+            <span class="answer-content h-100 w-100">@answer.Text</span>
+        </label>
+    }
+</div>
+
+@section Scripts {
+    <script src="/js/trainTest.js"></script>
+}
