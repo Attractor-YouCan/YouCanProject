@@ -95,3 +95,10 @@
     border-radius: 10px 0 0 10px;
     transition: width 0.5s;
 }
+.answer.correct {
+    background-color: green;
+}
+
+.answer.incorrect {
+    background-color: red;
+}

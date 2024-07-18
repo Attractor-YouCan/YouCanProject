@@ -42,7 +42,7 @@
             @foreach (var subtopic in Model)
             {
                 <div class="col-6 col-md-4 col-lg-2 subtopic">
-                    <a asp-controller="TrainTest" asp-action="Index" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                    <a asp-controller="Test" asp-action="Index" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <img src=@subtopic.ImageUrl
@@ -67,7 +67,7 @@
                 </a>
             </div>
             <div id="analogyCard1" class="col-6 col-md-4 col-lg-2 subtopic analogy-card" style="display: none;">
-                <a asp-controller="TrainTest" asp-action="Index" asp-route-isAnalogy="@false" asp-route-subTopicId="3" style="text-decoration: none; color: inherit;">
+                <a asp-controller="Test" asp-action="Index" asp-route-isAnalogy="@false" asp-route-subTopicId="3" style="text-decoration: none; color: inherit;">
                     <div class="card mb-3">
                         <div class="card-body">
                             <img src="/topicImages/readUnderstIcon.png"
@@ -79,7 +79,7 @@
                 </a>
             </div>
             <div id="analogyCard2" class="col-6 col-md-4 col-lg-2 subtopic analogy-card" style="display: none;">
-                <a asp-controller="TrainTest" asp-action="Index" asp-route-isAnalogy="@true" asp-route-subTopicId="3" style="text-decoration: none; color: inherit;">
+                <a asp-controller="Test" asp-action="Index" asp-route-isAnalogy="@true" asp-route-subTopicId="3" style="text-decoration: none; color: inherit;">
                     <div class="card mb-3">
                         <div class="card-body">
                             <img src="/topicImages/analogyIcon.png"

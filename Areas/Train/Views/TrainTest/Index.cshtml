@@ -32,7 +32,7 @@ Layout = "_Layout";
         <a class="btn @pageClass pagination-btn" id="page-@i">@i</a>
         }
     </div>
-    <div id="questions-container" data-subtopic-id="@Model.SubtopicId" data-current-page="@Model.PageViewModel.PageNumber">
+    <div id="questions-container" data-subtopic-id="@Model.TestId" data-current-page="@Model.PageViewModel.PageNumber">
         <div class="question-container text-center" data-question-id="@Model.CurrentQuestion.Id">
             <span class="fw-bold fs-5">@Model.CurrentQuestion.Instruction</span>
             <div class="question mt-4">

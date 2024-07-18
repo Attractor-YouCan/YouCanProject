@@ -19,17 +19,17 @@ public class TrainTestController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int subtopicId, bool? isAnalogy, int page = 1)
+    public async Task<IActionResult> Index(int testId, bool? isAnalogy, int page = 1)
     {
         int pageSize = 1; 
         Test? test = await _db.Tests.Include( q => q.Questions)
             .ThenInclude(q => q.Answers)          
-            .FirstOrDefaultAsync(t => t.SubtopicId == subtopicId);
+            .FirstOrDefaultAsync(t => t.Id == testId);
 
         if (test == null)
             return NotFound("No Test!");
 
-        if (subtopicId == 3 && isAnalogy == true)
+        if ( isAnalogy == true)
         {
             // Логика для аналогии (если есть)
         }
@@ -45,7 +45,7 @@ public class TrainTestController : Controller
         {
             PageViewModel = new PageViewModel(count, page, pageSize),
             CurrentQuestion = items.FirstOrDefault(),
-            SubtopicId = subtopicId,
+            TestId = testId,
         };
 
         return View(viewModel);
@@ -57,7 +57,7 @@ public class TrainTestController : Controller
         int pageSize = 1; 
         var test = await _db.Tests.Include(t => t.Questions)
             .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.SubtopicId == subtopicId);
+            .FirstOrDefaultAsync(t => t.Id == subtopicId);
 
         if (test == null)
             return NotFound("Test not found!");
@@ -67,7 +67,7 @@ public class TrainTestController : Controller
         var nextQuestion = questions.Skip((nextPage - 1) * pageSize).Take(pageSize).FirstOrDefault();
 
         if (nextQuestion == null)
-            return NotFound("No more questions!");
+            return BadRequest("No more questions!");
 
         return PartialView("_QuestionPartial", nextQuestion);
     }

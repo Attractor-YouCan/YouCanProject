@@ -13,7 +13,7 @@ public class Test
     public int? SubtopicId { get; set; }
     public Subtopic? Subtopic { get; set; }
     
-    public int? LessonId { get; set; }
+    public int? LessonId { get; set; }//не будет нужен для тренировки
     public Lesson? Lesson { get; set; }
     
     public int? OrtTestId { get; set; }
