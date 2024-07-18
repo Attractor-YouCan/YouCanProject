@@ -21,6 +21,10 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Subject>()
+            .HasMany(t => t.SubSubjects)
+            .WithOne(t => t.Parent)
+            .HasForeignKey(t => t.ParentId);
         base.OnModelCreating(modelBuilder);
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
