@@ -22,7 +22,7 @@ public class LessonsController : Controller
 
     public async Task<IActionResult> Index(int subTopicId)
     {
-        List<Lesson>? lessons = _db.Lessons.Where(l => l.SubtopicId == subTopicId).ToList();
+        List<Lesson>? lessons = _db.Lessons.Where(l => l.SubjectId == subTopicId).ToList();
         if (lessons == null)
             return NotFound("NO lessons in this topic !");
         User? currentUser = await _userManager.GetUserAsync(User);
@@ -31,10 +31,10 @@ public class LessonsController : Controller
 
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
-                                       && ul.SubtopicId == subTopicId);
+                                       && ul.SubjectId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubtopicId = subTopicId, PassedLevel = 0, IsPassed = true };
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true,SubtopicId = null};
             _db.UserLessons.Add(userLessons);
             await _db.SaveChangesAsync();
         }

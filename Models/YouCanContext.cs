@@ -18,6 +18,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<UserLessons> UserLessons { get; set; }
     public DbSet<UserLevel> UserLevels { get; set; }
     public DbSet<UserOrtTest> UserORTTests { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

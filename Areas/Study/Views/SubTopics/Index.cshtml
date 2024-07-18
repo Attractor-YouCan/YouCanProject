@@ -1,4 +1,5 @@
-@model List<Subtopic>
+@using YouCan.Services
+@model List<Subject>
 @{
     Layout = "_Layout";
 }
@@ -38,18 +39,36 @@
         {
             @foreach (var subtopic in Model)
             {
-                <div class="col-6 col-md-4 col-lg-2 subtopic">
-                    <a asp-controller="Lessons" asp-action="Index" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <img src=@subtopic.ImageUrl
-                                     class="card-img-top"
-                                     alt="@subtopic.Name"/>
-                                <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                if (subtopic.SubjectType == SubjectType.Parent)
+                {
+                    <div class="col-6 col-md-4 col-lg-2 subtopic">
+                        <a asp-controller="Subtopics" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <img src=@subtopic.ImageUrl
+                                         class="card-img-top"
+                                         alt="@subtopic.Name"/>
+                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-6 col-md-4 col-lg-2 subtopic">
+                        <a asp-controller="Lessons" asp-action="Index" asp-route-subTopicId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <img src=@subtopic.ImageUrl
+                                         class="card-img-top"
+                                         alt="@subtopic.Name"/>
+                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
             }
         }
     </div>
