@@ -54,24 +54,23 @@
                             как подготовиться вместе с Youcan!
                         </h2>
                         <a href="#"  data-bs-toggle="modal" data-bs-target="#aboutUsModal">
-                            <img src="~/authIcons/playVideo.png" alt="play video" width="200px" height="200px"/>
+                            <img src="~/authIcons/playVideo.png" alt="play video" class="playVideoImg"/>
                         </a>
                         <button class="nextBtn next-btn">Дальше</button>
                     </div>
 
                     
                     <div class="modal fade" id="aboutUsModal"  tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-dialog modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="btn-close btn btn-outline-dark " data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                     <div class="modal-body">
                                         <div class="video-container mx-auto text-center mt-5">
-                                            <iframe class="col-12 mx-auto rounded-3" width="560" height="315"
+                                            <iframe  id="youtube-video" class="col-12 mx-auto rounded-3" width="100%" height="450"
                                                     src="https://www.youtube.com/embed/P3ZTxke4AOU" frameborder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
-                                                    gyroscope; picture-in-picture" allowfullscreen>
+                                                    allowfullscreen>
                                             </iframe>
                                         </div>
                                     </div>
@@ -146,27 +145,29 @@
                             <label for="file">Фото профиля</label>
                             <input id="file" type="file" name="uploadedFile" class="form-control"  accept=".png, .jpg, .jpeg">
                         </div>
+                        
                         <div class="input-group password-wrapper">
-                            <label for="pass">
+                            <label for="pass" >
                                 <span class="text-danger"   asp-validation-for="Password"  id="passwordError"></span>
                             </label>
                             <div class="password-wrapper">
-                                <input asp-for="Password" type="password" oninput="validatePassword()" 
+                                <input asp-for="Password" type="password" oninput="validatePassword(); checkPasswords()" 
                                        name="password" class="form-control" placeholder="Пароль"   required="required"
-                                       id="pass" aria-describedby="button-addon1">
+                                       id="pass">
                                 <span class="toggle-password">
                                     <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon" width="32" height="32">
                                 </span>
                             </div>
                         </div>
+                        
                         <div class="input-group password-wrapper">
                             <label for="confPass">
-                                <span class="text-danger"  asp-validation-for="ConfirmPassword" id="passConfError"></span>
+                                <span class="text-danger"  id="passConfError"></span>
                             </label>
                             <div class="password-wrapper">
-                                <input asp-for="ConfirmPassword" type="password" oninput="checkPasswords()" 
-                                       class="form-control" placeholder="Подтвердите пароль" required="required"
-                                       id="confPass" aria-describedby="button-addon2">
+                                <input asp-for="ConfirmPassword" type="password" 
+                                       class="form-control" placeholder="Подтвердите пароль" oninput="checkPasswords()" required="required"
+                                       id="confPass">
                                 <span class="toggle-password2">
                                     <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon2" width="32" height="32">
                                 </span>
@@ -176,6 +177,7 @@
                             <span class="button-text">СОЗДАТЬ АККАУНТ</span>
                             <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                         </button>
+                       
                     </form>
                     <p class="terms">
                         Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>
@@ -184,7 +186,7 @@
                 </div>
                 <div id="page3" class="aboutUsRegister form-page active">
                     <h2>
-                        На вашу почту  был отправлен <br/>
+                        На вашу почту <span id="userEmailAddress"></span>  был отправлен <br/>
                         6-значный код для подтверждения
                     </h2>
                     <div id="errorContainer2" class="error-container text-danger"></div>
@@ -196,7 +198,10 @@
                         <input type="text" maxlength="1" class="code-input">
                         <input type="text" maxlength="1" class="code-input">
                     </div>
-                    <button id="confirm-button" class="loginBtn">ПОДТВЕРДИТЬ</button>
+                    <button id="confirm-button"  class="loginBtn">
+                        <span class="button-text">ПОДТВЕРДИТЬ</span>
+                        <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
+                    </button>
                 </div>
             </div>
         </div>
@@ -260,27 +265,32 @@
                  $password[0].setCustomValidity(errorMessage);
                  $passwordError.html(errorMessage);
              }
-}
+         }
+         
+         function checkPasswords() {
+             let password = $('#pass').val();
+             let confirm = $('#confPass').val();
+             let passConfError = $('#passConfError');
+
+             if (confirm === password) {
+                 $('#confPass')[0].setCustomValidity('');
+                 passConfError.text('');
+             } else {
+                 $('#confPass')[0].setCustomValidity('Пароли не совпадают');
+                 passConfError.text('Пароли не совпадают');
+             }
+         }
+
 
          $(document).ready(function () {
-             $('#pass, #confPass').on('input', function () {
-                 checkPasswords();
+             $('#aboutUsModal').on('hidden.bs.modal', function () {
+                 var $iframe = $('#youtube-video');
+                 var src = $iframe.attr('src');
+                 $iframe.attr('src', ''); 
+                 $iframe.attr('src', src); 
              });
-
-             function checkPasswords() {
-                 var password = $('#pass').val();
-                 var confirm = $('#confPass').val();
-                 var passConfError = $('#passConfError');
-
-                 if (confirm === password) {
-                     $('#confPass')[0].setCustomValidity('');
-                     passConfError.text('');
-                 } else {
-                     $('#confPass')[0].setCustomValidity('Пароли не совпадают');
-                     passConfError.text('Пароли не совпадают');
-                 }
-             }
-});
+             
+         });
          
          
     document.addEventListener('DOMContentLoaded', function() {
@@ -321,8 +331,7 @@
         });
 
         showPage(currentPage);
-
-
+        
         $('#registerForm').on('submit', function (event) {
             event.preventDefault();
             var formData = new FormData(this);
@@ -344,6 +353,7 @@
                 success: function (data) {
                     if (data.success) {
                         console.log(data, "success");
+                        $('#userEmailAddress').text(data.email);
                         currentPage++;
                         showPage(currentPage);
                     } else {
@@ -359,25 +369,12 @@
                 }
             });
         });
+        
+        
+        const $confirmBtn = $('#confirm-button');
+        const $errorContainer = $('#errorContainer2');
 
-        function showLoader(){
-            $('.button-text').hide();
-            $('.loginBtn').css('background', '#5B7CB2');
-            $('.loader').show();
-         }
-        function hideLoader(){
-            $('.button-text').show();
-            $('.loginBtn').css('background', '#58CC02');
-            $('.loader').hide();
-         }
-
-
-
-        $(document).ready(function () {
-            const $confirmBtn = $('#confirm-button');
-            const $errorContainer = $('#errorContainer2');
-
-            $confirmBtn.on('click', function () {
+        $confirmBtn.on('click', function () {
                 const verificationCode = $('.code-input').map(function () {
                     return $(this).val();
                 }).get().join('');
@@ -385,7 +382,9 @@
                 console.log("verification code " + verificationCode);
                 const email = $('#email').val();
                 $errorContainer.html('');
-
+                
+                showLoader();
+                
                 $.ajax({
                     url: 'ConfirmCode/',
                     type: 'POST',
@@ -400,26 +399,40 @@
                     },
                     error: function (error) {
                         console.log('Error:', error);
+                    },
+                    complete: function () {
+                        hideLoader();
                     }
                 });
             });
 
-            $('.code-input').each(function (index) {
-                const $input = $(this);
+        function showLoader(){
+            $('.button-text').hide();
+            $('.loginBtn').css('background', '#5B7CB2');
+            $('.loader').show();
+        }
+        function hideLoader(){
+            $('.button-text').show();
+            $('.loginBtn').css('background', '#58CC02');
+            $('.loader').hide();
+        }
 
-                $input.on('input', function () {
+        $('.code-input').each(function (index) {
+            const $input = $(this);
+
+            $input.on('input', function () {
                     if ($input.val().length === 1 && index < $('.code-input').length - 1) {
                         $('.code-input').eq(index + 1).focus();
                     }
-                });
+            });
 
-                $input.on('keydown', function (event) {
+            $input.on('keydown', function (event) {
                     if (event.key === 'Backspace' && index > 0 && $input.val() === '') {
                         $('.code-input').eq(index - 1).focus();
                     }
-                });
             });
         });
+        
 
 
         function displayValidationErrors(errors) {
@@ -444,9 +457,6 @@
         }
         
     });
-
-     
+    
      </script>
  }
- 
- 

@@ -110,7 +110,7 @@
     font-size: 18px;
 }
 
-.auth-main form .loginBtn {
+.loginBtn {
     width: 420px;
     height: 60px;
     padding: 10px;
@@ -123,12 +123,9 @@
     font-weight: 700;
     margin-top: 30px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.auth-main form .loginBtn:hover {
+.loginBtn:hover {
     background-color: #50b105;
 }
 
@@ -218,12 +215,35 @@
     width: 20px; 
     height: 20px; 
 }
+.playVideoImg{
+    width: 200px;
+    height: 200px;
+}
 
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
     .aboutUsRegister h2{ 
         line-height: 30px;
     }
 }}
+
+@media (max-width: 768px){
+    .aboutUsRegister {
+        margin-top: 100px;
+    }
+    .aboutUsRegister_content {
+        gap: 60px;
+    }
+    .aboutUsRegister h2 {
+        font-size: 35px;
+    }
+    .playVideoImg{
+        width: 150px;
+        height: 150px;
+    }
+    .next-btn {
+        margin-top: 0;
+    }
+}
 
 @media (max-width: 720px){
     .auth-main h1 {
@@ -249,6 +269,16 @@
 @media (max-width: 576px){
     .auth-main .back-button {
         top: 140px;
+    }
+    .aboutUsRegister h2 {
+        font-size: 25px;
+    }
+    .playVideoImg{
+        width: 130px;
+        height: 130px;
+    }
+    .next-btn {
+      width: 80%;
     }
 }
 @media (max-width: 490px){

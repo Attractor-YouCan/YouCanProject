@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,24 +12,26 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection))
     .AddIdentity<User, IdentityRole<int>>(options =>
     {
-            options.Password.RequiredLength = 6;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireDigit = true;
     })
     .AddEntityFrameworkStores<YouCanContext>()
-    .AddDefaultTokenProviders()
-    .AddTokenProvider<EmailTokenProvider<User>>("Email");
+    .AddDefaultTokenProviders();
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
     options.TokenLifespan = TimeSpan.FromHours(3);
 });
 
+builder.Services.AddScoped<TwoFactorService>();
+
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
+    
 try
 {
     var userManager = services.GetRequiredService<UserManager<User>>();
