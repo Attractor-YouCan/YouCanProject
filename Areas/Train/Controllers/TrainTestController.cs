@@ -145,4 +145,38 @@ public class TrainTestController : Controller
         var model = JsonConvert.DeserializeObject<TestResultViewModel>(resultModel);
         return View(model);
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> ReportQuestion([FromBody] QuestionReportModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var question = await _db.Questions.FindAsync(model.QuestionId);
+            if (question == null)
+            {
+                return NotFound("Question not found!");
+            }
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var report = new QuestionReport
+            {
+                Text = model.Text,
+                QuestionId = model.QuestionId,
+                UserId = user.Id
+            };
+
+            _db.QuestionReports.Add(report);
+            await _db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        return BadRequest("Invalid data!");
+    }
+
 }

@@ -90,6 +90,38 @@ $(document).ready(function () {
         finishTest();
     });
 
+    $('#report-question-button').click(function () {
+        $('#reportQuestionModal').modal('show');
+    });
+
+    $('#submit-report-button').click(function () {
+        let reportText = $('#report-text').val();
+        let questionId = $('.question-container').data('question-id');
+
+        if (!reportText.trim()) {
+            alert('Пожалуйста, введите текст отчета!');
+            return;
+        }
+
+        $.ajax({
+            url: '/Train/TrainTest/ReportQuestion',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: JSON.stringify({ questionId: questionId, text: reportText }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                alert('Ваш отчет был отправлен!');
+                $('#reportQuestionModal').modal('hide');
+                $('#report-text').val('');
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+
     function finishTest() {
         $.ajax({
             url: '/Train/TrainTest/FinishTest',
