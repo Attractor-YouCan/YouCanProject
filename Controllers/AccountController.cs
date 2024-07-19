@@ -110,6 +110,8 @@ public class AccountController : Controller
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "user");
+                await _userManager.SetLockoutEnabledAsync(user, false);
                 await _signInManager.SignInAsync(user, false);
                 return RedirectToAction("Profile", "Account", new {userId = user.Id});
             }

@@ -40,6 +40,36 @@ public class UsersController : Controller
         }
         return RedirectToAction("Index");
     }
+    public async Task<IActionResult> Block(int id)
+    {
+        User user = await _userManager.FindByIdAsync(id.ToString());
+        if (user != null)
+        {
+            var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, true);
+            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue.ToUniversalTime());
+
+            if (lockUserTask.Succeeded && lockDateTask.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        return NotFound();
+    }
+    public async Task<IActionResult> Unblock(int id)
+    {
+        User user = await _userManager.FindByIdAsync(id.ToString());
+        if (user != null)
+        {
+            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
+            var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
+
+            if (lockUserTask.Succeeded && lockDateTask.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        return NotFound();
+    }
     public async Task<IActionResult> Details(int id)
     {
         var user = await _context.Users.FindAsync(id);
