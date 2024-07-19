@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
@@ -23,17 +24,21 @@ public class UsersController : Controller
         return View(users);
     }
     [HttpPost]
-
-    public async Task<IActionResult> ChangeRole(int id, string role)
+    [Authorize(Roles = "admin")]
+    public async Task<IActionResult> ChangeRole(int id, string? role)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user != null)
+        if (String.IsNullOrEmpty(role))
         {
-            await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
-            await _userManager.AddToRoleAsync(user, role);
-            return RedirectToAction("Index");
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null)
+            {
+                await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+                await _userManager.AddToRoleAsync(user, role);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
         }
-        return NotFound();
+        return RedirectToAction("Index");
     }
     public async Task<IActionResult> Details(int id)
     {

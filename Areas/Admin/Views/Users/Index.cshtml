@@ -28,6 +28,9 @@
                 Роль
             </th>
             <th>
+                Права доступа
+            </th>
+            <th>
 
             </th>
         </tr>
@@ -48,6 +51,24 @@
                 @foreach (var role in await manager.GetRolesAsync(user))
                 {
                     <span>@role</span>
+                }
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (!await manager.IsInRoleAsync(user, "admin") && await manager.IsInRoleAsync(await manager.GetUserAsync(User), "admin"))
+                    {
+                        <form asp-action="ChangeRole" method="post">
+                            <input type="hidden" name="Id" value="@user.Id"/>
+                            <select name="role">
+                                <option value=""></option>
+                                <option value="admin">admin</option>
+                                <option value="manager">manager</option>
+                                <option value="user">user</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Поменять права</button>
+                        </form>
+                    }
                 }
             </td>
             <td>

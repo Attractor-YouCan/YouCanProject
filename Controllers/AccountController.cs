@@ -96,17 +96,16 @@ public class AccountController : Controller
                     await uploadedFile.CopyToAsync(fileStream);
                 }
             }
-            
+
             User user = new User
             {
                 Email = model.Email,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber,
-                FullName = model.LastName+ " " + model.FirstName,
+                FullName = model.LastName + " " + model.FirstName,
                 AvatarUrl = path,
-                BirthDate = model.BirthDate,
-                CreatedAt = DateTime.UtcNow.AddHours(6)
-                
+                BirthDate = model.BirthDate.ToUniversalTime(),
+                CreatedAt = DateTime.UtcNow
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)

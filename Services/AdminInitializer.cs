@@ -28,10 +28,6 @@ public class AdminInitializer
             {
                 await _userManager.AddToRoleAsync(superadmin, "admin");
             }
-            else
-            {
-                Console.WriteLine("ERROR");
-            }
         }
     }
 }
