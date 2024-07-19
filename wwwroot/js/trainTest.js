@@ -81,14 +81,14 @@ $(document).ready(function () {
             data: JSON.stringify({ answers: answers }),
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                console.log(data)
-                //window.location.href = '/Train/TrainTest/TestResult'; 
+                const resultModelJson = encodeURIComponent(JSON.stringify(data.resultModel));
+                window.location.href = `/Train/TrainTest/TestResult?resultModel=${resultModelJson}`;
             },
             error: function (error) {
                 console.error('Error:', error);
             }
         });
-    }   
+    }
 
     $('.pagination-btn').click(function (e) {
         e.preventDefault();

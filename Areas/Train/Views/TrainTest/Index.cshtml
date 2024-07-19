@@ -34,17 +34,18 @@ Layout = "_Layout";
     </div>
     <div id="questions-container" data-subtopic-id="@Model.TestId" data-current-page="@Model.PageViewModel.PageNumber">
         <div class="question-container text-center" data-question-id="@Model.CurrentQuestion.Id">
+            <h4 class="my-4">@Model.SubjectName</h4>
             <span class="fw-bold fs-5">@Model.CurrentQuestion.Instruction</span>
             <div class="question mt-4">
                 @Model.CurrentQuestion.Content
             </div>
             @foreach (var answer in Model.CurrentQuestion.Answers)
             {
-            <label class="answer mt-4" role="button">
-                <input type="radio" name="answer-@Model.CurrentQuestion.Id" value="@answer.Id" class="answer-radio">
-                <span class="answer-number">A</span>
-                <span class="answer-content h-100 w-100">@answer.Text</span>
-            </label>
+                <label class="answer mt-4" role="button">
+                    <input type="radio" name="answer-@Model.CurrentQuestion.Id" value="@answer.Id" class="answer-radio">
+                    <span class="answer-number">A</span>
+                    <span class="answer-content h-100 w-100">@answer.Text</span>
+                </label>
             }
         </div>
     </div>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using YouCan.Areas.Train.ViewModels;
 using YouCan.Models;
 
@@ -27,7 +28,7 @@ public class TrainTestController : Controller
         Test? test = await _db.Tests.Include( q => q.Questions)
             .ThenInclude(q => q.Answers)          
             .FirstOrDefaultAsync(t => t.Id == testId);
-
+        var subjectId = test.SubjectId;
         if (test == null)
             return NotFound("No Test!");
         
@@ -43,6 +44,7 @@ public class TrainTestController : Controller
             PageViewModel = new PageViewModel(count, page, pageSize),
             CurrentQuestion = items.FirstOrDefault(),
             TestId = testId,
+            SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault()
         };
 
         return View(viewModel);
@@ -58,7 +60,9 @@ public class TrainTestController : Controller
 
         if (test == null)
             return NotFound("Test not found!");
-
+        
+        var subjectId = test.SubjectId;
+        ViewBag.SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault();
         var questions = test.Questions.OrderBy(q => q.Id).ToList();
         var nextPage = currentPage + 1;
         
@@ -131,11 +135,13 @@ public class TrainTestController : Controller
             Questions = results
         };
 
-        return RedirectToAction("TestResult", resultModel);
+        return Json(new { resultModel = resultModel });
     }
-    
-    public IActionResult TestResult(TestResultViewModel model)
+        
+    [HttpGet]
+    public IActionResult TestResult(string resultModel)
     {
+        var model = JsonConvert.DeserializeObject<TestResultViewModel>(resultModel);
         return View(model);
     }
 }
