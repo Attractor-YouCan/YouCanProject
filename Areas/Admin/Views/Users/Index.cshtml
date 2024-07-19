@@ -59,7 +59,7 @@
             <td>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @if (!await manager.IsInRoleAsync(user, "admin") && await manager.IsInRoleAsync(await manager.GetUserAsync(User), "admin"))
+                    @if (!await manager.IsInRoleAsync(user, "admin") && User.IsInRole("admin"))
                     {
                         <form asp-action="ChangeRole" method="post">
                             <input type="hidden" name="Id" value="@user.Id"/>
@@ -78,16 +78,19 @@
                 @user.LockoutEnabled
             </td>
             <td>
-                <a asp-action="Edit" asp-route-userId="@user.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@user.Id">Delete</a> |
-                @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                @if (User.IsInRole("admin"))
                 {
-                    <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
-                }
-                else
-                {
-                    <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                    <a asp-action="Edit" asp-route-userId="@user.Id">Edit |</a> 
+                    <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
+                    <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
+                    @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                    {
+                        <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                    }
                 }
             </td>
         </tr>

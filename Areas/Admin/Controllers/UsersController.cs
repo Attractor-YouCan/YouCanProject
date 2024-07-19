@@ -6,6 +6,7 @@ using YouCan.Models;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles = "admin, manager")]
 public class UsersController : Controller
 {
     private readonly YouCanContext _context;
@@ -40,6 +41,7 @@ public class UsersController : Controller
         }
         return RedirectToAction("Index");
     }
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Block(int id)
     {
         User user = await _userManager.FindByIdAsync(id.ToString());
@@ -55,6 +57,7 @@ public class UsersController : Controller
         }
         return NotFound();
     }
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Unblock(int id)
     {
         User user = await _userManager.FindByIdAsync(id.ToString());
