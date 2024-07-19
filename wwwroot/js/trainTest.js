@@ -3,11 +3,33 @@ $(document).ready(function () {
     let csrfToken = $('input[name="__RequestVerificationToken"]').val();
     let subtopicId = $('#questions-container').data('subtopic-id');
 
+    function loadAnsweredQuestions() {
+        answers.forEach(answer => {
+            let pageButton = $('.pagination-btn').eq(answer.pageIndex - 1);
+            if (answer.isCorrect) {
+                pageButton.removeClass('btn-default').addClass('btn-success');
+            } else {
+                pageButton.removeClass('btn-default').addClass('btn-danger');
+            }
+        });
+    }
+
+    function blockAnsweredQuestion() {
+        let currentQuestionId = $('.question-container').data('question-id');
+        let answeredQuestion = answers.find(answer => answer.questionId == currentQuestionId);
+
+        if (answeredQuestion) {
+            $('input[name="answer-' + currentQuestionId + '"]').prop('disabled', true);
+            $('#answer-button').prop('disabled', true);
+        } else {
+            $('input[name="answer-' + currentQuestionId + '"]').prop('disabled', false);
+            $('#answer-button').prop('disabled', false);
+        }
+    }
+
     $('#answer-button').click(function () {
         let questionId = $('.question-container').data('question-id');
         let selectedAnswer = $('input[name="answer-' + questionId + '"]:checked');
-        console.log('Current Question ID:', questionId);
-        console.log('Selected Answer:', selectedAnswer);
         if (!selectedAnswer.length) {
             alert('Пожалуйста, выберите ответ!');
             return;
@@ -24,12 +46,8 @@ $(document).ready(function () {
             data: JSON.stringify({ questionId: questionId, selectedAnswerId: selectedAnswerId }),
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                console.log('CheckAnswer success:', data);
                 let pageIndex = $('#questions-container').data('current-page');
-                console.log('Page Index: ', pageIndex);
-                console.log('Subtopic ID: ', subtopicId);
                 let pageButton = $('.pagination-btn').eq(pageIndex - 1);
-                console.log('Page Button: ', pageButton);
 
                 if (data.isCorrect) {
                     pageButton.removeClass('btn-default').addClass('btn-success');
@@ -37,7 +55,8 @@ $(document).ready(function () {
                     pageButton.removeClass('btn-default').addClass('btn-danger');
                 }
 
-                answers.push({ questionId: questionId, selectedAnswerId: selectedAnswerId });
+                answers.push({ questionId: questionId, selectedAnswerId: selectedAnswerId, isCorrect: data.isCorrect, pageIndex: pageIndex });
+                localStorage.setItem('answers', JSON.stringify(answers));
 
                 $.ajax({
                     url: '/Train/TrainTest/GetNextQuestion',
@@ -45,15 +64,15 @@ $(document).ready(function () {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    data: { currentPage: pageIndex, subtopicId: subtopicId },
+                    data: { currentPage: pageIndex, wantedPage: 0, subtopicId: subtopicId },
                     success: function (response) {
                         if (response.finished) {
+                            blockAnsweredQuestion();
                             finishTest();
                         } else {
                             $('#questions-container').html(response);
                             $('#questions-container').data('current-page', pageIndex + 1);
-                            var newQuestionId = $('.question-container').data('question-id');
-                            $('#questions-container').attr('data-question-id', newQuestionId);
+                            blockAnsweredQuestion();
                         }
                     },
                     error: function (error) {
@@ -92,6 +111,25 @@ $(document).ready(function () {
 
     $('.pagination-btn').click(function (e) {
         e.preventDefault();
-        alert('Нелинейная навигация не разрешена!');
+        let wantedPage = parseInt($(this).text());
+        $.ajax({
+            url: '/Train/TrainTest/GetNextQuestion',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: { currentPage: 0, wantedPage: wantedPage, subtopicId: subtopicId },
+            success: function (response) {
+                $('#questions-container').html(response);
+                $('#questions-container').data('current-page', wantedPage);
+                blockAnsweredQuestion();
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
     });
+
+    loadAnsweredQuestions();
+    blockAnsweredQuestion();
 });

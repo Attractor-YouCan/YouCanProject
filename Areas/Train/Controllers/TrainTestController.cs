@@ -51,7 +51,7 @@ public class TrainTestController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId)
+    public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId, [FromForm] int wantedPage)
     {
         int pageSize = 1; 
         var test = await _db.Tests.Include(t => t.Questions)
@@ -64,19 +64,20 @@ public class TrainTestController : Controller
         var subjectId = test.SubjectId;
         ViewBag.SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault();
         var questions = test.Questions.OrderBy(q => q.Id).ToList();
-        var nextPage = currentPage + 1;
-        
-        if (nextPage > questions.Count)
+    
+        int pageToLoad = wantedPage > 0 ? wantedPage : currentPage + 1;
+    
+        if (pageToLoad > questions.Count)
         {
             return Json(new { finished = true });
         }
-        
-        var nextQuestion = questions.Skip((nextPage - 1) * pageSize).Take(pageSize).FirstOrDefault();
+    
+        var question = questions.Skip((pageToLoad - 1) * pageSize).Take(pageSize).FirstOrDefault();
 
-        if (nextQuestion == null)
+        if (question == null)
             return BadRequest("No more questions!");
 
-        return PartialView("_QuestionPartial", nextQuestion);
+        return PartialView("_QuestionPartial", question);
     }
     
     [HttpPost]
