@@ -3,7 +3,6 @@
 
 @{
     ViewBag.Title = "Delivery";
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -22,9 +21,7 @@
     </div>
     <div class="section1_container">
         <div class="auth-main">
-            <a asp-controller="Home" asp-action="Index" class="back-button">
-                <img src="~/authIcons/backArrow.png" alt="">
-            </a>
+           
             <div class="navContainer">
                 <nav>
                     <a asp-controller="Home" asp-action="Index" class="linkLogo">
@@ -42,6 +39,11 @@
                     </div>
 
                 </nav>
+            </div>
+            <div class="underNavbarSection">
+                <a asp-controller="Home" asp-action="Index" class="back-button">
+                    <img src="~/authIcons/backArrow.png" alt="">
+                </a>
             </div>
             <div class="authForm">
                 <h1>Вход</h1>

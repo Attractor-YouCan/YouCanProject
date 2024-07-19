@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services;
+using YouCan.Services.Email;
 using YouCan.ViewModels.Account;
 
 namespace YouCan.Controllers;
@@ -14,14 +16,18 @@ public class AccountController : Controller
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
+    private readonly TwoFactorService _twoFactorService;
 
 
-    public AccountController(YouCanContext db, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+    public AccountController(YouCanContext db, UserManager<User> userManager,
+        SignInManager<User> signInManager, IWebHostEnvironment environment,
+        TwoFactorService twoFactorService)
     {
         _db = db;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
+        _twoFactorService = twoFactorService;
     }
     
     
@@ -100,57 +106,171 @@ public class AccountController : Controller
         return View(model);
     }
     
-    public async Task<IActionResult> Register()
+    public IActionResult Register()
     {
         return View();
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
+   {
+    if (ModelState.IsValid)
     {
-        if (ModelState.IsValid)
+        string path = "/userImages/defProf-ProfileN=1.png";
+        if (uploadedFile != null)
         {
-            string path = "/userImages/defProf-ProfileN=1.png";
-            if (uploadedFile != null)
+            string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
+            path = $"/userImages/" + newFileName.Trim();
+            using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
             {
-                string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
-                path= $"/userImages/" + newFileName.Trim();
-                using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
+                await uploadedFile.CopyToAsync(fileStream);
             }
-            
-            User user = new User
-            {
-                Email = model.Email,
-                UserName = model.UserName,
-                PhoneNumber = model.PhoneNumber,
-                Disctrict = model.District,
-                FullName = model.LastName+ " " + model.FirstName,
-                AvatarUrl = path,
-                BirthDate = model.BirthDate,
-                CreatedAt = DateTime.UtcNow.AddHours(6)
-                
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                return RedirectToAction("Profile", "Account", new {userId = user.Id});
-            }
-            foreach (var error in result.Errors)
-                ModelState.AddModelError(string.Empty, error.Description);
         }
-        ModelState.AddModelError("", "Something went wrong! Please check all info");
-        return View(model);
+        User user = new User
+        {
+            Email = model.Email,
+            UserName = model.UserName,
+            PhoneNumber = model.PhoneNumber,
+            FullName = model.LastName + " " + model.FirstName,
+            Disctrict = model.District,
+            AvatarUrl = path,
+            BirthDate = model.BirthDate,
+            CreatedAt = DateTime.UtcNow.AddHours(6)
+        };
+        
+        await _userManager.CreateAsync(user, model.Password);
+        await _signInManager.SignInAsync(user, true);
+        
+        var (subject, message) =  GenerateEmailConfirmationContentAsync(user, model.UserName);
+        EmailSender emailSender = new EmailSender();
+        emailSender.SendEmail(model.Email, subject, message);
+        return Json(new { success = true, email = user.Email});
     }
 
-    public async Task<IActionResult> ConfirmEmail()
+    ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
+    return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+   }
+
+   private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
+   {
+    var code =  _twoFactorService.GenerateCode(user.Id);
+    var subject = "Ваш код подтверждения";
+    string message = $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background-color: #f4f4f4;
+                    padding: 20px;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }}
+                .header {{
+                    text-align: center;
+                    background-color: #1252b3;
+                    color: white;
+                    padding: 10px;
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                }}
+                .header h1 {{
+                    margin: 0;
+                }}
+                .content {{
+                    padding: 20px;
+                }}
+                .content p {{
+                    margin: 10px 0;
+                }}
+                .content a {{
+                    color: #4CAF50;
+                    text-decoration: none;
+                }}
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    margin: 20px 0;
+                    font-size: 16px;
+                    color: white;
+                    background-color: #1252b3;
+                    border: none;
+                    border-radius: 5px;
+                    text-align: center;
+                    text-decoration: none;
+                }}
+                .footer {{
+                    text-align: center;
+                    padding: 10px;
+                    font-size: 12px;
+                    color: #777;
+                    border-top: 1px solid #ddd;
+                    background-color: #f7f7f7;
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Добро пожаловать в YouCan!</h1>
+                </div>
+                <div class='content'>
+                    <p>Твой никнейм:</p>
+                    <p><strong>{userName}</strong></p>
+                    <p>Код активации:</p>
+                    <h2>{code}</h2>
+                </div>
+                <div class='footer'>
+                    <p>Благодарим что присоединилсь к YouCan!</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+    return (subject, message);
+   }     
+
+   
+    [HttpPost]
+    public async Task<IActionResult> ConfirmCode([FromBody]  ConfirmCodeRequest  model)
     {
-        int code = 1234;
-        return Ok();
+        if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Code))
+        {
+            ModelState.AddModelError("", "Ведите код!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            ModelState.AddModelError("", "Пользователь не найден!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+
+        var isCodeValid =  _twoFactorService.VerifyCode(user.Id, model.Code);
+        if (!isCodeValid)
+        {
+            ModelState.AddModelError("", "Неправильный код!.");
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+    
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
+        await _signInManager.SignInAsync(user, true);
+
+        return Json(new { success = true, userId = user.Id  });
     }
+    
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -195,6 +315,7 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login", "Account");
     }
+    
     [Authorize]
     public async Task<IActionResult> Delete()
     {
@@ -210,7 +331,9 @@ public class AccountController : Controller
         }
         await _signInManager.SignOutAsync();
         await _userManager.DeleteAsync(user);
-        
-        return RedirectToAction("Login", "Account");
+
+        return RedirectToAction("Register", "Account");
     }
+   
+    
 }
