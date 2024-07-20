@@ -109,7 +109,6 @@ else
                 const lessonLevels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(lesson => lesson.RequiredLevel).ToList()));
                 const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
                 
-                drawLines();
                 
                 function resizeCanvas() {
                     canvas.width = document.documentElement.clientWidth;
@@ -141,6 +140,7 @@ else
                 }
 
                 resizeCanvas();
+                drawLines();
 
                 window.addEventListener('resize', resizeCanvas);
                 window.addEventListener('scroll', drawLines);                
