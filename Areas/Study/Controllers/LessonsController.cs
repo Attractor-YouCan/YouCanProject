@@ -34,7 +34,7 @@ public class LessonsController : Controller
                                        && ul.SubjectId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true,SubtopicId = null};
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true, SubtopicId = null};
             _db.UserLessons.Add(userLessons);
             await _db.SaveChangesAsync();
         }
@@ -51,9 +51,9 @@ public class LessonsController : Controller
             return NotFound("No Lesson!");
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
-            && ul.SubtopicId == lesson.SubtopicId);
+            && ul.SubjectId == lesson.SubjectId);
         if (lesson.LessonLevel > userLessons.PassedLevel + 1)
-            return RedirectToAction("Index", new { subTopicId = lesson.SubtopicId });
+            return RedirectToAction("Index", new { subTopicId = lesson.SubjectId });
         if (userLessons == null)
             return NotFound("NO UserLesson!");
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)

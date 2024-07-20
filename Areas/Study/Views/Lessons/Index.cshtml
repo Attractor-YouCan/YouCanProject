@@ -37,6 +37,7 @@ else
 @section Scripts
 {
     <script>
+    
         function levelButton(element) {
             $('.level').popover('dispose');
 
@@ -107,7 +108,9 @@ else
                 const levels = document.querySelectorAll('.level');
                 const lessonLevels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(lesson => lesson.RequiredLevel).ToList()));
                 const currentLessonLevel = @Html.Raw(ViewBag.CurrentLessonLevel);
-
+                
+                drawLines();
+                
                 function resizeCanvas() {
                     canvas.width = document.documentElement.clientWidth;
                     canvas.height = document.querySelector('.levels').offsetHeight + 200;
@@ -140,8 +143,7 @@ else
                 resizeCanvas();
 
                 window.addEventListener('resize', resizeCanvas);
-                window.addEventListener('scroll', drawLines);
-
+                window.addEventListener('scroll', drawLines);                
                 setInterval(drawLines, 1);
 
                 const observer = new MutationObserver(resizeCanvas);
