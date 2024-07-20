@@ -6,11 +6,12 @@
     <div class="question mt-4">
         @Model.Content
     </div>
-    @foreach (var answer in Model.Answers)
+    @for (int i = 0; i < Model.Answers.Count; i++)
     {
+        var answer = Model.Answers[i];
         <label class="answer mt-4" role="button">
             <input type="radio" name="answer-@Model.Id" value="@answer.Id" class="answer-radio">
-            <span class="answer-number">A</span>
+            <span class="answer-number">@((char)('А' + i))</span>
             <span class="answer-content h-100 w-100">@answer.Text</span>
         </label>
     }
