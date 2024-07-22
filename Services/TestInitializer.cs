@@ -15,8 +15,8 @@ public class TestInitializer
     public void Seed()
     {
         _modelBuilder.Entity<Test>().HasData(
-            new Test(){Id = 1, LessonId = 12},//Альтернатива LessonId = 1
-            new Test(){Id = 2, LessonId = 13}//Альтернатива LessonId = 2
+            new Test(){Id = 1, LessonId = 12, OrtTestId = 1, SubjectId = 1},//Альтернатива LessonId = 1
+            new Test(){Id = 2, LessonId = 13, OrtTestId = 1, SubjectId = 2} //Альтернатива LessonId = 2
         );
         _modelBuilder.Entity<Question>().HasData(
             new Question(){Id = 1, TestId = 1, Type = "analogy", Instruction = "Что больше?", Content = "23 : 34"},

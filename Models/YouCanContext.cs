@@ -20,14 +20,16 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<UserOrtTest> UserORTTests { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<QuestionReport> QuestionReports { get; set; }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<OrtTest> OrtTests { get; set; }
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Subject>()
             .HasMany(t => t.SubSubjects)
             .WithOne(t => t.Parent)
             .HasForeignKey(t => t.ParentId);
         base.OnModelCreating(modelBuilder);
+        new OrtTestInitializer(modelBuilder).Seed();
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
         new TestInitializer(modelBuilder).Seed();

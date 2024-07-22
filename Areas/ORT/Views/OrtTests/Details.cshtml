@@ -1,0 +1,41 @@
+@model OrtTest
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<div class="col-8 text-center mx-auto mt-5">
+    <h5>Основные сведения о тесте</h5>
+    <p class="mt-4">Цель теста выявить способных к дальнейшему обучения абитуриентов.
+        Этот тст дает Вам возможность показать что Вы знаете и умеете делать реально, . . . 
+    </p>
+    <p>Основной тест сдают все абитуриенты. Это обязательный тест. Он состоит из следующих разделов:</p>
+
+</div>
+
+<div class="col-8 mx-auto my-5">
+    <div class="accordion" id="accordionExample">
+        @for (int i = 0; i < Model.Tests.Count; i++)
+        {
+            Test test = Model.Tests[i];
+            char romanNumber = (char)(0x2160 + i);
+            string collapseId = $"collapseOne{i}";
+            <div class="accordion-item mt-3 shadow rounded-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                        @($"{romanNumber}.") &nbsp; @test.Subject.Name
+                    </button>
+                </h2>
+                <div id="@collapseId" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-auto text-center">
+    <a class="btn btn-success">Перейти к тесту</a>
+</div>

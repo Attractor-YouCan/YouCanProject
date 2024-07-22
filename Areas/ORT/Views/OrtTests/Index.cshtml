@@ -1,0 +1,40 @@
+@model List<OrtTest>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Navbar";
+}
+
+<div class="col-10 mx-auto border border-1 rounded-3 text-center py-3">
+    Правила прохождения теста
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h5> Тестов еще нет!</h5>
+}
+else
+{
+    <div class="text-center mt-4">
+            <h5 class="mx-auto"> Доступные вам тесты</h5>
+    </div>
+    <div class="col-8 mx-auto tests mt-5">
+        @foreach (var ortTest in Model)
+        {
+            if (ViewBag.CurrentOrtTestLevel >= ortTest.OrtLevel)
+            {
+                <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
+                    <div class="border border-1 text-success rounded-3 border-success px-5 py-3 mt-3">
+                        <span>Пробный тест № @ortTest.OrtLevel</span>
+                    </div> 
+                </a>
+            }
+            else
+            {
+                <div class="border border-1 rounded-3 border-secondary px-5 py-3 mt-3">
+                    <span>Пробный тест № @ortTest.OrtLevel</span>
+                </div>
+            }
+        }
+    </div>
+    
+}
