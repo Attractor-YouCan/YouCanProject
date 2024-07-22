@@ -21,10 +21,18 @@ public class SubTopicsController : Controller
         _userManager = userManager;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int? subSubjectId)
     {
-        List<Subtopic> subtopics = _db.Subtopics.ToList();
-        return View(subtopics);
+        List<Subject> subjects = new List<Subject>();
+        if (subSubjectId == null)
+        {
+            subjects = _db.Subjects.Where(s => s.ParentId == null).ToList();
+        }
+        else
+        {
+            subjects = _db.Subjects.Where(s => s.ParentId == subSubjectId).ToList();
+        }
+        return View(subjects);
     }
 
 }

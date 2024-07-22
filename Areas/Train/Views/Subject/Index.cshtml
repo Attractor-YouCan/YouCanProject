@@ -1,0 +1,95 @@
+@using YouCan.Services
+@model List<YouCan.Models.Subject>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<style>
+    .card-title {
+        height: 40px;
+    }
+</style>
+<nav class="navbar navbar-light border-bottom">
+    <div class="container-fluid">
+        <span class="navbar-text mx-auto">Тренировка</span>
+    </div>
+</nav>
+<a class="navbar-brand" href="javascript:history.back()" style="margin-left: 30px; text-decoration: none; color: inherit;">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="30"
+         height="30"
+         fill="currentColor"
+         class="bi bi-arrow-left"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+    </svg>
+</a>
+<div class="container text-center my-5 px-4">
+    <p class="mb-3">
+        <strong>
+            Отлично!<br/>Давай проверим твои силы.<br/>Выбери нужный раздел:
+        </strong>
+    </p>
+    <div class="row justify-content-center mt-5">
+        @if (Model.Count == 0)
+        {
+            <h3>Предметов еще пока что нет!</h3>
+        }
+        else
+        {
+            @foreach (var subtopic in Model)
+            {
+                <div class="col-6 col-md-4 col-lg-2 subtopic">
+                    @if (subtopic.SubjectType == SubjectType.Parent)
+                    {
+                        <a asp-controller="Subject" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <img src=@subtopic.ImageUrl
+                                         class="card-img-top"
+                                         alt="@subtopic.Name"/>
+                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                </div>
+                            </div>
+                        </a>
+                        
+                    }
+                    else
+                    {
+                        <a asp-controller="Test" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <img src=@subtopic.ImageUrl
+                                         class="card-img-top"
+                                         alt="@subtopic.Name"/>
+                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+@section Scripts
+{
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("analogyLink").addEventListener("click", function(event) {
+                event.preventDefault();
+
+                document.querySelectorAll(".subtopic").forEach(function(element) {
+                    element.style.display = "none";
+                });
+
+                document.getElementById("analogyCard1").style.display = "block";
+                document.getElementById("analogyCard2").style.display = "block";
+            });
+        });
+    </script>
+}

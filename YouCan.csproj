@@ -8,6 +8,7 @@
   </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="MailKit" Version="4.7.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
@@ -144,6 +145,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="wwwroot\trainImages\" />
       <UpToDateCheckInput Remove="Areas\Admin\Views\Questions\Edit.cshtml" />
       <Folder Include="wwwroot\authIcons\" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
@@ -290,6 +292,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\assets\images\eb8beee6-4897-4ef0-a3ef-f1da7b98b0ee.png" />
       <_ContentIncludedByDefault Remove="wwwroot\assets\images\f0083cf9-53a9-47d0-9afa-11da3ed8c56f.png" />
       <_ContentIncludedByDefault Remove="wwwroot\assets\images\fbb99f09-7ae8-4e80-9e59-3ea6377ba0cb.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\css\profile.css" />
     </ItemGroup>
 
 </Project>

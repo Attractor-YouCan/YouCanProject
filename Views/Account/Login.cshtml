@@ -1,8 +1,8 @@
+@using YouCan.ViewModels.Account;
 @model LoginViewModel
 
 @{
     ViewBag.Title = "Delivery";
-    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -21,9 +21,7 @@
     </div>
     <div class="section1_container">
         <div class="auth-main">
-            <a asp-controller="Home" asp-action="Index" class="back-button">
-                <img src="~/authIcons/backArrow.png" alt="">
-            </a>
+           
             <div class="navContainer">
                 <nav>
                     <a asp-controller="Home" asp-action="Index" class="linkLogo">
@@ -41,6 +39,11 @@
                     </div>
 
                 </nav>
+            </div>
+            <div class="underNavbarSection">
+                <a asp-controller="Home" asp-action="Index" class="back-button">
+                    <img src="~/authIcons/backArrow.png" alt="">
+                </a>
             </div>
             <div class="authForm">
                 <h1>Вход</h1>
@@ -86,10 +89,3 @@
 </html>
 
 
-@section Scripts{
-    <script>
-    </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

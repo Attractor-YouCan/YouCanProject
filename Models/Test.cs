@@ -12,7 +12,9 @@ public class Test
 
     public int? SubtopicId { get; set; }
     public Subtopic? Subtopic { get; set; }
-    
+    //Альтернатива сабтопику
+    public int? SubjectId { get; set; }
+    public Subject? Subject { get; set; }
     public int? LessonId { get; set; }
     public Lesson? Lesson { get; set; }
     

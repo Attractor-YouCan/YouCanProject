@@ -18,9 +18,15 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<UserLessons> UserLessons { get; set; }
     public DbSet<UserLevel> UserLevels { get; set; }
     public DbSet<UserOrtTest> UserORTTests { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
+    public DbSet<QuestionReport> QuestionReports { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Subject>()
+            .HasMany(t => t.SubSubjects)
+            .WithOne(t => t.Parent)
+            .HasForeignKey(t => t.ParentId);
         base.OnModelCreating(modelBuilder);
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
@@ -32,6 +38,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
                 new IdentityRole<int> { Id = 2, Name = "manager", NormalizedName = "MANAGER" },
                 new IdentityRole<int> { Id = 3, Name = "admin", NormalizedName = "ADMIN" }
             );
+        new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
 
