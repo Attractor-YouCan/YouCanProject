@@ -28,7 +28,11 @@
                 </h2>
                 <div id="@collapseId" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        <p>@test.OrtInstruction.Description</p>
+                        <p>
+                            <span> Количество заданий: &nbsp; @test.OrtInstruction.QuestionsCount</span> <br/>
+                            <span> Время: &nbsp; @test.OrtInstruction.TimeInMin &nbsp; минут</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -37,5 +41,5 @@
 </div>
 
 <div class="mt-auto text-center">
-    <a class="btn btn-success">Перейти к тесту</a>
+    <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="btn btn-success">Перейти к тесту</a>
 </div>

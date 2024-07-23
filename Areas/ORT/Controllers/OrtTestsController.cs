@@ -27,7 +27,7 @@ public class OrtTestsController : Controller
         UserOrtTest? userOrtTest = await _db.UserORTTests.Include(t => t.OrtTest).FirstOrDefaultAsync(u => u.UserId == currUser.Id);
         if (userOrtTest == null)
         {
-            userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false};
+            userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false, PassedLevel = 0, OrtTestId = null};
             _db.UserORTTests.Add(userOrtTest);
             await _db.SaveChangesAsync();
         }
@@ -44,10 +44,20 @@ public class OrtTestsController : Controller
     {
         OrtTest? ortTest = await _db.OrtTests
             .Include(t => t.Tests)
-            .ThenInclude(s => s.Subject)
+                .ThenInclude(s => s.Subject)
+            .Include(t => t.Tests)
+                .ThenInclude(s => s.OrtInstruction)
             .FirstOrDefaultAsync(t => t.Id == ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
+        User? curUser = await _userManager.GetUserAsync(User);
+        if (curUser == null)
+            RedirectToAction("Login", "Account");
+        UserOrtTest? userOrtTest = await _db.UserORTTests
+            .Include(t => t.OrtTest)
+            .FirstOrDefaultAsync(t => t.UserId == curUser.Id);
+        if (userOrtTest.PassedLevel + 1 < ortTest.OrtLevel)
+            return RedirectToAction("Index");
         return View(ortTest);
     }
 }

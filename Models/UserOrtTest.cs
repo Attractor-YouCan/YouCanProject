@@ -11,6 +11,7 @@ public class UserOrtTest
     public int? OrtTestId { get; set; }
     public OrtTest? OrtTest { get; set; }
     
+    public int? PassedLevel { get; set; }
     public DateTime? PassedDateTime { get; set; }
     public int? Points { get; set; }
     public TimeSpan? PassedTime { get; set; }

@@ -21,6 +21,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<QuestionReport> QuestionReports { get; set; }
     public DbSet<OrtTest> OrtTests { get; set; }
+    public DbSet<OrtInstruction> OrtInstructions { get; set; }
 
 protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,11 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
             .HasMany(t => t.SubSubjects)
             .WithOne(t => t.Parent)
             .HasForeignKey(t => t.ParentId);
+        modelBuilder.Entity<OrtInstruction>()
+            .HasOne(t => t.Test)
+            .WithOne(o => o.OrtInstruction)
+            .HasForeignKey<Test>(o => o.OrtInstructionId); 
+        
         base.OnModelCreating(modelBuilder);
         new OrtTestInitializer(modelBuilder).Seed();
         new TopicInitializer(modelBuilder).Seed();
