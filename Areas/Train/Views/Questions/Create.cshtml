@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Создать тренировочный тест";
+    Layout = "_Navbar";
+}
+
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <form class="col-md-7 col-lg-5 m-0">
+            <p class="text-center profile-title">Тренировка</p>
+            <hr>
+            <a href="#" class="btn">
+                <img src="@Url.Content("~/profileIcons/arrow-back.svg")" />
+            </a>
+            <div class="mx-2">
+                <div class="mx-5">
+                    <h1 class="text-center fs-4">Аналогия</h1>@* Поле title для темы *@
+                    <p class="text-center fw-bold">Каждая аналогия в тесте состоит из пяти пар слов.</p>@* Поле subtitle для темы *@
+                    <p class="text-center fs-8 fw-bold text-secondary-theme">@* поле description для темы *@
+                        Первая пара выделена жирным шрифтом.
+                    </p>
+                </div>
+                <div class="text-center mb-5 row align-items-center m-0">
+                    <div class="col p-0">
+                        <input class="form-control" />
+                    </div>
+                    <p class="col-auto m-0 mx-2 p-0 fs-3 fw-bolder">:</p>
+                    <div class="col p-0">
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="text-center mb-5">
+                    <div class="row align-items-center justify-content-between mb-3 m-0">
+                        <div class="col-auto">
+                            <input class="form-check" type="radio" />
+                        </div>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                        <p class="col-auto m-0 mx-2 p-0 fs-3 fw-bolder">:</p>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center justify-content-between mb-3 m-0">
+                        <div class="col-auto">
+                            <input class="form-check" type="radio" />
+                        </div>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                        <p class="col-auto m-0 mx-2 p-0 fs-3 fw-bolder">:</p>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center justify-content-between mb-3 m-0">
+                        <div class="col-auto">
+                            <input class="form-check" type="radio" />
+                        </div>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                        <p class="col-auto m-0 mx-2 p-0 fs-3 fw-bolder">:</p>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between mb-3 m-0">
+                        <div class="col-auto">
+                            <input class="test-radio" type="radio" />
+                        </div>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                        <p class="col-auto m-0 mx-2 p-0 fs-3 fw-bolder">:</p>
+                        <div class="col p-0">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-2 justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-test btn-delete fw-bold">Удалить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn btn-test btn-send fw-bold">Отправить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn-test-square fw-bold">?</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

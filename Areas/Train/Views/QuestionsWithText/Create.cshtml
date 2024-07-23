@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Создать тренировочный тест";
+    Layout = "_Navbar";
+}
+
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
+<div class="container">
+    <div class="row justify-content-center mb-5">
+        <form class="col-md-7 col-lg-5 m-0">
+            <p class="text-center profile-title">Тренировка</p>
+            <hr>
+            <a href="#" class="btn">
+                <img src="@Url.Content("~/profileIcons/arrow-back.svg")" />
+            </a>
+            <div class="mx-2">
+                <div class="mx-5">
+                    <h1 class="text-center fs-4">Чтение и понимание</h1>@* Поле title для темы *@
+                    <p class="text-center fw-bold">
+                        @* Поле subtitle для темы *@
+                        В этом разделе оценивают умение внимательно читать различные
+                        тексты, понимать прочитанное и размышлять о нём.
+                    </p>
+                    <p class="text-center fs-8 fw-bold text-secondary-theme">
+                        @* поле description для темы *@
+                        Фрагменты текста должны быть объемом от
+                        400 до 850 слов.
+                    </p>
+                </div>
+                <div class="text-center mb-5 align-items-center m-0">
+                    <textarea class="form-control"></textarea>
+                </div>
+                <div id="questions">
+                    <div class="question text-center mb-4">
+                        <input class="form-control mb-3" />
+                        <div class="row align-items-center justify-content-between mb-3 m-0">
+                            <div class="col-auto">
+                                <input class="form-check" type="radio" />
+                            </div>
+                            <div class="col p-0">
+                                <input class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between mb-3 m-0">
+                            <div class="col-auto">
+                                <input class="form-check" type="radio" />
+                            </div>
+                            <div class="col p-0">
+                                <input class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center justify-content-between mb-3 m-0">
+                            <div class="col-auto">
+                                <input class="form-check" type="radio" />
+                            </div>
+                            <div class="col p-0">
+                                <input class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between mb-3 m-0">
+                            <div class="col-auto">
+                                <input class="test-radio" type="radio" />
+                            </div>
+                            <div class="col p-0">
+                                <input class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mb-5">
+                    <button id="add-question-btn" class="btn-add-question">Добавить вопрос</button>
+                </div>
+            </div>
+
+            <div class="row gx-2 justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-test btn-delete fw-bold">Удалить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn btn-test btn-send fw-bold">Отправить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn-test-square fw-bold">?</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const addButton = $('#add-question-btn');
+
+        function addQuestion() {
+
+            const questionDiv = $('<div>').addClass('question text-center mb-4');
+
+            const inputText = $('<input>').addClass('form-control mb-3');
+            questionDiv.append(inputText);
+
+            for (let i = 0; i < 4; i++) {
+                const rowDiv = $('<div>').addClass('row align-items-center justify-content-between mb-3 m-0');
+
+                const radioCol = $('<div>').addClass('col-auto');
+                const radioInput = $('<input>').addClass('form-check').attr('type', 'radio');
+                radioCol.append(radioInput);
+                rowDiv.append(radioCol);
+
+                const inputCol = $('<div>').addClass('col p-0');
+                const inputField = $('<input>').addClass('form-control');
+                inputCol.append(inputField);
+                rowDiv.append(inputCol);
+
+                questionDiv.append(rowDiv);
+            }
+
+            $('#questions').append(questionDiv);
+        }
+
+        addButton.on('click', addQuestion);
+    </script>
+}
