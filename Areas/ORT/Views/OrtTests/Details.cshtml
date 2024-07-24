@@ -32,8 +32,8 @@
                     <div class="accordion-body">
                         <p>@test.OrtInstruction.Description</p>
                         <p>
-                            <span> Количество заданий: &nbsp; @test.OrtInstruction.QuestionsCount</span> <br/>
-                            <span> Время: &nbsp; @test.OrtInstruction.TimeInMin &nbsp; минут</span>
+                            <span> Количество заданий: @test.OrtInstruction.QuestionsCount</span> <br/>
+                            <span> Время: @test.OrtInstruction.TimeInMin минут</span>
                         </p>
                     </div>
                 </div>
@@ -42,6 +42,6 @@
     </div>
 </div>
 
-<div class="mt-auto text-center">
+<div class="mt-auto text-center mb-4">
     <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="btn btn-success">Перейти к тесту</a>
 </div>

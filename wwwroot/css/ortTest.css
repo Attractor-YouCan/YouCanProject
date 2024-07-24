@@ -1,0 +1,16 @@
+
+.fixed-answers-button{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    z-index: 1000; /* Ensure it stays above other elements */
+    padding: 10px 20px; /* Optional padding for aesthetics */
+}
+
+@media screen and (max-width: 768px) {
+    .fixed-answers-button{
+        bottom: 80px;
+    }
+}

@@ -5,31 +5,179 @@
     Layout = "_Navbar";
 }
 
-@if (Model.Count == 0 || Model == null)
-{
-    <h5>Тестов еще нет!</h5>
-}
-else
-{
-    @foreach (var test in Model)
+<link rel="stylesheet" href="~/css/lesson-test.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/css/ortTest.css" asp-append-version="true"/>
+
+<div class="top-layout">
+    <a class="close-button" href="javascript:history.back()">
+        <img src="~/topicImages/exitButton.svg">
+    </a>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+</div>
+
+<div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
+    @if (Model.Count == 0 || Model == null)
     {
-        @foreach (var question in test.Questions)
+        <h5>Тестов еще нет!</h5>
+    }
+    else
+    {
+        @for (int s = 0; s < Model.Count; s++)
         {
-            <div class="question-container text-center" data-questionId="@question.Id">
-                <span class="fw-bold fs-5">@question.Instruction</span>
-                <div class="question mt-4">
-                    @question.Content
-                </div>
-                @foreach (var answer in question.Answers)
+            Test test = Model[s];
+            <div class="test-container" data-testId="@test.Id">
+                @for (int t = 0; t < test.Questions.Count; t++)
                 {
-                    <label class="answer mt-4" role="button">
-                        <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
-                        <span class="answer-number">A</span>
-                        <span class="answer-content h-100 w-100">@answer.Text</span>
-                    </label>
+                    Question question = test.Questions[t];
+                    int questionNum =  s * 2 + t +1 + s;
+                    <div class="question-container text-center mt-4" data-questionId="@question.Id">
+                        <span class="fw-bold fs-5">@($"{questionNum}.") &nbsp; @question.Instruction</span>
+                        <div class="question mt-4">
+                            @question.Content
+                        </div>
+                        @for (int i = 0; i < question.Answers.Count; i++)
+                        {
+                            Answer answer = question.Answers[i];
+                            char answerNum = (char)('A' + i);
+                            <label class="answer mt-4" role="button">
+                                <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
+                                <span class="answer-number">@answerNum</span>
+                                <span class="answer-content h-100 w-100">@answer.Text</span>
+                            </label>
+                        }
+                    </div>
                 }
             </div>
         }
+        <div class="text-center my-5" id="pagination-container">
+            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Предыдущий</button>
+            <span id="page-info"></span>
+            <button class="btn btn-success shadow py-2 ms-3 px-1 px-lg-4" id="next-page">Следующий</button>
+        </div>
     }
-    
+</div>
+
+<button class="btn btn-outline-success text-success fixed-answers-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+    Ответы
+</button>
+
+<div class="offcanvas offcanvas-bottom h-50" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="answers-parent">
+            
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            let currentPage = 1;
+            let selectedAnswers = []; // Array to store selected answers
+
+
+            function updatePaginationButtonState() {
+                const testContainers = document.querySelectorAll('.test-container');
+                const totalTests = testContainers.length;
+                document.getElementById('prev-page').disabled = currentPage === 1;
+                document.getElementById('next-page').textContent = currentPage === totalTests ? 'Закончить' : 'Следующий';
+                document.getElementById('next-page').disabled = !isCurrentTestAnswered();
+
+                let progressBar = document.getElementById('progress-bar');
+                let percentage = (currentPage / totalTests) * 100;
+                progressBar.style.width = percentage + '%';
+
+                document.querySelectorAll('.answer-radio').forEach(function(radio) {
+                    if (radio.checked) {
+                        radio.parentElement.style.backgroundColor = '#58CC02';
+                        radio.parentElement.classList.add('text-white');
+                    } else {
+                        radio.parentElement.style.backgroundColor = '';
+                        radio.parentElement.classList.remove('text-white');
+                    }
+                });
+            }
+
+            function isCurrentTestAnswered() {
+                const testContainer = document.querySelectorAll('.test-container')[currentPage - 1];
+                const questionContainers = testContainer.querySelectorAll('.question-container');
+                for (let i = 0; i < questionContainers.length; i++) {
+                    const answers = questionContainers[i].querySelectorAll('.answer-radio');
+                    if (!Array.from(answers).some(radio => radio.checked)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            document.querySelectorAll('.answer-radio').forEach(function(radio) {
+                radio.addEventListener('click', function() {
+                    const questionContainer = radio.closest('.question-container');
+                    const questionId = questionContainer.dataset.questionid;
+                    const testContainer = radio.closest('.test-container');
+                    const testId = testContainer.dataset.testid;
+                    
+                    if (radio.checked) {
+                        radio.parentElement.style.backgroundColor = '#58CC02';
+                        radio.parentElement.classList.add('text-white');
+                        selectedAnswers[radio.name] = {
+                            testId: testId,
+                            questionId: questionId,
+                            answerId: radio.value
+                        };
+                    } else {
+                        radio.parentElement.style.backgroundColor = '';
+                        radio.parentElement.classList.remove('text-white');
+                        delete selectedAnswers[radio.name];
+                    }
+                    updatePaginationButtonState();
+                });
+            });
+
+            function renderTests() {
+                const testContainers = document.querySelectorAll('.test-container');
+                testContainers.forEach(function(testContainer, index) {
+                    testContainer.style.display = (index === currentPage - 1) ? 'block' : 'none';
+                });
+                updatePaginationButtonState();
+            }
+
+            document.getElementById('prev-page').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTests();
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', function() {
+                const totalTests = document.querySelectorAll('.test-container').length;
+                if (currentPage < totalTests) {
+                    currentPage++;
+                    renderTests();
+                } else {
+                    let arrayOfObjects = Object.values(selectedAnswers);
+                    axios.post('@Url.Action("Index", "MiniTests")', arrayOfObjects)
+                        .then(response => {
+                            window.location.href = `@Url.Action("Result", "MiniTests")/?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
+                        })
+                        .catch(error => {
+                            console.error('Error sending data:', error);
+                        });
+                }
+            });
+
+            renderTests(); // Initial render
+        });
+    </script>
 }
