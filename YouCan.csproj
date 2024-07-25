@@ -145,6 +145,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Migrations\" />
       <Folder Include="wwwroot\trainImages\" />
       <UpToDateCheckInput Remove="Areas\Admin\Views\Questions\Edit.cshtml" />
       <Folder Include="wwwroot\authIcons\" />

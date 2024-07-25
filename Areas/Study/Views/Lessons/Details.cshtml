@@ -4,27 +4,41 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
+<link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
 
-<div class="col-10 mt-5 mx-auto">
-    <h2 class="mt-5"><strong>@Model.Title</strong></h2>
-    <p class="mt-4">@Model.SubTitle</p>
+<div class="container content">
+    <h1>@Model.Title</h1>
+    <p class="subtitle">
+       @Model.SubTitle
+    </p>
 
-    <div class="video-container mx-auto text-center mt-5">
-        <video class=" col-12 mx-auto rounded-3" controls>
-            <source src="~/lessonResources/lessonVideo.mp4" type="video/mp4">
-            <source src="~/lessonResources/lessonVideo.ogg" type="video/ogg">
+    <div class="video-container embed-responsive embed-responsive-16by9">
+        <video class="embed-responsive-item" controls>
+            <source src="~/lessonResources/lessonVideo.mp4" type="video/mp4" />
+            <source src="~/lessonResources/lessonVideo.ogg" type="video/ogg" />
             Your browser does not support the video tag.
         </video>
     </div>
-    <h5 class="mt-4">Description</h5>
-    <p class="mt-4">@Model.Description</p>
-    <h5 class="mt-4">Lecture</h5>
-    <p class="mt-4">@Model.Lecture</p>
-    
-    <div class="text-center">
-        <a class="btn btn-primary px-5 mt-5" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
-    </div>
-    
+
+    <h2 class="section-title">Описание</h2>
+    <p class="description">
+        @Model.Description
+    </p>
+
+    <h2 class="section-title">Подробно о лекции</h2>
+    <p class="lecture">
+        @Model.Lecture
+    </p>
+      @foreach (var module in Model.LessonModules)
+      {
+        <h2 class="section-title">@module.Title</h2>
+        <div class="formula-box">
+            @Html.Raw(module.Content)
+            @if(module.PhotoUrl != null)
+            {
+                <img src="@Url.Content(module.PhotoUrl)" />
+            }
+        </div>
+      } 
+    <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
 </div>
-
-
