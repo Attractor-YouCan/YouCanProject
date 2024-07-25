@@ -1,0 +1,80 @@
+﻿.content {
+    padding: 20px;
+}
+
+.video-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    .video-container video {
+        width: 100%;
+        height: auto;
+    }
+
+.section-title {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.formula-box {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.formula-box img {
+    max-width: 100%;
+    height: auto; 
+    display: block; 
+    margin: 0 auto; 
+}
+.test-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+    .test-button:focus,
+    .test-button:hover {
+        background-color: #ff6600;
+        color: white;
+        outline: none;
+        box-shadow: none;
+    }
+
+.highlight {
+    color: orange;
+}
+
+@media (max-width: 768px) {
+    .formula-box {
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .content {
+        padding: 10px;
+    }
+
+    .formula-box {
+        font-size: 12px;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+}
