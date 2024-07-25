@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Areas.Study.ViewModels;
 using YouCan.Models;
+using YouCan.ViewModels;
+using YouCan.ViewModels.Account;
 
 namespace YouCan.Areas.ORT.Controllers;
 [Area("ORT")]
@@ -26,6 +29,8 @@ public class TestsController : Controller
             RedirectToAction("Login", "Account");
         OrtTest? ortTest = await _db.OrtTests
             .Include(t => t.Tests)
+                .ThenInclude(t =>t .Subject)
+            .Include(t => t.Tests)
                 .ThenInclude(t => t.Questions)
                     .ThenInclude(q => q.Answers)
             .FirstOrDefaultAsync(t => t.Id == ortTestId);
@@ -38,4 +43,17 @@ public class TestsController : Controller
             return RedirectToAction("Index", "OrtTests");
         return View(ortTest.Tests);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Index([FromBody] TestSubmissionModel testSubmissionModel)
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Result()
+    {
+        return View();
+    }
+
 }

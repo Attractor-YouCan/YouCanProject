@@ -6,7 +6,7 @@ public class Test
 {
     public int Id { get; set; }
     public int GainingExperience { get; set; }
-    public TimeSpan? TimeForTest { get; set; }
+    public int? TimeForTestInMin { get; set; }
     [NotMapped]
     public int? MinutesForTest { get; set; }
     

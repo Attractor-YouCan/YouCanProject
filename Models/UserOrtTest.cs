@@ -14,7 +14,7 @@ public class UserOrtTest
     public int? PassedLevel { get; set; }
     public DateTime? PassedDateTime { get; set; }
     public int? Points { get; set; }
-    public TimeSpan? PassedTime { get; set; }
+    public int? PassedTimeInMin { get; set; }
 
 
 }

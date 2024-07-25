@@ -9,6 +9,17 @@
     padding: 10px 20px; /* Optional padding for aesthetics */
 }
 
+.fixed-time-table{
+    position: fixed;
+    display: flex;
+    top: 0;
+    background-color: white;
+    text-align: center;
+    padding: 20px 0;
+    justify-content: center;
+    z-index: 1000; 
+}
+
 @media screen and (max-width: 768px) {
     .fixed-answers-button{
         bottom: 80px;
