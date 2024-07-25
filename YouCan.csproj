@@ -145,7 +145,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\trainImages\" />
+      <Folder Include="Migrations\" />
       <UpToDateCheckInput Remove="Areas\Admin\Views\Questions\Edit.cshtml" />
       <Folder Include="wwwroot\authIcons\" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">

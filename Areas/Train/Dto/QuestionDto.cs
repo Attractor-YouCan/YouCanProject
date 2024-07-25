@@ -7,4 +7,5 @@ public class QuestionDto
     public IFormFile? Image { get; set; }
     public List<AnswerDto> Answers { get; set; }
     public int CorrectAnswerId { get; set; }
+    public bool AnswerIsImage { get; set; } = false;
 }
