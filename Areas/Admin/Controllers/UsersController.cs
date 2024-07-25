@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.ViewModels.Account;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -28,7 +29,7 @@ public class UsersController : Controller
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> ChangeRole(int id, string? role)
     {
-        if (String.IsNullOrEmpty(role))
+        if (!String.IsNullOrEmpty(role))
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user != null)
@@ -110,13 +111,14 @@ public class UsersController : Controller
                 PhoneNumber = model.PhoneNumber,
                 FullName = model.LastName + " " + model.FirstName,
                 AvatarUrl = path,
-                BirthDate = model.BirthDate,
-                CreatedAt = DateTime.UtcNow.AddHours(6)
-
+                BirthDate = model.BirthDate.ToUniversalTime(),
+                CreatedAt = DateTime.UtcNow.AddHours(6),
+                Disctrict = model.District
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "user");
                 return RedirectToAction("Index");
             }
             foreach (var error in result.Errors)
@@ -126,9 +128,9 @@ public class UsersController : Controller
         return View(model);
     }
     [HttpGet]
-    public async Task<IActionResult> Edit(int userId)
+    public async Task<IActionResult> Edit(int id)
     {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var user = await _userManager.FindByIdAsync(id.ToString());
         if (user != null)
         {
             return View(user);
@@ -136,9 +138,9 @@ public class UsersController : Controller
         return NotFound();
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(User user, int userId, string? currentPassword, string? newPassword)
+    public async Task<IActionResult> Edit(User user, int id, string? currentPassword, string? newPassword)
     {
-        var oldUser = await _userManager.FindByIdAsync(userId.ToString());
+        var oldUser = await _userManager.FindByIdAsync(id.ToString());
         if (oldUser != null)
         {
             oldUser.Email = user.Email;
@@ -146,6 +148,11 @@ public class UsersController : Controller
             oldUser.PhoneNumber = user.PhoneNumber;
             oldUser.FullName = user.FullName;
             oldUser.BirthDate = user.BirthDate;
+
+            if (oldUser.BirthDate.HasValue)
+            {
+                oldUser.BirthDate = ((DateTime)oldUser.BirthDate).ToUniversalTime();
+            }
             if (currentPassword != null && newPassword != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);

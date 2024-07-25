@@ -65,9 +65,14 @@
                             <input type="hidden" name="Id" value="@user.Id"/>
                             <select name="role">
                                 <option value=""></option>
-                                <option value="admin">admin</option>
-                                <option value="manager">manager</option>
-                                <option value="user">user</option>
+                                @if (!await manager.IsInRoleAsync(user, "manager"))
+                                {
+                                        <option value="manager">manager</option>
+                                }
+                                else
+                                {
+                                    <option value="user">user</option>
+                                }
                             </select>
                             <button type="submit" class="btn btn-primary">Поменять права</button>
                         </form>
@@ -80,7 +85,7 @@
             <td>
                 @if (User.IsInRole("admin"))
                 {
-                    <a asp-action="Edit" asp-route-userId="@user.Id">Edit |</a> 
+                    <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a> 
                     <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
                     <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
                     @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)

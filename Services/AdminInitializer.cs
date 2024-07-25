@@ -21,7 +21,8 @@ public class AdminInitializer
                 UserName = adminUsername,
                 AvatarUrl = path,
                 FullName = fullName,
-                BirthDate = DateTime.UtcNow
+                BirthDate = DateTime.UtcNow,
+                Disctrict = ""
             };
             IdentityResult result = await _userManager.CreateAsync(superadmin, adminPassword);
             if (result.Succeeded)

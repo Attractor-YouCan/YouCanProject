@@ -150,12 +150,16 @@ public class AccountController : Controller
                 EmailSender emailSender = new EmailSender();
                 emailSender.SendEmail(model.Email, subject, message);
                 return Json(new { success = true, email = user.Email });
-            }        
+            }
+            else
+            {
+                Console.WriteLine("ERROR");
+            }
         }
 
         ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
         return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
-     }
+    }
 
    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
    {
