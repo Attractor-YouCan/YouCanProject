@@ -45,7 +45,9 @@
                   </li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
-                    <a asp-controller="Account" asp-action="Logout" class="dropdown-item">Logout</a>
+                    <form class="d-flex justify-content-start dropdown-item" asp-action="LogOut" asp-controller="Account">
+                      <button type="submit" class="border-0 bg-transparent ps-3 text-center d-block text-decoration-none link-theme-secondary">Выйти</button>
+                    </form>
                   </li>
                 </ul>
                 }
