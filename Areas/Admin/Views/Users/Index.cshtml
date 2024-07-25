@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> manager;
+@model List<User>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Username
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Роль
+            </th>
+            <th>
+                Права доступа
+            </th>
+            <th>
+                Заблокирован
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var user in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => user.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Email)
+            </td>
+            <td>
+                @foreach (var role in await manager.GetRolesAsync(user))
+                {
+                    <span>@role</span>
+                }
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (!await manager.IsInRoleAsync(user, "admin") && User.IsInRole("admin"))
+                    {
+                        <form asp-action="ChangeRole" method="post">
+                            <input type="hidden" name="Id" value="@user.Id"/>
+                            <select name="role">
+                                <option value=""></option>
+                                @if (!await manager.IsInRoleAsync(user, "manager"))
+                                {
+                                        <option value="manager">manager</option>
+                                }
+                                else
+                                {
+                                    <option value="user">user</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-primary">Поменять права</button>
+                        </form>
+                    }
+                }
+            </td>
+            <td>
+                @user.LockoutEnabled
+            </td>
+            <td>
+                @if (User.IsInRole("admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a> 
+                    <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
+                    <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
+                    @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                    {
+                        <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                    }
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
