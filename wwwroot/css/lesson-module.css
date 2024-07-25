@@ -7,22 +7,42 @@
     margin-bottom: 20px;
 }
 
-    .video-container video {
-        width: 100%;
-        height: auto;
-    }
+.video-container video {
+    width: 100%;
+    height: auto;
 
+}
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28.82px;
+}
+.subtitle {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 18.29px;
+}
+.description {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 18.29px;
+}
+.lecture {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24.28px;
+}
 .section-title {
     margin-top: 20px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19.5px;
 }
-
 .formula-box {
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    border-radius:20px;
 }
 .formula-box img {
     max-width: 100%;

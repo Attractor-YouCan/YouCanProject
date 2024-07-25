@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
 
 <div class="container content">
-    <h1 class="text-center"><strong>@Model.Title</strong></h1>
-    <p>
-        @Model.SubTitle
+    <h1>@Model.Title</h1>
+    <p class="subtitle">
+       @Model.SubTitle
     </p>
 
     <div class="video-container embed-responsive embed-responsive-16by9">
@@ -21,27 +21,24 @@
     </div>
 
     <h2 class="section-title">Описание</h2>
-    <p>
+    <p class="description">
         @Model.Description
     </p>
 
     <h2 class="section-title">Подробно о лекции</h2>
-    <p>
+    <p class="lecture">
         @Model.Lecture
     </p>
-    @foreach (var module in Model.LessonModules)
-    {
+      @foreach (var module in Model.LessonModules)
+      {
         <h2 class="section-title">@module.Title</h2>
         <div class="formula-box">
-            @if(module.PhotoUrl == null)
-            {
-                @Html.Raw(module.Content)
-            }
-            else
+            @Html.Raw(module.Content)
+            @if(module.PhotoUrl != null)
             {
                 <img src="@Url.Content(module.PhotoUrl)" />
             }
         </div>
-    }
+      } 
     <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
 </div>
