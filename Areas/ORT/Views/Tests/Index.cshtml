@@ -19,7 +19,7 @@
         <span>00:00:00</span>
     </div> <!-- Место для отображения таймера -->
     <div class="col-6">
-        <button class="btn btn-danger text-white" id="next-page">Завершить 
+        <button class="btn btn-danger text-white" id="next-page">Завершить
             <span id="finishTestName"></span></button>
     </div>
     <div class="col-3" id="total-countdown">
@@ -88,11 +88,15 @@
 
 
 
+
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const testContainers = document.querySelectorAll('.test-container');
+            const countdownElement = document.getElementById('countdown');
+            const finishTestName = document.getElementById('finishTestName');
             let timers = {};
             let timeSpent = [];
             let selectedAnswers = [];
@@ -100,7 +104,6 @@
             let totalTestTime = 0;
         
             function initializeTimers() {
-                const testContainers = document.querySelectorAll('.test-container');
                 totalTestTime = 0; // Reset total test time
                 testContainers.forEach(testContainer => {
                     const testId = testContainer.dataset.testid;
@@ -122,19 +125,19 @@
                 return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
             }
         
-            function startTimer(testId, testName) {
-                const countdownElement = document.getElementById('countdown');
+            function startTimer(testId) {
                 if (timers[testId].interval) {
                     clearInterval(timers[testId].interval);
                 }
-                const finishTestName = document.getElementById('finishTestName');
-                finishTestName.innerText = testName;
+                let currentTestContainer = testContainers[currentPage - 1];
+                let testNameForTime = currentTestContainer.dataset.testname;
+                finishTestName.innerText = testNameForTime;
                 timers[testId].interval = setInterval(function() {
                     if (timers[testId].timeLeft <= 0) {
                         clearInterval(timers[testId].interval);
                         countdownElement.innerHTML = "Время вышло!";
                     } else {
-                        countdownElement.innerHTML = `${formatTime(timers[testId].timeLeft)} <br> <span> ${testName} </span>`;
+                        countdownElement.innerHTML = `${formatTime(timers[testId].timeLeft)} <br> <span> ${testNameForTime} </span>`;
                         timers[testId].timeLeft--;
                         updateTotalCountdown(); // Update total time on each tick
                     }
@@ -164,11 +167,10 @@
             }
         
             function updatePaginationButtonState() {
-                const testContainers = document.querySelectorAll('.test-container');
-                const totalTests = testContainers.length;
                 document.getElementById('prev-page').disabled = currentPage === 1;
-                const testName = testContainers.dataset.testname;
-                document.getElementById('next-page').textContent = 'Завершить' + testName;
+                const currentTestContainer = testContainers[currentPage - 1];
+                const testNameForButton = currentTestContainer.dataset.testname;
+                document.getElementById('next-page').textContent = 'Завершить ' + testNameForButton;
         
                 document.querySelectorAll('.answer-radio').forEach(function(radio) {
                     if (radio.checked) {
@@ -179,9 +181,7 @@
                         radio.parentElement.classList.remove('text-white');
                     }
                 });
-            }
-        
-          
+            }          
         
             document.querySelectorAll('.answer-radio').forEach(function(radio) {
                 radio.addEventListener('click', function() {
@@ -208,30 +208,30 @@
             });
         
             function renderTests() {
-                const testContainers = document.querySelectorAll('.test-container');
                 window.scrollTo(0, 0);
                 testContainers.forEach(function(testContainer, index) {
                     testContainer.style.display = (index === currentPage - 1) ? 'block' : 'none';
                 });
                 const testId = testContainers[currentPage - 1].dataset.testid;
-                const testName = testContainers[currentPage - 1].dataset.testname;
-                startTimer(testId, testName);
+                startTimer(testId);
                 updatePaginationButtonState();
             }
         
             document.getElementById('prev-page').addEventListener('click', function() {
                 if (currentPage > 1) {
-                    const testContainers = document.querySelectorAll('.test-container');
                     const currentTestId = testContainers[currentPage - 1].dataset.testid;
+                    if (timers[currentTestId] && timers[currentTestId].isFinished) {
+                        return; // Не позволяйте вернуться к завершенному тесту
+                    }
                     stopTimer(currentTestId);
                     currentPage--;
                     renderTests();
                 }
             });
+
         
             document.getElementById('next-page').addEventListener('click', function() {
-                const totalTests = document.querySelectorAll('.test-container').length;
-                const testContainers = document.querySelectorAll('.test-container');
+                const totalTests = testContainers.length;
                 const currentTestId = testContainers[currentPage - 1].dataset.testid;
                 saveTimeSpent(currentTestId);
                 stopTimer(currentTestId);
@@ -260,4 +260,6 @@
 
     </script>
 }
+
+
 
