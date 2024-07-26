@@ -151,10 +151,6 @@ public class AccountController : Controller
                 emailSender.SendEmail(model.Email, subject, message);
                 return Json(new { success = true, email = user.Email });
             }
-            else
-            {
-                Console.WriteLine("ERROR");
-            }
         }
 
         ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");

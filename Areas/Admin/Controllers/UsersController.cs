@@ -119,6 +119,7 @@ public class UsersController : Controller
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "user");
+                await _userManager.SetLockoutEnabledAsync(user, false);
                 return RedirectToAction("Index");
             }
             foreach (var error in result.Errors)
