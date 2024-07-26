@@ -1,0 +1,145 @@
+﻿body {
+    font-family: Montserrat, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+    .header .time-left {
+        background-color: #e0e0e0;
+        border: 2px solid;
+        border-radius: 7px;
+        padding: 8px 20px;
+        color: #9c34c2;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+        .header .time-left img {
+            margin-right: 20px;
+            width: 15px;
+            height: 20px;
+        }
+
+    .header .score-info {
+        display: flex;
+        align-items: center;
+    }
+
+        .header .score-info div {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+            .header .score-info div img {
+                margin-right: 5px;
+            }
+
+.coin {
+    font-weight: 600;
+    color: #d98a14;
+}
+
+.fire {
+    font-weight: 600;
+    color: #fd3c4f;
+}
+
+.league-header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+    .league-header img {
+        margin: 0 5px;
+    }
+
+.league-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 20px 0;
+    text-align: center;
+    color: #ff6e09;
+}
+
+.leaderboard {
+    margin: 0 auto;
+    max-width: 1050px;
+}
+
+    .leaderboard .row {
+        background-color: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        align-items: center;
+    }
+
+        .leaderboard .row:nth-child(odd) {
+            background-color: #ffe2ce;
+        }
+
+    .leaderboard .position {
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .leaderboard .user-info {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        line-height: 9.75px;
+    }
+
+        .leaderboard .user-info img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+    .leaderboard .score {
+        margin-left: auto;
+        margin-right: 10px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .leaderboard .change {
+        font-size: 18px;
+    }
+
+.footer-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .footer-button button {
+        background-color: #CD7F32;
+        border: 2px solid #C36E1A;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-weight: 700;
+    background-color: #CD7F32;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0.9;
+    z-index: 1000;
+}
