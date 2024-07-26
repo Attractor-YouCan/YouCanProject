@@ -34,7 +34,7 @@ public class LessonsController : Controller
                                        && ul.SubjectId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true, SubtopicId = null};
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true, SubtopicId = null };
             _db.UserLessons.Add(userLessons);
             await _db.SaveChangesAsync();
         }
@@ -46,7 +46,7 @@ public class LessonsController : Controller
     public async Task<IActionResult> Details(int lessonId)
     {
         User? currentUser = await _userManager.GetUserAsync(User);
-        Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == lessonId);
+        Lesson? lesson = await _db.Lessons.Include(l => l.LessonModules).FirstOrDefaultAsync(l => l.Id == lessonId);
         if (lesson == null)
             return NotFound("No Lesson!");
         UserLessons? userLessons = await _db.UserLessons

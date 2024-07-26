@@ -6,6 +6,7 @@ using YouCan.Models;
 using YouCan.Services;
 using YouCan.Services.Email;
 using YouCan.ViewModels.Account;
+using RegisterViewModel = YouCan.ViewModels.Account.RegisterViewModel;
 
 namespace YouCan.Controllers;
 
@@ -113,43 +114,48 @@ public class AccountController : Controller
     
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
-   {
-    if (ModelState.IsValid)
     {
-        string path = "/userImages/defProf-ProfileN=1.png";
-        if (uploadedFile != null)
+        if (ModelState.IsValid)
         {
-            string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
-            path = $"/userImages/" + newFileName.Trim();
-            using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
+            string path = "/userImages/defProf-ProfileN=1.png";
+            if (uploadedFile != null)
             {
-                await uploadedFile.CopyToAsync(fileStream);
+                string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
+                path = $"/userImages/" + newFileName.Trim();
+                using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+            }
+            User user = new User
+            {
+                Email = model.Email,
+                UserName = model.UserName,
+                PhoneNumber = model.PhoneNumber,
+                FullName = model.LastName + " " + model.FirstName,
+                Disctrict = model.District,
+                AvatarUrl = path,
+                BirthDate = model.BirthDate.ToUniversalTime(),
+                CreatedAt = DateTime.UtcNow.AddHours(6)
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "user");
+                await _userManager.SetLockoutEnabledAsync(user, false);
+                await _signInManager.SignInAsync(user, false);
+
+                var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
+                EmailSender emailSender = new EmailSender();
+                emailSender.SendEmail(model.Email, subject, message);
+                return Json(new { success = true, email = user.Email });
             }
         }
-        User user = new User
-        {
-            Email = model.Email,
-            UserName = model.UserName,
-            PhoneNumber = model.PhoneNumber,
-            FullName = model.LastName + " " + model.FirstName,
-            Disctrict = model.District,
-            AvatarUrl = path,
-            BirthDate = model.BirthDate,
-            CreatedAt = DateTime.UtcNow.AddHours(6)
-        };
-        
-        await _userManager.CreateAsync(user, model.Password);
-        await _signInManager.SignInAsync(user, true);
-        
-        var (subject, message) =  GenerateEmailConfirmationContentAsync(user, model.UserName);
-        EmailSender emailSender = new EmailSender();
-        emailSender.SendEmail(model.Email, subject, message);
-        return Json(new { success = true, email = user.Email});
-    }
 
-    ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
-    return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
-   }
+        ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
+        return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+    }
 
    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
    {
