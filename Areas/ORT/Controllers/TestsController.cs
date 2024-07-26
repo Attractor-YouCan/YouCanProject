@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,7 @@ public class TestsController : Controller
             .FirstOrDefaultAsync(t => t.Id == ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
+        ViewBag.OrtTestId = ortTest.Id;
         UserOrtTest? userOrtTest = await _db.UserORTTests
             .Include(t => t.OrtTest)
             .FirstOrDefaultAsync(t => t.UserId == curUser.Id);
@@ -47,13 +49,75 @@ public class TestsController : Controller
     [HttpPost]
     public async Task<IActionResult> Index([FromBody] TestSubmissionModel testSubmissionModel)
     {
-        return View();
+        OrtTest? ortTest = await _db.OrtTests
+            .Include(t => t.Tests)
+                .ThenInclude(t => t.Questions)
+                    .ThenInclude(t => t.Answers)
+            .FirstOrDefaultAsync(t => t.Id == testSubmissionModel.OrtTestId);
+        if (ortTest == null)
+            return BadRequest("No OrtTest Id!");
+
+        User? currentUser = await _userManager.GetUserAsync(User);
+        UserOrtTest userOrtTest = await _db.UserORTTests.FirstOrDefaultAsync(t => t.UserId == currentUser.Id);
+        List<TestAnswersModel> selectedAnswer = testSubmissionModel.SelectedAnswers;
+        List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
+        List<Test>? tests = ortTest.Tests;
+        int passingCount = 0;
+        List<OrtTestResultModel> ortTestResultModels = new List<OrtTestResultModel>();
+
+        foreach (var test in tests)
+        {
+            int testPassingCount = (
+                from question in test.Questions
+                from answer in question.Answers.Where(a => a.IsCorrect)
+                join selectedAnswerLINQ in selectedAnswer on answer.Id equals selectedAnswerLINQ.AnswerId
+                select selectedAnswer
+            ).Count();
+            passingCount += testPassingCount;
+            ortTestResultModels.Add(new OrtTestResultModel()
+            {
+                RightsCount = testPassingCount,
+                QuestionCount = test.Questions.Count,
+                TestId = test.Id,
+                SpentTimeInMin = timeSpent.FirstOrDefault(t => t.TestId == test.Id).TimeSpent / 60.0
+            });
+        }
+
+        // Return the result data in the response
+        return Ok(new { ortTestResultModels });
     }
 
+
     [HttpGet]
-    public async Task<IActionResult> Result()
+    public IActionResult Result(string ortTestResultModels)
     {
-        return View();
+        try
+        {
+            // Decode URL-encoded data
+            var decodedResultModels = Uri.UnescapeDataString(ortTestResultModels);
+
+            // Deserialize JSON data to List<OrtTestResultModel>
+            List<OrtTestResultModel>? ortTestResultModelsNew = JsonSerializer.Deserialize<List<OrtTestResultModel>>(decodedResultModels);
+            
+            if (ortTestResultModelsNew != null)
+            {
+                // Pass data to view
+                return View(ortTestResultModelsNew);
+            }
+            else
+            {
+                return BadRequest("Deserialization failed.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle errors during deserialization
+            return BadRequest($"Error processing data: {ex.Message}");
+        }
     }
+
+
+
+    
 
 }

@@ -105,8 +105,7 @@
                         <span class="number">@questionNum</span>
                         @foreach (var answer in question.Answers)
                         {
-                            <input type="radio" name="answer-@question.Id" value="@answer.Id" />
-                            
+                            <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
                         }
                     </div>
                 }
@@ -272,17 +271,21 @@
                     currentPage++;
                     renderTests();
                 } else {
-                    axios.post('@Url.Action("Index", "Tests")', 
-                    {
-                        selectedAnswers: Object.values(selectedAnswers),
-                        timeSpent: timeSpent
-                    })
-                        .then(response => {
-                            window.location.href = `@Url.Action("Result", "Tests")/?isPassed=${response.data.isPassed}&lessonId=${response.data.lessonId}&subtopicId=${response.data.subtopicId}`;
-                        })
-                        .catch(error => {
-                            console.error('Error sending data:', error);
-                        });
+                   axios.post('@Url.Action("Index", "Tests")', {
+                           selectedAnswers: Object.values(selectedAnswers),
+                           timeSpent: timeSpent,
+                           ortTestId: '@ViewBag.OrtTestId'
+                       })
+                       .then(response => {
+                           // Handle redirection with result data
+                           // Assuming `response.data.ortTestResultModels` is your data object
+                           const ortTestResultModels = encodeURIComponent(JSON.stringify(response.data.ortTestResultModels));
+                           window.location.href = `@Url.Action("Result", "Tests")?ortTestResultModels=${ortTestResultModels}`;
+
+                       })
+                       .catch(error => {
+                           console.error('Error sending data:', error);
+                       });
                 }
             });
         
