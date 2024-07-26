@@ -81,8 +81,38 @@
     </div>
     <div class="offcanvas-body">
         <div class="answers-parent">
-            
+            <!-- Заголовок с вариантами ответов -->
+            <div class="answers header">
+                @for (var answerIndex = 0; answerIndex < 5; answerIndex++) // Задайте максимальное количество вариантов ответов, например 5
+                {
+                    <span class="answer-@(answerIndex + 1)">
+                        @if (Model.SelectMany(test => test.Questions).Any(question => question.Answers.Count > answerIndex))
+                        {
+                            @((char)('A' + answerIndex))
+                        }
+                    </span>
+                }
+            </div>
+        
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                Test test = Model[i];
+                @for (int t = 0; t < test.Questions.Count; t++)
+                {
+                    int questionNum = i * 2 + t + 1 + i;
+                    Question question = test.Questions[t];
+                    <div class="answers">
+                        <span class="number">@questionNum</span>
+                        @foreach (var answer in question.Answers)
+                        {
+                            <input type="radio" name="answer-@question.Id" value="@answer.Id" />
+                            
+                        }
+                    </div>
+                }
+            }
         </div>
+
     </div>
 </div>
 
@@ -94,6 +124,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            
+           
             const testContainers = document.querySelectorAll('.test-container');
             const countdownElement = document.getElementById('countdown');
             const finishTestName = document.getElementById('finishTestName');
