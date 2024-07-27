@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using YouCan.Areas.Train.Dto;
 using YouCan.Models;
 using YouCan.Services;
@@ -6,14 +8,17 @@ using YouCan.Services;
 namespace YouCan.Areas.Train.Controllers;
 
 [Area("Train")]
+[Authorize]
 public class QuestionsController : Controller
 {
     private readonly YouCanContext _youCanContext;
     private readonly W3RootFileManager _w3RootFileManager;
-    public QuestionsController(YouCanContext youCanContext, W3RootFileManager w3RootFileManager)
+    private readonly UserManager<User> _userManager; 
+    public QuestionsController(YouCanContext youCanContext, W3RootFileManager w3RootFileManager, UserManager<User> userManager)
     {
         _youCanContext = youCanContext;
         _w3RootFileManager = w3RootFileManager;
+        _userManager = userManager;
     }
     [HttpGet]
     public IActionResult Create(int subSubjectId)
@@ -60,7 +65,8 @@ public class QuestionsController : Controller
                             SubjectId = question.SubjectId,
                             Text = question.Text,
                             Answers = [],
-                            AnswersIsImage = question.AnswerIsImage
+                            AnswersIsImage = question.AnswerIsImage,
+                            UserId = int.Parse(_userManager.GetUserId(User)),
                         };
                         if(question.Image is not null)
                         {
