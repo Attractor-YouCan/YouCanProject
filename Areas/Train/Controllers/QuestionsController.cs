@@ -26,7 +26,7 @@ public class QuestionsController : Controller
         if(ModelState.IsValid)
         {
             bool subjectIsParent = _youCanContext.Subjects.Any(e => e.ParentId == subSubjectId);
-            if (subjectIsParent)
+            if (!subjectIsParent)
             {
                 var subject = _youCanContext.Subjects.FirstOrDefault(e => e.Id == subSubjectId);
                 if(subject is not null)
@@ -36,7 +36,7 @@ public class QuestionsController : Controller
                         Answers = new List<AnswerDto>(),
                         SubjectId = subSubjectId
                     };
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         model.Answers.Add(new AnswerDto());
                     }
@@ -53,7 +53,7 @@ public class QuestionsController : Controller
         if (ModelState.IsValid)
         {
             bool subjectIsParent = _youCanContext.Subjects.Any(e => e.ParentId == question.SubjectId);
-            if (subjectIsParent)
+            if (!subjectIsParent)
             {
                 var subject = _youCanContext.Subjects.FirstOrDefault(e => e.Id == question.SubjectId);
                 if (subject is not null)
@@ -64,6 +64,7 @@ public class QuestionsController : Controller
                         {
                             SubjectId = question.SubjectId,
                             Text = question.Text,
+                            Instruction = question.Instruction,
                             Answers = [],
                             AnswersIsImage = question.AnswerIsImage,
                             UserId = int.Parse(_userManager.GetUserId(User)),
@@ -91,7 +92,7 @@ public class QuestionsController : Controller
                         dbQuestion.Answers[question.CorrectAnswerId].IsCorrect = true;
                         _youCanContext.Questions.Add(dbQuestion);
                         await _youCanContext.SaveChangesAsync();
-                        return RedirectToAction("Train", "Index");
+                        return RedirectToAction("Index", "Train");
                     }
                     else if(question.Answers.Count > 4)
                     {

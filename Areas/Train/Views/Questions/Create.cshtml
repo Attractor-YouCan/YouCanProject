@@ -8,7 +8,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <form class="col-md-7 col-lg-5 m-0" enctype="multipart/form-data">
+        <form class="col-md-7 col-lg-5 m-0" enctype="multipart/form-data" asp-action="Create" asp-controller="Questions" method="post">
             <p class="text-center profile-title">Тренировка</p>
             <hr>
             <a href="#" class="btn">
@@ -16,7 +16,7 @@
             </a>
             <div class="mx-2">
                 <div class="mx-5">
-                    <h1 class="text-center fs-4">Аналогия</h1>@* Поле title для темы *@
+                    <h1 class="text-center fs-4">@ViewBag.Subject.Name</h1>@* Поле title для темы *@
                     <p class="text-center fw-bold">Каждая аналогия в тесте состоит из пяти пар слов.</p>@* Поле subtitle для темы *@
                     <p class="text-center fs-8 fw-bold text-secondary-theme">@* поле description для темы *@
                         Первая пара выделена жирным шрифтом.
@@ -24,7 +24,10 @@
                 </div>
                 <div class="text-center mb-5 row align-items-center m-0">
                     <div class="col p-0">
+                        <input asp-for="SubjectId" class="d-none" />
                         <input asp-for="Text" class="form-control mb-3" />
+                        <label asp-for="Instruction" class="form-label"></label>
+                        <input asp-for="Instruction" class="form-control mb-3" />
                         <label asp-for="Image"
                                class="btn-add-image p-0 d-flex flex-row align-items-center justify-content-center mb-3">
                             <img class="me-2" src="@Url.Content("~/trainImages/add.png")">
