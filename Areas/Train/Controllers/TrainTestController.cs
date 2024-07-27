@@ -70,6 +70,10 @@ public class TrainTestController : Controller
     [HttpPost]
     public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId)
     {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+            return Unauthorized();
         int pageSize = 1; 
         var test = await _db.Tests.Include(t => t.Questions)
             .ThenInclude(q => q.Answers)
@@ -80,7 +84,14 @@ public class TrainTestController : Controller
         
         var subjectId = test.SubjectId;
         ViewBag.SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault();
-        var questions = test.Questions.OrderBy(q => q.Id).ToList();
+        var answeredQuestionIds = await _db.PassedQuestions
+            .Where(pq => pq.UserId == user.Id)
+            .Select(pq => pq.QuestionId)
+            .ToListAsync();
+        var questions = test.Questions
+            .Where(q => !answeredQuestionIds.Contains(q.Id))
+            .OrderBy(q => q.Id)
+            .ToList();
     
         int pageToLoad = currentPage + 1;
     
@@ -131,7 +142,7 @@ public class TrainTestController : Controller
             var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == answer.SelectedAnswerId);
             var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
 
-            if (selectedAnswer != null && selectedAnswer.IsCorrect)
+            if (selectedAnswer   != null && selectedAnswer.IsCorrect)
             {
                 correctAnswers++;
             }
