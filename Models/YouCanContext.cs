@@ -39,6 +39,13 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
         new TestInitializer(modelBuilder).Seed();
+
+        modelBuilder.Entity<IdentityRole<int>>()
+            .HasData(
+                new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
+                new IdentityRole<int> { Id = 2, Name = "manager", NormalizedName = "MANAGER" },
+                new IdentityRole<int> { Id = 3, Name = "admin", NormalizedName = "ADMIN" }
+            );
         new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}

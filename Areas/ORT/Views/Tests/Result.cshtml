@@ -1,8 +1,17 @@
-@model bool
+@model List<YouCan.ViewModels.OrtTestResultModel>
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "_Navbar";
 }
 
 <h2>title</h2>
+
+@foreach(var result in Model)
+{
+    <h5>Правильные ответы :  @result.RightsCount</h5>
+    <h5>Общее количество ответов : @result.QuestionCount</h5>
+    <h5>ID теста : @result.TestId</h5>
+    <h5>Минут потраченных : @result.SpentTimeInMin</h5>
+}
+
