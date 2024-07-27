@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
+using YouCan.Services;
 using YouCan.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,8 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
     options.TokenLifespan = TimeSpan.FromHours(3);
 });
+
+builder.Services.AddSingleton<W3RootFileManager>();
 
 builder.Services.AddScoped<TwoFactorService>();
 
