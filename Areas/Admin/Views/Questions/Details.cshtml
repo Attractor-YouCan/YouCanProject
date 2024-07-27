@@ -11,10 +11,10 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => model.Text)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => model.Text)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsPublished)
@@ -48,11 +48,11 @@
         <ul>
             @if (a.IsCorrect)
             {
-                <li class="text-success">@a.Text</li>
+                <li class="text-success">@a.Content</li>
             }
             else
             {
-                <li class="text-danger">@a.Text</li>
+                <li class="text-danger">@a.Content</li>
             }
         </ul>
     }

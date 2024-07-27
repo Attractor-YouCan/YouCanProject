@@ -118,14 +118,14 @@ public class TrainTestController : Controller
             results.Add(new QuestionResultViewModel
             {
                 QuestionId = question.Id,
-                QuestionContent = question.Content,
+                QuestionContent = question.Text,
                 SelectedAnswerId = selectedAnswer?.Id ?? 0,
                 CorrectAnswerId = correctAnswer?.Id ?? 0,
                 IsCorrect = selectedAnswer?.IsCorrect ?? false,
                 Answers = question.Answers.Select(a => new AnswerViewModel
                 {
                     Id = a.Id,
-                    Text = a.Text
+                    Text = a.Content
                 }).ToList()
             });
         }

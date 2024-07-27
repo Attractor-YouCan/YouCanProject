@@ -27,14 +27,14 @@
             <div class="question-container text-center" data-questionId="@question.Id">
                 <span class="fw-bold fs-5">@question.Instruction</span>
                 <div class="question mt-4">
-                    @question.Content
+                    @question.Text
                 </div>
                 @foreach (var answer in question.Answers)
                 {
                     <label class="answer mt-4" role="button">
                         <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
                         <span class="answer-number">A</span>
-                        <span class="answer-content h-100 w-100">@answer.Text</span>
+                        <span class="answer-content h-100 w-100">@answer.Content</span>
                     </label>
                 }
             </div>
