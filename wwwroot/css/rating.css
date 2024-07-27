@@ -4,10 +4,17 @@
 
 .header {
     display: flex;
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
 }
+
+    .header .time-left,
+    .header .score-info {
+        display: flex;
+        align-items: center;
+    }
 
     .header .time-left {
         background-color: #e0e0e0;
@@ -16,13 +23,12 @@
         padding: 8px 20px;
         color: #9c34c2;
         font-weight: 600;
-        display: flex;
-        align-items: center;
+        margin-right: 20px;
     }
 
         .header .time-left img {
-            margin-right: 20px;
-            width: 15px;
+            margin-right: 10px;
+            width: 20px;
             height: 20px;
         }
 
@@ -39,6 +45,8 @@
 
             .header .score-info div img {
                 margin-right: 5px;
+                width: 20px;
+                height: 20px;
             }
 
 .coin {
@@ -52,16 +60,36 @@
 }
 
 .league-header {
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     margin: 20px 0;
 }
 
     .league-header img {
-        margin: 0 5px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        margin: 5px;
     }
 
+        .league-header img.small {
+            width: 40px;
+            height: 40px;
+        }
+
+        .league-header img.medium {
+            width: 60px;
+            height: 60px;
+        }
+
+        .league-header img.large {
+            width: 80px;
+            height: 80px;
+        }
+
 .league-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     margin: 20px 0;
     text-align: center;
@@ -70,7 +98,8 @@
 
 .leaderboard {
     margin: 0 auto;
-    max-width: 1050px;
+    max-width: 100%;
+    padding: 0 15px;
 }
 
     .leaderboard .row {
@@ -79,6 +108,7 @@
         margin-bottom: 10px;
         padding: 10px;
         align-items: center;
+        flex-wrap: wrap;
     }
 
         .leaderboard .row:nth-child(odd) {
@@ -86,7 +116,7 @@
         }
 
     .leaderboard .position {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: bold;
         display: flex;
         align-items: center;
@@ -97,23 +127,25 @@
         display: flex;
         align-items: center;
         font-weight: 600;
-        line-height: 9.75px;
+        line-height: 1.5;
     }
 
         .leaderboard .user-info img {
             border-radius: 50%;
             margin-right: 10px;
+            width: 30px;
+            height: 30px;
         }
 
     .leaderboard .score {
         margin-left: auto;
         margin-right: 10px;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
     }
 
     .leaderboard .change {
-        font-size: 18px;
+        font-size: 16px;
     }
 
 .footer-button {
@@ -123,8 +155,8 @@
 }
 
     .footer-button button {
-        background-color: #CD7F32;
-        border: 2px solid #C36E1A;
+        background-color: #cd7f32;
+        border: 2px solid #c36e1a;
         color: white;
         padding: 10px 20px;
         border-radius: 5px;
@@ -135,11 +167,70 @@
     bottom: 20px;
     right: 20px;
     font-weight: 700;
-    background-color: #CD7F32;
+    background-color: #cd7f32;
     border: none;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
     opacity: 0.9;
     z-index: 1000;
+}
+
+.highlight {
+    border: 2px solid #cd7f32;
+    background-color: #fffae6;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        align-items: flex-start;
+    }
+
+        .header .time-left{
+            font-size: 8px;
+        }
+        ,
+        .header .score-info {
+            width: auto;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        .header .score-info {
+            margin-top: 10px;
+        }
+
+    .league-title {
+        font-size: 18px;
+    }
+
+    .league-header img {
+        margin: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .league-header img {
+        margin: 3px;
+    }
+
+    .header .time-left img,
+    .header .score-info div img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .leaderboard .position {
+        font-size: 14px;
+    }
+
+    .leaderboard .score {
+        font-size: 14px;
+    }
+
+    .floating-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
 }
