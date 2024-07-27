@@ -6,12 +6,19 @@
 }
 <link rel="stylesheet" href="~/css/ortTest.css">
 
-<div class="col-8 text-center mx-auto mt-5">
-    <h5>Основные сведения о тесте</h5>
-    <p class="mt-4">Цель теста выявить способных к дальнейшему обучения абитуриентов.
-        Этот тст дает Вам возможность показать что Вы знаете и умеете делать реально, . . . 
+<div class="container mx-auto ort-trial-test_details-block">
+    <div class="ort-trial-test_details-block_title">
+        <a asp-action="Index" asp-controller="OrtTests">
+            <img src="~/ortIcons/Vector-3.png"/>
+        </a>
+        <p>Основные сведения о тесте</p>
+    </div>
+    
+    <p class="my-4 ort-trial-test_details-block_text">Цель теста выявить способных к дальнейшему обучения абитуриентов.
+        <br/>
+        Этот тест дает Вам возможность показать что Вы знаете и умеете делать реально, . . .
     </p>
-    <p>Основной тест сдают все абитуриенты. Это обязательный тест. Он состоит из следующих разделов:</p>
+    <p class="ort-trial-test_details-block_text">Основной тест сдают все абитуриенты. Это обязательный тест. Он состоит из следующих разделов:</p>
 
 </div>
 
@@ -43,5 +50,5 @@
 </div>
 
 <div class="mt-auto text-center mb-4">
-    <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="btn btn-success">Перейти к тесту</a>
+    <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="ort-trial-test_details-block_btn">Хорошо</a>
 </div>

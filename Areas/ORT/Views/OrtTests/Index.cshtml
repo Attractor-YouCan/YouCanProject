@@ -4,9 +4,18 @@
     Layout = "_Navbar";
 }
 
-<div class="col-10 mx-auto border border-1 rounded-3 text-center py-3">
-    Правила прохождения теста
+<link rel="stylesheet" href="~/css/ortTest.css">
+
+<div class="container ort-trial-block">
+    <img class="align-self-center" src="~/ortIcons/logo.svg" alt="logo-youcan"/>
+    <p>Пробный тест</p>
 </div>
+<hr/>
+
+
+@* <div class="col-10 mx-auto border border-1 rounded-3 text-center py-3"> *@
+@*     Правила прохождения теста *@
+@* </div> *@
 
 @if (Model == null || Model.Count == 0)
 {
@@ -14,23 +23,23 @@
 }
 else
 {
-    <div class="text-center mt-4">
-            <h5 class="mx-auto"> Доступные вам тесты</h5>
-    </div>
+    @* <div class="text-center mt-4"> *@
+    @*         <h5 class="mx-auto"> Доступные вам тесты</h5> *@
+    @* </div> *@
     <div class="col-8 mx-auto tests mt-5">
         @foreach (var ortTest in Model)
         {
             if (ViewBag.CurrentOrtTestLevel >= ortTest.OrtLevel)
             {
                 <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
-                    <div class="border border-1 text-success rounded-3 border-success px-5 py-3 mt-3">
+                    <div class="ort-trial-block-paddings border border-1 text-black fw-bold text-center rounded-3 border-light-subtle mt-3">
                         <span>Пробный тест № @ortTest.OrtLevel</span>
                     </div> 
                 </a>
             }
             else
             {
-                <div class="border border-1 rounded-3 border-secondary px-5 py-3 mt-3">
+                <div style="color: #C4C4C4" class="ort-trial-block-paddings border border-1 rounded-3 te fw-bold text-center border-light-subtle mt-3">
                     <span>Пробный тест № @ortTest.OrtLevel</span>
                 </div>
             }
