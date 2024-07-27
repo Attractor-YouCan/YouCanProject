@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let answers = [];
+    let answers =  [];
     let csrfToken = $('input[name="__RequestVerificationToken"]').val();
     let subtopicId = $('#questions-container').data('subtopic-id');
 
@@ -11,6 +11,14 @@ $(document).ready(function () {
             } else {
                 pageButton.removeClass('btn-default').addClass('btn-danger');
             }
+
+            let questionContainer = $(`.question-container[data-question-id="${answer.questionId}"]`);
+            let selectedAnswer = questionContainer.find(`input[value="${answer.selectedAnswerId}"]`);
+            if (answer.isCorrect) {
+                selectedAnswer.closest('label').addClass('correct-answer');
+            } else {
+                selectedAnswer.closest('label').addClass('wrong-answer');
+            }
         });
     }
 
@@ -21,9 +29,11 @@ $(document).ready(function () {
         if (answeredQuestion) {
             $('input[name="answer-' + currentQuestionId + '"]').prop('disabled', true);
             $('#answer-button').prop('disabled', true);
+            $('#next-question-button').prop('disabled', false); // Enable "Next Question" button
         } else {
             $('input[name="answer-' + currentQuestionId + '"]').prop('disabled', false);
             $('#answer-button').prop('disabled', false);
+            $('#next-question-button').prop('disabled', true); // Disable "Next Question" button
         }
     }
 
@@ -51,34 +61,42 @@ $(document).ready(function () {
 
                 if (data.isCorrect) {
                     pageButton.removeClass('btn-default').addClass('btn-success');
+                    selectedAnswer.closest('label').addClass('correct-answer');
                 } else {
                     pageButton.removeClass('btn-default').addClass('btn-danger');
+                    selectedAnswer.closest('label').addClass('wrong-answer');
                 }
 
                 answers.push({ questionId: questionId, selectedAnswerId: selectedAnswerId, isCorrect: data.isCorrect, pageIndex: pageIndex });
                 localStorage.setItem('answers', JSON.stringify(answers));
 
-                $.ajax({
-                    url: '/Train/TrainTest/GetNextQuestion',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: { currentPage: pageIndex, wantedPage: 0, subtopicId: subtopicId },
-                    success: function (response) {
-                        if (response.finished) {
-                            blockAnsweredQuestion();
-                            finishTest();
-                        } else {
-                            $('#questions-container').html(response);
-                            $('#questions-container').data('current-page', pageIndex + 1);
-                            blockAnsweredQuestion();
-                        }
-                    },
-                    error: function (error) {
-                        console.error('Error:', error);
-                    }
-                });
+                blockAnsweredQuestion(); // Block the current question and enable the "Next Question" button
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+
+    $('#next-question-button').click(function () {
+        let pageIndex = $('#questions-container').data('current-page');
+
+        $.ajax({
+            url: '/Train/TrainTest/GetNextQuestion',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: { currentPage: pageIndex, subtopicId: subtopicId },
+            success: function (response) {
+                if (response.finished) {
+                    blockAnsweredQuestion();
+                    finishTest();
+                } else {
+                    $('#questions-container').html(response);
+                    $('#questions-container').data('current-page', pageIndex + 1);
+                    blockAnsweredQuestion();
+                }
             },
             error: function (error) {
                 console.error('Error:', error);
@@ -140,27 +158,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    $('.pagination-btn').click(function (e) {
-        e.preventDefault();
-        let wantedPage = parseInt($(this).text());
-        $.ajax({
-            url: '/Train/TrainTest/GetNextQuestion',
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            data: { currentPage: 0, wantedPage: wantedPage, subtopicId: subtopicId },
-            success: function (response) {
-                $('#questions-container').html(response);
-                $('#questions-container').data('current-page', wantedPage);
-                blockAnsweredQuestion();
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            }
-        });
-    });
 
     loadAnsweredQuestions();
     blockAnsweredQuestion();
