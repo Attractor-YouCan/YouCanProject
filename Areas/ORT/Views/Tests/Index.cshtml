@@ -17,17 +17,15 @@
 <div class="row row-cols-3 px-4 text-center mb-4 w-100 fixed-time-table">
     <div class="col-3" id="countdown">
         <span>00:00:00</span>
-    </div> <!-- Место для отображения таймера -->
+    </div>
     <div class="col-6">
         <button class="btn btn-danger text-white" id="next-page">Завершить
             <span id="finishTestName"></span></button>
     </div>
     <div class="col-3" id="total-countdown">
         <span>00:00:00</span>
-    </div> <!-- Место для отображения общего таймера -->
+    </div>
 </div>
-
-
 
 <div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
     @if (Model.Count == 0 || Model == null)
@@ -43,7 +41,7 @@
                 @for (int t = 0; t < test.Questions.Count; t++)
                 {
                     Question question = test.Questions[t];
-                    int questionNum =  s * 2 + t +1 + s;
+                    int questionNum = s * 2 + t + 1 + s;
                     <div class="question-container text-center mt-4" data-questionId="@question.Id">
                         <span class="fw-bold fs-5">@($"{questionNum}.") &nbsp; @question.Instruction</span>
                         <div class="question mt-4">
@@ -81,9 +79,8 @@
     </div>
     <div class="offcanvas-body">
         <div class="answers-parent">
-            <!-- Заголовок с вариантами ответов -->
             <div class="answers header">
-                @for (var answerIndex = 0; answerIndex < 5; answerIndex++) // Задайте максимальное количество вариантов ответов, например 5
+                @for (var answerIndex = 0; answerIndex < 5; answerIndex++)
                 {
                     <span class="answer-@(answerIndex + 1)">
                         @if (Model.SelectMany(test => test.Questions).Any(question => question.Answers.Count > answerIndex))
@@ -93,7 +90,6 @@
                     </span>
                 }
             </div>
-        
             @for (var i = 0; i < Model.Count; i++)
             {
                 Test test = Model[i];
@@ -111,76 +107,68 @@
                 }
             }
         </div>
-
     </div>
 </div>
-
-
-
 
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            
-           
+        document.addEventListener("DOMContentLoaded", function () {
             const testContainers = document.querySelectorAll('.test-container');
             const countdownElement = document.getElementById('countdown');
             const finishTestName = document.getElementById('finishTestName');
             let timers = {};
             let timeSpent = [];
-            let selectedAnswers = [];
+            let selectedAnswers = {};
             let currentPage = 1;
             let totalTestTime = 0;
-        
+            let selectionCounts = {};
+
             function initializeTimers() {
-                totalTestTime = 0; // Reset total test time
+                totalTestTime = 0;
                 testContainers.forEach(testContainer => {
                     const testId = testContainer.dataset.testid;
                     const testTime = parseInt(testContainer.dataset.testtime, 10) * 60;
-                    totalTestTime += testTime; // Add this test's time to total
+                    totalTestTime += testTime;
                     timers[testId] = {
                         originalTime: testTime,
                         timeLeft: testTime,
                         interval: null
                     };
                 });
-                updateTotalCountdown(); // Initialize the total countdown
+                updateTotalCountdown();
             }
-        
+
             function formatTime(seconds) {
                 const hours = Math.floor(seconds / 3600);
                 const minutes = Math.floor((seconds % 3600) / 60);
                 const secs = seconds % 60;
                 return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
             }
-        
+
             function startTimer(testId) {
                 if (timers[testId].interval) {
                     clearInterval(timers[testId].interval);
                 }
-                let currentTestContainer = testContainers[currentPage - 1];
-                let testNameForTime = currentTestContainer.dataset.testname;
-                finishTestName.innerText = testNameForTime;
-                timers[testId].interval = setInterval(function() {
+                timers[testId].interval = setInterval(function () {
                     if (timers[testId].timeLeft <= 0) {
                         clearInterval(timers[testId].interval);
                         countdownElement.innerHTML = "Время вышло!";
                     } else {
-                        countdownElement.innerHTML = `${formatTime(timers[testId].timeLeft)} <br> <span> ${testNameForTime} </span>`;
                         timers[testId].timeLeft--;
-                        updateTotalCountdown(); // Update total time on each tick
+                        updateCountdown(testId);
+                        updateTotalCountdown();
                     }
                 }, 1000);
             }
-        
+
             function stopTimer(testId) {
                 if (timers[testId].interval) {
                     clearInterval(timers[testId].interval);
                 }
             }
-        
+
             function saveTimeSpent(testId) {
                 const timer = timers[testId];
                 const timeSpentTest = (timer.originalTime - timer.timeLeft);
@@ -191,19 +179,26 @@
                     timeSpent.push({ testId: testId, timeSpent: timeSpentTest });
                 }
             }
-        
+
+            function updateCountdown(testId) {
+                const testContainer = document.querySelector(`.test-container[data-testid="${testId}"]`);
+                const testName = testContainer.dataset.testname;
+                const timeLeft = timers[testId].timeLeft;
+                countdownElement.innerHTML = `${formatTime(timeLeft)} <br> <span> ${testName} </span>`;
+            }
+
             function updateTotalCountdown() {
                 const totalTimeLeft = Object.values(timers).reduce((acc, timer) => acc + timer.timeLeft, 0);
                 document.getElementById('total-countdown').innerHTML = `${formatTime(totalTimeLeft)} <br> <span>Общее время</span>`;
             }
-        
+
             function updatePaginationButtonState() {
                 document.getElementById('prev-page').disabled = currentPage === 1;
                 const currentTestContainer = testContainers[currentPage - 1];
                 const testNameForButton = currentTestContainer.dataset.testname;
                 document.getElementById('next-page').textContent = 'Завершить ' + testNameForButton;
-        
-                document.querySelectorAll('.answer-radio').forEach(function(radio) {
+
+                document.querySelectorAll('.answer-radio').forEach(function (radio) {
                     if (radio.checked) {
                         radio.parentElement.style.backgroundColor = '#58CC02';
                         radio.parentElement.classList.add('text-white');
@@ -212,89 +207,126 @@
                         radio.parentElement.classList.remove('text-white');
                     }
                 });
-            }          
-        
-            document.querySelectorAll('.answer-radio').forEach(function(radio) {
-                radio.addEventListener('click', function() {
-                    const questionContainer = radio.closest('.question-container');
-                    const questionId = questionContainer.dataset.questionid;
-                    const testContainer = radio.closest('.test-container');
-                    const testId = testContainer.dataset.testid;
-                    
-                    if (radio.checked) {
-                        radio.parentElement.style.backgroundColor = '#58CC02';
-                        radio.parentElement.classList.add('text-white');
-                        selectedAnswers[radio.name] = {
-                            testId: testId,
-                            questionId: questionId,
-                            answerId: radio.value
-                        };
-                    } else {
-                        radio.parentElement.style.backgroundColor = '';
-                        radio.parentElement.classList.remove('text-white');
-                        delete selectedAnswers[radio.name];
+            }
+
+            function handleRadioClick(event) {
+                const radio = event.target;
+                const questionContainer = radio.closest('.question-container');
+                const questionId = questionContainer.dataset.questionid;
+                const testContainer = radio.closest('.test-container');
+                const testId = testContainer.dataset.testid;
+            
+                if (selectionCounts[questionId] > 0) {            
+                    // Найти предыдущий выбранный ответ
+                    for (const [key, value] of Object.entries(selectedAnswers)) {
+                        if (value.questionId === questionId && value.testId === testId) {
+                            const previousRadioElement = document.querySelector(`input[name="${key}"][value="${value.answerId}"]`);
+                            requestAnimationFrame(() => {
+                            previousRadioElement.parentElement.style.backgroundColor = '#F1C40F'; // Жёлтый цвет
+                            previousRadioElement.parentElement.classList.remove('text-white');
+                            });                                
+                            break;
+                        }
                     }
-                    updatePaginationButtonState();
-                });
-            });
-        
+                }
+            
+                // Обновление выбранного ответа
+                if (radio.checked) {
+                    radio.parentElement.style.backgroundColor = '#58CC02'; // Зеленый цвет
+                    radio.parentElement.classList.add('text-white');
+                    selectedAnswers[radio.name] = {
+                        testId: testId,
+                        questionId: questionId,
+                        answerId: radio.value
+                    };
+                    selectionCounts[questionId] = (selectionCounts[questionId] || 0) + 1;
+                } else {
+                    radio.parentElement.classList.remove('text-white');
+                    delete selectedAnswers[radio.name];
+                    selectionCounts[questionId] = (selectionCounts[questionId] || 0) - 1;
+                }
+            
+                // Отключение невыбранных радио-кнопок, если выбран больше двух ответов
+                if (selectionCounts[questionId] >= 2) {
+                    document.querySelectorAll(`[data-questionid="${questionId}"] .answer-radio`).forEach(function (radio) {
+                        if (!radio.checked) {
+                            radio.disabled = true;
+                        }
+                    });
+                } else {
+                    document.querySelectorAll(`[data-questionid="${questionId}"] .answer-radio`).forEach(function (radio) {
+                        radio.disabled = false;
+                    });
+                }
+            
+                updatePaginationButtonState();
+            }
+
+
+
+
             function renderTests() {
                 window.scrollTo(0, 0);
-                testContainers.forEach(function(testContainer, index) {
+                testContainers.forEach(function (testContainer, index) {
                     testContainer.style.display = (index === currentPage - 1) ? 'block' : 'none';
                 });
                 const testId = testContainers[currentPage - 1].dataset.testid;
                 startTimer(testId);
                 updatePaginationButtonState();
             }
-        
-            document.getElementById('prev-page').addEventListener('click', function() {
+
+            document.getElementById('prev-page').addEventListener('click', function () {
                 if (currentPage > 1) {
                     const currentTestId = testContainers[currentPage - 1].dataset.testid;
-                    if (timers[currentTestId] && timers[currentTestId].isFinished) {
-                        return; // Не позволяйте вернуться к завершенному тесту
-                    }
                     stopTimer(currentTestId);
                     currentPage--;
                     renderTests();
                 }
             });
 
-        
-            document.getElementById('next-page').addEventListener('click', function() {
+            document.getElementById('next-page').addEventListener('click', function () {
                 const totalTests = testContainers.length;
                 const currentTestId = testContainers[currentPage - 1].dataset.testid;
                 saveTimeSpent(currentTestId);
                 stopTimer(currentTestId);
-        
+
                 if (currentPage < totalTests) {
                     currentPage++;
                     renderTests();
                 } else {
                    axios.post('@Url.Action("Index", "Tests")', {
-                           selectedAnswers: Object.values(selectedAnswers),
-                           timeSpent: timeSpent,
-                           ortTestId: '@ViewBag.OrtTestId'
-                       })
-                       .then(response => {
-                           // Handle redirection with result data
-                           // Assuming `response.data.ortTestResultModels` is your data object
-                           const ortTestResultModels = encodeURIComponent(JSON.stringify(response.data.ortTestResultModels));
-                           window.location.href = `@Url.Action("Result", "Tests")?ortTestResultModels=${ortTestResultModels}`;
-
-                       })
-                       .catch(error => {
-                           console.error('Error sending data:', error);
+                       selectedAnswers: Object.values(selectedAnswers),
+                       timeSpent: timeSpent,
+                       ortTestId: '@ViewBag.OrtTestId'
+                   })
+                   .then(response => {
+                       const ortTestResultModels = response.data.ortTestResultModels;
+                       const queryParams = new URLSearchParams();
+                       ortTestResultModels.forEach((model, index) => {
+                           queryParams.append(`ortTestResultModels[${index}].rightsCount`, model.rightsCount);
+                           queryParams.append(`ortTestResultModels[${index}].questionCount`, model.questionCount);
+                           queryParams.append(`ortTestResultModels[${index}].testId`, model.testId);
+                           queryParams.append(`ortTestResultModels[${index}].spentTimeInMin`, model.spentTimeInMin);
+                           queryParams.append(`ortTestResultModels[${index}].testPoints`, model.testPoints);
+                           queryParams.append(`ortTestResultModels[${index}].pointsSum`, model.pointsSum);
                        });
+                       window.location.href = `@Url.Action("Result", "Tests")?${queryParams.toString()}`;
+                   })
+                   .catch(error => {
+                       console.error('Error sending data:', error);
+                   });
+
                 }
             });
-        
-            initializeTimers();
-            renderTests(); // Initial render
-        });
 
+            document.querySelectorAll('.answer-radio').forEach(function (radio) {
+                radio.addEventListener('click', handleRadioClick);
+            });
+
+            initializeTimers();
+            renderTests();
+        });
     </script>
 }
-
 
 

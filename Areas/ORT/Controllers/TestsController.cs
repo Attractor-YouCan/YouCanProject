@@ -58,62 +58,69 @@ public class TestsController : Controller
             return BadRequest("No OrtTest Id!");
 
         User? currentUser = await _userManager.GetUserAsync(User);
-        UserOrtTest userOrtTest = await _db.UserORTTests.FirstOrDefaultAsync(t => t.UserId == currentUser.Id);
+        UserOrtTest userOrtTest = await _db.UserORTTests
+            .FirstOrDefaultAsync(t => t.UserId == currentUser.Id);
         List<TestAnswersModel> selectedAnswer = testSubmissionModel.SelectedAnswers;
         List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
         List<Test>? tests = ortTest.Tests;
-        int passingCount = 0;
         List<OrtTestResultModel> ortTestResultModels = new List<OrtTestResultModel>();
-
+        int passingCount = 0;
+        int? testPointSum = 0;
+        int passedTimeInMin = 0;
         foreach (var test in tests)
         {
             int testPassingCount = (
                 from question in test.Questions
                 from answer in question.Answers.Where(a => a.IsCorrect)
-                join selectedAnswerLINQ in selectedAnswer on answer.Id equals selectedAnswerLINQ.AnswerId
+                join selectedAnswerLINQ in selectedAnswer on answer.Id
+                    equals selectedAnswerLINQ.AnswerId
                 select selectedAnswer
             ).Count();
+            
+            int? testPoints = (
+                from question in test.Questions
+                from answer in question.Answers.Where(a => a.IsCorrect)
+                join selectedAnswerLINQ in selectedAnswer on answer.Id
+                    equals selectedAnswerLINQ.AnswerId
+                select question.Point
+            ).Sum();
+
+            double testPassedTime = timeSpent.FirstOrDefault(t => t.TestId == test.Id).TimeSpent / 60.0;
+            
             passingCount += testPassingCount;
+            testPointSum += testPoints;
+            passedTimeInMin += (int)testPassedTime;
             ortTestResultModels.Add(new OrtTestResultModel()
             {
                 RightsCount = testPassingCount,
                 QuestionCount = test.Questions.Count,
                 TestId = test.Id,
-                SpentTimeInMin = timeSpent.FirstOrDefault(t => t.TestId == test.Id).TimeSpent / 60.0
+                SpentTimeInMin = testPassedTime,
+                PointsSum = testPointSum,
+                TestPoints = testPoints
             });
         }
 
+        userOrtTest.OrtTestId = ortTest.Id;
+        userOrtTest.PassedLevel = ortTest.OrtLevel;
+        userOrtTest.Points = testPointSum;
+        userOrtTest.PassedTimeInMin = passedTimeInMin;
+        userOrtTest.PassedDateTime = DateTime.UtcNow;
+        int? totalPoints = ortTest.Tests.SelectMany(t => t.Questions).Sum(q => q.Point);
+        if (testPointSum >= totalPoints/2)
+            userOrtTest.IsPassed = true;
+        else
+            userOrtTest.IsPassed = false;
+        _db.UserORTTests.Update(userOrtTest);
+        await _db.SaveChangesAsync();
         // Return the result data in the response
         return Ok(new { ortTestResultModels });
     }
 
-
     [HttpGet]
-    public IActionResult Result(string ortTestResultModels)
+    public IActionResult Result(List<OrtTestResultModel> ortTestResultModels)
     {
-        try
-        {
-            // Decode URL-encoded data
-            var decodedResultModels = Uri.UnescapeDataString(ortTestResultModels);
-
-            // Deserialize JSON data to List<OrtTestResultModel>
-            List<OrtTestResultModel>? ortTestResultModelsNew = JsonSerializer.Deserialize<List<OrtTestResultModel>>(decodedResultModels);
-            
-            if (ortTestResultModelsNew != null)
-            {
-                // Pass data to view
-                return View(ortTestResultModelsNew);
-            }
-            else
-            {
-                return BadRequest("Deserialization failed.");
-            }
-        }
-        catch (Exception ex)
-        {
-            // Handle errors during deserialization
-            return BadRequest($"Error processing data: {ex.Message}");
-        }
+        return View(ortTestResultModels);
     }
 
 

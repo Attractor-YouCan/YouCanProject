@@ -9,9 +9,14 @@
 
 @foreach(var result in Model)
 {
-    <h5>Правильные ответы :  @result.RightsCount</h5>
-    <h5>Общее количество ответов : @result.QuestionCount</h5>
-    <h5>ID теста : @result.TestId</h5>
-    <h5>Минут потраченных : @result.SpentTimeInMin</h5>
+    <p class="border border-success">
+        <h5>Правильные ответы :  @result.RightsCount</h5>
+            <h5>Общее количество ответов : @result.QuestionCount</h5>
+            <h5>ID теста : @result.TestId</h5>
+            <h5>Минут потраченных : @result.SpentTimeInMin</h5>
+            <h5>Количество баллов теста : @result.TestPoints</h5>
+            <h5>Общее Количество баллов : @result.PointsSum</h5>
+    </p>
+    
 }
 

@@ -16,4 +16,8 @@ public class OrtTestResultModel
 
     [JsonPropertyName("spentTimeInMin")]
     public double? SpentTimeInMin { get; set; }
+    [JsonPropertyName("testPoints")]
+    public int? TestPoints { get; set; }
+    [JsonPropertyName("pointsSum")]
+    public int? PointsSum { get; set; }
 }

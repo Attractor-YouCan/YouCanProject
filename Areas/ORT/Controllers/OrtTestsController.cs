@@ -24,7 +24,9 @@ public class OrtTestsController : Controller
         User? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null)
             RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _db.UserORTTests.Include(t => t.OrtTest).FirstOrDefaultAsync(u => u.UserId == currUser.Id);
+        UserOrtTest? userOrtTest = await _db.UserORTTests
+            .Include(t => t.OrtTest)
+            .FirstOrDefaultAsync(u => u.UserId == currUser.Id);
         if (userOrtTest == null)
         {
             userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false, PassedLevel = 0, OrtTestId = null};
@@ -32,9 +34,14 @@ public class OrtTestsController : Controller
             await _db.SaveChangesAsync();
         }
         if (userOrtTest.OrtTest == null)
-            ViewBag.CurrentOrtTestLevel = 1;
+            ViewBag.CurrentOrtTestLevel = 0;
         else
-            ViewBag.CurrentOrtTestLevel = userOrtTest.OrtTest.OrtLevel;
+        {
+            if (userOrtTest.IsPassed)
+                ViewBag.CurrentOrtTestLevel = userOrtTest.OrtTest.OrtLevel;
+            else
+                ViewBag.CurrentOrtTestLevel = userOrtTest.OrtTest.OrtLevel - 1;
+        }
         List<OrtTest> ortTests = await _db.OrtTests.ToListAsync();
         return View(ortTests);
     }
