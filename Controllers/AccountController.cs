@@ -9,7 +9,6 @@ namespace YouCan.Controllers;
 
 public class AccountController : Controller
 {
-    
     private YouCanContext _db;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;

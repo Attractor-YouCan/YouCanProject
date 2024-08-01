@@ -47,7 +47,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.6" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.7" />
     </ItemGroup>
 
 </Project>
