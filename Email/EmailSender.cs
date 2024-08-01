@@ -1,3 +1,4 @@
+namespace YouCan.Mvc;
 public class EmailSender
 {
     public bool SendEmail(string email, string subject, string text)

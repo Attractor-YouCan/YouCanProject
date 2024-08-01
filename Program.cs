@@ -1,7 +1,7 @@
-using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
+using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Repository.Repository;
 using YouCan.Service.Service;
@@ -54,6 +54,8 @@ builder.Services.AddTransient<ICRUDService<UserLevel>, CRUDService<UserLevel>>()
 
 builder.Services.AddTransient<IRepository<UserOrtTest>, Repository<UserOrtTest>>();
 builder.Services.AddTransient<ICRUDService<UserOrtTest>, CRUDService<UserOrtTest>>();
+
+builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();

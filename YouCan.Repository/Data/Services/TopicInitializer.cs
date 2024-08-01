@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
-
-namespace YouCan.Services;
+namespace YouCan.Repository;
 
 public class TopicInitializer
 {

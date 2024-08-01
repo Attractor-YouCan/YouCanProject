@@ -3,13 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
+using YouCan.Mvc;
 using YouCan.Repository;
-using YouCan.Services;
-using YouCan.Services.Email;
-using YouCan.ViewModels.Account;
-using RegisterViewModel = YouCan.ViewModels.Account.RegisterViewModel;
 
-namespace YouCan.Controllers;
 
 public class AccountController : Controller
 {

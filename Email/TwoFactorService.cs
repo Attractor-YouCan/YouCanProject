@@ -1,7 +1,6 @@
-
 using System.Collections.Concurrent;
 
-namespace YouCan.Services.Email
+namespace YouCan.Mvc
 {
     public class TwoFactorService
     {

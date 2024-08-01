@@ -1,4 +1,4 @@
-namespace YouCan.Services;
+namespace YouCan.Entities;
 
 public class ConfirmCodeRequest
 {
