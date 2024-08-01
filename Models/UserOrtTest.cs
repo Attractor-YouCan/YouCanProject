@@ -8,8 +8,13 @@ public class UserOrtTest
     public int UserId { get; set; }
     public User? User { get; set; }
 
-    public int TestId { get; set; }
-    public Test? Test { get; set; }
+    public int? OrtTestId { get; set; }
+    public OrtTest? OrtTest { get; set; }
+    
+    public int? PassedLevel { get; set; }
+    public DateTime? PassedDateTime { get; set; }
+    public int? Points { get; set; }
+    public int? PassedTimeInMin { get; set; }
 
 
 }
