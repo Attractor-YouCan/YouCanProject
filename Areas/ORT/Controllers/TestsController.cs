@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -64,9 +63,9 @@ public class TestsController : Controller
         List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
         List<Test>? tests = ortTest.Tests;
         List<OrtTestResultModel> ortTestResultModels = new List<OrtTestResultModel>();
-        int passingCount = 0;
         int? testPointSum = 0;
         int passedTimeInMin = 0;
+        int? passingTimeInMin = ortTest.Tests.Select(t => t.TimeForTestInMin).Sum();
         foreach (var test in tests)
         {
             int testPassingCount = (
@@ -85,9 +84,8 @@ public class TestsController : Controller
                 select question.Point
             ).Sum();
 
-            double testPassedTime = timeSpent.FirstOrDefault(t => t.TestId == test.Id).TimeSpent / 60.0;
-            
-            passingCount += testPassingCount;
+            double testPassedTime = timeSpent.FirstOrDefault(t => t.TestId == test.Id)!.TimeSpent / 60.0;
+
             testPointSum += testPoints;
             passedTimeInMin += (int)testPassedTime;
             ortTestResultModels.Add(new OrtTestResultModel()
@@ -101,13 +99,13 @@ public class TestsController : Controller
             });
         }
 
-        userOrtTest.OrtTestId = ortTest.Id;
+        userOrtTest!.OrtTestId = ortTest.Id;
         userOrtTest.PassedLevel = ortTest.OrtLevel;
         userOrtTest.Points = testPointSum;
         userOrtTest.PassedTimeInMin = passedTimeInMin;
         userOrtTest.PassedDateTime = DateTime.UtcNow;
         int? totalPoints = ortTest.Tests.SelectMany(t => t.Questions).Sum(q => q.Point);
-        if (testPointSum >= totalPoints/2)
+        if (testPointSum >= totalPoints/2 && passedTimeInMin < passingTimeInMin)
             userOrtTest.IsPassed = true;
         else
             userOrtTest.IsPassed = false;
