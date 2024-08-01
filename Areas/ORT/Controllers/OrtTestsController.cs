@@ -64,11 +64,16 @@ public class OrtTestsController : Controller
             .Include(t => t.OrtTest)
             .FirstOrDefaultAsync(t => t.UserId == curUser.Id);
         int currentLevel = 0;
-        if (userOrtTest.IsPassed)
-            currentLevel = (int)userOrtTest.OrtTest.OrtLevel;
-        else
-            currentLevel = (int)(userOrtTest.OrtTest.OrtLevel - 1);
-        if (currentLevel + 1 >= ortTest.OrtLevel)
+        if (userOrtTest.OrtTest != null)
+        {
+            if (userOrtTest.IsPassed)
+                currentLevel = (int)userOrtTest.OrtTest.OrtLevel;
+            else
+                currentLevel = (int)(userOrtTest.OrtTest.OrtLevel - 1);
+            if (currentLevel + 1 >= ortTest.OrtLevel)
+                return View(ortTest);
+        }
+        else if(userOrtTest.PassedLevel + 1 >= ortTest.OrtLevel)
             return View(ortTest);
         return RedirectToAction("Index");
     }
