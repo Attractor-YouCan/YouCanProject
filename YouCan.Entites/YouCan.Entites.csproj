@@ -50,4 +50,10 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="YouCan">
+        <HintPath>..\bin\Debug\net8.0\YouCan.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

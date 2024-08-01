@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using YouCan.Models;
 
 namespace YouCan.Entities;
 
@@ -11,7 +12,9 @@ public class Test : EntityBase
 
     public int? SubtopicId { get; set; }
     public Subtopic? Subtopic { get; set; }
-    
+    //Альтернатива сабтопику
+    public int? SubjectId { get; set; }
+    public Subject? Subject { get; set; }
     public int? LessonId { get; set; }
     public Lesson? Lesson { get; set; }
     

@@ -23,7 +23,7 @@ public class LessonsController : Controller
 
     public async Task<IActionResult> Index(int subTopicId)
     {
-        List<Lesson>? lessons = _db.Lessons.Where(l => l.SubtopicId == subTopicId).ToList();
+        List<Lesson>? lessons = _db.Lessons.Where(l => l.SubjectId == subTopicId).ToList();
         if (lessons == null)
             return NotFound("NO lessons in this topic !");
         User? currentUser = await _userManager.GetUserAsync(User);
@@ -32,10 +32,10 @@ public class LessonsController : Controller
 
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
-                                       && ul.SubtopicId == subTopicId);
+                                       && ul.SubjectId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubtopicId = subTopicId, PassedLevel = 0, IsPassed = true };
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true, SubtopicId = null };
             _db.UserLessons.Add(userLessons);
             await _db.SaveChangesAsync();
         }
@@ -47,14 +47,14 @@ public class LessonsController : Controller
     public async Task<IActionResult> Details(int lessonId)
     {
         User? currentUser = await _userManager.GetUserAsync(User);
-        Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == lessonId);
+        Lesson? lesson = await _db.Lessons.Include(l => l.LessonModules).FirstOrDefaultAsync(l => l.Id == lessonId);
         if (lesson == null)
             return NotFound("No Lesson!");
         UserLessons? userLessons = await _db.UserLessons
             .FirstOrDefaultAsync(ul => ul.UserId == currentUser.Id
-            && ul.SubtopicId == lesson.SubtopicId);
+            && ul.SubjectId == lesson.SubjectId);
         if (lesson.LessonLevel > userLessons.PassedLevel + 1)
-            return RedirectToAction("Index", new { subTopicId = lesson.SubtopicId });
+            return RedirectToAction("Index", new { subTopicId = lesson.SubjectId });
         if (userLessons == null)
             return NotFound("NO UserLesson!");
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)

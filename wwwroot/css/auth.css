@@ -12,7 +12,7 @@
 .auth-main .authForm{
     display: flex;
     flex-direction: column;
-     margin-top: 200px; 
+    margin-top: 200px;
     gap: 20px;
 }
 
@@ -76,7 +76,7 @@
 
 
 .auth-main form input::placeholder {
-    color: #fff; 
+    color: #fff;
 }
 
 .auth-main form .password-wrapper {
@@ -215,5 +215,5 @@
     .auth-main form .input-group {
         margin-bottom: 10px;
     }
-    
+
 }

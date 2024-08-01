@@ -12,18 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
             passwordIcon.setAttribute('src', '../authIcons/eyes-open.png')
         }
     });
+    const togglePassword2 = document.querySelector('.toggle-password2');
+    const passwordInput2 = document.querySelector('#confPass');
+    const passwordIcon2 = document.querySelector('#toggle-password-icon2');
+
+    togglePassword2.addEventListener('click', () => {
+        const type = passwordInput2.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput2.setAttribute('type', type);
+        if(type == 'password'){
+            passwordIcon2.setAttribute('src', '../authIcons/eyes-closed.png')
+        }if(type == 'text'){
+            passwordIcon2.setAttribute('src', '../authIcons/eyes-open.png')
+        }
+    });
 });
-// $(document).ready(function() {
-//     const togglePassword = $('.toggle-password');
-//     const passwordInput = $('#password');
-//     const passwordIcon = $('#toggle-password-icon');
-//
-//     togglePassword.on('click', function() {
-//         const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-//         passwordInput.attr('type', type);
-//         if(type == 'password'){
-//             passwordIcon.attr('src', '../authIcons/eyes-closed.png');
-//             passwordIcon.attr('src', '../authIcons/eyes-open.png');
-//         }
-//     });
-// });

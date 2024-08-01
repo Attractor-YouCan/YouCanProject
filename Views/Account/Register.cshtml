@@ -1,106 +1,462 @@
-@model YouCan.Entities.RegisterViewModel
+@using YouCan.ViewModels.Account;
+@model RegisterViewModel
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = "Register";
     Layout = "_Layout";
 }
-<div class="container">
-    <div class="row row-cols-1 mt-5">
-        <div class="col col-6 mx-auto">
-            <div class="row row-cols-2">
-                <div class="col col-10 bg-white mx-auto text-center">
-                    <div class="row">
-                        <div class="col col-12 border border-1 py-4 px-5">
-                            <h5> Регистрация </h5>
-                            <form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
-                                <div class="input-group mt-5">
-                                    <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
-                                    <label for="email"><span class="text-danger" asp-validation-for="Email"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="Email" type="email" class="form-control" placeholder="Email" id="email">
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="lastName"><span class="text-danger" asp-validation-for="LastName"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="LastName" type="text" class="form-control" placeholder="LastName" id="lastName">
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="firstName"><span class="text-danger" asp-validation-for="FirstName"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="FirstName" type="text" class="form-control" placeholder="FirstName" id="firstName">
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="userName"><span class="text-danger" asp-validation-for="UserName"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="UserName" type="text" class="form-control" placeholder="Username" id="userName">
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="district"><span class="text-danger" asp-validation-for="District"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="District" type="text" class="form-control" placeholder="District" id="district">
-                                    </div>
-                                </div>
-                                
-                                <div class="input-group mt-2">
-                                    <label for="birthDate">Введите дату рождения</label>
-                                    <label for="birthDate"><span class="text-danger" asp-validation-for="BirthDate"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="BirthDate" type="date" class="form-control" placeholder="BirthDate" id="birthDate">
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="phone"><span class="text-danger" asp-validation-for="PhoneNumber"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Phone number" id="phone">
-                                    </div>
-                                </div>
-                                <div class="mt-2">
-                                    <label for="file">Выберите фото профиля</label>
-                                    <input id="file" type="file" name="uploadedFile" class="form-control">
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="pass"><span class="text-danger" asp-validation-for="Password"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" id="pass" aria-describedby="button-addon1">
-                                        <button type="button" id="button-addon1" class="btn password-toggle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg></button>
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <label for="pass"><span class="text-danger" asp-validation-for="ConfirmPassword"></span></label>
-                                    <div class="input-group">
-                                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" id="confPass" aria-describedby="button-addon2">
-                                        <button type="button" id="button-addon2" class="btn password-toggle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 16.01C14.2091 16.01 16 14.2191 16 12.01C16 9.80087 14.2091 8.01001 12 8.01001C9.79086 8.01001 8 9.80087 8 12.01C8 14.2191 9.79086 16.01 12 16.01Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M2 11.98C8.09 1.31996 15.91 1.32996 22 11.98" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M22 12.01C15.91 22.67 8.09 22.66 2 12.01" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg></button>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary rounded-2 w-100 mt-3">Зарегистрироваться</button>
-                            </form>
-                        </div>
-                        
-                        <div class="col col-12 text-center border border-1 mt-4 py-4">
-                            Есть аккаунт? &nbsp;<a class="link link-info link-underline link-underline-opacity-0" asp-action="Login" >Войти</a>
-                        </div>
-                        
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/landing.css">
+    <link rel="stylesheet" href="~/css/auth.css">
+    <title>Register</title>
+</head>
+<body>
+<section class="section1">
+    <div class="background">
+        <div class="stars"></div>
+    </div>
+    <div class="section1_container">
+        <div class="auth-main">
+           
+            <div class="navContainer">
+                <nav>
+                    <a asp-controller="Home" asp-action="Index" class="linkLogo">
+                        <img src="~/landingIcons/YouCanLogo.png" alt="logo">
+                        <span class="textLogo">youcan</span>
+                    </a>
+
+                    <div class="language-switch">
+                        <span>Рус</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                        <span>Кыр</span>
                     </div>
+                </nav>
+            </div>
+            <div class="underNavbarSection">
+                <a class="backBtn back-button">
+                    <img src="~/authIcons/backArrow.png" alt="">
+                </a>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </div>
+           
+            
+            <div class="multi-step-form">
+                <div id="page1" class="aboutUsRegister form-page active">
+                    <div class="aboutUsRegister_content">
+                        <h2>Посмотри видео и узнай, <br/>
+                            как подготовиться вместе с Youcan!
+                        </h2>
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#aboutUsModal">
+                            <img src="~/authIcons/playVideo.png" alt="play video" class="playVideoImg"/>
+                        </a>
+                        <button class="nextBtn next-btn">Дальше</button>
+                    </div>
+
+                    
+                    <div class="modal fade" id="aboutUsModal"  tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close btn btn-outline-dark " data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                    <div class="modal-body">
+                                        <div class="video-container mx-auto text-center mt-5">
+                                            <iframe  id="youtube-video" class="col-12 mx-auto rounded-3" width="100%" height="450"
+                                                    src="https://www.youtube.com/embed/P3ZTxke4AOU" frameborder="0"
+                                                    allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div id="page2" class="authForm  form-page" style="margin-top: 50px">
+                    <h1>Регистрация</h1>
+                    <form id="registerForm" asp-action="Register" asp-controller="Account"  asp-anti-forgery="true" enctype="multipart/form-data">
+                        
+                        <div id="errorContainer" class="validation text-danger"></div>
+
+                        <div class="input-group">
+                            <label for="email">
+                                <span class="text-danger" asp-validation-for="Email"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="Email" type="text" class="form-control" placeholder="Эл почта" id="email">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastName">
+                                <span class="text-danger" asp-validation-for="LastName"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="LastName" type="text" class="form-control" placeholder="Фамилия" id="lastName">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="firstName">
+                                <span class="text-danger" asp-validation-for="FirstName"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="FirstName" type="text" class="form-control" placeholder="Имя" id="firstName">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="userName">
+                                <span class="text-danger" asp-validation-for="UserName"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="UserName" type="text" class="form-control" placeholder="Никнейм" id="userName">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="district">
+                                <span class="text-danger" asp-validation-for="District"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="District" type="text" class="form-control" placeholder="Район" id="district">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="birthDate">
+                                <span class="text-danger" asp-validation-for="BirthDate"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="BirthDate" type="date" class="form-control" placeholder="Дата рождения" id="birthDate">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">
+                                <span class="text-danger"  asp-validation-for="PhoneNumber"></span>
+                            </label>
+                            <div class="phone-wrapper">
+                                <input asp-for="PhoneNumber" type="number" class="form-control" placeholder="Номер телефона" id="phone">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="file">Фото профиля</label>
+                            <input id="file" type="file" name="uploadedFile" class="form-control"  accept=".png, .jpg, .jpeg">
+                        </div>
+                        
+                        <div class="input-group password-wrapper">
+                            <label for="pass" >
+                                <span class="text-danger"   asp-validation-for="Password"  id="passwordError"></span>
+                            </label>
+                            <div class="password-wrapper">
+                                <input asp-for="Password" type="password" oninput="validatePassword(); checkPasswords()" 
+                                       name="password" class="form-control" placeholder="Пароль"   required="required"
+                                       id="pass">
+                                <span class="toggle-password">
+                                    <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon" width="32" height="32">
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group password-wrapper">
+                            <label for="confPass">
+                                <span class="text-danger"  id="passConfError"></span>
+                            </label>
+                            <div class="password-wrapper">
+                                <input asp-for="ConfirmPassword" type="password" 
+                                       class="form-control" placeholder="Подтвердите пароль" oninput="checkPasswords()" required="required"
+                                       id="confPass">
+                                <span class="toggle-password2">
+                                    <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon2" width="32" height="32">
+                                </span>
+                            </div>
+                        </div>
+                        <button type="submit" class="loginBtn">
+                            <span class="button-text">СОЗДАТЬ АККАУНТ</span>
+                            <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
+                        </button>
+                       
+                    </form>
+                    <p class="terms">
+                        Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>
+                        с нашими <a href="#">Условиями</a> и <a href="#">Политикой конфиденциальности</a>.
+                    </p>
+                </div>
+                <div id="page3" class="aboutUsRegister form-page active">
+                    <h2>
+                        На вашу почту <span id="userEmailAddress"></span>  был отправлен <br/>
+                        6-значный код для подтверждения
+                    </h2>
+                    <div id="errorContainer2" class="error-container text-danger"></div>
+                    <div class="input-container">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                    </div>
+                    <button id="confirm-button"  class="loginBtn">
+                        <span class="button-text">ПОДТВЕРДИТЬ</span>
+                        <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@section Scripts{
-    <script>
-    </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+</section>
+</body>
+
+
+ @section Scripts{
+     @{
+         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+     }
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+     <script src="~/js/landing.js"></script>
+     <script src="~/js/auth.js"></script>
+     
+
+
+     <script>
+         $('#file').on('change', function () {
+             var fileInput = $(this);
+             var filePath = fileInput.val();
+             var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+             if (!allowedExtensions.exec(filePath)) {
+                 alert('Неверный тип файла. Выберите файл .png, .jpg или .jpeg.');
+                 fileInput.val('');
+                 return false;
+             }
+         });
+
+         function validatePassword() {
+             let $password = $('input[name=password]');
+             let $passwordError = $('#passwordError');
+             let passwordValue = $password.val();
+
+             let lengthCheck = passwordValue.length >= 6;
+             let digitCheck = /\d/.test(passwordValue);
+             let uppercaseCheck = /[A-Z]/.test(passwordValue);
+             let lowercaseCheck = /[a-z]/.test(passwordValue);
+
+             let errorMessage = '';
+             if (!lengthCheck) {
+                 errorMessage += 'Пароль должен быть не менее 6 символов.<br>';
+             }
+             if (!digitCheck) {
+                 errorMessage += 'Пароль должен содержать хотя бы одну цифру (\'0\'-\'9\').<br>';
+             }
+             if (!uppercaseCheck) {
+                 errorMessage += 'Пароль должен иметь хотя бы одну заглавную букву (\'A\'-\'Z\').<br>';
+             }
+             if (!lowercaseCheck) {
+                 errorMessage += 'Пароль должен иметь хотя бы одну строчную букву (\'a\'-\'z\').<br>';
+             }
+
+             if (errorMessage === '') {
+                 $password[0].setCustomValidity('');
+                 $passwordError.text('');
+             } else {
+                 $password[0].setCustomValidity(errorMessage);
+                 $passwordError.html(errorMessage);
+             }
+         }
+         
+         function checkPasswords() {
+             let password = $('#pass').val();
+             let confirm = $('#confPass').val();
+             let passConfError = $('#passConfError');
+
+             if (confirm === password) {
+                 $('#confPass')[0].setCustomValidity('');
+                 passConfError.text('');
+             } else {
+                 $('#confPass')[0].setCustomValidity('Пароли не совпадают');
+                 passConfError.text('Пароли не совпадают');
+             }
+         }
+
+
+         $(document).ready(function () {
+             $('#aboutUsModal').on('hidden.bs.modal', function () {
+                 var $iframe = $('#youtube-video');
+                 var src = $iframe.attr('src');
+                 $iframe.attr('src', ''); 
+                 $iframe.attr('src', src); 
+             });
+             
+         });
+         
+         
+    document.addEventListener('DOMContentLoaded', function() {
+        const pages = document.querySelectorAll('.form-page');
+        const progressBar = document.querySelector('#progress-bar');
+        const nextButtons = document.querySelectorAll('.nextBtn');
+        const backButtons = document.querySelectorAll('.backBtn');
+        let currentPage = 0;
+        
+        function updateProgressBar() {
+            const progress = ((currentPage + 1) / pages.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function showPage(pageIndex) {
+            pages.forEach((page, index) => {
+                page.style.display = index === pageIndex ? 'block' : 'none';
+            });
+            updateProgressBar();
+        }
+
+        nextButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (currentPage < pages.length - 1) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+        });
+
+        backButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+        });
+
+        showPage(currentPage);
+        
+        $('#registerForm').on('submit', function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            formData.forEach(function (value, key) {
+                console.log(key + ": " + value);
+            });
+
+            $('#errorContainer').html('');
+
+            showLoader();
+
+            $.ajax({
+                url: 'Register/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.success) {
+                        console.log(data, "success");
+                        $('#userEmailAddress').text(data.email);
+                        currentPage++;
+                        showPage(currentPage);
+                    } else {
+                        console.log("error" + data.errors);
+                        displayValidationErrors(data.errors);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown);
+                },
+                complete: function () {
+                   hideLoader();
+                }
+            });
+        });
+        
+        
+        const $confirmBtn = $('#confirm-button');
+        const $errorContainer = $('#errorContainer2');
+
+        $confirmBtn.on('click', function () {
+                const verificationCode = $('.code-input').map(function () {
+                    return $(this).val();
+                }).get().join('');
+
+                console.log("verification code " + verificationCode);
+                const email = $('#email').val();
+                $errorContainer.html('');
+                
+                showLoader();
+                
+                $.ajax({
+                    url: 'ConfirmCode/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: email, code: verificationCode }),
+                    success: function (data) {
+                        if (data.success) {
+                            window.location.href = `/Account/Profile/${data.userId}`;
+                        } else {
+                            displayValidationErrors2(data.errors || [data.message]);
+                        }
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    },
+                    complete: function () {
+                        hideLoader();
+                    }
+                });
+            });
+
+        function showLoader(){
+            $('.button-text').hide();
+            $('.loginBtn').css('background', '#5B7CB2');
+            $('.loader').show();
+        }
+        function hideLoader(){
+            $('.button-text').show();
+            $('.loginBtn').css('background', '#58CC02');
+            $('.loader').hide();
+        }
+
+        $('.code-input').each(function (index) {
+            const $input = $(this);
+
+            $input.on('input', function () {
+                    if ($input.val().length === 1 && index < $('.code-input').length - 1) {
+                        $('.code-input').eq(index + 1).focus();
+                    }
+            });
+
+            $input.on('keydown', function (event) {
+                    if (event.key === 'Backspace' && index > 0 && $input.val() === '') {
+                        $('.code-input').eq(index - 1).focus();
+                    }
+            });
+        });
+        
+
+
+        function displayValidationErrors(errors) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = '';
+            errors.forEach(error => {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.innerText = error;
+                errorContainer.appendChild(errorDiv);
+            });
+        }
+        function displayValidationErrors2(errors) {
+            const errorContainer = document.getElementById('errorContainer2');
+            errorContainer.innerHTML = '';
+            errors.forEach(error => {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.innerText = error;
+                errorContainer.appendChild(errorDiv);
+            });
+        }
+        
+    });
+    
+     </script>
+ }

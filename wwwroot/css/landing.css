@@ -482,35 +482,16 @@ input:checked + .slider:before {
     background-size: cover;
 }
 
-.section3_benefits{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.benefits-bg-color {
     background-color: #FFCF21;
-    border-radius: 40px;
 }
-.section3 h2{
-    position: relative;
-    font-size: 45px;
-    font-weight: 700;
-    line-height: 54px;
-    color: #000;
-    padding-left: 200px;
-}
-.section3 h2 span{
-    width: 250px;
-    height: 250px;
-    position: absolute;
-    background: url('../landingIcons/bonbon-bills-wallet.png') no-repeat;
-    background-size: cover;
-    left: -60px;
-    bottom: -50px;
+
+.benefits-bg-color p {
+    color: black;
 }
 
 .mobile-cards {
-    margin: 40px auto;
-    display: flex;
-    justify-content: space-between;
+    display: none;
 }
 
 .mobile-card-first_last {
@@ -572,6 +553,7 @@ input:checked + .slider:before {
 .fade {
     transition: opacity 0.5s ease-in-out, height 0.5s ease-in-out;
 }
+
 .fade.show {
     opacity: 1;
     height: auto;
@@ -584,9 +566,9 @@ input:checked + .slider:before {
 
 .desktop-cards {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
+    margin: 40px auto;
 }
 
 .card-first-last {
@@ -739,7 +721,6 @@ input:checked + .slider:before {
 }
 
 .timeblock-bg {
-    background-color: #3284e1;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
@@ -749,18 +730,22 @@ input:checked + .slider:before {
     position: relative;
 }
 
+.timeblock-bg-color {
+    background-color: #3284e1;
+}
+
 .time-img {
     width: 176px;
     height: 172px;
     align-self: center;
     position: absolute;
-    left: 20%;
+    left: 15%;
     bottom: 5%;
 }
 
 .time-text {
     position: absolute;
-    right: 15%;
+    right: 12%;
     top: 25%;
     font-size: 45px;
     font-weight: 700;
@@ -1084,10 +1069,6 @@ footer {
     .section3_card p {   
         font-size: 18px;
     }
-    .section3 h2 span {
-        width: 200px;
-        height: 200px;
-    }
 }
 @media (max-width: 1420px) {
     .section1_content_img img {
@@ -1096,14 +1077,6 @@ footer {
     }
     .section2_subjects div p {
         font-size: 18px;
-    }
-    .section3_benefits h2 {
-        font-size: 35px;
-    }
-    .section3_benefits h2 span {
-        width: 200px;
-        height: 200px;
-        left: -30px;
     }
 }
 @media (max-width: 1300px) {
@@ -1192,21 +1165,25 @@ footer {
         width: 350px;
         height: 220px;
     }
-    .section3_benefits h2 {
-        font-size: 30px;
-        padding-left: 180px;
-    }
-    .section3_benefits h2 span {
-        width: 160px;
-        height: 160px;
-        left: 0;
-        bottom: -20px;
+
+    .desktop-cards {
+        display: none;
     }
 
     .mobile-cards {
+        margin: 40px auto;
+        display: flex;
         flex-direction: column;
         align-items: center;
         row-gap: 20px;
+    }
+
+    .time-img {
+        left: 16%;
+    }
+
+    .time-text {
+        right: 13%;
     }
 
     .pre-footer-info_img img {
@@ -1380,16 +1357,6 @@ footer {
     .section3_topContent_content {
         width: 100%;
     }
-    .section3_benefits h2 {
-        font-size: 25px;
-        padding-left: 150px;
-    }
-    .section3_benefits h2 span {
-        width: 140px;
-        height: 140px;
-        left: 0;
-        bottom: -20px;
-    }
 
     .timeblock-bg {
         height: 50px;
@@ -1403,7 +1370,8 @@ footer {
     }
     
     .time-text {
-        font-size: 28px;
+        font-size: 29px;
+        top: 6%;
     }
 
     .pre-footer-info_img img {
@@ -1511,8 +1479,11 @@ footer {
 }
 
 @media (max-width: 851px) {
-    .timeblock-bg {
+    .timeblock-bg-color {
         background-color: #0D3D8D;
+    }
+    
+    .timeblock-bg {
         height: 45px;
     }
 
@@ -1522,7 +1493,7 @@ footer {
     }
 
     .time-text {
-        font-size: 22px;
+        font-size: 24px;
     }
     
     .preparing_block {
@@ -1547,6 +1518,10 @@ footer {
     .section1_content_img .linkTrailer {
         bottom: -70px;
         right: 80px;
+    }
+
+    .time-text {
+        font-size: 22px;
     }
 
     .preparing_block {
@@ -1614,12 +1589,6 @@ footer {
 
 /* Mobile devices */
 @media (max-width: 661px) {
-    .section3_benefits h2 {
-        text-wrap: wrap;
-        text-align: end;
-        line-height: 25px;
-    }
-
     .timeblock-bg {
         height: 37px;
     }
@@ -1643,7 +1612,7 @@ footer {
     .time-img {
         width: 45px;
         height: 41px;
-        left: 14%;
+        left: 19%;
     }
 
     .time-text {
@@ -1829,9 +1798,12 @@ footer {
         top: 20px;
         left: -40px;
     }
+}
 
-    .section3_benefits {
-        padding:  10px 20px;
+@media (max-width: 530px){
+    .time-text {
+        font-size: 17px;
+        top: 8%;
     }
 }
 
@@ -1847,7 +1819,7 @@ footer {
     }
 
     .time-text {
-        font-size: 15px;
+        font-size: 16px;
         top: 3%;
     }
 }
@@ -1858,6 +1830,8 @@ footer {
     }
 
     .time-text {
+        font-size: 17px;
+        top: 0%;
         right: 12%;
     }
     
@@ -1998,20 +1972,19 @@ footer {
         padding: 8px 15px;
         font-size: 12px;
     }
-    .section3_benefits h2 span {
-        width: 120px;
-        height: 120px;
+
+    .time-text {
+        font-size: 16px;
     }
-    
 }
 
 @media (max-width: 387px) {
     .time-img {
-        left: 4%;
+        left: 10%;
     }
 
     .time-text {
-        right: 5%;
+        right: 6%;
     }
     
     .pre-footer-info_texts_title-1 {
@@ -2059,5 +2032,17 @@ footer {
     nav{
         width: initial;
         gap: 8px;
+    }
+}
+
+@media (max-width: 357px) {
+    .time-img {
+        left: 6%;
+    }
+
+    .time-text {
+        font-size: 15px;
+        right: 5%;
+        top: 2%;
     }
 }

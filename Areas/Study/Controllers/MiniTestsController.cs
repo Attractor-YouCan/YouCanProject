@@ -41,7 +41,7 @@ public class MiniTestsController : Controller
             .FirstOrDefaultAsync(t => t.Id == selectedAnswers[0].TestId);
         Lesson? lesson = await _db.Lessons.FirstOrDefaultAsync(l => l.Id == test.LessonId);
         UserLessons? userLessons = await _db.UserLessons.FirstOrDefaultAsync(ul =>
-            ul.UserId == currentUser.Id && ul.SubtopicId == lesson.SubtopicId);
+            ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
 
         int passingCount = (
             from question in test.Questions
@@ -62,7 +62,7 @@ public class MiniTestsController : Controller
         {
             isPassed = n > 0,
             lessonId = lesson.Id,
-            subtopicId = lesson.SubtopicId
+            subtopicId = lesson.SubjectId
         };
         return Ok(testResult);
     }

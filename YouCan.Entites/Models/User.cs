@@ -8,7 +8,7 @@ public class User : IdentityUser<int>
     public string FullName { get; set; }
     public DateTime? BirthDate { get; set; }
     public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
-
+    public string Disctrict { get; set; }
     public Statistic? Statistic { get; set; }
     public List<UserLessons>? Lessons { get; set; }
     public List<UserLevel>? UserLevels { get; set; }

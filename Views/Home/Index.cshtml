@@ -1,6 +1,6 @@
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "_layout";
 }
 <!DOCTYPE html>
 <html lang="ru">
@@ -24,14 +24,45 @@
                     <span class="textLogo">youcan</span>
                 </a>
 
-                <div class="language-switch">
-                    <span>Рус</span>
-                    <label class="switch">
-                        <input type="checkbox">
+              <div class="user-info dropdown">
+                @if (User.Identity.IsAuthenticated)
+                {
+                <span class="dropdown-toggle fw-bold" role="button" data-bs-toggle="dropdown" aria-expanded="false">@User.Identity.Name</span>
+
+                <ul class="dropdown-menu">
+                  <li>
+                    <a asp-action="Profile" asp-controller="Account" class="dropdown-item">Профиль - @User.Identity.Name</a>
+                  </li>
+                  <li>
+                    <div class="language-switch">
+                      <span style="color: #000">Рус</span>
+                      <label class="switch">
+                        <input type="checkbox" id="languageSwitch">
                         <span class="slider"></span>
-                    </label>
-                    <span>Кыр</span>
+                      </label>
+                      <span style="color: #000">Кыр</span>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <form class="d-flex justify-content-start dropdown-item" asp-action="LogOut" asp-controller="Account">
+                      <button type="submit" class="border-0 bg-transparent ps-3 text-center d-block text-decoration-none link-theme-secondary">Выйти</button>
+                    </form>
+                  </li>
+                </ul>
+                }
+                else
+                {
+                <div class="language-switch">
+                  <span>Рус</span>
+                  <label class="switch">
+                    <input type="checkbox" id="languageSwitch">
+                    <span class="slider"></span>
+                  </label>
+                  <span>Кыр</span>
                 </div>
+                }
+              </div>
 
             </nav>
         </div>
@@ -59,6 +90,7 @@
 
     </div>
 </section>
+
 <section class="section2">
     <div class="section2_subjects">
         <div class="math">
@@ -145,12 +177,164 @@
         </div>
 
     </div>
-    <div class="section3_benefits">
-        <h2>Цены ниже – качество выше!
-            <span></span>
-        </h2>
+    
+    <div class="timeblock-bg benefits-bg-color my-3">
+      <div class="container">
+        <img
+          class="time-img"
+          src="~/landingIcons/bonbon-bills-wallet.png"
+          alt="clock-image"
+        />
+        <p class="time-text">Цены ниже – качество выше!</p>
+      </div>
     </div>
+    
 </section>
+
+<div class="container desktop-cards">
+      <div class="card card-first-last p-4 subscription-card">
+        <div class="card-body d-flex flex-column">
+          <img
+            src="~/landingIcons/lending1.svg"
+            class="img-fluid mb-3 mx-auto"
+            alt="Subscription Image"
+          />
+          <p class="title-card-first-last">Старт</p>
+          <p class="price-info-first-last">
+            <strong>0 <span>С</span> /</strong> в месяц
+          </p>
+          <ul class="text-list-first-last">
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              10 бесплатных уроков
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Информация о ВУЗах
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              1 пробный тест ОРТ
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Рейтинг пользователей
+            </li>
+          </ul>
+          <a href="#" class="btn btn-first-last text-center mt-auto"
+            >Ваш тариф</a
+          >
+        </div>
+      </div>
+
+      <div class="card card-middle p-4 subscription-card">
+        <div class="card-body d-flex flex-column">
+          <img
+            src="~/landingIcons/lending1.svg"
+            class="img-fluid mb-3 mx-auto"
+            alt="Subscription Image"
+          />
+          <p class="title-card">Про</p>
+          <p class="price-info">
+            <strong>1200 <span>С</span> /</strong> в месяц
+          </p>
+          <ul class="text-list">
+            <li>
+              <div class="checkbox-container-middle">
+                <div class="checkbox-icon-middle"></div>
+              </div>
+              Доступ ко всем урокам
+            </li>
+            <li>
+              <div class="checkbox-container-middle">
+                <div class="checkbox-icon-middle"></div>
+              </div>
+              Информация о ВУЗах
+            </li>
+            <li>
+              <div class="checkbox-container-middle">
+                <div class="checkbox-icon-middle"></div>
+              </div>
+              Все пробные тесты ОРТ
+            </li>
+            <li>
+              <div class="checkbox-container-middle">
+                <div class="checkbox-icon-middle"></div>
+              </div>
+              Рейтинг пользователей
+            </li>
+            <li>
+              <div class="checkbox-container-middle">
+                <div class="checkbox-icon-middle"></div>
+              </div>
+              Хранилище задач ОРТ
+            </li>
+          </ul>
+          <a href="#" class="btn btn-select text-center mt-auto">Выбрать</a>
+        </div>
+      </div>
+
+      <div class="card card-first-last p-4 subscription-card">
+        <div class="card-body d-flex flex-column">
+          <img
+            src="~/landingIcons/lending1.svg"
+            class="img-fluid mb-3 mx-auto"
+            alt="Subscription Image"
+          />
+          <p class="title-card-first-last">Премиум</p>
+          <p class="price-info-first-last">
+            <strong>3000 <span>С</span> /</strong> на 3 месяца
+          </p>
+          <ul class="text-list-first-last">
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Скидка -15% на 3 месяца
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Доступ ко всем урокам
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Информация о ВУЗах
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Все пробные тесты ОРТ
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Рейтинг пользователей
+            </li>
+            <li>
+              <div class="checkbox-container">
+                <div class="checkbox-icon"></div>
+              </div>
+              Хранилище задач ОРТ
+            </li>
+          </ul>
+          <a href="#" class="btn btn-first-last text-center mt-auto">Выбрать</a>
+        </div>
+      </div>
+    </div>
 
 <div class="container mobile-cards">
       <div>
@@ -397,7 +581,7 @@
     </div>
     
     <section class="last-lending">
-          <div class="timeblock-bg">
+          <div class="timeblock-bg timeblock-bg-color">
             <div class="container">
               <img
                 class="time-img"
@@ -573,3 +757,10 @@
 </body>
 </html>
 
+  @section Scripts
+  {
+    <script>
+      
+    </script>
+  }
+  
