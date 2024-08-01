@@ -3,7 +3,6 @@ using YouCan.Models;
 
 namespace YouCan.Services;
 
-
 public class TrainTestInitializer
 {
     private ModelBuilder _modelBuilder;
@@ -24,7 +23,12 @@ public class TrainTestInitializer
             new Question(){Id = 8, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?"},
             new Question(){Id = 9, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком слове вместо точек следует вставить букву з?"},
             new Question(){Id = 10, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово употреблено в правильной форме?"},
-            new Question(){Id = 11, TestId = 3, Instruction = "Какое слово следует вставить вместо точек в предложение?", Content = "Задание, ... нами, не вызывает особых затруднений."}
+            new Question(){Id = 11, TestId = 3, Instruction = "Какое слово следует вставить вместо точек в предложение?", Content = "Задание, ... нами, не вызывает особых затруднений."},
+
+            new Question(){Id = 12, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово является синонимом к слову 'красивый'?"},
+            new Question(){Id = 13, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово является антонимом к слову 'высокий'?"},
+            new Question(){Id = 14, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово является глаголом?"},
+            new Question(){Id = 15, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово обозначает предмет?"}
         );
 
         _modelBuilder.Entity<Answer>().HasData(
@@ -47,11 +51,30 @@ public class TrainTestInitializer
             new Answer(){Id = 26, QuestionId = 10, IsCorrect = false, Text = "Впереди шла стройная женщина, а позади (её) бежал малыш."},
             new Answer(){Id = 27, QuestionId = 10, IsCorrect = false, Text = "На углу улицы я увидел мальчика, возле (его) стояла корзина с цветами."},
             new Answer(){Id = 28, QuestionId = 10, IsCorrect = true, Text = "Когда Мурат свернул на шоссе, то увидел, что навстречу (ему) медленно движется колонна машин."},
-
             new Answer(){Id = 29, QuestionId = 11, IsCorrect = false, Text = "выполняющееся"},
             new Answer(){Id = 30, QuestionId = 11, IsCorrect = true, Text = "выполняемое"},
             new Answer(){Id = 31, QuestionId = 11, IsCorrect = false, Text = "выполненное"},
-            new Answer(){Id = 32, QuestionId = 11, IsCorrect = false, Text = "выполнявшееся"}
+            new Answer(){Id = 32, QuestionId = 11, IsCorrect = false, Text = "выполнявшееся"},
+
+            new Answer(){Id = 33, QuestionId = 12, IsCorrect = true, Text = "прекрасный"},
+            new Answer(){Id = 34, QuestionId = 12, IsCorrect = false, Text = "ужасный"},
+            new Answer(){Id = 35, QuestionId = 12, IsCorrect = false, Text = "быстрый"},
+            new Answer(){Id = 36, QuestionId = 12, IsCorrect = false, Text = "медленный"},
+
+            new Answer(){Id = 37, QuestionId = 13, IsCorrect = true, Text = "низкий"},
+            new Answer(){Id = 38, QuestionId = 13, IsCorrect = false, Text = "высокий"},
+            new Answer(){Id = 39, QuestionId = 13, IsCorrect = false, Text = "широкий"},
+            new Answer(){Id = 40, QuestionId = 13, IsCorrect = false, Text = "длинный"},
+
+            new Answer(){Id = 41, QuestionId = 14, IsCorrect = true, Text = "бежать"},
+            new Answer(){Id = 42, QuestionId = 14, IsCorrect = false, Text = "дерево"},
+            new Answer(){Id = 43, QuestionId = 14, IsCorrect = false, Text = "красный"},
+            new Answer(){Id = 44, QuestionId = 14, IsCorrect = false, Text = "медленно"},
+
+            new Answer(){Id = 45, QuestionId = 15, IsCorrect = true, Text = "стол"},
+            new Answer(){Id = 46, QuestionId = 15, IsCorrect = false, Text = "быстро"},
+            new Answer(){Id = 47, QuestionId = 15, IsCorrect = false, Text = "играть"},
+            new Answer(){Id = 48, QuestionId = 15, IsCorrect = false, Text = "красивый"}
         );
     }
 }

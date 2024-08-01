@@ -24,20 +24,36 @@ public class TrainTestController : Controller
     public async Task<IActionResult> Index(int testId)
     {
         int page = 1;
-        int pageSize = 1; 
-        Test? test = await _db.Tests.Include( q => q.Questions)
-            .ThenInclude(q => q.Answers)          
+        int pageSize = 1;
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+            return Unauthorized();
+
+        Test? test = await _db.Tests.Include(q => q.Questions)
+            .ThenInclude(q => q.Answers)
             .FirstOrDefaultAsync(t => t.Id == testId);
-        var subjectId = test.SubjectId;
+
         if (test == null)
             return NotFound("No Test!");
-        
-        var questions = test.Questions.OrderBy(q => q.Id).ToList();
+
+        var subjectId = test.SubjectId;
+
+        var answeredQuestionIds = await _db.PassedQuestions
+            .Where(pq => pq.UserId == user.Id)
+            .Select(pq => pq.QuestionId)
+            .ToListAsync();
+
+        var questions = test.Questions
+            .Where(q => !answeredQuestionIds.Contains(q.Id))
+            .OrderBy(q => q.Id)
+            .ToList();
+
         var count = questions.Count;
         var items = questions.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
         if (!items.Any())
-            return NotFound("Question not found!");
+            return NotFound("No unanswered questions!");
 
         var viewModel = new TestViewModel
         {
@@ -49,10 +65,15 @@ public class TrainTestController : Controller
 
         return View(viewModel);
     }
+
     
     [HttpPost]
-    public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId, [FromForm] int wantedPage)
+    public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId)
     {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+            return Unauthorized();
         int pageSize = 1; 
         var test = await _db.Tests.Include(t => t.Questions)
             .ThenInclude(q => q.Answers)
@@ -63,9 +84,16 @@ public class TrainTestController : Controller
         
         var subjectId = test.SubjectId;
         ViewBag.SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault();
-        var questions = test.Questions.OrderBy(q => q.Id).ToList();
+        var answeredQuestionIds = await _db.PassedQuestions
+            .Where(pq => pq.UserId == user.Id)
+            .Select(pq => pq.QuestionId)
+            .ToListAsync();
+        var questions = test.Questions
+            .Where(q => !answeredQuestionIds.Contains(q.Id))
+            .OrderBy(q => q.Id)
+            .ToList();
     
-        int pageToLoad = wantedPage > 0 ? wantedPage : currentPage + 1;
+        int pageToLoad = currentPage + 1;
     
         if (pageToLoad > questions.Count)
         {
@@ -100,6 +128,10 @@ public class TrainTestController : Controller
     {
         int correctAnswers = 0;
         var results = new List<QuestionResultViewModel>();
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+            return Unauthorized();
 
         foreach (var answer in model.Answers)
         {
@@ -110,7 +142,7 @@ public class TrainTestController : Controller
             var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == answer.SelectedAnswerId);
             var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
 
-            if (selectedAnswer != null && selectedAnswer.IsCorrect)
+            if (selectedAnswer   != null && selectedAnswer.IsCorrect)
             {
                 correctAnswers++;
             }
@@ -128,7 +160,15 @@ public class TrainTestController : Controller
                     Text = a.Text
                 }).ToList()
             });
+
+            _db.PassedQuestions.Add(new PassedQuestion
+            {
+                QuestionId = question.Id,
+                UserId = user.Id
+            });
         }
+
+        await _db.SaveChangesAsync();
 
         var resultModel = new TestResultViewModel
         {
@@ -138,6 +178,7 @@ public class TrainTestController : Controller
 
         return Json(new { resultModel = resultModel });
     }
+
         
     [HttpGet]
     public IActionResult TestResult(string resultModel)
