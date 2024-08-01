@@ -126,40 +126,26 @@ public class TrainTestController : Controller
     [HttpPost]
     public async Task<IActionResult> FinishTest([FromBody] FinishTestModel model)
     {
-        int correctAnswers = 0;
-        var results = new List<QuestionResultViewModel>();
         var user = await _userManager.GetUserAsync(User);
 
         if (user == null)
             return Unauthorized();
 
+        var answeredQuestionIds = await _db.PassedQuestions
+            .Where(pq => pq.UserId == user.Id)
+            .Select(pq => pq.QuestionId)
+            .ToListAsync();
+
         foreach (var answer in model.Answers)
         {
+            if (answeredQuestionIds.Contains(answer.QuestionId))
+            {
+                continue; 
+            }
+
             var question = await _db.Questions.Include(q => q.Answers).FirstOrDefaultAsync(q => q.Id == answer.QuestionId);
             if (question == null)
                 continue;
-
-            var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == answer.SelectedAnswerId);
-            var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
-
-            if (selectedAnswer   != null && selectedAnswer.IsCorrect)
-            {
-                correctAnswers++;
-            }
-
-            results.Add(new QuestionResultViewModel
-            {
-                QuestionId = question.Id,
-                QuestionContent = question.Content,
-                SelectedAnswerId = selectedAnswer?.Id ?? 0,
-                CorrectAnswerId = correctAnswer?.Id ?? 0,
-                IsCorrect = selectedAnswer?.IsCorrect ?? false,
-                Answers = question.Answers.Select(a => new AnswerViewModel
-                {
-                    Id = a.Id,
-                    Text = a.Text
-                }).ToList()
-            });
 
             _db.PassedQuestions.Add(new PassedQuestion
             {
@@ -170,22 +156,9 @@ public class TrainTestController : Controller
 
         await _db.SaveChangesAsync();
 
-        var resultModel = new TestResultViewModel
-        {
-            CorrectAnswers = correctAnswers,
-            Questions = results
-        };
-
-        return Json(new { resultModel = resultModel });
+        return Ok();
     }
-
-        
-    [HttpGet]
-    public IActionResult TestResult(string resultModel)
-    {
-        var model = JsonConvert.DeserializeObject<TestResultViewModel>(resultModel);
-        return View(model);
-    }
+    
     
     [HttpPost]
     public async Task<IActionResult> ReportQuestion([FromBody] QuestionReportModel model)
