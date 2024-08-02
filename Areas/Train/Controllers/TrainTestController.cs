@@ -21,7 +21,7 @@ public class TrainTestController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int testId)
+    public async Task<IActionResult> Index(int subSubjectId)
     {
         int page = 1;
         int pageSize = 1;
@@ -32,7 +32,7 @@ public class TrainTestController : Controller
 
         Test? test = await _db.Tests.Include(q => q.Questions)
             .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.Id == testId);
+            .FirstOrDefaultAsync(t => t.SubjectId == subSubjectId);
 
         if (test == null)
             return NotFound("No Test!");
@@ -59,7 +59,7 @@ public class TrainTestController : Controller
         {
             PageViewModel = new PageViewModel(count, page, pageSize),
             CurrentQuestion = items.FirstOrDefault(),
-            TestId = testId,
+            SubjectId = subSubjectId,
             SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault()
         };
 
@@ -95,7 +95,7 @@ public class TrainTestController : Controller
     
         int pageToLoad = currentPage + 1;
     
-        if (pageToLoad > questions.Count)
+        if (pageToLoad > questions.Count && pageToLoad < 0)
         {
             return Json(new { finished = true });
         }

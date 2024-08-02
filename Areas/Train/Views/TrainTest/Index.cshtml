@@ -33,7 +33,7 @@ Layout = "_Layout";
     }
     else
     {
-    <div id="questions-container" data-subtopic-id="@Model.TestId" data-current-page="@Model.PageViewModel.PageNumber">
+    <div id="questions-container" data-subtopic-id="@Model.SubjectId" data-current-page="@Model.PageViewModel.PageNumber">
         <div class="question-container text-center" data-question-id="@Model.CurrentQuestion.Id">
             <h4 class="my-4">@Model.SubjectName</h4>
             <span class="fw-bold fs-5">@Model.CurrentQuestion.Instruction</span>
