@@ -1,0 +1,54 @@
+@using YouCan.Services
+@model Subject
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Заполните форму для добавления продукта</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <label asp-for="Name">Наименование</label>
+                    <input asp-for="Name" class="form-control" placeholder="Введите наименование предмета">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile">Изображение предмета</label>
+                    <input asp-for="ImageFile" type="file" name="ImageFile" class="form-control">
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ParentId">Выберите предмет если вы хотите создать дочерний</label>
+                    <select asp-for="ParentId" class="form-control">
+                        <option value="">-- Выберите родительский предмет --</option>
+                        @foreach (var subject in ViewBag.Subjects)
+                        {
+                            if (subject.SubjectType == SubjectType.Parent)
+                            {
+                                <option value="@subject.Id">@subject.Name - Parent</option>
+                            }
+                            else
+                            {
+                                <option value="@subject.Id">@subject.Name - Child</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="ParentId" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-2">Создать</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

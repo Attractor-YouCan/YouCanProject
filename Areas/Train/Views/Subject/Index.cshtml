@@ -75,21 +75,3 @@
         }
     </div>
 </div>
-@section Scripts
-{
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("analogyLink").addEventListener("click", function(event) {
-                event.preventDefault();
-
-                document.querySelectorAll(".subtopic").forEach(function(element) {
-                    element.style.display = "none";
-                });
-
-                document.getElementById("analogyCard1").style.display = "block";
-                document.getElementById("analogyCard2").style.display = "block";
-            });
-        });
-    </script>
-}

@@ -1,0 +1,73 @@
+@using YouCan.Services
+@model List<YouCan.Models.Subject>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<style>
+    .card-title {
+        height: 40px;
+    }
+    .btn-group-vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+
+    }
+    
+</style>
+<div class="container text-center my-5 px-4">
+    <p class="mb-3">
+        <strong>
+            Список предметов
+        </strong>
+    </p>
+    <a asp-controller="Subject" asp-action="Create" class="btn btn-primary mb-3">Создать новый Subject</a>
+    <div class="row justify-content-center mt-5">
+        @if (Model.Count == 0)
+        {
+        <h3>Предметов еще пока что нет!</h3>
+        }
+        else
+        {
+        @foreach (var subtopic in Model)
+        {
+        <div class="col-6 col-md-4 col-lg-2 subtopic">
+            @if (subtopic.SubjectType == SubjectType.Parent)
+            {
+            <a asp-controller="Subject" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <img src=@subtopic.ImageUrl
+                             class="card-img-top"
+                             alt="@subtopic.Name"/>
+                        <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                    </div>
+                </div>
+            </a>
+
+            }
+            else
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <img src=@subtopic.ImageUrl
+                             class="card-img-top"
+                             alt="@subtopic.Name"/>
+                        <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                    </div>
+                </div>
+           
+            }
+            <div class="btn-group-vertical mt-2">
+                <a asp-controller="Subject" asp-action="Edit" asp-route-id="@subtopic.Id" class="btn btn-warning">Редактировать</a>
+                <a asp-controller="Subject" asp-action="Delete" asp-route-id="@subtopic.Id" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+        }
+        }
+    </div>
+</div>
