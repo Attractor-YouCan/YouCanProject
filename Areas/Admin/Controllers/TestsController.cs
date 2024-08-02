@@ -59,7 +59,7 @@ public class TestsController : Controller
     {
         if (test.MinutesForTest != null)
         {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+            test.TimeForTestInMin = TimeSpan.FromMinutes(test.MinutesForTest.Value).Minutes;
         }
         if (ModelState.IsValid)
         {
@@ -101,7 +101,7 @@ public class TestsController : Controller
         }
         if (test.MinutesForTest != null)
         {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+            test.TimeForTestInMin = TimeSpan.FromMinutes(test.MinutesForTest.Value).Minutes;
         }
         if (ModelState.IsValid)
         {
