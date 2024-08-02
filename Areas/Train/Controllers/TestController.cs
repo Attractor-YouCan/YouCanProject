@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
-using YouCan.Repository;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Train.Controllers;
 
@@ -10,16 +9,16 @@ namespace YouCan.Areas.Train.Controllers;
 [Authorize]
 public class TestController : Controller
 {
-    private YouCanContext _context;
+    private ICRUDService<Test> _testService;
 
-    public TestController(YouCanContext context)
+    public TestController(ICRUDService<Test> testService)
     {
-        _context = context;
+        _testService = testService;
     }
 
     public async Task<IActionResult> Index(int subSubjectId)
     {
-        var tests = await _context.Tests.Where(t => t.SubjectId == subSubjectId && t.LessonId == null).ToListAsync();
+        var tests = _testService.GetAll().Where(t => t.SubjectId == subSubjectId && t.LessonId == null).ToList();
         return View(tests);
     }
 }
