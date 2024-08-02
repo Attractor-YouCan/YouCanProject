@@ -23,7 +23,6 @@ public class LessonRepository : IRepository<Lesson>
         return entitis
             .Include(l => l.Subject)
                 .ThenInclude(s => s.Lessons)
-                    .ThenInclude(s => s.Subject)
             .Include(l => l.Tests)
                 .ThenInclude(t => t.Subject)
             .Include(l => l.Tests)
@@ -38,7 +37,6 @@ public class LessonRepository : IRepository<Lesson>
         return await entitis
             .Include(l => l.Subject)
                 .ThenInclude(s => s.Lessons)
-                    .ThenInclude(s => s.Subject)
             .Include(l => l.Tests)
                 .ThenInclude(t => t.Subject)
             .Include(l => l.Tests)
