@@ -120,19 +120,35 @@
                     medalImg = "/ratingimages/third.png"; // Бронзовая медаль
                 }
 
+                // Пример добавления стрелок изменения
+                let changeImg = "";
+                let changeValue = "";
+                if (item.score > 16000) { // Условие для изменения стрелки
+                    changeImg = "/ratingimages/arrow-up.png"; // Зеленая стрелка вверх
+                    changeValue = (item.score - 16000); // Расчет изменения
+                } else if (item.score < 15000) {
+                    changeImg = "/ratingimages/arrow-down.png"; // Красная стрелка вниз
+                    changeValue = (15000 - item.score); // Расчет изменения
+                }
+
                 row.innerHTML = `
-                        <div class="col-1 position">
-                            ${medalImg
+                    <div class="col-1 position">
+                        ${medalImg
                         ? `<img src="${medalImg}" alt="Medal" width="30" height="40" />`
-                        : index + 1
-                    }
+                        : index + 1}
+                    </div>
+                    <div class="col-7 user-info">
+                        <img src="${item.img}" alt="User" width="40" height="40" />
+                        <span>${item.name}</span>
+                    </div>
+                    <div class="col-2 score">
+                        ${item.score} очков
+                        <div class="change">
+                            ${changeImg ? `<img src="${changeImg}" alt="Change" />` : ''}
+                            <span class="change-value">${changeValue}</span>
                         </div>
-                        <div class="col-7 user-info">
-                            <img src="${item.img}" alt="User" width="40" height="40" />
-                            <span>${item.name}</span>
-                        </div>
-                        <div class="col-2 score">${item.score} очков</div>
-                    `;
+                    </div>
+                `;
                 leaderboard.appendChild(row);
             });
         }

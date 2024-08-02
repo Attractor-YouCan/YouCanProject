@@ -138,10 +138,12 @@
         }
 
     .leaderboard .score {
-        margin-left: auto;
-        margin-right: 10px;
+        display: flex;
+        align-items: center;
         font-size: 16px;
         font-weight: 600;
+        margin-left: auto;
+        margin-right: 10px;
     }
 
     .leaderboard .change {
@@ -179,7 +181,7 @@
 .highlight {
     border: 2px solid #cd7f32;
     background-color: #fffae6;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 @media (max-width: 768px) {
@@ -187,18 +189,13 @@
         align-items: flex-start;
     }
 
-        .header .time-left{
-            font-size: 8px;
-        }
-        ,
-        .header .score-info {
-            width: auto;
-            margin-bottom: 10px;
+        .header .time-left {
             font-size: 10px;
         }
 
         .header .score-info {
-            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
         }
 
     .league-title {
@@ -207,6 +204,10 @@
 
     .league-header img {
         margin: 5px;
+    }
+
+    .floating-button {
+        bottom: 85px;
     }
 }
 
@@ -230,7 +231,37 @@
     }
 
     .floating-button {
+        bottom: 95px; 
         padding: 8px 16px;
         font-size: 14px;
     }
+    .change .change-value {
+        font-size: 12px;
+    }
 }
+.leaderboard .change {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+    .leaderboard .change img {
+        width: 20px;
+        height: 20px;
+    }
+.change {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+    .change img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .change .change-value {
+        margin-left: 5px;
+    }
