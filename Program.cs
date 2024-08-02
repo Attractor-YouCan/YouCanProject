@@ -17,43 +17,49 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddEntityFrameworkStores<YouCanContext>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
-builder.Services.AddTransient<ICRUDService<User>, UserCRUD>();
+builder.Services.AddTransient<IUserCRUD, UserCRUD>();
 
-builder.Services.AddTransient<IRepository<Topic>, Repository<Topic>>();
-builder.Services.AddTransient<ICRUDService<Topic>, CRUDService<Topic>>();
-
-builder.Services.AddTransient<IRepository<Subtopic>, Repository<Subtopic>>();
-builder.Services.AddTransient<ICRUDService<Subtopic>, CRUDService<Subtopic>>();
-
-builder.Services.AddTransient<IRepository<Answer>, Repository<Answer>>();
+builder.Services.AddTransient<IRepository<Answer>, AnswerRepository>();
 builder.Services.AddTransient<ICRUDService<Answer>, CRUDService<Answer>>();
 
-builder.Services.AddTransient<IRepository<Lesson>, Repository<Lesson>>();
+builder.Services.AddTransient<IRepository<Lesson>, LessonRepository>();
 builder.Services.AddTransient<ICRUDService<Lesson>, CRUDService<Lesson>>();
 
-builder.Services.AddTransient<IRepository<LessonModule>, Repository<LessonModule>>();
+builder.Services.AddTransient<IRepository<LessonModule>, LessonModuleRepository>();
 builder.Services.AddTransient<ICRUDService<LessonModule>, CRUDService<LessonModule>>();
 
-builder.Services.AddTransient<IRepository<OrtTest>, Repository<OrtTest>>();
+builder.Services.AddTransient<IRepository<OrtTest>, OrtTestRepository>();
 builder.Services.AddTransient<ICRUDService<OrtTest>, CRUDService<OrtTest>>();
 
-builder.Services.AddTransient<IRepository<Question>, Repository<Question>>();
+builder.Services.AddTransient<IRepository<Question>, QuestionRepository>();
 builder.Services.AddTransient<ICRUDService<Question>, CRUDService<Question>>();
 
 builder.Services.AddTransient<IRepository<Statistic>, Repository<Statistic>>();
 builder.Services.AddTransient<ICRUDService<Statistic>, CRUDService<Statistic>>();
 
-builder.Services.AddTransient<IRepository<Test>, Repository<Test>>();
+builder.Services.AddTransient<IRepository<Test>, TestRepository>();
 builder.Services.AddTransient<ICRUDService<Test>, CRUDService<Test>>();
 
-builder.Services.AddTransient<IRepository<UserLessons>, Repository<UserLessons>>();
+builder.Services.AddTransient<IRepository<UserLessons>, UserLessonsRepository>();
 builder.Services.AddTransient<ICRUDService<UserLessons>, CRUDService<UserLessons>>();
 
 builder.Services.AddTransient<IRepository<UserLevel>, Repository<UserLevel>>();
 builder.Services.AddTransient<ICRUDService<UserLevel>, CRUDService<UserLevel>>();
 
-builder.Services.AddTransient<IRepository<UserOrtTest>, Repository<UserOrtTest>>();
+builder.Services.AddTransient<IRepository<UserOrtTest>, UserOrtTestRepository>();
 builder.Services.AddTransient<ICRUDService<UserOrtTest>, CRUDService<UserOrtTest>>();
+
+builder.Services.AddTransient<IRepository<OrtInstruction>, Repository<OrtInstruction>>();
+builder.Services.AddTransient<ICRUDService<OrtInstruction>, CRUDService<OrtInstruction>>();
+
+builder.Services.AddTransient<IRepository<PassedQuestion>, PassedQuestionsRepository>();
+builder.Services.AddTransient<ICRUDService<PassedQuestion>, CRUDService<PassedQuestion>>();
+
+builder.Services.AddTransient<IRepository<Subject>, SubjectRepository>();
+builder.Services.AddTransient<ICRUDService<Subject>, CRUDService<Subject>>();
+
+builder.Services.AddTransient<IRepository<QuestionReport>, QuestionReportRepository>();
+builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<QuestionReport>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 

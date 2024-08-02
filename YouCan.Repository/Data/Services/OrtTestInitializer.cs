@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
 
 namespace YouCan.Services;
 

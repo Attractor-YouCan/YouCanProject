@@ -1,9 +1,8 @@
 
 namespace YouCan.Entities;
 
-public class Subject
+public class Subject : EntityBase
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public string? ImageUrl { get; set; }
     public SubjectType SubjectType { get; set; }

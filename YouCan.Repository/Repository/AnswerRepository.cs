@@ -7,29 +7,32 @@ using YouCan.Entities;
 
 namespace YouCan.Repository.Repository;
 
-public class Repository<T> : IRepository<T> where T : EntityBase
+public class AnswerRepository : IRepository<Answer>
 {
     private readonly YouCanContext _context;
-    private DbSet<T> entitis;
+    private DbSet<Answer> entitis;
 
 
-    public Repository(YouCanContext context)
+    public AnswerRepository(YouCanContext context)
     {
         _context = context;
-        entitis = _context.Set<T>();
+        entitis = _context.Set<Answer>();
     }
-
-    public IEnumerable<T> GetAll()
+    public IEnumerable<Answer> GetAll()
     {
-        return entitis.AsEnumerable();
+        return entitis
+            .Include(a => a.Question)
+            .AsEnumerable();
     }
 
-    public async Task<T> Get(int id)
+    public async Task<Answer> Get(int id)
     {
-        return await entitis.SingleOrDefaultAsync(x => x.Id == id);
+        return (await entitis
+            .Include(a => a.Question)
+            .SingleOrDefaultAsync(a => a.Id == id))!;
     }
 
-    public async Task Insert(T entity)
+    public async Task Insert(Answer entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -37,7 +40,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public async Task Update(Answer entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -45,7 +48,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(T entity)
+    public async Task Delete(Answer entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -53,7 +56,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public void Remove(T entity)
+    public void Remove(Answer entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");

@@ -1,9 +1,8 @@
 
 namespace YouCan.Entities;
 
-public class PassedQuestion
+public class PassedQuestion : EntityBase
 {
-    public int Id { get; set; }
     public int QuestionId { get; set; }
     public Question? Question { get; set; }
     public int UserId { get; set; }

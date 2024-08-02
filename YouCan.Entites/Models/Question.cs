@@ -1,8 +1,7 @@
-﻿namespace YouCan.Models;
+﻿namespace YouCan.Entities;
 
-public class Question
+public class Question : EntityBase
 {
-    public int Id { get; set; }
     public string? Instruction { get; set; }
     public string? Type { get; set; }
     public string Content { get; set; }

@@ -1,8 +1,8 @@
-namespace YouCan.Models;
 
-public class OrtInstruction
+namespace YouCan.Entities;
+
+public class OrtInstruction : EntityBase
 {
-    public int Id { get; set; }
     public int? TestId { get; set; }
     public Test? Test { get; set; }
     public string? Description { get; set; }

@@ -7,29 +7,38 @@ using YouCan.Entities;
 
 namespace YouCan.Repository.Repository;
 
-public class Repository<T> : IRepository<T> where T : EntityBase
+public class QuestionRepository : IRepository<Question>
 {
     private readonly YouCanContext _context;
-    private DbSet<T> entitis;
+    private DbSet<Question> entitis;
 
 
-    public Repository(YouCanContext context)
+    public QuestionRepository(YouCanContext context)
     {
         _context = context;
-        entitis = _context.Set<T>();
+        entitis = _context.Set<Question>();
     }
-
-    public IEnumerable<T> GetAll()
+    public IEnumerable<Question> GetAll()
     {
-        return entitis.AsEnumerable();
+        return entitis
+            .Include(q => q.Answers)
+            .Include(q => q.Test)
+                .ThenInclude(t=> t.Subject)
+            .Include(q => q.User)
+            .AsEnumerable();
     }
 
-    public async Task<T> Get(int id)
+    public async Task<Question> Get(int id)
     {
-        return await entitis.SingleOrDefaultAsync(x => x.Id == id);
+        return await entitis
+            .Include(q => q.Answers)
+            .Include(q => q.Test)
+            .ThenInclude(t=> t.Subject)
+            .Include(q => q.User)
+            .SingleOrDefaultAsync(q => q.Id == id);
     }
 
-    public async Task Insert(T entity)
+    public async Task Insert(Question entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -37,7 +46,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public async Task Update(Question entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -45,7 +54,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(T entity)
+    public async Task Delete(Question entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -53,7 +62,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public void Remove(T entity)
+    public void Remove(Question entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");

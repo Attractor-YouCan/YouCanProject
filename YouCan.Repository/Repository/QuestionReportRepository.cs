@@ -7,29 +7,34 @@ using YouCan.Entities;
 
 namespace YouCan.Repository.Repository;
 
-public class Repository<T> : IRepository<T> where T : EntityBase
+public class QuestionReportRepository : IRepository<QuestionReport>
 {
     private readonly YouCanContext _context;
-    private DbSet<T> entitis;
+    private DbSet<QuestionReport> entitis;
 
 
-    public Repository(YouCanContext context)
+    public QuestionReportRepository(YouCanContext context)
     {
         _context = context;
-        entitis = _context.Set<T>();
+        entitis = _context.Set<QuestionReport>();
     }
-
-    public IEnumerable<T> GetAll()
+    public IEnumerable<QuestionReport> GetAll()
     {
-        return entitis.AsEnumerable();
+        return entitis
+            .Include(ut => ut.User)
+            .Include(ut => ut.Question)
+            .AsEnumerable();
     }
 
-    public async Task<T> Get(int id)
+    public async Task<QuestionReport> Get(int id)
     {
-        return await entitis.SingleOrDefaultAsync(x => x.Id == id);
+        return (await entitis
+            .Include(ut => ut.User)
+            .Include(ut => ut.Question)
+            .SingleOrDefaultAsync(e => e.Id == id))!;
     }
 
-    public async Task Insert(T entity)
+    public async Task Insert(QuestionReport entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -37,7 +42,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public async Task Update(QuestionReport entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -45,7 +50,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(T entity)
+    public async Task Delete(QuestionReport entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -53,7 +58,7 @@ public class Repository<T> : IRepository<T> where T : EntityBase
         await _context.SaveChangesAsync();
     }
 
-    public void Remove(T entity)
+    public void Remove(QuestionReport entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
