@@ -81,8 +81,62 @@ public class SubjectController : Controller
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        ViewBag.Subjects = _db.Subjects.ToList();
+        return View(subject);
+    }
 
-        return BadRequest();
+    public async Task<IActionResult> Edit(int id)
+    {
+        ViewBag.Subjects = _db.Subjects.ToList();
+        var subject = await _db.Subjects.FindAsync(id);
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        return View(subject);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(Subject subject, int id)
+    {
+        var oldSubject = await _db.Subjects.FirstOrDefaultAsync(s => s.Id == id);
+        if (subject.ParentId != oldSubject.ParentId)
+        {
+            var subjects = _db.Subjects.Where(s => s.ParentId == oldSubject.ParentId);
+            if (subjects.Count() == 1)
+            {
+                var oldParentSubject = await _db.Subjects.FirstOrDefaultAsync(s => s.Id == oldSubject.ParentId);
+                oldParentSubject.SubjectType = SubjectType.Child;
+                _db.Update(oldParentSubject);
+            }
+            var newParentSubject =  await _db.Subjects.FirstOrDefaultAsync(s => s.Id == subject.ParentId);
+            if (newParentSubject.SubjectType == SubjectType.Child)
+            {
+                newParentSubject.SubjectType = SubjectType.Parent;
+                _db.Update(newParentSubject);
+            }
+        }
+        if (ModelState.IsValid)
+        {
+            if (subject.ImageFile != null && subject.ImageFile.Length > 0)
+            {
+                
+                var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "topicImages");
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(subject.ImageFile.FileName);
+                var fullPath = Path.Combine(uploadPath, fileName);
+            
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await subject.ImageFile.CopyToAsync(fileStream);
+                }
+            
+                subject.ImageUrl = "/topicImages/" + fileName;
+            }
+            _db.Update(subject);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        return View(subject);
     }
     
 }

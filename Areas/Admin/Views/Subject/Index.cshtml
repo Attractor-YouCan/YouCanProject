@@ -63,8 +63,8 @@
            
             }
             <div class="btn-group-vertical mt-2">
-                <a asp-controller="Subject" asp-action="Edit" asp-route-id="@subtopic.Id" class="btn btn-warning">Редактировать</a>
-                <a asp-controller="Subject" asp-action="Delete" asp-route-id="@subtopic.Id" class="btn btn-danger">Удалить</a>
+                <a asp-controller="Subject" asp-action="Edit" asp-route-id="@subtopic.Id" asp-area="Admin" class="btn btn-warning">Редактировать</a>
+                <a asp-controller="Subject" asp-action="Delete" asp-route-id="@subtopic.Id" asp-area="Admin" class="btn btn-danger">Удалить</a>
             </div>
         </div>
         }
