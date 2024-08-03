@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using YouCan.Models;
 
 namespace YouCan.ViewModels;
 

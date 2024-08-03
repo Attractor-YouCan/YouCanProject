@@ -1,4 +1,4 @@
-using YouCan.Models;
+using YouCan.Entities;
 
 namespace YouCan.Areas.Train.ViewModels;
 

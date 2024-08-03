@@ -1,30 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
-using YouCan.Services;
-using YouCan.Services.Email;
-using YouCan.ViewModels.Account;
-using RegisterViewModel = YouCan.ViewModels.Account.RegisterViewModel;
+using YouCan.Entities;
+using YouCan.Service.Service;
 
-namespace YouCan.Controllers;
-
+namespace YouCan.Mvc;
 public class AccountController : Controller
 {
-    
-    private YouCanContext _db;
+    private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private readonly TwoFactorService _twoFactorService;
 
 
-    public AccountController(YouCanContext db, UserManager<User> userManager,
+    public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
         TwoFactorService twoFactorService)
     {
-        _db = db;
+        _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
@@ -37,9 +31,9 @@ public class AccountController : Controller
     {
         User user = new User();
         if (!userId.HasValue)
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(_userManager.GetUserId(User)));
+            user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
         else
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user = await _userService.GetById((int)userId);
         if (user != null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -293,7 +287,7 @@ public class AccountController : Controller
             if (user == null)
                 user = await _userManager.FindByNameAsync(model.LoginValue);
             if (user == null)
-                user = await _db.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(model.LoginValue));
+                user = _userService.GetAll().FirstOrDefault(u => u.PhoneNumber.Equals(model.LoginValue));
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(

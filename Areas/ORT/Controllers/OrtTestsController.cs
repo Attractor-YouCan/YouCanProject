@@ -1,20 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.ORT.Controllers;
 [Area("ORT")]
 [Authorize]
 public class OrtTestsController : Controller
 {
-    private YouCanContext _db;
+    private ICRUDService<OrtTest> _ortTestService;
+    private ICRUDService<UserOrtTest> _userOrtTestService;
     private UserManager<User> _userManager;
 
-    public OrtTestsController(YouCanContext db, UserManager<User> userManager)
+    public OrtTestsController(ICRUDService<OrtTest> ortTestService, 
+        ICRUDService<UserOrtTest> userOrtTestService,
+        UserManager<User> userManager)
     {
-        _db = db;
+        _ortTestService = ortTestService;
+        _userOrtTestService = userOrtTestService;
         _userManager = userManager;
     }
     
@@ -24,14 +28,11 @@ public class OrtTestsController : Controller
         User? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null)
             RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _db.UserORTTests
-            .Include(t => t.OrtTest)
-            .FirstOrDefaultAsync(u => u.UserId == currUser.Id);
+        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(currUser.Id);
         if (userOrtTest == null)
         {
             userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false, PassedLevel = 0, OrtTestId = null};
-            _db.UserORTTests.Add(userOrtTest);
-            await _db.SaveChangesAsync();
+            await _userOrtTestService.Insert(userOrtTest);
         }
         if (userOrtTest.OrtTest == null)
             ViewBag.CurrentOrtTestLevel = 0;
@@ -42,27 +43,20 @@ public class OrtTestsController : Controller
             else
                 ViewBag.CurrentOrtTestLevel = userOrtTest.OrtTest.OrtLevel - 1;
         }
-        List<OrtTest> ortTests = await _db.OrtTests.ToListAsync();
+        List<OrtTest> ortTests = _ortTestService.GetAll().ToList();
         return View(ortTests);
     }
 
     [HttpGet]
     public async Task<IActionResult> Details(int ortTestId)
     {
-        OrtTest? ortTest = await _db.OrtTests
-            .Include(t => t.Tests)
-                .ThenInclude(s => s.Subject)
-            .Include(t => t.Tests)
-                .ThenInclude(s => s.OrtInstruction)
-            .FirstOrDefaultAsync(t => t.Id == ortTestId);
+        OrtTest? ortTest = await _ortTestService.GetById(ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
         User? curUser = await _userManager.GetUserAsync(User);
         if (curUser == null)
             RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _db.UserORTTests
-            .Include(t => t.OrtTest)
-            .FirstOrDefaultAsync(t => t.UserId == curUser.Id);
+        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(curUser.Id);
         int currentLevel = 0;
         if (userOrtTest.OrtTest != null)
         {

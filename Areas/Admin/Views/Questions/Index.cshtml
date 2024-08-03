@@ -1,4 +1,4 @@
-﻿@model IEnumerable<YouCan.Models.Question>
+﻿@model IEnumerable<YouCan.Entities.Question>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Test)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => typeof(YouCan.Entities.User))
             </th>
             <th></th>
         </tr>

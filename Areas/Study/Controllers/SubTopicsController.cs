@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using YouCan.Areas.Study.ViewModels;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Study.Controllers;
 
@@ -11,13 +10,13 @@ namespace YouCan.Areas.Study.Controllers;
 [Authorize]
 public class SubTopicsController : Controller
 {
-    private YouCanContext _db;
-
+    private ICRUDService<Subject> _subjectService;
     private UserManager<User> _userManager;
 
-    public SubTopicsController(YouCanContext db, UserManager<User> userManager)
+    public SubTopicsController(ICRUDService<Subject> subjectService,
+        UserManager<User> userManager)
     {
-        _db = db;
+        _subjectService = subjectService;
         _userManager = userManager;
     }
 
@@ -26,11 +25,11 @@ public class SubTopicsController : Controller
         List<Subject> subjects = new List<Subject>();
         if (subSubjectId == null)
         {
-            subjects = _db.Subjects.Where(s => s.ParentId == null).ToList();
+            subjects = _subjectService.GetAll().Where(s => s.ParentId == null).ToList();
         }
         else
         {
-            subjects = _db.Subjects.Where(s => s.ParentId == subSubjectId).ToList();
+            subjects = _subjectService.GetAll().Where(s => s.ParentId == subSubjectId).ToList();
         }
         return View(subjects);
     }

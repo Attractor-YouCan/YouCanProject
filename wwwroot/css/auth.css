@@ -12,17 +12,14 @@
 .auth-main .authForm{
     display: flex;
     flex-direction: column;
-     margin-top: 200px; 
+    margin-top: 200px;
     gap: 20px;
 }
-.underNavbarSection{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-}
+
 .auth-main .back-button {
-    display: flex;
+    position: absolute;
+    top: 120px;
+    left: 40px;
     color: #fff;
     text-decoration: none;
     font-size: 24px;
@@ -79,7 +76,7 @@
 
 
 .auth-main form input::placeholder {
-    color: #fff; 
+    color: #fff;
 }
 
 .auth-main form .password-wrapper {
@@ -96,7 +93,7 @@
 }
 
 
-.auth-main form .toggle-password, .auth-main form .toggle-password2 {
+.auth-main form .toggle-password {
     position: absolute;
     right: 15px;
     cursor: pointer;
@@ -110,7 +107,7 @@
     font-size: 18px;
 }
 
-.loginBtn {
+.auth-main form .loginBtn {
     width: 420px;
     height: 60px;
     padding: 10px;
@@ -125,7 +122,7 @@
     cursor: pointer;
 }
 
-.loginBtn:hover {
+.auth-main form .loginBtn:hover {
     background-color: #50b105;
 }
 
@@ -141,108 +138,6 @@
     color: #6E86AD;
     text-decoration: none;
     font-weight: 700;
-}
-
-.aboutUsRegister{
-    margin-top: 150px;
-    margin-bottom: 100px;
-   
-}
-.aboutUsRegister_content{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 90px;
-}
-.aboutUsRegister h2{
-    text-align: center;
-    font-size: 45px;
-    font-weight: 700;
-}
-.next-btn{
-    width: 420px;
-    height: 60px;
-    padding: 10px;
-    background-color: #58CC02;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 700;
-    margin-top: 100px;
-    cursor: pointer;
-}
-.next-btn:hover{
-    background-color: #50b105;
-}
-.progress-container {
-    width: 100%;
-    background-color: #5B7CB2;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    width: 0;
-    height: 23px;
-    background-color: #58CC02;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 10px 0 0 10px;
-    transition: ease-in-out .4s;
-}
-.input-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.code-input {
-    width: 80px;
-    height: 80px;
-    margin: 0 5px;
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-    background: #5B7CB2;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 5px;
-}
-.loader {
-    display: none;
-    width: 20px; 
-    height: 20px; 
-}
-.playVideoImg{
-    width: 200px;
-    height: 200px;
-}
-
-@media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
-    .aboutUsRegister h2{ 
-        line-height: 30px;
-    }
-}}
-
-@media (max-width: 768px){
-    .aboutUsRegister {
-        margin-top: 100px;
-    }
-    .aboutUsRegister_content {
-        gap: 60px;
-    }
-    .aboutUsRegister h2 {
-        font-size: 35px;
-    }
-    .playVideoImg{
-        width: 150px;
-        height: 150px;
-    }
-    .next-btn {
-        margin-top: 0;
-    }
 }
 
 @media (max-width: 720px){
@@ -269,16 +164,6 @@
 @media (max-width: 576px){
     .auth-main .back-button {
         top: 140px;
-    }
-    .aboutUsRegister h2 {
-        font-size: 25px;
-    }
-    .playVideoImg{
-        width: 130px;
-        height: 130px;
-    }
-    .next-btn {
-      width: 80%;
     }
 }
 @media (max-width: 490px){
@@ -330,5 +215,5 @@
     .auth-main form .input-group {
         margin-bottom: 10px;
     }
-    
+
 }
