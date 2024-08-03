@@ -6,6 +6,6 @@ public class TestViewModel
 {
     public PageViewModel PageViewModel { get; set; }
     public Question? CurrentQuestion { get; set; }
-    public int TestId { get; set; }
+    public int SubjectId { get; set; }
     public string? SubjectName { get; set; }
 }
