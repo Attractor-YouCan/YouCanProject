@@ -99,44 +99,85 @@ public class SubjectController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(Subject subject, int id)
     {
-        var oldSubject = await _db.Subjects.FirstOrDefaultAsync(s => s.Id == id);
+        var oldSubject = await _db.Subjects.FindAsync(id);
         if (subject.ParentId != oldSubject.ParentId)
         {
-            var subjects = _db.Subjects.Where(s => s.ParentId == oldSubject.ParentId);
-            if (subjects.Count() == 1)
+            var subjects = _db.Subjects.Where(s => s.ParentId == oldSubject.ParentId).ToList();
+            if (subjects.Count == 1)
             {
-                var oldParentSubject = await _db.Subjects.FirstOrDefaultAsync(s => s.Id == oldSubject.ParentId);
-                oldParentSubject.SubjectType = SubjectType.Child;
-                _db.Update(oldParentSubject);
+                var oldParentSubject = await _db.Subjects.FindAsync(oldSubject.ParentId);
+                if (oldParentSubject != null)
+                {
+                    oldParentSubject.SubjectType = SubjectType.Child;
+                    _db.Update(oldParentSubject);
+                }
             }
-            var newParentSubject =  await _db.Subjects.FirstOrDefaultAsync(s => s.Id == subject.ParentId);
-            if (newParentSubject.SubjectType == SubjectType.Child)
+
+            var newParentSubject = await _db.Subjects.FindAsync(subject.ParentId);
+            if (newParentSubject != null && newParentSubject.SubjectType == SubjectType.Child)
             {
                 newParentSubject.SubjectType = SubjectType.Parent;
                 _db.Update(newParentSubject);
             }
         }
+
         if (ModelState.IsValid)
         {
             if (subject.ImageFile != null && subject.ImageFile.Length > 0)
             {
-                
                 var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "topicImages");
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(subject.ImageFile.FileName);
                 var fullPath = Path.Combine(uploadPath, fileName);
-            
+
                 using (var fileStream = new FileStream(fullPath, FileMode.Create))
                 {
                     await subject.ImageFile.CopyToAsync(fileStream);
                 }
-            
+
                 subject.ImageUrl = "/topicImages/" + fileName;
             }
-            _db.Update(subject);
+            else
+            {
+                subject.ImageUrl = oldSubject.ImageUrl;
+            }
+
+            subject.SubjectType = oldSubject.SubjectType;
+
+            _db.Entry(oldSubject).CurrentValues.SetValues(subject);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
         return View(subject);
+    }
+    
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id != null)
+        {
+            Subject? subject = await _db.Subjects.FirstOrDefaultAsync(p => p.Id == id);
+            if (subject != null)
+            {
+                return View(subject);
+            }
+        }
+        return NotFound();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> ConfirmDelete(int? id)
+    {
+        if (id != null)
+        {
+            Subject? subject = await _db.Subjects.FirstOrDefaultAsync(p => p.Id == id);
+            if (subject != null)
+            {
+                _db.Subjects.Remove(subject);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+        }
+        return NotFound();
     }
     
 }

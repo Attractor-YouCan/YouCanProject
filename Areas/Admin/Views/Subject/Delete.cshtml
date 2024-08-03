@@ -1,0 +1,23 @@
+@model Subject
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Подтверждение удаления</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" asp-action="ConfirmDelete" asp-controller="Subject" asp-route-Id="@Model.Id">
+                <p>Вы действительно хотите удалить этот предмет @Model.Name?<br/>Вся связанные предметы также будут удалены</p>
+
+                <div class="form-group">
+                    <input type="submit" value="Да" class="btn btn-danger">
+                    <a asp-action="Index" asp-controller="Subject" class="btn btn-secondary">Нет</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
