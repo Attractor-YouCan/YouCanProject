@@ -1,3 +1,13 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .section1{
     width: 100%;
     min-height: 100vh;
@@ -173,6 +183,30 @@
     margin-top: 100px;
     cursor: pointer;
 }
+
+#resend-button.disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+#resend-button.enabled {
+    background-color: green;
+    cursor: pointer;
+}
+
+.skip-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    width: 380px;
+    height: 50px;
+    padding: 10px;
+    text-decoration: none;
+    background: #c4960b;
+    color: #fff;
+    border-radius: 30px;
+}
 .next-btn:hover{
     background-color: #50b105;
 }
@@ -243,6 +277,15 @@
     .next-btn {
         margin-top: 0;
     }
+    .input-container{
+        gap: 5px;
+    }
+    .code-input{
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin: 0;
+    }
 }
 
 @media (max-width: 720px){
@@ -279,6 +322,9 @@
     }
     .next-btn {
         width: 80%;
+    }
+    .aboutUsRegister h2{
+        font-size: 30px;
     }
 }
 @media (max-width: 490px){
