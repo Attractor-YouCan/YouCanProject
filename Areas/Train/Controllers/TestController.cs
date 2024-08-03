@@ -18,7 +18,8 @@ public class TestController : Controller
 
     public async Task<IActionResult> Index(int subSubjectId)
     {
-        var tests = _testService.GetAll().Where(t => t.SubjectId == subSubjectId && t.LessonId == null).ToList();
+        var tests = _testService.GetAll()
+            .Where(t => t.SubjectId == subSubjectId && t.LessonId == null).ToList();
         return View(tests);
     }
 }
