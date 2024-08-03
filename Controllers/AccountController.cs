@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Models;
@@ -12,13 +13,11 @@ namespace YouCan.Controllers;
 
 public class AccountController : Controller
 {
-    
     private YouCanContext _db;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private readonly TwoFactorService _twoFactorService;
-
 
     public AccountController(YouCanContext db, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
@@ -273,8 +272,29 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
+        
 
         return Json(new { success = true, userId = user.Id  });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
+    {
+        if (string.IsNullOrEmpty(model.Email))
+        {
+            return Json(new { success = false, errors = new[] { "Email is required." } });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return Json(new { success = false, errors = new[] { "User not found." } });
+        }
+        var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
+        EmailSender emailSender = new EmailSender();
+         emailSender.SendEmail(user.Email, subject, message);
+
+        return Json(new { success = true });
     }
     
 
