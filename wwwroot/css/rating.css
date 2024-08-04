@@ -147,6 +147,8 @@
     }
 
     .leaderboard .change {
+        display: flex;
+        align-items: center;
         font-size: 16px;
     }
 
@@ -190,7 +192,7 @@
     }
 
         .header .time-left {
-            font-size: 10px;
+            font-size: 8px;
         }
 
         .header .score-info {
@@ -218,16 +220,29 @@
 
     .header .time-left img,
     .header .score-info div img {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
     }
 
     .leaderboard .position {
-        font-size: 14px;
+        font-size: 10px;
+    }
+    .leaderboard .position img{
+        width: 15px;
+        height: 20px;
+    }
+    .leaderboard .user-info {
+        font-size: 10px;
+
+    }
+    .leaderboard .user-info img{
+        width: 20px;
+        height: 20px;
     }
 
     .leaderboard .score {
-        font-size: 14px;
+        font-size: 10px;
+        white-space: nowrap;
     }
 
     .floating-button {
@@ -246,8 +261,8 @@
 }
 
     .leaderboard .change img {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
     }
 .change {
     display: flex;
