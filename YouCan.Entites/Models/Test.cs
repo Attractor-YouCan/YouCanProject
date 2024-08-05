@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using YouCan.Models;
-
 namespace YouCan.Entities;
 
 public class Test : EntityBase

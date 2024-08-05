@@ -1,5 +1,3 @@
-using YouCan.Models;
-
 namespace YouCan.Entities;
 
 public class UserLessons : EntityBase
