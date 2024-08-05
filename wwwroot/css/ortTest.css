@@ -80,6 +80,16 @@
     padding: 10px 93px;
 }
 
+.btn-finish {
+    background-color: #FF5C00;
+}
+
+.ort-answers-btn {
+    position: absolute;
+    right: 18px;
+    bottom: 14px;
+}
+
 @media screen and (max-width: 768px) {
     .fixed-answers-button{
         bottom: 80px;
