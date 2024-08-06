@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
@@ -256,14 +257,14 @@ public class AccountController : Controller
             ModelState.AddModelError("", "Пользователь не найден!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-
+        
         var isCodeValid =  _twoFactorService.VerifyCode(user.Id, model.Code);
         if (!isCodeValid)
         {
             ModelState.AddModelError("", "Неправильный код!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-    
+        
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);

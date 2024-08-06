@@ -6,7 +6,7 @@ public class UserOrtTest : EntityBase
     
     public int UserId { get; set; }
     public User? User { get; set; }
-
+    
     public int? OrtTestId { get; set; }
     public OrtTest? OrtTest { get; set; }
     

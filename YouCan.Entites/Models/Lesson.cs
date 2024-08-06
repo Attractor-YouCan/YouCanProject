@@ -1,6 +1,4 @@
-﻿using YouCan.Models;
-
-namespace YouCan.Entities;
+﻿namespace YouCan.Entities;
 
 public class Lesson : EntityBase
 {
