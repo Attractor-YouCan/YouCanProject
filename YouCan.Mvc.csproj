@@ -41,10 +41,6 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Areas\Admin\Views\Questions\Index.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
       <Content Remove="YouCan.Service\**" />
       <Content Remove="YouCan.Repository\**" />
       <Content Remove="YouCan.Entites\**" />
@@ -52,6 +48,16 @@
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Details.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Index.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Details.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -88,6 +94,11 @@
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.assets.json" />
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.packagespec.json" />
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\YouCan.Entites.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Topics\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Topics\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Topics\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Topics\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Topics\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

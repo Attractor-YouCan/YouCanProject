@@ -42,7 +42,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         new TopicInitializer(modelBuilder).Seed();
         new LessonInitializer(modelBuilder).Seed();
         new TestInitializer(modelBuilder).Seed();
-
+        
         modelBuilder.Entity<IdentityRole<int>>()
             .HasData(
                 new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
