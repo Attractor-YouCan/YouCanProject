@@ -51,9 +51,13 @@ public class StudyController : Controller
         return View(lessons);
     }
 
-    public async Task<IActionResult> CreateLesson()
+    public async Task<IActionResult> CreateLesson(int subjectId)
     {
+        ViewBag.SubjectId = subjectId;
+        Subject subject = await _subjectService.GetById(subjectId);
+        int? avaibleLevel = subject.Lessons.Select(l => l.LessonLevel).Max();
+        ViewBag.AvailableLevel = avaibleLevel + 1;
         return View();
     }
-
+    
 }

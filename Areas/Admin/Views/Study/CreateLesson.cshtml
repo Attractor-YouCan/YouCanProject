@@ -8,38 +8,47 @@
 <link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
 <form>
     <div class="container content">
-        <h1>
-            <label for="lessonTitle">Здесь будет Тема Урока</label>
-            <input type="text" class="form-control-lg" id="lessonTitle" placeholder="Введите Тему Урока"/>
-        </h1>
-        <p class="subtitle mt-3">
-            <label for="lessonTitle2">Здесь будет Подтема Урока</label>
-            <textarea class="form-control" id="lessonTitle2" placeholder="Введите Подтему Урока"  style="height: 50px"></textarea>
-        </p>
-    
-        <div class="video-container embed-responsive embed-responsive-16by9 border border-primary rounded-3 mt-3" style="height: 300px;">
-            <h5 class="section-title">Здесь будет Видеоматериал Урока</h5>
-            <input type="file" class="mx-auto form-control" placeholder="Выберите видеоматериал урока"/>
+        <div class="creationPage">
+            <label for="lessonLevel">Уровень Урока</label>
+            <select class="form-select" id="lessonLevel" aria-label="Disabled select example" required>
+                <option disabled selected>Выберите доступный уровень урока</option>
+                <option value="@ViewBag.AvailableLevel">@ViewBag.AvailableLevel</option>
+            </select>
+            <h1 class="mt-4">
+                <label for="lessonTitle">Здесь будет Тема Урока</label>
+                <input type="text" class="form-control-lg" id="lessonTitle" placeholder="Введите Тему Урока"/>
+            </h1>
+            <p class="subtitle mt-3">
+                <label for="lessonTitle2">Здесь будет Подтема Урока</label>
+                <textarea class="form-control" id="lessonTitle2" placeholder="Введите Подтему Урока"  style="height: 50px"></textarea>
+            </p>
+            <div class="video-container embed-responsive embed-responsive-16by9 border border-primary rounded-3 mt-3" style="height: 300px;">
+                <h5 class="section-title">Здесь будет Видеоматериал Урока</h5>
+                <input type="file" class="mx-auto form-control" placeholder="Выберите видеоматериал урока" required/>
+            </div>
+            <h2 class="section-title">Здесь будет Описание</h2>
+            <p class="description">
+                <textarea class="form-control" placeholder="Введите Описание Урока" id="floatingTextarea1" style="height: 200px"></textarea>
+            </p>
+            <h2 class="section-title">Здесь будет Подробно о лекции</h2>
+            <p class="lecture">
+                <textarea class="form-control" placeholder="Введите Лекцию Урока" id="floatingTextarea2" style="height: 200px"></textarea>
+            </p>
+            <div class="col col-4 mx-auto mt-4">
+                <button type="button" class="btn btn-success add-module-button rounded-3 w-100">Добавить Модуль к Уроку</button>
+            </div>
+            <div id="module-change-div" class="p-4 border border-light rounded-3 mt-3"></div>
         </div>
-    
-        <h2 class="section-title">Здесь будет Описание</h2>
-        <p class="description">
-            <textarea class="form-control" placeholder="Введите Описание Урока" id="floatingTextarea1" style="height: 200px"></textarea>
-        </p>
-    
-        <h2 class="section-title">Здесь будет Подробно о лекции</h2>
-        <p class="lecture">
-            <textarea class="form-control" placeholder="Введите Лекцию Урока" id="floatingTextarea2" style="height: 200px"></textarea>
-        </p>
+        <div class="creationPage" data-page="2" style="display: none;">
+            <h5>Создание теста</h5>
+        </div>
         
-        <div class="col col-4 mx-auto mt-4">
-            <button type="button" class="btn btn-success add-module-button rounded-3 w-100">Добавить Модуль к Уроку</button>
-        </div>
-        <div id="module-change-div" class="p-4 border border-light rounded-3 mt-3">
-            
+        <div class="text-center my-3" id="pagination-container">
+            <button type="button" class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Previous</button>
+            <span id="page-info"></span>
+            <button type="button" class="btn btn-primary py-2 px-1 px-lg-4" id="next-page">Next</button>
         </div>
     </div>
-    
 </form>
 
 
@@ -49,44 +58,100 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let moduleCounter = 0;
-                                let moduleObjs = [];
-                    
-                                function addModule() {
-                                    moduleCounter++;
-                                    const formId = `module-form-${moduleCounter}`;                    
-                    
-                                    const resumeFormHtml = `
-                                        <div class="module border border-secondary rounded-3 mt-4 p-3" id="${formId}">
-                                            <h2 class="section-title">
-                                                <input type="text" class="form-control" placeholder="Введите тему модуля"/> 
-                                            </h2>
-                                                <div class="formula-box mt-3">
-                                                    <input class="form-control" type="text" placeholder="Введите контент модуля"/>
-                                                    <div class="border border-primary rounded-3 mt-4 px-5" style="height: 150px">
-                                                        <span class="mx-auto mt-3">Здесь будет фотоматериал модуля</span>
-                                                        <input type="file" class="form-control mt-3" placeholder="Выберите фото модуля"/>
-                                                    </div>
-                                                </div>
-                                            <button type="button" class="btn btn-light mt-4 ms-3 module-cancel-button">Отмена</button>
-                                        </div>`;
-                    
-                                    $('#module-change-div').append(resumeFormHtml);
-                    
-                                    $(`#${formId} .module-cancel-button`).click(function() {
-                                        $(`#${formId}`).remove();
-                                    });
-                    
-                                    const moduleObj = {
-                                       
-                                    };
-                    
-                                    moduleObjs.push(moduleObj);
-                                }
-                    
-                                $('.add-module-button').click(function(e) {
-                                    e.preventDefault();
-                                    addModule();
-                                });
+            let moduleObjs = [];
+            let currentPage = 1;
+            const totalPages = document.querySelectorAll('.creationPage').length;
+
+            function addModule() {
+                moduleCounter++;
+                const formId = `module-form-${moduleCounter}`;
+
+                const resumeFormHtml = `
+                    <div class="module border border-secondary rounded-3 mt-4 p-3" id="${formId}">
+                        <h2 class="section-title">
+                            <input type="text" class="form-control" placeholder="Введите тему модуля"/> 
+                        </h2>
+                            <div class="formula-box mt-3">
+                                <input class="form-control" type="text" placeholder="Введите контент модуля"/>
+                                <div class="border border-primary rounded-3 mt-4 px-5" style="height: 150px">
+                                    <span class="mx-auto mt-3">Здесь будет фотоматериал модуля</span>
+                                    <input type="file" class="form-control mt-3" placeholder="Выберите фото модуля"/ required>
+                                </div>
+                            </div>
+                        <button type="button" class="btn btn-light mt-4 ms-3 module-cancel-button">Отмена</button>
+                    </div>`;
+
+                $('#module-change-div').append(resumeFormHtml);
+
+                $(`#${formId} .module-cancel-button`).click(function() {
+                    $(`#${formId}`).remove();
+                });
+
+                const moduleObj = {
+                    // Add module-specific data if needed
+                };
+
+                moduleObjs.push(moduleObj);
+            }
+
+            function validatePage(page) {
+                const inputs = document.querySelectorAll(`.creationPage:nth-of-type(${page}) input, .creationPage:nth-of-type(${page}) textarea`);
+                let allFilled = true;
+
+                inputs.forEach(input => {
+                    if (input.type === 'file') {
+                        return; 
+                    }
+                    if (input.type === 'text' || input.type === 'textarea') {
+                        if (input.value.trim() === '') {
+                            allFilled = false;
+                        }
+                    }
+                });
+
+                return allFilled;
+            }
+
+            function updatePaginationButtonState() {
+                const isValid = validatePage(currentPage);
+                document.getElementById('next-page').disabled = !isValid;
+            }
+
+            function showPage(page) {
+                document.querySelectorAll('.creationPage').forEach((pageDiv, index) => {
+                    pageDiv.style.display = (index + 1 === page) ? 'block' : 'none';
+                });
+                document.getElementById('prev-page').disabled = page === 1;
+                document.getElementById('next-page').textContent = page === totalPages ? 'Finish' : 'Next';
+                document.getElementById('page-info').textContent = `Page ${page} of ${totalPages}`;
+                
+                // Update button state based on validation
+                updatePaginationButtonState();
+            }
+
+            document.getElementById('prev-page').addEventListener('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                } else {
+                    // Handle form submission if needed
+                    alert('Form submitted!');
+                }
+            });
+
+            // Bind validation to input events on the current page
+            document.addEventListener('input', updatePaginationButtonState);
+
+            // Initial page display
+            showPage(currentPage);
         });
     </script>
 }
+
