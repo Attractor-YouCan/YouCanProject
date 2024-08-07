@@ -121,6 +121,9 @@ input[type="number"] {
 }
 
 .loginBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 420px;
     height: 60px;
     padding: 10px;
@@ -183,12 +186,24 @@ input[type="number"] {
     margin-top: 100px;
     cursor: pointer;
 }
-
-#resend-button.disabled {
-    background-color: gray;
+.resend-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px;
+    border: none;
+    text-decoration: none;
+    background: #c4960b;
+    color: #fff;
+    border-radius: 30px;
+}
+.resend-button:disabled {
+    background: #939393; !important;
     cursor: not-allowed;
 }
-#resend-button.enabled {
+.resend-button.enabled {
     background-color: green;
     cursor: pointer;
 }
@@ -206,6 +221,11 @@ input[type="number"] {
     background: #c4960b;
     color: #fff;
     border-radius: 30px;
+}
+
+#timer{
+    font-weight: 600;
+    
 }
 .next-btn:hover{
     background-color: #50b105;

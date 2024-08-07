@@ -139,7 +139,6 @@ public class AccountController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
-                await _signInManager.SignInAsync(user, false);
 
                 var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();
