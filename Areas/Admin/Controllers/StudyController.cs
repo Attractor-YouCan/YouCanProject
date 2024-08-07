@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
@@ -48,9 +49,11 @@ public class StudyController : Controller
     {
         List<Lesson>? lessons = _lessonService.GetAll()
             .Where(l => l.SubjectId == subjectId).ToList();
+        ViewBag.SubjectId = subjectId;
         return View(lessons);
     }
 
+    [HttpGet]
     public async Task<IActionResult> CreateLesson(int subjectId)
     {
         ViewBag.SubjectId = subjectId;
@@ -59,5 +62,16 @@ public class StudyController : Controller
         ViewBag.AvailableLevel = avaibleLevel + 1;
         return View();
     }
-    
+
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateLesson([FromForm] LessonModel model, [FromForm] List<LessonModuleModel> moduleModel)
+    {
+        model.Modules = moduleModel;
+
+        // Ваша логика обработки данных
+        return View();
+    }
+
+
 }
