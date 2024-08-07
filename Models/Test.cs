@@ -9,7 +9,7 @@ public class Test
     public TimeSpan? TimeForTest { get; set; }
     [NotMapped]
     public int? MinutesForTest { get; set; }
-
+    public string? Text { get; set; }
     public int? SubtopicId { get; set; }
     public Subtopic? Subtopic { get; set; }
     //Альтернатива сабтопику
