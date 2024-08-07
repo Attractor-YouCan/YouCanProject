@@ -1,5 +1,5 @@
-@using YouCan.ViewModels.Account;
-@model RegisterViewModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model YouCan.Mvc.RegisterViewModel
 @{
     ViewBag.Title = "Register";
     Layout = "_Layout";
@@ -177,7 +177,7 @@
                             <span class="button-text">СОЗДАТЬ АККАУНТ</span>
                             <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                         </button>
-                        <button class="nextBtn next-btn">Дальше</button>
+                        @* <button class="nextBtn next-btn">Дальше</button> *@
                     </form>
                     <p class="terms">
                         Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>

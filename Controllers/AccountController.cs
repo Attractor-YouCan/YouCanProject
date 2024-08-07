@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using YouCan.Entities;
 using YouCan.Service.Service;
+using YouCan.Services.Email;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
