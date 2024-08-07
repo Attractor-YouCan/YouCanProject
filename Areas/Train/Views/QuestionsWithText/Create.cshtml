@@ -1,4 +1,6 @@
-﻿@{
+﻿@model TestDto
+
+@{
     ViewBag.Title = "Создать тренировочный тест";
     Layout = "_Navbar";
 }
@@ -7,7 +9,7 @@
 
 <div class="container">
     <div class="row justify-content-center mb-5">
-        <form class="col-md-7 col-lg-5 m-0">
+        <form class="col-md-7 col-lg-5 m-0" asp-action="Create" method="post">
             <p class="text-center profile-title">Тренировка</p>
             <hr>
             <a href="#" class="btn">
@@ -15,7 +17,7 @@
             </a>
             <div class="mx-2">
                 <div class="mx-5">
-                    <h1 class="text-center fs-4">Чтение и понимание</h1>@* Поле title для темы *@
+                    <h1 class="text-center fs-4">@ViewBag.Subject.Name</h1>@* Поле title для темы *@
                     <p class="text-center fw-bold">
                         @* Поле subtitle для темы *@
                         В этом разделе оценивают умение внимательно читать различные
@@ -27,61 +29,43 @@
                         400 до 850 слов.
                     </p>
                 </div>
+                <input asp-for="SubjectId" class="d-none" />
                 <div class="text-center mb-5 align-items-center m-0">
-                    <textarea class="form-control"></textarea>
+                    <textarea asp-for="Text" class="form-control"></textarea>
                 </div>
                 <div id="questions">
-                    <div class="question text-center mb-4">
-                        <input class="form-control mb-3" />
-                        <div class="row align-items-center justify-content-between mb-3 m-0">
-                            <div class="col-auto">
-                                <input class="form-check" type="radio" />
-                            </div>
-                            <div class="col p-0">
-                                <input class="form-control" />
-                            </div>
+                    @for(int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        <div class="question text-center mb-4" data-question-id="@i">
+                            <input class="form-control mb-3" asp-for="Questions[i].Text" />
+                            @for(int j = 0; j < Model.Questions[i].Answers.Count; j++)
+                            {
+                                <div class="row align-items-center justify-content-between mb-3 m-0">
+                                    <div class="col-auto">
+                                        <input class="form-check" type="radio" asp-for="Questions[i].CorrectAnswerId" value="@j"/>
+                                    </div>
+                                    <div class="col p-0">
+                                        <input class="form-control" asp-for="Questions[i].Answers[j]"/>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                        <div class="row align-items-center justify-content-between mb-3 m-0">
-                            <div class="col-auto">
-                                <input class="form-check" type="radio" />
-                            </div>
-                            <div class="col p-0">
-                                <input class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center justify-content-between mb-3 m-0">
-                            <div class="col-auto">
-                                <input class="form-check" type="radio" />
-                            </div>
-                            <div class="col p-0">
-                                <input class="form-control" />
-                            </div>
-                        </div>
-                        <div class="row align-items-center justify-content-between mb-3 m-0">
-                            <div class="col-auto">
-                                <input class="test-radio" type="radio" />
-                            </div>
-                            <div class="col p-0">
-                                <input class="form-control" />
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="text-center mb-5">
-                    <button id="add-question-btn" class="btn-add-question">Добавить вопрос</button>
+                    <button id="add-question-btn" class="btn-add-question" type="button">Добавить вопрос</button>
                 </div>
             </div>
 
             <div class="row gx-2 justify-content-center">
                 <div class="col-auto">
-                    <button class="btn btn-test btn-delete fw-bold">Удалить</button>
+                    <button class="btn btn-test btn-delete fw-bold" type="reset">Удалить</button>
                 </div>
                 <div class="col-auto">
-                    <button class="col-auto btn btn-test btn-send fw-bold">Отправить</button>
+                    <button class="col-auto btn btn-test btn-send fw-bold" type="submit">Отправить</button>
                 </div>
                 <div class="col-auto">
-                    <button class="col-auto btn-test-square fw-bold">?</button>
+                    <button class="col-auto btn-test-square fw-bold" type="button">?</button>
                 </div>
             </div>
         </form>
@@ -89,34 +73,52 @@
 </div>
 @section Scripts {
     <script>
-        const addButton = $('#add-question-btn');
+        $(document).ready(function () {
+            const addButton = $('#add-question-btn');
+            let questionIndex = @Model.Questions.Count;
 
-        function addQuestion() {
+            function addQuestion() {
+                const questionDiv = $('<div>').addClass('question text-center mb-4');
 
-            const questionDiv = $('<div>').addClass('question text-center mb-4');
+                const inputText = $('<input>')
+                    .attr('name', `Questions[${questionIndex}].Text`)
+                    .attr('id', `Questions_${questionIndex}__Text`)
+                    .addClass('form-control mb-3');
 
-            const inputText = $('<input>').addClass('form-control mb-3');
-            questionDiv.append(inputText);
+                questionDiv.append(inputText);
 
-            for (let i = 0; i < 4; i++) {
-                const rowDiv = $('<div>').addClass('row align-items-center justify-content-between mb-3 m-0');
+                for (let i = 0; i < 4; i++) {
+                    const rowDiv = $('<div>').addClass('row align-items-center justify-content-between mb-3 m-0');
 
-                const radioCol = $('<div>').addClass('col-auto');
-                const radioInput = $('<input>').addClass('form-check').attr('type', 'radio');
-                radioCol.append(radioInput);
-                rowDiv.append(radioCol);
+                    const radioCol = $('<div>').addClass('col-auto');
+                    const radioInput = $('<input>')
+                        .attr('type', 'radio')
+                        .attr('name', `Questions[${questionIndex}].CorrectAnswerId`)
+                        .attr('id', `Questions_${questionIndex}__CorrectAnswerId_${i}`)
+                        .attr('value', i)
+                        .addClass('form-check');
 
-                const inputCol = $('<div>').addClass('col p-0');
-                const inputField = $('<input>').addClass('form-control');
-                inputCol.append(inputField);
-                rowDiv.append(inputCol);
+                    radioCol.append(radioInput);
+                    rowDiv.append(radioCol);
 
-                questionDiv.append(rowDiv);
+                    const inputCol = $('<div>').addClass('col p-0');
+                    const inputField = $('<input>')
+                        .attr('name', `Questions[${questionIndex}].Answers[${i}]`)
+                        .attr('id', `Questions_${questionIndex}__Answers_${i}`)
+                        .addClass('form-control');
+
+                    inputCol.append(inputField);
+                    rowDiv.append(inputCol);
+
+                    questionDiv.append(rowDiv);
+                }
+
+                $('#questions').append(questionDiv);
+
+                questionIndex++;
             }
 
-            $('#questions').append(questionDiv);
-        }
-
-        addButton.on('click', addQuestion);
+            addButton.on('click', addQuestion);
+        });
     </script>
 }
