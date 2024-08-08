@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
       <UserSecretsId>d543739f-0504-4d16-8744-4acaa280bc99</UserSecretsId>
       <RootNamespace>YouCan</RootNamespace>
+      <RootNamespace>YouCan</RootNamespace>
   </PropertyGroup>
 
     <ItemGroup>
@@ -88,6 +89,13 @@
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.assets.json" />
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.packagespec.json" />
       <_ContentIncludedByDefault Remove="YouCan.Entites\obj\YouCan.Entites.csproj.nuget.dgspec.json" />
+
+      <_ContentIncludedByDefault Remove="Areas\Train\Views\Test\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="publish\web.config" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+      <_ContentIncludedByDefault Remove="publish\YouCan.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\YouCan.runtimeconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -308,6 +316,50 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="YouCan.Service\**" />
+      <Compile Remove="YouCan.Repository\**" />
+      <Compile Remove="YouCan.Entites\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="YouCan.Service\**" />
+      <EmbeddedResource Remove="YouCan.Repository\**" />
+      <EmbeddedResource Remove="YouCan.Entites\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="YouCan.Service\**" />
+      <None Remove="YouCan.Repository\**" />
+      <None Remove="YouCan.Entites\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="YouCan.Service\YouCan.Service.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+      <Content Remove="YouCan.Service\**" />
+      <Content Remove="YouCan.Repository\**" />
+      <Content Remove="YouCan.Entites\**" />
+      <_ContentIncludedByDefault Remove="YouCan.Service\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Service\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Service\obj\YouCan.Service.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\bin\Debug\net8.0\YouCan.Repository.deps.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\bin\Debug\net8.0\YouCan.Repository.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\obj\Debug\net8.0\YouCan.Repository.sourcelink.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Repository\obj\YouCan.Repository.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Entites\bin\Debug\net8.0\YouCan.Entites.deps.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Entites\obj\Debug\net8.0\YouCan.Entites.sourcelink.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Entites\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Entites\obj\YouCan.Entites.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Areas\Train\Views\Test\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="publish\web.config" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+      <_ContentIncludedByDefault Remove="publish\YouCan.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\YouCan.runtimeconfig.json" />
       <Compile Remove="YouCan.Service\**" />
       <Compile Remove="YouCan.Repository\**" />
       <Compile Remove="YouCan.Entites\**" />
