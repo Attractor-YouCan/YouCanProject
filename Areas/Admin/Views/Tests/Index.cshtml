@@ -1,4 +1,4 @@
-﻿@model IEnumerable<YouCan.Models.Test>
+﻿@model IEnumerable<YouCan.Entities.Test>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.GainingExperience)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TimeForTest)
+                @Html.DisplayNameFor(model => model.TimeForTestInMin)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Lesson)
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.GainingExperience)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TimeForTest)
+                @Html.DisplayFor(modelItem => item.TimeForTestInMin)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LessonId)

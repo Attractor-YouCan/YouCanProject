@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YouCan.ViewModels.Account;
-
+namespace YouCan.Mvc;
 public class LoginViewModel
 {
     [Required(ErrorMessage = "Заполните поле!")]

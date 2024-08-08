@@ -1,0 +1,50 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<YouCan.Entities.OrtTest>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Navbar";
+}
+
+<link rel="stylesheet" href="~/css/ortTest.css">
+
+<div class="container ort-trial-block">
+    <img class="align-self-center" src="~/ortIcons/logo.svg" alt="logo-youcan"/>
+    <p>Пробный тест</p>
+</div>
+<hr/>
+
+
+<h5 class="col-10 mx-auto border border-1 rounded-3 text-center py-sm-4 py-3 px-1 ">
+    Правила прохождения теста
+</h5>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h5> Тестов еще нет!</h5>
+}
+else
+{
+    <div class="text-center mt-4">
+            <h5 class="mx-auto"> Доступные вам тесты</h5>
+    </div>
+    <div class="col-8 mx-auto tests mt-5">
+        @foreach (var ortTest in Model)
+        {
+            if (ViewBag.CurrentOrtTestLevel+1 >= ortTest.OrtLevel)
+            {
+                <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
+                    <div class="ort-trial-block-paddings border border-1 text-success fw-bold text-center rounded-3 border-success mt-3">
+                        <span>Пробный тест № @ortTest.OrtLevel</span>
+                    </div> 
+                </a>
+            }
+            else
+            {
+                <div style="color: #C4C4C4" class="ort-trial-block-paddings border border-1 rounded-3 te fw-bold text-center border-light-subtle mt-3">
+                    <span>Пробный тест № @ortTest.OrtLevel</span>
+                </div>
+            }
+        }
+    </div>
+    
+}

@@ -31,11 +31,11 @@
                 <img src="~/navbar_icons/book.png" alt="..." class="bx bx-grid-alt nav_icon book">
                 <span class="nav_name">ОБУЧЕНИЕ</span>
             </a>
-            <a asp-area="Train" asp-controller="Train" asp-action="Index" class="nav_link" data-area="Train" data-controller="Train">
+            <a asp-area="Train" asp-controller="Test" asp-action="Index" class="nav_link" data-area="Train" data-controller="Train">
                 <img src="~/navbar_icons/biceps.png" alt="..." class="bx bx-grid-alt nav_icon biceps">
                 <span class="nav_name">ТРЕНИРОВКА</span>
             </a>
-            <a href="#" class="nav_link">
+            <a asp-area="ORT" asp-controller="OrtTests" asp-action="Index" class="nav_link">
                 <img src="~/navbar_icons/board.png" alt="..." class="bx bx-grid-alt nav_icon board">
                 <span class="nav_name">ТЕСТ</span>
             </a>
@@ -59,7 +59,7 @@
             <a class="col-2 nav-link" href="#">
                 <img class="img-fluid" src="~/navbar_icons/board.png" alt="...">
             </a>
-            <a class="col-2 nav-link" asp-area="Train" asp-controller="Train" asp-action="Index">
+            <a class="col-2 nav-link" asp-area="Train" asp-controller="Test" asp-action="Index">
                 <img class="img-fluid" src="~/navbar_icons/biceps.png" alt="...">
             </a>
             <a class="col-2 nav-link" asp-area="Study" asp-controller="Subtopics" asp-action="Index">
@@ -82,7 +82,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/navbar.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

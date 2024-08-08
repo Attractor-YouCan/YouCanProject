@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Repository;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -58,7 +59,7 @@ public class TestsController : Controller
     {
         if (test.MinutesForTest != null)
         {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+            test.TimeForTestInMin = TimeSpan.FromMinutes(test.MinutesForTest.Value).Minutes;
         }
         if (ModelState.IsValid)
         {
@@ -100,7 +101,7 @@ public class TestsController : Controller
         }
         if (test.MinutesForTest != null)
         {
-            test.TimeForTest = TimeSpan.FromMinutes(test.MinutesForTest.Value);
+            test.TimeForTestInMin = TimeSpan.FromMinutes(test.MinutesForTest.Value).Minutes;
         }
         if (ModelState.IsValid)
         {

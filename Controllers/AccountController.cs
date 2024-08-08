@@ -1,29 +1,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
-using YouCan.Services;
+using YouCan.Entities;
+using YouCan.Service.Service;
 using YouCan.Services.Email;
-using YouCan.ViewModels.Account;
 
-namespace YouCan.Controllers;
-
+namespace YouCan.Mvc;
 public class AccountController : Controller
 {
-    
-    private YouCanContext _db;
+    private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private readonly TwoFactorService _twoFactorService;
 
 
-    public AccountController(YouCanContext db, UserManager<User> userManager,
+    public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
         TwoFactorService twoFactorService)
     {
-        _db = db;
+        _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
@@ -36,9 +32,9 @@ public class AccountController : Controller
     {
         User user = new User();
         if (!userId.HasValue)
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(_userManager.GetUserId(User)));
+            user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
         else
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user = await _userService.GetById((int)userId);
         if (user != null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -113,43 +109,47 @@ public class AccountController : Controller
     
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
-   {
-    if (ModelState.IsValid)
     {
-        string path = "/userImages/defProf-ProfileN=1.png";
-        if (uploadedFile != null)
+        if (ModelState.IsValid)
         {
-            string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
-            path = $"/userImages/" + newFileName.Trim();
-            using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
+            string path = "/userImages/defProf-ProfileN=1.png";
+            if (uploadedFile != null)
             {
-                await uploadedFile.CopyToAsync(fileStream);
+                string newFileName = Path.ChangeExtension($"{model.UserName.Trim()}-ProfileN=1", Path.GetExtension(uploadedFile.FileName));
+                path = $"/userImages/" + newFileName.Trim();
+                using (var fileStream = new FileStream(_environment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+            }
+            User user = new User
+            {
+                Email = model.Email,
+                UserName = model.UserName,
+                PhoneNumber = model.PhoneNumber,
+                FullName = model.LastName + " " + model.FirstName,
+                Disctrict = model.District,
+                AvatarUrl = path,
+                BirthDate = model.BirthDate.ToUniversalTime(),
+                CreatedAt = DateTime.UtcNow.AddHours(6)
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "user");
+                await _userManager.SetLockoutEnabledAsync(user, false);
+
+                var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
+                EmailSender emailSender = new EmailSender();
+                emailSender.SendEmail(model.Email, subject, message);
+                return Json(new { success = true, email = user.Email });
             }
         }
-        User user = new User
-        {
-            Email = model.Email,
-            UserName = model.UserName,
-            PhoneNumber = model.PhoneNumber,
-            FullName = model.LastName + " " + model.FirstName,
-            Disctrict = model.District,
-            AvatarUrl = path,
-            BirthDate = model.BirthDate,
-            CreatedAt = DateTime.UtcNow.AddHours(6)
-        };
-        
-        await _userManager.CreateAsync(user, model.Password);
-        await _signInManager.SignInAsync(user, true);
-        
-        var (subject, message) =  GenerateEmailConfirmationContentAsync(user, model.UserName);
-        EmailSender emailSender = new EmailSender();
-        emailSender.SendEmail(model.Email, subject, message);
-        return Json(new { success = true, email = user.Email});
-    }
 
-    ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
-    return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
-   }
+        ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
+        return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+    }
 
    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
    {
@@ -267,8 +267,29 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
+        
 
         return Json(new { success = true, userId = user.Id  });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
+    {
+        if (string.IsNullOrEmpty(model.Email))
+        {
+            return Json(new { success = false, errors = new[] { "Email is required." } });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return Json(new { success = false, errors = new[] { "User not found." } });
+        }
+        var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
+        EmailSender emailSender = new EmailSender();
+         emailSender.SendEmail(user.Email, subject, message);
+
+        return Json(new { success = true });
     }
     
 
@@ -287,7 +308,7 @@ public class AccountController : Controller
             if (user == null)
                 user = await _userManager.FindByNameAsync(model.LoginValue);
             if (user == null)
-                user = await _db.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(model.LoginValue));
+                user = _userService.GetAll().FirstOrDefault(u => u.PhoneNumber.Equals(model.LoginValue));
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(
