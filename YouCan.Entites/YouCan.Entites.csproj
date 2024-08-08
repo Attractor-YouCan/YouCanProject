@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Models\Test.cs~RF88860daf.TMP" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Update="Views\Account\Login.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -46,14 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.7" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="YouCan">
-        <HintPath>..\bin\Debug\net8.0\YouCan.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>

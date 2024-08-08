@@ -38,8 +38,8 @@
     @foreach (var q in Model.Questions)
     {
         <div class="border border-1">
-            <a asp-action="Details" asp-controller="Questions" asp-route-id="@q.Id">Вопрос: @q.Text</a>
-            <p>Контент: @q.Text</p>
+            <a asp-action="Details" asp-controller="Questions" asp-route-id="@q.Id">Вопрос: @q.Content</a>
+            <p>Контент: @q.Content</p>
             <p>Опубликован: @q.IsPublished</p>
             <h4>Варианты ответа</h4>
             <a asp-action="Create" asp-controller="Answers" asp-route-id="@q.Id" asp-route-returnUrl="@Url.Action("Details", "Tests", new{id = Model.Id})">Добавить вариант ответа</a>

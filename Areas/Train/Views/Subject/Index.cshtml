@@ -1,5 +1,5 @@
 @using YouCan.Services
-@model List<YouCan.Models.Subject>
+@model List<YouCan.Entities.Subject>
 
 @{
     ViewBag.Title = "title";
@@ -61,7 +61,7 @@
                     {
                         if(ViewBag.ForCreate)
                         {
-                            if(subtopic.UserTestIsTest)
+                            if(subtopic.UserTestType == YouCan.Entites.Models.UserTestType.Test)
                             {
                                 <a asp-controller="QuestionsWithText" asp-action="Create" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
                                     <div class="card mb-3">

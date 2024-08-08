@@ -15,10 +15,12 @@ public class Test : EntityBase
     public Lesson? Lesson { get; set; }
     public int? OrtTestId { get; set; }
     public OrtTest? OrtTest { get; set; }
-
+    public string? Text { get; set; }
     public int? OrtInstructionId { get; set; }
     public OrtInstruction? OrtInstruction { get; set; }
     public List<Question> Questions { get; set; }
+    public int? UserId { get; set; }
+    public User? User { get; set; }
     public Test()
     {
         Questions = new List<Question>();

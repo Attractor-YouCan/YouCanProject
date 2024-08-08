@@ -4,7 +4,7 @@ public class Question : EntityBase
 {
     public string? Instruction { get; set; }
     public string? Type { get; set; }
-    public string? Text { get; set; }
+    public string? Content { get; set; }
     public string? ImageUrl { get; set; } 
     public bool IsPublished { get; set; } = false;
     public int? TestId { get; set; }

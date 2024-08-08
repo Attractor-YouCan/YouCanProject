@@ -5,6 +5,7 @@ using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Repository.Repository;
 using YouCan.Service.Service;
+using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     })
     .AddEntityFrameworkStores<YouCanContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<W3RootFileManager>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
 builder.Services.AddTransient<IUserCRUD, UserCRUD>();
