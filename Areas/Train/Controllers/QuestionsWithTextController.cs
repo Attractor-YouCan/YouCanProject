@@ -29,6 +29,10 @@ public class QuestionsWithTextController : Controller
                 var subject = _youCanContext.Subjects.FirstOrDefault(e => e.Id == subSubjectId);
                 if (subject is not null)
                 {
+                    if (!subject.UserTestIsTest)
+                    {
+                        return RedirectToAction("Create", "QuestionsWithText", new { SubSubjectId = subSubjectId });
+                    }
                     var model = new TestDto()
                     {
                         Questions = new List<TestDto.TestQuestionDto>()

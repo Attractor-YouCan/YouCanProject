@@ -45,7 +45,7 @@
                 <div class="col-6 col-md-4 col-lg-2 subtopic">
                     @if (subtopic.SubjectType == SubjectType.Parent)
                     {
-                        <a asp-controller="Subject" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                        <a asp-controller="Subject" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" asp-route-forCreate="@ViewBag.ForCreate" style="text-decoration: none; color: inherit;">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <img src=@subtopic.ImageUrl
@@ -55,20 +55,53 @@
                                 </div>
                             </div>
                         </a>
-                        
+
                     }
                     else
                     {
-                        <a asp-controller="Test" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <img src=@subtopic.ImageUrl
-                                         class="card-img-top"
-                                         alt="@subtopic.Name"/>
-                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                        if(ViewBag.ForCreate)
+                        {
+                            if(subtopic.UserTestIsTest)
+                            {
+                                <a asp-controller="QuestionsWithText" asp-action="Create" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <img src=@subtopic.ImageUrl
+                                                 class="card-img-top"
+                                                 alt="@subtopic.Name" />
+                                            <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Questions" asp-action="Create" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <img src=@subtopic.ImageUrl
+                                                 class="card-img-top"
+                                                 alt="@subtopic.Name" />
+                                            <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+
+                        }
+                        else
+                        {
+                            <a asp-controller="Test" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <img src=@subtopic.ImageUrl
+                                             class="card-img-top"
+                                             alt="@subtopic.Name" />
+                                        <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        }
                     }
                 </div>
             }

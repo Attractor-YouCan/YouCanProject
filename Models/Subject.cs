@@ -12,6 +12,5 @@ public class Subject
     public Subject? Parent { get; set; }  
     public List<Subject>? SubSubjects { get; set; } 
     public List<Lesson>? Lessons { get; set; }
-
-    
+    public bool UserTestIsTest { get; set; } = false;
 }

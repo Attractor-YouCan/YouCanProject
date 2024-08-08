@@ -18,7 +18,7 @@ public class SubjectController : Controller
         _userManager = userManager;
     }
     
-    public IActionResult Index(int? subSubjectId)
+    public IActionResult Index(int? subSubjectId, bool forCreate = false)
     {
         List<Subject> subjects = new List<Subject>();
         if (subSubjectId == null)
@@ -29,6 +29,7 @@ public class SubjectController : Controller
         {
             subjects = _db.Subjects.Where(s => s.ParentId == subSubjectId).ToList();
         }
+        ViewBag.ForCreate = forCreate;
         return View(subjects);
     }
 
