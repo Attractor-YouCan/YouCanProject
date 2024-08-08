@@ -75,7 +75,6 @@ public class StudyController : Controller
     public async Task<IActionResult> Edit(int lessonId)
     {
         Lesson? lesson = await _lessonService.GetById(lessonId);
-        
         LessonModel lessonModel = new LessonModel
         {
             Id = lesson.Id,
@@ -95,9 +94,21 @@ public class StudyController : Controller
         return View(lessonModel);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Edit()
+    [HttpPost]    
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Edit([FromForm] LessonModel model)
     {
+        Lesson lesson = await _lessonService.GetById((int)model.Id);
+        lesson.Title = model.LessonTitle;
+        lesson.SubTitle = model.LessonTitle2;
+        lesson.Description = model.Description;
+        lesson.Lecture = model.Lecture;
+        if (model.LessonVideo is not null)
+        {
+            
+        }
+
+        await _lessonService.Update(lesson);
         return View();
     }
 }

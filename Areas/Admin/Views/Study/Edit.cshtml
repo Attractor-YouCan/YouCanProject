@@ -41,24 +41,26 @@
                 <button type="button" class="btn btn-success add-module-button rounded-3 w-100">Добавить Модуль к Уроку</button>
             </div>
             <div id="module-change-div" class="p-4 border border-light rounded-3 mt-3">
+                <input type="hidden" asp-for="Modules" id="modulesObjs"/>
                 @if (Model.Modules.Count == 0 || Model.Modules == null)
                 {
                     <h5>Модулей к урокам еще нет!</h5>
                 }
                 else
                 {
-                    @foreach (var module in Model.Modules)
+                    @for (int i = 0; i < Model.Modules.Count; i++)
                     {
-                        <div class="module border border-secondary rounded-3 mt-4 p-3" id="${formId}">
+                        var module = Model.Modules[i];
+                        <div class="module border border-secondary rounded-3 mt-4 p-3" id="module-form-@i">
                             <h2 class="section-title">
-                                <input value="@module.ModuleTitle" type="text" class="form-control" placeholder="Введите тему модуля" name="moduleTitle"/> 
+                                <input value="@module.ModuleTitle" type="text" class="form-control" placeholder="Введите тему модуля" name="moduleTitle"/>
                             </h2>
                             <div class="formula-box mt-3">
                                 <input value="@module.ModuleContent" class="form-control" type="text" placeholder="Введите контент модуля" name="moduleContent"/>
                                 <div class="border border-primary rounded-3 mt-4 px-5">
                                     @if (module.ExistsPhotoUrl != null)
                                     {
-                                        <img class="h-100" src="@Url.Content(module.ExistsPhotoUrl)" />
+                                        <img class="h-100" src="@Url.Content(module.ExistsPhotoUrl)"/>
                                     }
                                     <span class="mx-auto mt-3">Выбрать другое фото модуля</span>
                                     <input type="file" class="form-control mt-3" placeholder="Выберите фото модуля" name="modulePhoto" required/>
@@ -68,7 +70,6 @@
                         </div>
                     }
                 }
-                <input type="hidden" asp-for="Modules" id="modulesObjs"/>
             </div>
         </div>
         <div class="creationPage" data-page="2" style="display: none;">
@@ -90,7 +91,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let moduleCounter = 0;
+            let moduleCounter = '@(Model.Modules.Count-1)';
             let moduleObjs = [];
             let currentPage = 1;
             const totalPages = document.querySelectorAll('.creationPage').length;
@@ -116,11 +117,16 @@
         
                 $('#module-change-div').append(resumeFormHtml);
         
-                $(`#${formId} .module-cancel-button`).click(function() {
-                    $(`#${formId}`).remove();
-                });
             }
         
+            function handleCancelButtonClick(event) {
+                    if (event.target.classList.contains('module-cancel-button')) {
+                        event.target.closest('.module').remove();
+                    }
+                }
+                
+            $('#module-change-div').on('click', '.module-cancel-button', handleCancelButtonClick);
+
             $('.add-module-button').click(function (){
                 addModule();
             });
