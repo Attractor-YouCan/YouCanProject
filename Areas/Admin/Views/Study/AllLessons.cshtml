@@ -32,7 +32,9 @@ else
                     <td>@lesson.Subject.Name</td>
                     <td>@lesson.LessonLevel</td>
                     <td>@lesson.RequiredLevel</td>
-                    <td>Edit Delete</td>
+                    <td>
+                        <a class="btn btn-outline-success" asp-action="Edit" asp-route-lessonId="@lesson.Id">Edit</a>
+                    </td>
                 </tr>
             }
             </tbody>

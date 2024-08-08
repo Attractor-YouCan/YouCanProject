@@ -10,4 +10,5 @@ public class LessonModuleModel
     public string ModuleContent { get; set; }
     [JsonPropertyName("modulePhoto")]
     public IFormFile? ModulePhoto { get; set; }
+    public string? ExistsPhotoUrl { get; set; }
 }

@@ -9,8 +9,9 @@
 <form asp-action="CreateLesson" asp-controller="Study" enctype="multipart/form-data">
     <div class="container content">
         <div class="creationPage">
-            <label for="lessonLevel">Доступный Уровень Урока</label>
-            <input asp-for="LessonLevel" type="number" class="form-control" value="@ViewBag.AvailableLevel" id="lessonLevel" disabled/>
+            <label for="lessonLevel">Уровень Урока</label>
+            <input asp-for="LessonLevel" type="number" class="form-control" value="@Model.LessonLevel" id="lessonLevel" disabled/>
+            <input asp-for="Id" type="hidden" value="@Model.Id"/>
             <h1 class="mt-4">
                 <label for="lessonTitle">Здесь будет: Тема Урока</label>
                 <input asp-for="LessonTitle" type="text" class="form-control-lg" id="lessonTitle" placeholder="Введите Тему Урока"/>
@@ -19,9 +20,14 @@
                 <label for="lessonTitle2">Здесь будет: Подтема Урока</label>
                 <textarea asp-for="LessonTitle2" class="form-control" id="lessonTitle2" placeholder="Введите Подтему Урока"  style="height: 50px"></textarea>
             </p>
-            <div class="video-container embed-responsive embed-responsive-16by9 border border-primary rounded-3 mt-3" style="height: 300px;">
+            <div class="video-container embed-responsive embed-responsive-16by9 border border-primary rounded-3 mt-3">
+                <video class="embed-responsive-item" controls>
+                    <source src="~/lessonResources/lessonVideo.mp4" type="video/mp4" />
+                    <source src="~/lessonResources/lessonVideo.ogg" type="video/ogg" />
+                    Your browser does not support the video tag.
+                </video>
                 <h5 class="section-title">Здесь будет: Видеоматериал Урока</h5>
-                <input type="file" class="mx-auto form-control" name="lessonVideo" placeholder="Выберите видеоматериал урока" required/>
+                <input type="file" class="mx-auto form-control my-3" name="lessonVideo" placeholder="Выберите видеоматериал урока" required/>
             </div>
             <h2 class="section-title">Здесь будет: Описание</h2>
             <p class="description">
@@ -35,6 +41,33 @@
                 <button type="button" class="btn btn-success add-module-button rounded-3 w-100">Добавить Модуль к Уроку</button>
             </div>
             <div id="module-change-div" class="p-4 border border-light rounded-3 mt-3">
+                @if (Model.Modules.Count == 0 || Model.Modules == null)
+                {
+                    <h5>Модулей к урокам еще нет!</h5>
+                }
+                else
+                {
+                    @foreach (var module in Model.Modules)
+                    {
+                        <div class="module border border-secondary rounded-3 mt-4 p-3" id="${formId}">
+                            <h2 class="section-title">
+                                <input value="@module.ModuleTitle" type="text" class="form-control" placeholder="Введите тему модуля" name="moduleTitle"/> 
+                            </h2>
+                            <div class="formula-box mt-3">
+                                <input value="@module.ModuleContent" class="form-control" type="text" placeholder="Введите контент модуля" name="moduleContent"/>
+                                <div class="border border-primary rounded-3 mt-4 px-5">
+                                    @if (module.ExistsPhotoUrl != null)
+                                    {
+                                        <img class="h-100" src="@Url.Content(module.ExistsPhotoUrl)" />
+                                    }
+                                    <span class="mx-auto mt-3">Выбрать другое фото модуля</span>
+                                    <input type="file" class="form-control mt-3" placeholder="Выберите фото модуля" name="modulePhoto" required/>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-light mt-4 ms-3 module-cancel-button">Отмена</button>
+                        </div>
+                    }
+                }
                 <input type="hidden" asp-for="Modules" id="modulesObjs"/>
             </div>
         </div>
@@ -138,6 +171,7 @@
                 } else {
                     const formData = new FormData();
         
+                    formData.append('Id', document.querySelector('input[name="Id"]').value);
                     formData.append('LessonLevel', document.querySelector('input[name="LessonLevel"]').value);
                     formData.append('LessonTitle', document.querySelector('input[name="LessonTitle"]').value);
                     formData.append('LessonTitle2', document.querySelector('textarea[name="LessonTitle2"]').value);
@@ -152,7 +186,7 @@
                         formData.append(`Modules[${index}].ModulePhoto`, form.querySelector('input[name="modulePhoto"]').files[0]);
                     });
         
-                    axios.post('/Admin/Study/CreateLesson', formData, {
+                    axios.post('/Admin/Study/Edit', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -174,4 +208,5 @@
         });
     </script>
 }
+
 

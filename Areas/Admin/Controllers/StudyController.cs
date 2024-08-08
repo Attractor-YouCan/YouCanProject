@@ -62,16 +62,42 @@ public class StudyController : Controller
         ViewBag.AvailableLevel = avaibleLevel + 1;
         return View();
     }
-
+    
     [HttpPost]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> CreateLesson([FromForm] LessonModel model, [FromForm] List<LessonModuleModel> moduleModel)
+    public async Task<IActionResult> CreateLesson([FromForm] LessonModel model)
     {
-        model.Modules = moduleModel;
-
         // Ваша логика обработки данных
         return View();
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Edit(int lessonId)
+    {
+        Lesson? lesson = await _lessonService.GetById(lessonId);
+        
+        LessonModel lessonModel = new LessonModel
+        {
+            Id = lesson.Id,
+            LessonLevel = (int)lesson.LessonLevel,
+            ExistsVideoUrl = lesson.VideoUrl,
+            LessonTitle = lesson.Title,
+            LessonTitle2 = lesson.SubTitle,
+            Description = lesson.Description,
+            Lecture = lesson.Lecture,
+            Modules = lesson.LessonModules.Select(lm => new LessonModuleModel
+            {
+                ModuleTitle = lm.Title,
+                ModuleContent = lm.Content,
+                ExistsPhotoUrl = lm.PhotoUrl
+            }).ToList()
+        };
+        return View(lessonModel);
+    }
 
+    [HttpPost]
+    public async Task<IActionResult> Edit()
+    {
+        return View();
+    }
 }
