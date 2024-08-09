@@ -1,5 +1,6 @@
 @using YouCan.Services
-@model List<YouCan.Models.Subject>
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<YouCan.Entities.Subject>
 
 @{
     ViewBag.Title = "title";
@@ -59,7 +60,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Test" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
+                        <a asp-controller="TrainTest" asp-action="Index" asp-route-subSubjectId="@subtopic.Id" style="text-decoration: none; color: inherit;">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <img src=@subtopic.ImageUrl

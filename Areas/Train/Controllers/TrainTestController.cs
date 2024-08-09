@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using YouCan.Areas.Train.ViewModels;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Train.Controllers;
 
@@ -12,16 +11,30 @@ namespace YouCan.Areas.Train.Controllers;
 [Authorize]
 public class TrainTestController : Controller
 {
-    private YouCanContext _db;
+    private ICRUDService<PassedQuestion> _passedQuestionService;
+    private ICRUDService<Subject> _subjectService;
+    private ICRUDService<Test> _testService;
+    private ICRUDService<Question> _questionService;
+    private ICRUDService<QuestionReport> _questionReportService;
     private UserManager<User> _userManager;
 
-    public TrainTestController(YouCanContext db, UserManager<User> userManager)
+
+    public TrainTestController(ICRUDService<PassedQuestion> passedQuestionService, 
+        ICRUDService<Subject> subjectService, 
+        ICRUDService<QuestionReport> questionReportService,
+        ICRUDService<Test> testService, 
+        ICRUDService<Question> questionService, 
+        UserManager<User> userManager)
     {
-        _db = db;
+        _passedQuestionService = passedQuestionService;
+        _questionReportService = questionReportService;
+        _subjectService = subjectService;
+        _testService = testService;
+        _questionService = questionService;
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int testId)
+    public async Task<IActionResult> Index(int subSubjectId)
     {
         int page = 1;
         int pageSize = 1;
@@ -30,19 +43,18 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
 
-        Test? test = await _db.Tests.Include(q => q.Questions)
-            .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.Id == testId);
+        Test? test =  _testService.GetAll()
+            .FirstOrDefault(t => t.SubjectId == subSubjectId);
 
         if (test == null)
             return NotFound("No Test!");
 
         var subjectId = test.SubjectId;
 
-        var answeredQuestionIds = await _db.PassedQuestions
+        var answeredQuestionIds =  _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
             .Select(pq => pq.QuestionId)
-            .ToListAsync();
+            .ToList();
 
         var questions = test.Questions
             .Where(q => !answeredQuestionIds.Contains(q.Id))
@@ -59,8 +71,11 @@ public class TrainTestController : Controller
         {
             PageViewModel = new PageViewModel(count, page, pageSize),
             CurrentQuestion = items.FirstOrDefault(),
-            TestId = testId,
-            SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault()
+            SubjectId = subSubjectId,
+            SubjectName = _subjectService.GetAll()
+                .Where(s => s.Id == subjectId)
+                .Select(s => s.Name)
+                .FirstOrDefault()
         };
 
         return View(viewModel);
@@ -75,19 +90,21 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
         int pageSize = 1; 
-        var test = await _db.Tests.Include(t => t.Questions)
-            .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.Id == subtopicId);
+        var test = _testService.GetAll().FirstOrDefault( t => t.SubjectId == subtopicId);
 
         if (test == null)
             return NotFound("Test not found!");
         
         var subjectId = test.SubjectId;
-        ViewBag.SubjectName = _db.Subjects.Where(s => s.Id == subjectId).Select(s => s.Name).FirstOrDefault();
-        var answeredQuestionIds = await _db.PassedQuestions
+        ViewBag.SubjectName = _subjectService.GetAll()
+            .Where(s => s.Id == subjectId)
+            .Select(s => s.Name)
+            .FirstOrDefault()!;
+        
+        var answeredQuestionIds = _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
             .Select(pq => pq.QuestionId)
-            .ToListAsync();
+            .ToList();
         var questions = test.Questions
             .Where(q => !answeredQuestionIds.Contains(q.Id))
             .OrderBy(q => q.Id)
@@ -95,7 +112,7 @@ public class TrainTestController : Controller
     
         int pageToLoad = currentPage + 1;
     
-        if (pageToLoad > questions.Count)
+        if (pageToLoad > questions.Count && pageToLoad < 0)
         {
             return Json(new { finished = true });
         }
@@ -111,7 +128,7 @@ public class TrainTestController : Controller
     [HttpPost]
     public async Task<IActionResult> CheckAnswer([FromBody] AnswerCheckModel model)
     {
-        var question = await _db.Questions.Include(q => q.Answers).FirstOrDefaultAsync(q => q.Id == model.QuestionId);
+        var question = await _questionService.GetById(model.QuestionId);
         if (question == null)
             return NotFound("Question not found!");
 
@@ -126,73 +143,43 @@ public class TrainTestController : Controller
     [HttpPost]
     public async Task<IActionResult> FinishTest([FromBody] FinishTestModel model)
     {
-        int correctAnswers = 0;
-        var results = new List<QuestionResultViewModel>();
         var user = await _userManager.GetUserAsync(User);
 
         if (user == null)
             return Unauthorized();
 
+        var answeredQuestionIds =  _passedQuestionService.GetAll()
+            .Where(pq => pq.UserId == user.Id)
+            .Select(pq => pq.QuestionId)
+            .ToList();
+
         foreach (var answer in model.Answers)
         {
-            var question = await _db.Questions.Include(q => q.Answers).FirstOrDefaultAsync(q => q.Id == answer.QuestionId);
+            if (answeredQuestionIds.Contains(answer.QuestionId))
+            {
+                continue; 
+            }
+
+            var question = await _questionService.GetById(answer.QuestionId);
             if (question == null)
                 continue;
 
-            var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == answer.SelectedAnswerId);
-            var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
-
-            if (selectedAnswer   != null && selectedAnswer.IsCorrect)
-            {
-                correctAnswers++;
-            }
-
-            results.Add(new QuestionResultViewModel
-            {
-                QuestionId = question.Id,
-                QuestionContent = question.Content,
-                SelectedAnswerId = selectedAnswer?.Id ?? 0,
-                CorrectAnswerId = correctAnswer?.Id ?? 0,
-                IsCorrect = selectedAnswer?.IsCorrect ?? false,
-                Answers = question.Answers.Select(a => new AnswerViewModel
-                {
-                    Id = a.Id,
-                    Text = a.Text
-                }).ToList()
-            });
-
-            _db.PassedQuestions.Add(new PassedQuestion
+            await _passedQuestionService.Insert(new PassedQuestion
             {
                 QuestionId = question.Id,
                 UserId = user.Id
             });
         }
-
-        await _db.SaveChangesAsync();
-
-        var resultModel = new TestResultViewModel
-        {
-            CorrectAnswers = correctAnswers,
-            Questions = results
-        };
-
-        return Json(new { resultModel = resultModel });
+        return Ok();
     }
-
-        
-    [HttpGet]
-    public IActionResult TestResult(string resultModel)
-    {
-        var model = JsonConvert.DeserializeObject<TestResultViewModel>(resultModel);
-        return View(model);
-    }
+    
     
     [HttpPost]
     public async Task<IActionResult> ReportQuestion([FromBody] QuestionReportModel model)
     {
         if (ModelState.IsValid)
         {
-            var question = await _db.Questions.FindAsync(model.QuestionId);
+            var question = await _questionService.GetById(model.QuestionId);
             if (question == null)
             {
                 return NotFound("Question not found!");
@@ -211,9 +198,7 @@ public class TrainTestController : Controller
                 UserId = user.Id
             };
 
-            _db.QuestionReports.Add(report);
-            await _db.SaveChangesAsync();
-
+            await _questionReportService.Insert(report);
             return Ok();
         }
 

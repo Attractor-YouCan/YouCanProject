@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace YouCan.ViewModels.Account;
+namespace YouCan.Mvc;
 
 public class EditViewModel
 {

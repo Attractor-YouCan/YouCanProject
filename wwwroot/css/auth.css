@@ -12,7 +12,7 @@
 .auth-main .authForm{
     display: flex;
     flex-direction: column;
-     margin-top: 200px; 
+    margin-top: 200px;
     gap: 20px;
 }
 .underNavbarSection{
@@ -79,7 +79,7 @@
 
 
 .auth-main form input::placeholder {
-    color: #fff; 
+    color: #fff;
 }
 
 .auth-main form .password-wrapper {
@@ -146,7 +146,7 @@
 .aboutUsRegister{
     margin-top: 150px;
     margin-bottom: 100px;
-   
+
 }
 .aboutUsRegister_content{
     display: flex;
@@ -212,8 +212,8 @@
 }
 .loader {
     display: none;
-    width: 20px; 
-    height: 20px; 
+    width: 20px;
+    height: 20px;
 }
 .playVideoImg{
     width: 200px;
@@ -221,7 +221,7 @@
 }
 
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
-    .aboutUsRegister h2{ 
+    .aboutUsRegister h2{
         line-height: 30px;
     }
 }}
@@ -278,7 +278,7 @@
         height: 130px;
     }
     .next-btn {
-      width: 80%;
+        width: 80%;
     }
 }
 @media (max-width: 490px){
@@ -330,5 +330,5 @@
     .auth-main form .input-group {
         margin-bottom: 10px;
     }
-    
+
 }

@@ -1,10 +1,9 @@
-@using YouCan.ViewModels.Account;
-@model RegisterViewModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model YouCan.Mvc.RegisterViewModel
 @{
     ViewBag.Title = "Register";
     Layout = "_Layout";
 }
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +18,6 @@
     </div>
     <div class="section1_container">
         <div class="auth-main">
-           
             <div class="navContainer">
                 <nav>
                     <a asp-controller="Home" asp-action="Index" class="linkLogo">
@@ -45,44 +43,42 @@
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
             </div>
-           
-            
+
+
             <div class="multi-step-form">
                 <div id="page1" class="aboutUsRegister form-page active">
                     <div class="aboutUsRegister_content">
                         <h2>Посмотри видео и узнай, <br/>
                             как подготовиться вместе с Youcan!
                         </h2>
-                        <a href="#"  data-bs-toggle="modal" data-bs-target="#aboutUsModal">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#aboutUsModal">
                             <img src="~/authIcons/playVideo.png" alt="play video" class="playVideoImg"/>
                         </a>
                         <button class="nextBtn next-btn">Дальше</button>
                     </div>
-
-                    
-                    <div class="modal fade" id="aboutUsModal"  tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="aboutUsModal" tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="btn-close btn btn-outline-dark " data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                    <div class="modal-body">
-                                        <div class="video-container mx-auto text-center mt-5">
-                                            <iframe  id="youtube-video" class="col-12 mx-auto rounded-3" width="100%" height="450"
-                                                    src="https://www.youtube.com/embed/P3ZTxke4AOU" frameborder="0"
-                                                    allowfullscreen>
-                                            </iframe>
-                                        </div>
+                                <div class="modal-body">
+                                    <div class="video-container mx-auto text-center mt-5">
+                                        <iframe id="youtube-video" class="col-12 mx-auto rounded-3" width="100%" height="450"
+                                                src="https://www.youtube.com/embed/P3ZTxke4AOU" frameborder="0"
+                                                allowfullscreen>
+                                        </iframe>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-               
+
                 <div id="page2" class="authForm  form-page" style="margin-top: 50px">
                     <h1>Регистрация</h1>
-                    <form id="registerForm" asp-action="Register" asp-controller="Account"  asp-anti-forgery="true" enctype="multipart/form-data">
-                        
+                    <form id="registerForm" asp-action="Register" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
+
                         <div id="errorContainer" class="validation text-danger"></div>
 
                         <div class="input-group">
@@ -135,7 +131,7 @@
                         </div>
                         <div class="input-group">
                             <label for="phone">
-                                <span class="text-danger"  asp-validation-for="PhoneNumber"></span>
+                                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                             </label>
                             <div class="phone-wrapper">
                                 <input asp-for="PhoneNumber" type="number" class="form-control" placeholder="Номер телефона" id="phone">
@@ -143,29 +139,29 @@
                         </div>
                         <div class="mt-2">
                             <label for="file">Фото профиля</label>
-                            <input id="file" type="file" name="uploadedFile" class="form-control"  accept=".png, .jpg, .jpeg">
+                            <input id="file" type="file" name="uploadedFile" class="form-control" accept=".png, .jpg, .jpeg">
                         </div>
-                        
+
                         <div class="input-group password-wrapper">
-                            <label for="pass" >
-                                <span class="text-danger"   asp-validation-for="Password"  id="passwordError"></span>
+                            <label for="pass">
+                                <span class="text-danger" asp-validation-for="Password" id="passwordError"></span>
                             </label>
                             <div class="password-wrapper">
-                                <input asp-for="Password" type="password" oninput="validatePassword(); checkPasswords()" 
-                                       name="password" class="form-control" placeholder="Пароль"   required="required"
+                                <input asp-for="Password" type="password" oninput="validatePassword(); checkPasswords()"
+                                       name="password" class="form-control" placeholder="Пароль" required="required"
                                        id="pass">
                                 <span class="toggle-password">
                                     <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon" width="32" height="32">
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="input-group password-wrapper">
                             <label for="confPass">
-                                <span class="text-danger"  id="passConfError"></span>
+                                <span class="text-danger" id="passConfError"></span>
                             </label>
                             <div class="password-wrapper">
-                                <input asp-for="ConfirmPassword" type="password" 
+                                <input asp-for="ConfirmPassword" type="password"
                                        class="form-control" placeholder="Подтвердите пароль" oninput="checkPasswords()" required="required"
                                        id="confPass">
                                 <span class="toggle-password2">
@@ -177,7 +173,7 @@
                             <span class="button-text">СОЗДАТЬ АККАУНТ</span>
                             <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                         </button>
-                       
+
                     </form>
                     <p class="terms">
                         Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>
@@ -186,7 +182,7 @@
                 </div>
                 <div id="page3" class="aboutUsRegister form-page active">
                     <h2>
-                        На вашу почту <span id="userEmailAddress"></span>  был отправлен <br/>
+                        На вашу почту <span id="userEmailAddress"></span> был отправлен <br/>
                         6-значный код для подтверждения
                     </h2>
                     <div id="errorContainer2" class="error-container text-danger"></div>
@@ -198,7 +194,7 @@
                         <input type="text" maxlength="1" class="code-input">
                         <input type="text" maxlength="1" class="code-input">
                     </div>
-                    <button id="confirm-button"  class="loginBtn">
+                    <button id="confirm-button" class="loginBtn">
                         <span class="button-text">ПОДТВЕРДИТЬ</span>
                         <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                     </button>

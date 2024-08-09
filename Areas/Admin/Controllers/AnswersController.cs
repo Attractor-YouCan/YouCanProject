@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Repository;
+using YouCan.Entities;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]

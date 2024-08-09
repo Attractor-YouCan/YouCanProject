@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YouCan.Areas.Study.ViewModels;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Service.Service;
 using YouCan.ViewModels;
 using YouCan.ViewModels.Account;
 
@@ -12,12 +12,16 @@ namespace YouCan.Areas.ORT.Controllers;
 [Authorize]
 public class TestsController : Controller
 {
-    private YouCanContext _db;
+    private ICRUDService<OrtTest> _ortTestService;
+    private ICRUDService<UserOrtTest> _userOrtTestService;
     private UserManager<User> _userManager;
 
-    public TestsController(YouCanContext db, UserManager<User> userManager)
+    public TestsController(ICRUDService<OrtTest> ortTestService, 
+        ICRUDService<UserOrtTest> userOrtTestService,
+        UserManager<User> userManager)
     {
-        _db = db;
+        _ortTestService = ortTestService;
+        _userOrtTestService = userOrtTestService;
         _userManager = userManager;
     }
 
@@ -27,19 +31,11 @@ public class TestsController : Controller
         User? curUser = await _userManager.GetUserAsync(User);
         if (curUser == null)
             RedirectToAction("Login", "Account");
-        OrtTest? ortTest = await _db.OrtTests
-            .Include(t => t.Tests)
-                .ThenInclude(t =>t .Subject)
-            .Include(t => t.Tests)
-                .ThenInclude(t => t.Questions)
-                    .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.Id == ortTestId);
+        OrtTest? ortTest = await _ortTestService.GetById(ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
         ViewBag.OrtTestId = ortTest.Id;
-        UserOrtTest? userOrtTest = await _db.UserORTTests
-            .Include(t => t.OrtTest)
-            .FirstOrDefaultAsync(t => t.UserId == curUser.Id);
+        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(curUser.Id);
         if (userOrtTest.PassedLevel + 1 < ortTest.OrtLevel)
             return RedirectToAction("Index", "OrtTests");
         return View(ortTest.Tests);
@@ -48,17 +44,12 @@ public class TestsController : Controller
     [HttpPost]
     public async Task<IActionResult> Index([FromBody] TestSubmissionModel testSubmissionModel)
     {
-        OrtTest? ortTest = await _db.OrtTests
-            .Include(t => t.Tests)
-                .ThenInclude(t => t.Questions)
-                    .ThenInclude(t => t.Answers)
-            .FirstOrDefaultAsync(t => t.Id == testSubmissionModel.OrtTestId);
+        OrtTest? ortTest = await _ortTestService.GetById(testSubmissionModel.OrtTestId);
         if (ortTest == null)
             return BadRequest("No OrtTest Id!");
 
         User? currentUser = await _userManager.GetUserAsync(User);
-        UserOrtTest userOrtTest = await _db.UserORTTests
-            .FirstOrDefaultAsync(t => t.UserId == currentUser.Id);
+        UserOrtTest userOrtTest = await _userOrtTestService.GetById(currentUser.Id);
         List<TestAnswersModel> selectedAnswer = testSubmissionModel.SelectedAnswers;
         List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
         List<Test>? tests = ortTest.Tests;
@@ -109,8 +100,7 @@ public class TestsController : Controller
             userOrtTest.IsPassed = true;
         else
             userOrtTest.IsPassed = false;
-        _db.UserORTTests.Update(userOrtTest);
-        await _db.SaveChangesAsync();
+        await _userOrtTestService.Update(userOrtTest);
         // Return the result data in the response
         return Ok(new { ortTestResultModels });
     }

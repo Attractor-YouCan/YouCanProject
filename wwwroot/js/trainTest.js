@@ -5,13 +5,6 @@ $(document).ready(function () {
 
     function loadAnsweredQuestions() {
         answers.forEach(answer => {
-            let pageButton = $('.pagination-btn').eq(answer.pageIndex - 1);
-            if (answer.isCorrect) {
-                pageButton.removeClass('btn-default').addClass('btn-success');
-            } else {
-                pageButton.removeClass('btn-default').addClass('btn-danger');
-            }
-
             let questionContainer = $(`.question-container[data-question-id="${answer.questionId}"]`);
             let selectedAnswer = questionContainer.find(`input[value="${answer.selectedAnswerId}"]`);
             if (answer.isCorrect) {
@@ -149,9 +142,8 @@ $(document).ready(function () {
             },
             data: JSON.stringify({ answers: answers }),
             contentType: 'application/json; charset=utf-8',
-            success: function (data) {
-                const resultModelJson = encodeURIComponent(JSON.stringify(data.resultModel));
-                window.location.href = `/Train/TrainTest/TestResult?resultModel=${resultModelJson}`;
+            success: function () {
+                window.location.href = `/Train/Subject/Index`;
             },
             error: function (error) {
                 console.error('Error:', error);
