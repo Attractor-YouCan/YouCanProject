@@ -1,5 +1,4 @@
-@using YouCan.Services
-@model Subject
+@model YouCan.Areas.ViewModels.SubjectViewModel
 
 @{
     ViewBag.Title = "title";
@@ -17,9 +16,9 @@
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ImageFile">Изображение предмета</label>
-                    <input asp-for="ImageFile" type="file" name="ImageFile" class="form-control">
-                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    <label asp-for="ImageUrl">Изображение предмета</label>
+                    <input asp-for="ImageUrl" type="file" name="ImageFile" class="form-control">
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">

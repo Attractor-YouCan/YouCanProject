@@ -1,6 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using YouCan.Services
-@model Subject
+@model YouCan.Areas.ViewModels.SubjectViewModel
 
 @{
     ViewBag.Title = "title";
@@ -12,7 +11,7 @@
 <form asp-action="Edit" enctype="multipart/form-data">
     @Html.ValidationSummary(true)
     <input type="hidden" asp-for="Id"/>
-    <input type="hidden" asp-for="ImageFile" name="ImageFile" accept="image/*"/>
+    <input type="hidden" asp-for="ImageUrl" name="ImageFile" accept="image/*"/>
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control"/>
