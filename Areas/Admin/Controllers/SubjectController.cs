@@ -178,6 +178,18 @@ public class SubjectController : Controller
     {
         if (id != null)
         {
+            var subject = await _subjectService.GetById(id);
+            var subjects = _subjectService.GetAll().Where(s => s.ParentId == s.ParentId).ToList();
+            if (subjects.Count == 1)
+            {
+                int oldSubjectParentId = subject.ParentId ?? default(int);
+                var oldParentSubject = await _subjectService.GetById(oldSubjectParentId);
+                if (oldParentSubject != null)
+                {
+                    oldParentSubject.SubjectType = SubjectType.Child;
+                    await _subjectService.Update(oldParentSubject);
+                }
+            }
             await _subjectService.DeleteById(id);
             return RedirectToAction("Index");
             

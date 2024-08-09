@@ -11,6 +11,7 @@
 <form asp-action="Edit" enctype="multipart/form-data">
     @Html.ValidationSummary(true)
     <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="SubjectType"/>
     <input type="hidden" asp-for="ImageUrl" name="ImageFile" accept="image/*"/>
     <div class="form-group">
         <label asp-for="Name"></label>
