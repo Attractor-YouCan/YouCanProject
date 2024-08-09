@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using YouCan.Entities;
 using YouCan.Repository;
 using YouCan.Service.Service;
+using YouCan.Services.Email;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
@@ -142,7 +142,6 @@ public class AccountController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
-                await _signInManager.SignInAsync(user, false);
 
                 var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
@@ -267,19 +266,40 @@ public class AccountController : Controller
             ModelState.AddModelError("", "Пользователь не найден!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-        
+
         var isCodeValid =  _twoFactorService.VerifyCode(user.Id, model.Code);
         if (!isCodeValid)
         {
             ModelState.AddModelError("", "Неправильный код!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-        
+    
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
+        
 
         return Json(new { success = true, userId = user.Id  });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
+    {
+        if (string.IsNullOrEmpty(model.Email))
+        {
+            return Json(new { success = false, errors = new[] { "Email is required." } });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return Json(new { success = false, errors = new[] { "User not found." } });
+        }
+        var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
+        EmailSender emailSender = new EmailSender();
+         emailSender.SendEmail(user.Email, subject, message);
+
+        return Json(new { success = true });
     }
     
 

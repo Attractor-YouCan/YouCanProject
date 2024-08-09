@@ -15,8 +15,16 @@ builder.Services.AddControllersWithViews();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection, x => x.MigrationsAssembly("YouCan.Repository")))
-    .AddIdentity<User, IdentityRole<int>>()
-    .AddEntityFrameworkStores<YouCanContext>();
+    .AddIdentity<User, IdentityRole<int>>(options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireDigit = true;
+    })
+    .AddEntityFrameworkStores<YouCanContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddHostedService<TariffCheckService>();
 
