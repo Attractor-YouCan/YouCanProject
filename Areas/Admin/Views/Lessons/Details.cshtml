@@ -69,7 +69,7 @@ ViewData["Title"] = "Lesson Details";
                 <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Delete</a>
                 <a asp-action="Index" class="btn btn-secondary">Back to List</a>
                 <a asp-action="Modules" asp-route-id="@Model?.Id" class="btn btn-info">View Modules</a>
-                <a asp-action="Tests" asp-route-id="@Model?.Id" class="btn btn-primary">View Tests</a>
+                <a asp-controller="Tests" asp-action="Index" asp-route-id="@Model?.Id" class="btn btn-primary">View Tests</a>
             </div>
         </div>
     </div>

@@ -16,9 +16,9 @@ public class TestsController : Controller
     }
 
     // GET: Tests
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int id)
     {
-        var tests = _context.Tests.Include(t => t.Lesson);
+        var tests = _context.Tests.Include(t => t.Lesson).Where(t => t.LessonId == id);
         return View(await tests.ToListAsync());
     }
 
@@ -47,7 +47,7 @@ public class TestsController : Controller
     public IActionResult Create()
     {
         ViewData["LessonId"] = new SelectList(_context.Lessons, "Id", "Title");
-        return View();
+        return View(new Test(){SubjectId = null});
     }
 
     // POST: Tests/Create
