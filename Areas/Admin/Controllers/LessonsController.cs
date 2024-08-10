@@ -3,23 +3,47 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 using YouCan.Repository;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
 public class LessonsController : Controller
 {
     private readonly YouCanContext _context;
+    private ICRUDService<Subject> _subjectService;
 
-    public LessonsController(YouCanContext context)
+    public LessonsController(YouCanContext context, ICRUDService<Subject> subjectService)
     {
         _context = context;
+        _subjectService = subjectService;
     }
 
     // GET: Lessons
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int subSubjectId)
     {
-        var lesson = _context.Lessons.Include(l => l.Subject);
-        return View(await lesson.ToListAsync());
+        if (subSubjectId != null)
+        {
+            
+            var lesson = _context.Lessons.Include(l => l.Subject)
+                .Where(l => l.SubjectId == subSubjectId);
+            return View(await lesson.ToListAsync());
+        }
+
+        return NotFound();
+    }
+    
+    public async Task<IActionResult> IndexOfSubjects(int? subSubjectId)
+    {
+        List<Subject> subjects = new List<Subject>();
+        if (subSubjectId == null)
+        {
+            subjects = _subjectService.GetAll().Where(s => s.ParentId == null).ToList();
+        }
+        else
+        {
+            subjects = _subjectService.GetAll().Where(s => s.ParentId == subSubjectId).ToList();
+        }
+        return View(subjects);
     }
 
     // GET: Lessons/Details/5
