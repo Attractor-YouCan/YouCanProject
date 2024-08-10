@@ -1,58 +1,4 @@
-@* @using YouCan.Mvc; *@
-@* @model User *@
-@* *@
-@* @{ *@
-@*     ViewBag.Title = "title"; *@
-@*     Layout = "_NavBar"; *@
-@* } *@
-@* *@
-@* <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" /> *@
-@* *@
-@* *@
-@* <div class="container ps-5"> *@
-@* *@
-@*     <h1 class="d-md-none text-center profile-title">Профиль</h1> *@
-@*     <hr class="d-md-none"> *@
-@*     <div class="row row-cols-1 row-cols-lg-2"> *@
-@*         <div class="col"> *@
-@*             <div class="mt-md-5 mx-lg-0"> *@
-@*                 <div class="d-flex flex-row justify-content-between mx-2 mx-lg-0 mb-5"> *@
-@*                     <div class=""> *@
-@*                         <p class="profile-text-primary">@Model.FullName</p> *@
-@*                         <p class="profile-text-secondary">@Model.PhoneNumber</p> *@
-@*                         <div class="d-flex flex-row align-items-center"> *@
-@*                             <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img> *@
-@*                             <p class="profile-text-secondary ms-1">Регистрация -</p> *@
-@*                         </div> *@
-@*                     </div> *@
-@*                     <div class=""> *@
-@*                         <img class="profile-img" src="@Url.Content($"~{Model.AvatarUrl}")" alt="avatar"> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <a asp-action="Edit" class="btn edit-profile-button d-inline-block p-0 d-flex flex-column justify-content-center"> *@
-@*                 <div class="edit-profile-button-body d-flex flex-row align-items-center justify-content-between"> *@
-@*                     <img class="pencil-img" src="@Url.Content("/profileIcons/pencil.png")" alt="pencil"> *@
-@*                     <p class="m-0 font-weight-bold">Редактировать</p> *@
-@*                     <img class="arrow-img" src="@Url.Content("/profileIcons/arrow.png")"> *@
-@*                 </div> *@
-@*             </a> *@
-@*             <hr> *@
-@*         </div> *@
-@*         <div class="row"> *@
-@*             @if (Model.UserLessonScore != null) *@
-@*             { *@
-@*                 <span>Your score is  *@
-@*                     <span> *@
-@*                         @Model.UserLessonScore *@
-@*                     </span> *@
-@*                 </span> *@
-@*             } *@
-@*             *@
-@*         </div> *@
-@*     </div> *@
-@* *@
-@* </div> *@
+
 
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model YouCan.ViewModels.UserProfileViewModel
@@ -64,7 +10,7 @@
 
 <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
 
-<div class="container ps-5 pb-6rem">
+<div class="container ps-5  pb-6rem">
     <h1 class="d-md-none text-center profile-title">Профиль</h1>
     <hr class="d-md-none">
     <div class="row row-cols-1 row-cols-lg-2">
@@ -75,7 +21,7 @@
                         <p class="profile-text-primary">@Model.User.FullName</p>
                         <p class="profile-text-secondary">@Model.User.PhoneNumber</p>
                         <div class="d-flex flex-row align-items-center">
-                            <img class="clock-img d-block" src="@Url.Content("~/profileIcons/oclock.png")">
+                            <img class="clock-img d-block" src="@Url.Content("~/profileIcons/oclock.png")"></img>
                             <p class="profile-text-secondary ms-1">Регистрация -</p>
                         </div>
                     </div>
@@ -115,6 +61,10 @@
                         </li>
                     }
                 </ul>
+            </div>
+            <div class="col">
+                <h3>Your Score</h3>
+                <p>@ViewBag.UserScore</p>
             </div>
         </div>
     </div>

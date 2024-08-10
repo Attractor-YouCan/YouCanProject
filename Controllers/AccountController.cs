@@ -32,30 +32,6 @@ public class AccountController : Controller
     }
     
     
-    // [Authorize]
-    // public async Task<IActionResult> Profile(int? userId)
-    // {
-    //     User user = new User();
-    //     if (!userId.HasValue)
-    //         user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
-    //     else
-    //         user = await _userService.GetById((int)userId);
-    //     if (user != null)
-    //     {
-    //         var currentUser = await _userManager.GetUserAsync(User);
-    //         var adminUser =await _userManager.IsInRoleAsync(currentUser, "admin");
-    //         var isOwner = currentUser.Id == user.Id;
-    //         var userLevel = _userLevel.GetAll().Where(l => l.UserId == currentUser.Id);
-    //         
-    //         ViewBag.EditAccess = adminUser || isOwner;
-    //         ViewBag.DeleteAccess = adminUser;
-    //         ViewBag.IsAdmin = adminUser && isOwner;
-    //         ViewBag.RoleIdent = await _userManager.IsInRoleAsync(user, "user");
-    //         return View(user);
-    //     }
-    //     return NotFound();
-    // }
-    //
     [Authorize]
     public async Task<IActionResult> Profile(int? userId)
     {
@@ -71,14 +47,12 @@ public class AccountController : Controller
             var adminUser = await _userManager.IsInRoleAsync(currentUser, "admin");
             var isOwner = currentUser.Id == user.Id;
 
-            // Retrieve user levels and group by subject, selecting the highest level for each subject
             var userLevels = _userLevel.GetAll()
                 .Where(l => l.UserId == currentUser.Id)
                 .GroupBy(l => l.SubjectId)
                 .Select(g => g.OrderByDescending(l => l.Level).FirstOrDefault())
                 .ToList();
 
-            // Retrieve user lessons
             var userLessons = _userLessonService.GetAll()
                 .Where(l => l.UserId == currentUser.Id && l.IsPassed)
                 .Select(ul => new UserLessonViewModel
@@ -89,13 +63,15 @@ public class AccountController : Controller
                     RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
                 }).ToList();
 
-            // ViewBag for access control
+           
+            int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
             ViewBag.IsAdmin = adminUser && isOwner;
             ViewBag.RoleIdent = await _userManager.IsInRoleAsync(user, "user");
+            ViewBag.UserScore = userScore;
 
-            // Pass the user data along with levels and lessons to the view
             var model = new UserProfileViewModel
             {
                 User = user,
@@ -107,6 +83,7 @@ public class AccountController : Controller
         }
         return NotFound();
     }
+
 
 
 
