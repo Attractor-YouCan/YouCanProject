@@ -10,8 +10,6 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Statistic> Statistics { get; set; }
-    public DbSet<Topic> Topics { get; set; }
-    public DbSet<Subtopic> Subtopics { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<Test> Tests { get; set; }
     public DbSet<Question> Questions { get; set; }

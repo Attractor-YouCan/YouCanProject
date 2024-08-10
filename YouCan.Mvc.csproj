@@ -52,6 +52,11 @@
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Areas\Admin\Views\Answers\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Create.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Details.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Areas\Admin\Views\Subtopics\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

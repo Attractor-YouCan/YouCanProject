@@ -11,9 +11,6 @@ public class Lesson : EntityBase
     
     public int RequiredLevel { get; set; }
     public int? LessonLevel { get; set; }
-
-    public int? SubtopicId { get; set; }
-    public Subtopic? Subtopic { get; set; }
     
     //Привязка внешнего ключа к Subject
     public int? SubjectId { get; set; }

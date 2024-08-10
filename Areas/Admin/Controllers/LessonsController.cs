@@ -18,7 +18,7 @@ public class LessonsController : Controller
     // GET: Lessons
     public async Task<IActionResult> Index()
     {
-        var lesson = _context.Lessons.Include(l => l.Subtopic);
+        var lesson = _context.Lessons.Include(l => l.Subject);
         return View(await lesson.ToListAsync());
     }
 
@@ -31,7 +31,7 @@ public class LessonsController : Controller
         }
 
         var lesson = await _context.Lessons
-            .Include(l => l.Subtopic)
+            .Include(l => l.Subject)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (lesson == null)
         {
@@ -44,7 +44,7 @@ public class LessonsController : Controller
     // GET: Lessons/Create
     public IActionResult Create()
     {
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name");
+        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name");
         return View();
     }
 
@@ -61,7 +61,7 @@ public class LessonsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -78,7 +78,7 @@ public class LessonsController : Controller
         {
             return NotFound();
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -114,7 +114,7 @@ public class LessonsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubtopicId"] = new SelectList(_context.Subtopics, "Id", "Name", lesson.SubtopicId);
+        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -127,7 +127,7 @@ public class LessonsController : Controller
         }
 
         var lesson = await _context.Lessons
-            .Include(l => l.Subtopic)
+            .Include(l => l.Subject)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (lesson == null)
         {

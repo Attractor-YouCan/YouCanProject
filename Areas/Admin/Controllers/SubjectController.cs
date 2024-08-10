@@ -179,7 +179,7 @@ public class SubjectController : Controller
         if (id != null)
         {
             var subject = await _subjectService.GetById(id);
-            var subjects = _subjectService.GetAll().Where(s => s.ParentId == s.ParentId).ToList();
+            var subjects = _subjectService.GetAll().Where(s => s.ParentId == subject.ParentId).ToList();
             if (subjects.Count == 1)
             {
                 int oldSubjectParentId = subject.ParentId ?? default(int);
