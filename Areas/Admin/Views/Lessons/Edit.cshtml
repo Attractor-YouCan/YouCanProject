@@ -1,49 +1,69 @@
 ﻿@model YouCan.Entities.Lesson
 
 @{
-    ViewData["Title"] = "Edit";
+ViewData["Title"] = "Edit Lesson";
 }
 
-<h1>Edit</h1>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-4 text-center">@ViewData["Title"]</h1>
 
-<h4>Lesson</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lecture" class="control-label"></label>
-                <input asp-for="Lecture" class="form-control" />
-                <span asp-validation-for="Lecture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RequiredLevel" class="control-label"></label>
-                <input asp-for="RequiredLevel" class="form-control" />
-                <span asp-validation-for="RequiredLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
-                <span asp-validation-for="SubjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubTitle" class="control-label">Subtitle</label>
+                    <input asp-for="SubTitle" class="form-control" />
+                    <span asp-validation-for="SubTitle" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="VideoUrl" class="control-label">Video URL</label>
+                    <input asp-for="VideoUrl" class="form-control" />
+                    <span asp-validation-for="VideoUrl" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Lecture" class="control-label">Lecture</label>
+                    <textarea asp-for="Lecture" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Lecture" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="RequiredLevel" class="control-label">Required Level</label>
+                    <input asp-for="RequiredLevel" class="form-control" />
+                    <span asp-validation-for="RequiredLevel" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubjectId" class="control-label">Subject</label>
+                    <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
+                    <span asp-validation-for="SubjectId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <input type="submit" value="Save" class="btn btn-success btn-lg" />
+                    <a asp-action="Index" class="btn btn-secondary btn-lg ml-3">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
