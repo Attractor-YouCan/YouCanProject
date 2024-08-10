@@ -9,13 +9,13 @@ namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
 public class LessonsController : Controller
 {
-    private readonly YouCanContext _context;
     private ICRUDService<Subject> _subjectService;
+    private ICRUDService<Lesson> _lessonService;
 
-    public LessonsController(YouCanContext context, ICRUDService<Subject> subjectService)
+    public LessonsController(ICRUDService<Subject> subjectService, ICRUDService<Lesson> lessonService)
     {
-        _context = context;
         _subjectService = subjectService;
+        _lessonService = lessonService;
     }
 
     // GET: Lessons
@@ -23,10 +23,9 @@ public class LessonsController : Controller
     {
         if (subSubjectId != null)
         {
-            var lesson = _context.Lessons.Include(l => l.Subject)
-                .Where(l => l.SubjectId == subSubjectId);
+            var lessons = _lessonService.GetAll().Where(l => l.SubjectId == subSubjectId).ToList();
             ViewBag.SubjectId = subSubjectId;
-            return View(await lesson.ToListAsync());
+            return View(lessons);
         }
 
         return NotFound();
@@ -53,10 +52,8 @@ public class LessonsController : Controller
         {
             return NotFound();
         }
-
-        var lesson = await _context.Lessons
-            .Include(l => l.Subject)
-            .FirstOrDefaultAsync(m => m.Id == id);
+        
+        var lesson = await _lessonService.GetById(id ?? default(int));
         if (lesson == null)
         {
             return NotFound();
@@ -81,11 +78,10 @@ public class LessonsController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(lesson);
-            await _context.SaveChangesAsync();
+            await _lessonService.Insert(lesson);
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
+        ViewData["SubjectId"] = new SelectList(_subjectService.GetAll().Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -97,12 +93,12 @@ public class LessonsController : Controller
             return NotFound();
         }
 
-        var lesson = await _context.Lessons.FindAsync(id);
+        var lesson = await _lessonService.GetById(id ?? default(int));
         if (lesson == null)
         {
             return NotFound();
         }
-        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
+        ViewData["SubjectId"] = new SelectList(_subjectService.GetAll().Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -122,8 +118,7 @@ public class LessonsController : Controller
         {
             try
             {
-                _context.Update(lesson);
-                await _context.SaveChangesAsync();
+                await _lessonService.Update(lesson);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -138,7 +133,7 @@ public class LessonsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
+        ViewData["SubjectId"] = new SelectList(_subjectService.GetAll().Where(s => s.SubjectType == SubjectType.Child), "Id", "Name", lesson.SubjectId);
         return View(lesson);
     }
 
@@ -150,9 +145,8 @@ public class LessonsController : Controller
             return NotFound();
         }
 
-        var lesson = await _context.Lessons
-            .Include(l => l.Subject)
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var lesson = await _lessonService.GetById(id ?? default(int));
+        
         if (lesson == null)
         {
             return NotFound();
@@ -166,11 +160,10 @@ public class LessonsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var lesson = await _context.Lessons.FindAsync(id);
-        if (lesson != null)
+        var lesson2 = await _lessonService.GetById(id);
+        if (lesson2 != null)
         {
-            _context.Lessons.Remove(lesson);
-            await _context.SaveChangesAsync();
+            await _lessonService.DeleteById(id);
         }
 
         return RedirectToAction(nameof(Index));
@@ -178,6 +171,6 @@ public class LessonsController : Controller
 
     private bool LessonExists(int id)
     {
-        return _context.Lessons.Any(e => e.Id == id);
+        return _lessonService.GetAll().Any(e => e.Id == id);
     }
 }
