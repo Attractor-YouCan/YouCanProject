@@ -48,7 +48,7 @@
         <button class="floating-button">Где я?</button>
     </div>
 </div>
-@section Scripts{
+@section Scripts {
     <script>
         const leagueData = {
             bronze: [
@@ -132,23 +132,23 @@
                 }
 
                 row.innerHTML = `
-                    <div class="col-1 position">
-                        ${medalImg
+                            <div class="col-1 position">
+                                ${medalImg
                         ? `<img src="${medalImg}" alt="Medal" width="30" height="40" />`
                         : index + 1}
-                    </div>
-                    <div class="col-7 user-info">
-                        <img src="${item.img}" alt="User" width="40" height="40" />
-                        <span>${item.name}</span>
-                    </div>
-                    <div class="col-2 score">
-                        ${item.score} очков
-                        <div class="change">
-                            ${changeImg ? `<img src="${changeImg}" alt="Change" />` : ''}
-                            <span class="change-value">${changeValue}</span>
-                        </div>
-                    </div>
-                `;
+                            </div>
+                            <div class="col-7 user-info">
+                                <img src="${item.img}" alt="User" width="40" height="40" />
+                                <span>${item.name}</span>
+                            </div>
+                            <div class="col-2 score">
+                                ${item.score} очков
+                                <div class="change">
+                                    ${changeImg ? `<img class="changeImg" src="${changeImg}" alt="Change" />` : ''}
+                                    <span class="change-value">${changeValue}</span>
+                                </div>
+                            </div>
+                        `;
                 leaderboard.appendChild(row);
             });
         }
