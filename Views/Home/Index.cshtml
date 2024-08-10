@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/landing.css">
-    <title>YouCan.Mvc ORT</title>
+    <title>YouCan</title>
 </head>
 <body>
 <section class="section1">
@@ -69,12 +69,20 @@
 
         <div class="section1_content">
             <div class="section1_content_actions">
-                <h1>Набери высокие <br>
-                    баллы на ОРТ <span>вместе <br>
-                        с YouCan.Mvc</span>
-                </h1>
+              <h1>Набери высокие <br>
+                баллы на ОРТ <span>вместе <br>
+                  с YouCan</span>
+              </h1>
+              @if (User.Identity.IsAuthenticated)
+              {
+                <a asp-action="Profile" asp-controller="Account" class="login"> Перейти к профилю</a>
+              }
+              else
+              {
                 <a asp-controller="Account" asp-action="Register" class="register">Регистрация</a>
                 <a asp-controller="Account" asp-action="Login" class="login">У меня уже есть аккаунт</a>
+              }
+                
             </div>
 
             <div class="section1_content_img">
