@@ -1,47 +1,90 @@
 ﻿@model YouCan.Entities.Lesson
 
 @{
-    ViewData["Title"] = "Create";
+ViewData["Title"] = "Create";
 }
+<nav class="navbar navbar-light border-bottom">
+    <div class="container-fluid">
+        <span class="navbar-text mx-auto">Административная часть</span>
+    </div>
+</nav>
+<a class="navbar-brand" href="javascript:history.back()" style="margin-left: 30px; text-decoration: none; color: inherit;">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="30"
+         height="30"
+         fill="currentColor"
+         class="bi bi-arrow-left"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+    </svg>
+</a>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="mb-4 text-center">@ViewData["Title"] Lesson</h1>
 
-<h1>Create</h1>
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" value="@ViewBag.SubjectId"/>
 
-<h4>Lesson</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lecture" class="control-label"></label>
-                <input asp-for="Lecture" class="form-control" />
-                <span asp-validation-for="Lecture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RequiredLevel" class="control-label"></label>
-                <input asp-for="RequiredLevel" class="form-control" />
-                <span asp-validation-for="RequiredLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class ="form-control" asp-items="ViewBag.SubjectId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter the title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubTitle" class="control-label"></label>
+                    <input asp-for="SubTitle" class="form-control" placeholder="Enter the subtitle" />
+                    <span asp-validation-for="SubTitle" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="VideoUrl" class="control-label"></label>
+                    <input asp-for="VideoUrl" class="form-control" placeholder="Enter the video URL" />
+                    <span asp-validation-for="VideoUrl" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter the description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Lecture" class="control-label"></label>
+                    <textarea asp-for="Lecture" class="form-control" rows="4" placeholder="Enter the lecture" ></textarea>
+                    <span asp-validation-for="Lecture" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="RequiredLevel" class="control-label"></label>
+                    <input asp-for="RequiredLevel" type="number" class="form-control" placeholder="Enter the required level" />
+                    <span asp-validation-for="RequiredLevel" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LessonLevel" class="control-label"></label>
+                    <input asp-for="LessonLevel" type="number" class="form-control" placeholder="Enter the lesson level" />
+                    <span asp-validation-for="LessonLevel" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="SubjectName">Предмет:</label>
+                    <input disabled type="text" value="@Model.Subject.Name" class="form-control"/>
+                    <input asp-for="SubjectId" type="hidden" value="@Model.Subject.Id"/>
+                </div>
+
+                <div class="form-group text-center mt-3">
+                    <input type="submit" value="Create" class="btn btn-success btn-lg px-5" />
+                </div>
+            </form>
+            
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

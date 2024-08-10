@@ -10,7 +10,7 @@
             <h1 class="h3">@ViewData["Title"]</h1>
         </div>
         <div class="col-12 col-md-4 text-md-right text-center">
-            <a asp-action="Create" class="btn btn-success">Create New Lesson</a>
+            <a asp-action="Create" asp-route-subjectId="@ViewBag.SubjectId" class="btn btn-success">Create New Lesson</a>
         </div>
     </div>
 

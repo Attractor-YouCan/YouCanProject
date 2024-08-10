@@ -23,9 +23,9 @@ public class LessonsController : Controller
     {
         if (subSubjectId != null)
         {
-            
             var lesson = _context.Lessons.Include(l => l.Subject)
                 .Where(l => l.SubjectId == subSubjectId);
+            ViewBag.SubjectId = subSubjectId;
             return View(await lesson.ToListAsync());
         }
 
@@ -66,10 +66,10 @@ public class LessonsController : Controller
     }
 
     // GET: Lessons/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create(int subjectId)
     {
-        ViewData["SubjectId"] = new SelectList(_context.Subjects.Where(s => s.SubjectType == SubjectType.Child), "Id", "Name");
-        return View();
+        var subject = await _subjectService.GetById(subjectId);
+        return View(new Lesson(){Subject = subject});
     }
 
     // POST: Lessons/Create
@@ -170,9 +170,9 @@ public class LessonsController : Controller
         if (lesson != null)
         {
             _context.Lessons.Remove(lesson);
+            await _context.SaveChangesAsync();
         }
 
-        await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
