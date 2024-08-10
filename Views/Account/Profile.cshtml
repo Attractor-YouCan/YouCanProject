@@ -10,7 +10,6 @@
 
 
 <div class="container">
-
     <h1 class="d-md-none text-center profile-title">Профиль</h1>
     <hr class="d-md-none">
     <div class="row row-cols-1 row-cols-lg-2">
@@ -41,4 +40,97 @@
         </div>
     </div>
 
+    @* Статистика *@
+    <h2 class="mb-3 mt-4">Статистика</h2>
+    <div class="row row-cols-2 row-cols-md-2 g-2">
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-shock-mode">
+                <img src="@Url.Content("/profileIcons/fire.png")" alt="fire-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">7</p>
+                    <p class="stat-card-subtitle mb-0">Ударный режим</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-experience">
+                <img src="@Url.Content("/profileIcons/coin.png")" alt="experience-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">1024</p>
+                    <p class="stat-card-subtitle mb-0">Очки опыта</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-current-league">
+                <img src="@Url.Content("/profileIcons/league.png")" alt="league-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">Золотая</p>
+                    <p class="stat-card-subtitle mb-0">Текущая лига</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-study-time">
+                <img src="@Url.Content("/profileIcons/league.png")" alt="clock-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">3433</p>
+                    <p class="stat-card-subtitle mb-0">Минуты за учебой</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* график *@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <canvas id="myStyledBarChart" style="width: 400px; margin: 20px auto; position:static"></canvas>
+
+    <script>
+        let data = {
+            labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'],
+            datasets: [{
+                label: 'Bar Chart',
+                data: [12, 19, 4, 8, 5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 2,
+                borderRadius: 10,
+                hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
+                hoverBorderColor: 'rgba(255, 99, 132, 1)'
+            }]
+        };
+
+        let options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        let ctx = document.getElementById('myStyledBarChart').getContext('2d');
+
+
+        let myStyledBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+
+    
 </div>

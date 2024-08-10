@@ -173,3 +173,103 @@ body {
     margin-left: 7px;
     margin-right: 21px;
 }
+/*Статистика*/
+.profile-stat-card {
+    height: 64px;
+    width: 270px;
+    border-radius: 8px;
+}
+    .profile-stat-card img {
+        height: 30px;
+        width: 30px;
+    }
+
+
+.stat-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.stat-card-subtitle {
+    font-size: 14px;
+    color: white;
+    opacity: 0.7;
+}
+
+.color-shock-mode {
+    background-color: #0078FF;
+}
+
+.color-experience {
+    background-color: #9C34C2;
+}
+
+.color-current-league {
+    background-color: #0D3D8D;
+}
+
+.color-study-time {
+    background-color: #4C0068;
+}
+
+/*График*/
+.chart-container {
+    width: 300px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.chart-bar {
+    width: 30px;
+    height: 100px;
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+}
+
+.bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-radius: 5px;
+}
+
+    .bar.bg-gray {
+        background-color: #e0e0e0;
+        height: 100%;
+    }
+
+    .bar.bg-blue {
+        background-color: #1e88e5;
+    }
+
+    .bar.bg-orange {
+        background-color: #fb8c00;
+    }
+
+    .bar.bg-green {
+        background-color: #43a047;
+    }
+
+.days {
+    text-align: center;
+    margin-top: 5px;
+}
+.chart-container {
+    width: 20%; /* Задает ширину контейнера как 100% от родительского элемента */
+    max-width: 600px; /* Максимальная ширина контейнера */
+    margin: 20px auto; /* Центрирование контейнера */
+    padding: 0 15px; /* Внутренний отступ для предотвращения наложения */
+    text-align: center;
+}
+
+.chart {
+    width: 100% !important; /* Ширина графика по размеру контейнера */
+    height: auto; /* Высота графика автоматически */
+    display: block; /* Убирает пробелы вокруг графика */
+    margin: 0 auto; /* Центрирование графика */
+}
