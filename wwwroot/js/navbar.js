@@ -9,7 +9,7 @@
         if (toggle && nav && bodypd) {
             toggle.addEventListener('click', () => {
                 // show navbar
-                nav.classList.toggle('show');
+                nav.classList.toggle('show-navbar');
                 // change icon
                 toggle.classList.toggle('bx-x');
                 // add padding to body

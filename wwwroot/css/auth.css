@@ -1,3 +1,13 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .section1{
     width: 100%;
     min-height: 100vh;
@@ -12,7 +22,7 @@
 .auth-main .authForm{
     display: flex;
     flex-direction: column;
-     margin-top: 200px; 
+    margin-top: 200px;
     gap: 20px;
 }
 .underNavbarSection{
@@ -79,7 +89,7 @@
 
 
 .auth-main form input::placeholder {
-    color: #fff; 
+    color: #fff;
 }
 
 .auth-main form .password-wrapper {
@@ -111,6 +121,9 @@
 }
 
 .loginBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 420px;
     height: 60px;
     padding: 10px;
@@ -146,7 +159,7 @@
 .aboutUsRegister{
     margin-top: 150px;
     margin-bottom: 100px;
-   
+
 }
 .aboutUsRegister_content{
     display: flex;
@@ -172,6 +185,47 @@
     font-weight: 700;
     margin-top: 100px;
     cursor: pointer;
+}
+.resend-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px;
+    border: none;
+    text-decoration: none;
+    background: #c4960b;
+    color: #fff;
+    border-radius: 30px;
+}
+.resend-button:disabled {
+    background: #939393; !important;
+    cursor: not-allowed;
+}
+.resend-button.enabled {
+    background-color: green;
+    cursor: pointer;
+}
+
+.skip-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    width: 380px;
+    height: 50px;
+    padding: 10px;
+    text-decoration: none;
+    background: #c4960b;
+    color: #fff;
+    border-radius: 30px;
+}
+
+#timer{
+    font-weight: 600;
+    
 }
 .next-btn:hover{
     background-color: #50b105;
@@ -212,8 +266,8 @@
 }
 .loader {
     display: none;
-    width: 20px; 
-    height: 20px; 
+    width: 20px;
+    height: 20px;
 }
 .playVideoImg{
     width: 200px;
@@ -221,7 +275,7 @@
 }
 
 @media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
-    .aboutUsRegister h2{ 
+    .aboutUsRegister h2{
         line-height: 30px;
     }
 }}
@@ -242,6 +296,15 @@
     }
     .next-btn {
         margin-top: 0;
+    }
+    .input-container{
+        gap: 5px;
+    }
+    .code-input{
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin: 0;
     }
 }
 
@@ -278,7 +341,10 @@
         height: 130px;
     }
     .next-btn {
-      width: 80%;
+        width: 80%;
+    }
+    .aboutUsRegister h2{
+        font-size: 30px;
     }
 }
 @media (max-width: 490px){
@@ -330,5 +396,5 @@
     .auth-main form .input-group {
         margin-bottom: 10px;
     }
-    
+
 }

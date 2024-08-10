@@ -1,30 +1,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
-using YouCan.Services;
+using YouCan.Entities;
+using YouCan.Service.Service;
 using YouCan.Services.Email;
-using YouCan.ViewModels.Account;
-using RegisterViewModel = YouCan.ViewModels.Account.RegisterViewModel;
 
-namespace YouCan.Controllers;
-
+namespace YouCan.Mvc;
 public class AccountController : Controller
 {
-
-    private YouCanContext _db;
+    private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private readonly TwoFactorService _twoFactorService;
 
 
-    public AccountController(YouCanContext db, UserManager<User> userManager,
+    public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
         TwoFactorService twoFactorService)
     {
-        _db = db;
+        _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
@@ -37,9 +32,9 @@ public class AccountController : Controller
     {
         User user = new User();
         if (!userId.HasValue)
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(_userManager.GetUserId(User)));
+            user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
         else
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user = await _userService.GetById((int)userId);
         if (user != null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -144,7 +139,6 @@ public class AccountController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
-                await _signInManager.SignInAsync(user, false);
 
                 var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();
@@ -273,10 +267,31 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
+        
 
-        return Json(new { success = true, userId = user.Id });
+        return Json(new { success = true, userId = user.Id  });
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
+    {
+        if (string.IsNullOrEmpty(model.Email))
+        {
+            return Json(new { success = false, errors = new[] { "Email is required." } });
+        }
 
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return Json(new { success = false, errors = new[] { "User not found." } });
+        }
+        var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
+        EmailSender emailSender = new EmailSender();
+         emailSender.SendEmail(user.Email, subject, message);
+
+        return Json(new { success = true });
+    }
+    
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -293,7 +308,7 @@ public class AccountController : Controller
             if (user == null)
                 user = await _userManager.FindByNameAsync(model.LoginValue);
             if (user == null)
-                user = await _db.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(model.LoginValue));
+                user = _userService.GetAll().FirstOrDefault(u => u.PhoneNumber.Equals(model.LoginValue));
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(

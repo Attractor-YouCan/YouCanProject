@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using YouCan.Models;
+using YouCan.Entities;
+using YouCan.Service.Service;
 
 namespace YouCan.Controllers;
 
 public class ValidationController : Controller
 {
-    private YouCanContext _db;
+    private IUserCRUD _userService;
     private UserManager<User> _userManager;
 
-    public ValidationController(YouCanContext context, UserManager<User> userManager)
+    public ValidationController(IUserCRUD userService, UserManager<User> userManager)
     {
-        _db = context;
+        _userService = userService;
         _userManager = userManager;
     }
     
     [AcceptVerbs("GET", "POST")]
     public bool CheckEmail(string Email)
     {
-        return !_db.Users.Any(u => u.Email.ToLower().Trim() == Email.ToLower().Trim());
+        return !_userService.GetAll().Any(u => u.Email.ToLower().Trim() == Email.ToLower().Trim());
     }
 
     [AcceptVerbs("GET", "POST")]
@@ -46,26 +47,26 @@ public class ValidationController : Controller
     [AcceptVerbs("GET", "POST")]
     public bool CheckPhoneNumber(string PhoneNumber)
     {
-        return !_db.Users.Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
+        return !_userService.GetAll().Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
     }
     
     [AcceptVerbs("GET", "POST")]
     public bool CheckUsername(string UserName)
     {
-        return !_db.Users.Any(u => u.UserName.ToLower().Trim() == UserName.ToLower().Trim());
+        return !_userService.GetAll().Any(u => u.UserName.ToLower().Trim() == UserName.ToLower().Trim());
     }
     [HttpGet]
     public async Task<IActionResult> EditCheckUsernameEmail(string value, int? id)
     {
         User? adminUsr = await _userManager.GetUserAsync(User);
-        User? user = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+        User? user = await _userService.GetById((int)id);
         bool result = true;
         bool userName = value.ToLower().Trim() == adminUsr.UserName.ToLower().Trim() 
                         || value.ToLower().Trim() == user.UserName.ToLower().Trim();
         bool email = value.ToLower().Trim() == adminUsr.Email.ToLower().Trim() 
                      || value.ToLower().Trim() == user.Email.ToLower().Trim();
-        if (_db.Users.Any(u => u.UserName.ToLower().Trim() == value.ToLower().Trim()) 
-            || _db.Users.Any(u => u.Email.ToLower().Trim() == value.ToLower().Trim()))
+        if (_userService.GetAll().Any(u => u.UserName.ToLower().Trim() == value.ToLower().Trim()) 
+            || _userService.GetAll().Any(u => u.Email.ToLower().Trim() == value.ToLower().Trim()))
         {
             if (userName || email )
                 result = true;
