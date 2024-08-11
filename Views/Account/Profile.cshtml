@@ -84,53 +84,171 @@
 
     @* график *@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <h2 class="mb-3 mt-4">Опыт за неделю</h2>
     
-    <canvas id="myStyledBarChart" style="width: 400px; margin: 20px auto; position:static"></canvas>
+    <canvas class="chart" id="myStyledBarChart" width="700" height="200"></canvas>
+
+    @* календарь *@
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button class="prev-month">&lt;</button>
+            <span class="month-year"></span>
+            <button class="next-month">&gt;</button>
+        </div>
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                    <th>Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
 
     <script>
         let data = {
-            labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'],
+            labels: ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'],
             datasets: [{
-                label: 'Bar Chart',
-                data: [12, 19, 4, 8, 5],
+                label: 'Опыт за неделю',
+                data: [75, 100, 50, 25, 75, 50, 100],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.9)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(153, 102, 255, 0.8)'
+                    'rgba(255, 165, 0, 0.7)', // оранжевый
+                    'rgba(50, 205, 50, 0.7)',  // зеленый
+                    'rgba(135, 206, 235, 0.7)', // голубой
+                    'rgba(255, 69, 0, 0.7)',    // красный
+                    'rgba(135, 206, 250, 0.7)', // светло-голубой
+                    'rgba(135, 206, 250, 0.7)', // светло-голубой
+                    'rgba(50, 205, 50, 0.7)'   // зеленый
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    'rgba(255, 165, 0, 1)',
+                    'rgba(50, 205, 50, 1)',
+                    'rgba(135, 206, 235, 1)',
+                    'rgba(255, 69, 0, 1)',
+                    'rgba(135, 206, 250, 1)',
+                    'rgba(135, 206, 250, 1)',
+                    'rgba(50, 205, 50, 1)'
                 ],
                 borderWidth: 2,
                 borderRadius: 10,
+                barPercentage: 0.5,
+                categoryPercentage: 0.5,
                 hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
                 hoverBorderColor: 'rgba(255, 99, 132, 1)'
             }]
         };
 
         let options = {
+            responsive: false,
+            maintainAspectRatio: false,
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 25
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         };
 
         let ctx = document.getElementById('myStyledBarChart').getContext('2d');
 
-
         let myStyledBarChart = new Chart(ctx, {
             type: 'bar',
             data: data,
             options: options
         });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarContainer = document.querySelector('.calendar');
+            const monthYearElement = document.querySelector('.month-year');
+            const prevMonthButton = document.querySelector('.prev-month');
+            const nextMonthButton = document.querySelector('.next-month');
+
+            let currentDate = new Date();
+
+            function renderCalendar(date) {
+                const month = date.getMonth();
+                const year = date.getFullYear();
+
+                monthYearElement.textContent = date.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                const daysInPreviousMonth = new Date(year, month, 0).getDate();
+
+                calendarContainer.querySelector('tbody').innerHTML = '';
+                let row = document.createElement('tr');
+
+                // Fill in days from previous month if the month doesn't start on Monday
+                for (let i = 1; i < (firstDayOfMonth === 0 ? 7 : firstDayOfMonth); i++) {
+                    let cell = document.createElement('td');
+                    cell.classList.add('inactive');
+                    cell.textContent = daysInPreviousMonth - firstDayOfMonth + i + 1;
+                    row.appendChild(cell);
+                }
+
+                // Fill in the days of the current month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    if (row.children.length === 7) {
+                        calendarContainer.querySelector('tbody').appendChild(row);
+                        row = document.createElement('tr');
+                    }
+                    let cell = document.createElement('td');
+                    cell.textContent = day;
+
+                    // Highlight current day
+                    if (day === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
+                        cell.classList.add('active');
+                    }
+
+                    row.appendChild(cell);
+                }
+
+                // Fill in days from the next month if the last week is not full
+                while (row.children.length < 7) {
+                    let cell = document.createElement('td');
+                    cell.classList.add('inactive');
+                    cell.textContent = row.children.length + 1;
+                    row.appendChild(cell);
+                }
+
+                calendarContainer.querySelector('tbody').appendChild(row);
+            }
+
+            prevMonthButton.addEventListener('click', function () {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+
+            nextMonthButton.addEventListener('click', function () {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+
+            renderCalendar(currentDate);
+        });
     </script>
 
-    
 </div>

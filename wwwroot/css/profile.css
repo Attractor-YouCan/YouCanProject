@@ -174,9 +174,10 @@ body {
     margin-right: 21px;
 }
 /*Статистика*/
+
 .profile-stat-card {
     height: 64px;
-    width: 270px;
+    width: 100%;
     border-radius: 8px;
 }
     .profile-stat-card img {
@@ -214,62 +215,71 @@ body {
 }
 
 /*График*/
-.chart-container {
-    width: 300px;
-    margin: 20px auto;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #fff;
-}
-
-.chart-bar {
-    width: 30px;
-    height: 100px;
-    display: inline-block;
-    position: relative;
-    margin-right: 10px;
-}
-
-.bar {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-radius: 5px;
-}
-
-    .bar.bg-gray {
-        background-color: #e0e0e0;
-        height: 100%;
-    }
-
-    .bar.bg-blue {
-        background-color: #1e88e5;
-    }
-
-    .bar.bg-orange {
-        background-color: #fb8c00;
-    }
-
-    .bar.bg-green {
-        background-color: #43a047;
-    }
-
-.days {
-    text-align: center;
-    margin-top: 5px;
-}
-.chart-container {
-    width: 20%; /* Задает ширину контейнера как 100% от родительского элемента */
-    max-width: 600px; /* Максимальная ширина контейнера */
-    margin: 20px auto; /* Центрирование контейнера */
-    padding: 0 15px; /* Внутренний отступ для предотвращения наложения */
-    text-align: center;
-}
-
 .chart {
-    width: 100% !important; /* Ширина графика по размеру контейнера */
-    height: auto; /* Высота графика автоматически */
-    display: block; /* Убирает пробелы вокруг графика */
-    margin: 0 auto; /* Центрирование графика */
+    all: unset;
 }
+
+
+/*календарь*/
+.calendar-container {
+    width: 240px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+    .calendar-header button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+.month-year {
+    font-size: 16px;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .calendar th,
+    .calendar td {
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .calendar th {
+        font-weight: normal;
+        color: #666;
+    }
+
+    .calendar td {
+        border-radius: 50%;
+    }
+
+    .calendar .active {
+        background-color: #26a6d7;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .calendar td:hover {
+        background-color: #e6f7ff;
+    }
+
+    .calendar .active:hover {
+        background-color: #1e90ff;
+    }
