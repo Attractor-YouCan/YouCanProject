@@ -123,32 +123,36 @@
                 // Пример добавления стрелок изменения
                 let changeImg = "";
                 let changeValue = "";
+                let changeColor = ""; // Переменная для хранения цвета
+
                 if (item.score > 16000) { // Условие для изменения стрелки
                     changeImg = "/ratingimages/arrow-up.png"; // Зеленая стрелка вверх
                     changeValue = (item.score - 16000); // Расчет изменения
+                    changeColor = "text-success"; // Зеленый цвет
                 } else if (item.score < 15000) {
                     changeImg = "/ratingimages/arrow-down.png"; // Красная стрелка вниз
                     changeValue = (15000 - item.score); // Расчет изменения
+                    changeColor = "text-danger"; // Красный цвет
                 }
 
                 row.innerHTML = `
-                            <div class="col-1 position">
-                                ${medalImg
+            <div class="col-1 position">
+                ${medalImg
                         ? `<img src="${medalImg}" alt="Medal" width="30" height="40" />`
                         : index + 1}
-                            </div>
-                            <div class="col-7 user-info">
-                                <img src="${item.img}" alt="User" width="40" height="40" />
-                                <span>${item.name}</span>
-                            </div>
-                            <div class="col-2 score">
-                                ${item.score} очков
-                                <div class="change">
-                                    ${changeImg ? `<img class="changeImg" src="${changeImg}" alt="Change" />` : ''}
-                                    <span class="change-value">${changeValue}</span>
-                                </div>
-                            </div>
-                        `;
+            </div>
+            <div class="col-7 user-info">
+                <img src="${item.img}" alt="User" width="40" height="40" />
+                <span>${item.name}</span>
+            </div>
+            <div class="col-2 score">
+                ${item.score} очков
+                <div class="change">
+                    ${changeImg ? `<img class="changeImg" src="${changeImg}" alt="Change" />` : ''}
+                    <span class="change-value ${changeColor}">${changeValue}</span>
+                </div>
+            </div>
+        `;
                 leaderboard.appendChild(row);
             });
         }
