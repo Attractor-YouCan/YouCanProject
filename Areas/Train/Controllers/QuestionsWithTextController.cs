@@ -84,7 +84,7 @@ public class QuestionsWithTextController : Controller
                             Test = dbTest,
                             Content = question.Text,
                             Instruction = string.Empty,
-                            Answers = [],
+                            Answers = new(),
                             AnswersIsImage = false,
                         };
                         foreach(var answer in question.Answers)

@@ -71,7 +71,7 @@ public class QuestionsController : Controller
                         SubjectId = question.SubjectId,
                         Content = question.Text,
                         Instruction = question.Instruction,
-                        Answers = [],
+                        Answers = new(),
                         AnswersIsImage = question.AnswerIsImage,
                         UserId = int.Parse(_userManager.GetUserId(User)),
                     };
