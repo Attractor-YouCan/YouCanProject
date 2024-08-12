@@ -21,6 +21,7 @@ public class Test : EntityBase
     public List<Question> Questions { get; set; }
     public int? UserId { get; set; }
     public User? User { get; set; }
+    public bool IsPublished { get; set; }
     public Test()
     {
         Questions = new List<Question>();
