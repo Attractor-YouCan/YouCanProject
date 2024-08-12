@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Тренировочный тест создан";
+    Layout = "_Navbar";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5 m-0">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <img class="img-fluid w-50 d-block mb-3" src="@Url.Content("~/trainImages/coin-bal.png")" />
+                <h1>Хороший вопрос!</h1>
+                <p>Ваш тест отправлен на проверку.</p>
+                <p>После одобрения он будет опубликован.</p>
+                <a asp-action="index" asp-controller="test">Вернуться в меню</a>
+            </div>
+        </div>
+    </div>
+</div>

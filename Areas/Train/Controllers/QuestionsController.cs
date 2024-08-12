@@ -119,4 +119,19 @@ public class QuestionsController : Controller
         }
         return RedirectToAction("Index", "Test");
     }
+    public async Task<IActionResult> Created(int questionId)
+    {
+        if (ModelState.IsValid)
+        {
+            var question = await _questionCrudService.GetById(questionId);
+            if (question is not null)
+            {
+                if (!question.IsPublished && question.UserId.HasValue && question.UserId == int.Parse(_userManager.GetUserId(User)!))
+                {
+                    return View();
+                }
+            }
+        }
+        return RedirectToAction("Index", "Test");
+    }
 }

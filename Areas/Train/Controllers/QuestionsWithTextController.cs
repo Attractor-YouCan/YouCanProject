@@ -119,4 +119,19 @@ public class QuestionsWithTextController : Controller
         }
         return RedirectToAction("Index", "Test");
     }
+    public async Task<IActionResult> Created(int testId)
+    {
+        if (ModelState.IsValid)
+        {
+            var test = await _testCrudService.GetById(testId);
+            if (test is not null)
+            {
+                if (!test.IsPublished && test.UserId.HasValue && test.UserId == int.Parse(_userManager.GetUserId(User)!))
+                {
+                    return View();
+                }
+            }
+        }
+        return RedirectToAction("Index", "Test");
+    }
 }
