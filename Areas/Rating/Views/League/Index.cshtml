@@ -1,0 +1,38 @@
+@model IEnumerable<YouCan.Entities.League>
+
+@{
+ViewData["Title"] = "Leagues";
+}
+
+<h2>Leagues</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>League Name</th>
+        <th>Min Points</th>
+        <th>Max Points</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.LeagueName</td>
+        <td>@item.MinPoints</td>
+        <td>@item.MaxPoints</td>
+        <td>@item.StartDate.ToShortDateString()</td>
+        <td>@item.EndDate.ToShortDateString()</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New League</a>

@@ -5,6 +5,7 @@ using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Repository.Repository;
+using YouCan.Service.BackgroundServices;
 using YouCan.Service.Service;
 using YouCan.Services;
 
@@ -27,6 +28,8 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<W3RootFileManager>();
+builder.Services.AddScoped<LeagueRepository>();
+builder.Services.AddHostedService<LeagueUpdateService>();
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
@@ -76,6 +79,9 @@ builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<Question
 
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
 builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
+
+builder.Services.AddTransient<IRepository<League>, LeagueRepository>();
+builder.Services.AddTransient<ICRUDService<League>, CRUDService<League>>();
 
 builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
 builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction>>();
