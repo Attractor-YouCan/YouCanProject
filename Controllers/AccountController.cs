@@ -32,8 +32,8 @@ public class AccountController : Controller
         _userLevel = userLevel;
         _userLessonService = userLessonService;
     }
-    
-    
+
+
     [Authorize]
     public async Task<IActionResult> Profile(int? userId)
     {
@@ -95,7 +95,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Edit()
     {
         var user = await _userManager.GetUserAsync(User);
-        
+
         ViewBag.User = user;
         var viewModel = new EditViewModel()
         {
@@ -111,7 +111,7 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Edit(EditViewModel model)
     {
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var user = await _userManager.GetUserAsync(User);
             if (model.UploadedFile is not null)
@@ -142,12 +142,12 @@ public class AccountController : Controller
         }
         return View(model);
     }
-    
+
     public IActionResult Register()
     {
         return View();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
     {
@@ -199,11 +199,11 @@ public class AccountController : Controller
         return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
-   private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
-   {
-    var code =  _twoFactorService.GenerateCode(user.Id);
-    var subject = "Ваш код подтверждения";
-    string message = $@"
+    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
+    {
+        var code = _twoFactorService.GenerateCode(user.Id);
+        var subject = "Ваш код подтверждения";
+        string message = $@"
         <html>
         <head>
             <style>
@@ -285,12 +285,12 @@ public class AccountController : Controller
             </div>
         </body>
         </html>";
-    return (subject, message);
-   }     
+        return (subject, message);
+    }
 
-   
+
     [HttpPost]
-    public async Task<IActionResult> ConfirmCode([FromBody]  ConfirmCodeRequest  model)
+    public async Task<IActionResult> ConfirmCode([FromBody] ConfirmCodeRequest model)
     {
         if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Code))
         {
@@ -305,13 +305,13 @@ public class AccountController : Controller
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
-        var isCodeValid =  _twoFactorService.VerifyCode(user.Id, model.Code);
+        var isCodeValid = _twoFactorService.VerifyCode(user.Id, model.Code);
         if (!isCodeValid)
         {
             ModelState.AddModelError("", "Неправильный код!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-    
+
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
@@ -344,7 +344,7 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
     {
-        return View(new LoginViewModel(){ReturnUrl = returnUrl});
+        return View(new LoginViewModel() { ReturnUrl = returnUrl });
     }
 
     [HttpPost]
@@ -368,7 +368,7 @@ public class AccountController : Controller
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
-                    return RedirectToAction("Profile", "Account", new {id = user.Id});
+                    return RedirectToAction("Profile", "Account", new { id = user.Id });
                 }
             }
             ModelState.AddModelError("LoginValue", "Invalid email, login or password!");
@@ -384,7 +384,7 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login", "Account");
     }
-    
+
     [Authorize]
     public async Task<IActionResult> Delete()
     {
@@ -409,4 +409,10 @@ public class AccountController : Controller
         return userId;
     }
     
+    [Authorize]
+    public async Task<IActionResult> Rating()
+    {
+        return View();
+    }
+
 }
