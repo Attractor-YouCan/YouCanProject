@@ -23,7 +23,9 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.Include(u => u.Tariff).ToListAsync();
+        var users = await _context.Users.Include(u => u.Tariff)
+            .OrderBy(u => u.Id)
+            .ToListAsync();
 
         ViewBag.Roles = await _context.Roles.ToListAsync();
         ViewBag.Tariffs = await _context.Tariffs.ToListAsync();
@@ -48,7 +50,7 @@ public class UsersController : Controller
         return RedirectToAction("Index");
     }
     [HttpPost]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin, manager")]
     public async Task<IActionResult> ChangeTariff(int id, int? tariffId)
     {
         if (tariffId.HasValue)
@@ -63,8 +65,12 @@ public class UsersController : Controller
                     if (tariff.Duration.HasValue)
                     {
                         user.TariffEndDate = DateTime.UtcNow.AddMonths((int)tariff.Duration);
-                        await _userManager.AddToRoleAsync(user, "prouser");
-                        await _userManager.RemoveFromRoleAsync(user, "user");
+
+                        if (await _userManager.IsInRoleAsync(user, "user"))
+                        {
+                            await _userManager.AddToRoleAsync(user, "prouser");
+                            await _userManager.RemoveFromRoleAsync(user, "user");
+                        }
                     }
                     else
                     {
@@ -81,8 +87,9 @@ public class UsersController : Controller
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            return NotFound();
         }
-        return NotFound();
+        return RedirectToAction("Index");
     }
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> Block(int id)
