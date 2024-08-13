@@ -5,6 +5,7 @@ using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Repository.Repository;
 using YouCan.Service.Service;
+using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,8 @@ try
 {
     var userManager = services.GetRequiredService<UserManager<User>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+    await AdminInitializer.SeedAdminUser(rolesManager, userManager);
 }
 catch (Exception ex)
 {
