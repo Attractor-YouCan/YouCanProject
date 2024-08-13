@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using YouCan.Entities;
 using YouCan.Service.Service;
 using YouCan.Services.Email;
+using YouCan.ViewModels;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
@@ -12,42 +13,80 @@ public class AccountController : Controller
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
+    private ICRUDService<UserLevel> _userLevel;
+    private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
 
 
     public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService)
+        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService)
     {
         _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
         _twoFactorService = twoFactorService;
+        _userLevel = userLevel;
+        _userLessonService = userLessonService;
     }
 
 
     [Authorize]
     public async Task<IActionResult> Profile(int? userId)
     {
-        User user = new User();
+        User user;
         if (!userId.HasValue)
             user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
         else
             user = await _userService.GetById((int)userId);
+
         if (user != null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var adminUser = await _userManager.IsInRoleAsync(currentUser, "admin");
             var isOwner = currentUser.Id == user.Id;
+
+            var userLevels = _userLevel.GetAll()
+                .Where(l => l.UserId == currentUser.Id)
+                .GroupBy(l => l.SubjectId)
+                .Select(g => g.OrderByDescending(l => l.Level).FirstOrDefault())
+                .ToList();
+
+            var userLessons = _userLessonService.GetAll()
+                .Where(l => l.UserId == currentUser.Id && l.IsPassed)
+                .Select(ul => new UserLessonViewModel
+                {
+                    LessonId = ul.LessonId ?? 0,
+                    PassedLevel = ul.PassedLevel,
+                    Title = ul.Lesson?.Title ?? "Unknown",
+                    RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
+                }).ToList();
+
+           
+            int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
             ViewBag.IsAdmin = adminUser && isOwner;
             ViewBag.RoleIdent = await _userManager.IsInRoleAsync(user, "user");
-            return View(user);
+            ViewBag.UserScore = userScore;
+
+            var model = new UserProfileViewModel
+            {
+                User = user,
+                UserLevels = userLevels,
+                UserLessons = userLessons
+            };
+
+            return View(model);
         }
         return NotFound();
     }
+
+
+
+
 
     [HttpGet]
     [Authorize]
@@ -355,6 +394,12 @@ public class AccountController : Controller
 
         return RedirectToAction("Register", "Account");
     }
+    private int GetCurrentUserId()
+    {
+        var userId = int.Parse(_userManager.GetUserId(User));
+        return userId;
+    }
+    
     [Authorize]
     public async Task<IActionResult> Rating()
     {
