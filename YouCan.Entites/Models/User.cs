@@ -15,6 +15,7 @@ public class User : IdentityUser<int>
     public Tariff? Tariff { get; set; }
     public DateTime? TariffEndDate { get; set; }
 
+    public int UserLessonScore { get; set; }
     public Statistic? Statistic { get; set; }
     public List<UserLessons>? Lessons { get; set; }
     public List<UserLevel>? UserLevels { get; set; }

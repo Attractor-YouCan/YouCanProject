@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using YouCan.Areas.Study.ViewModels;
 using YouCan.Entities;
 using YouCan.Repository;
@@ -15,17 +16,19 @@ public class MiniTestsController : Controller
     private ICRUDService<Lesson> _lessonService;
     private ICRUDService<UserLessons> _userLessonService;
     private ICRUDService<Test> _testService;
+    private ICRUDService<UserLevel> _userLevel;
     private UserManager<User> _userManager;
 
     public MiniTestsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Test> testService,
+        ICRUDService<Test> testService,ICRUDService<UserLevel> userLevel,
         UserManager<User> userManager)
     {
         _testService = testService;
         _lessonService = lessonService;
         _userLessonService = userLessonService;
         _userManager = userManager;
+        _userLevel = userLevel;
     }
 
     public async Task<IActionResult> Index(int lessonId)
@@ -43,7 +46,7 @@ public class MiniTestsController : Controller
         User? currentUser = await _userManager.GetUserAsync(User);
         Test? test = await _testService.GetById(selectedAnswers[0].TestId);
         Lesson? lesson = await _lessonService.GetById((int)test.LessonId!);
-        UserLessons? userLessons = _userLessonService.GetAll()
+        UserLessons? userLesson = _userLessonService.GetAll()
             .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
 
         int passingCount = (
@@ -54,10 +57,21 @@ public class MiniTestsController : Controller
         ).Count();
         if (passingCount >= 2)
         {
-            userLessons.PassedLevel = lesson.LessonLevel;
-            userLessons.IsPassed = true;
-            userLessons.LessonId = lesson.Id;
-            await _userLessonService.Update(userLessons);
+            userLesson.PassedLevel = lesson.LessonLevel;
+            userLesson.IsPassed = true;
+            userLesson.LessonId = lesson.Id;
+        
+            UserLevel userLevel = new UserLevel()
+            {
+                Level = lesson.LessonLevel,
+                UserId = currentUser.Id,
+                User = currentUser,
+                SubjectId = lesson.SubjectId,
+                Subject = lesson.Subject
+            };
+            await _userLevel.Update(userLevel);
+            // await _userManager.UpdateAsync(currentUser);
+            await _userLessonService.Update(userLesson);
         }
         var testResult = new
         {
