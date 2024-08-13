@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using YouCan.Entites.Models
 @inject UserManager<User> manager;
 @model List<User>
 
@@ -29,6 +30,15 @@
             </th>
             <th>
                 Права доступа
+            </th>
+            <th>
+                Тариф
+            </th>
+            <th>
+                Дата окончания тарифа
+            </th>
+            <th>
+                Смена тарифа
             </th>
             <th>
                 Заблокирован
@@ -79,25 +89,59 @@
                     }
                 }
             </td>
-            <td>
-                @user.LockoutEnabled
-            </td>
-            <td>
-                @if (User.IsInRole("admin"))
-                {
-                    <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a> 
-                    <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
-                    <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
-                    @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                <td>
+                    @if (user.Tariff != null)
                     {
-                        <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                        @user.Tariff.Name
                     }
-                    else
+                </td>
+                <td>
+                    @if (user.TariffEndDate.HasValue)
                     {
-                        <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                        @(((DateTime)user.TariffEndDate).ToLongDateString())
                     }
-                }
-            </td>
+                </td>
+                <td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (!await manager.IsInRoleAsync(user, "admin"))
+                        {
+                            <form asp-action="ChangeTariff" method="post">
+                                <input type="hidden" name="id" value="@user.Id" />
+                                <select name="tariffId">
+                                    <option value=""></option>
+                                    @foreach (var tariff in (List<Tariff>)ViewBag.Tariffs)
+                                    {
+                                        @if (user.TariffId != tariff.Id)
+                                        {
+                                            <option value="@tariff.Id">@tariff.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-primary">Поменять тариф</button>
+                            </form>
+                        }
+                    }
+                </td>
+                <td>
+                    @user.LockoutEnabled
+                </td>
+                <td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a>
+                        <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
+                        <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
+                        @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                        {
+                            <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                        }
+                    }
+                </td>
         </tr>
 }
     </tbody>

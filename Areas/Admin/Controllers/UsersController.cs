@@ -23,7 +23,13 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.ToListAsync();
+        var users = await _context.Users.Include(u => u.Tariff)
+            .OrderBy(u => u.Id)
+            .ToListAsync();
+
+        ViewBag.Roles = await _context.Roles.ToListAsync();
+        ViewBag.Tariffs = await _context.Tariffs.ToListAsync();
+
         return View(users);
     }
     [HttpPost]
@@ -37,6 +43,48 @@ public class UsersController : Controller
             {
                 await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
                 await _userManager.AddToRoleAsync(user, role);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+        return RedirectToAction("Index");
+    }
+    [HttpPost]
+    [Authorize(Roles = "admin, manager")]
+    public async Task<IActionResult> ChangeTariff(int id, int? tariffId)
+    {
+        if (tariffId.HasValue)
+        {
+            var user = await _context.Users.Include(u => u.Tariff).FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                user.TariffId = tariffId;
+                var tariff = await _context.Tariffs.FindAsync(tariffId);
+                if (tariff != null)
+                {
+                    if (tariff.Duration.HasValue)
+                    {
+                        user.TariffEndDate = DateTime.UtcNow.AddMonths((int)tariff.Duration);
+
+                        if (await _userManager.IsInRoleAsync(user, "user"))
+                        {
+                            await _userManager.AddToRoleAsync(user, "prouser");
+                            await _userManager.RemoveFromRoleAsync(user, "user");
+                        }
+                    }
+                    else
+                    {
+                        user.TariffEndDate = null;
+                        if (await _userManager.IsInRoleAsync(user, "prouser"))
+                        {
+                            await _userManager.AddToRoleAsync(user, "user");
+                            await _userManager.RemoveFromRoleAsync(user, "prouser");
+                        }
+                    }
+                }
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return NotFound();
@@ -121,6 +169,11 @@ public class UsersController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
+                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                user.TariffId = startTariff.Id;
+                user.TariffEndDate = null;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             foreach (var error in result.Errors)

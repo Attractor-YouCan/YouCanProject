@@ -2,59 +2,100 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using YouCan.Entities;
+using YouCan.Repository;
 using YouCan.Service.Service;
 using YouCan.Services.Email;
+using YouCan.ViewModels;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
 {
+    private readonly YouCanContext _context; 
     private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
+    private ICRUDService<UserLevel> _userLevel;
+    private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
 
 
     public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService)
+        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService)
     {
         _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
         _environment = environment;
         _twoFactorService = twoFactorService;
+        _userLevel = userLevel;
+        _userLessonService = userLessonService;
     }
-    
-    
+
+
     [Authorize]
     public async Task<IActionResult> Profile(int? userId)
     {
-        User user = new User();
+        User user;
         if (!userId.HasValue)
             user = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
         else
             user = await _userService.GetById((int)userId);
+
         if (user != null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var adminUser =await _userManager.IsInRoleAsync(currentUser, "admin");
+            var adminUser = await _userManager.IsInRoleAsync(currentUser, "admin");
             var isOwner = currentUser.Id == user.Id;
+
+            var userLevels = _userLevel.GetAll()
+                .Where(l => l.UserId == currentUser.Id)
+                .GroupBy(l => l.SubjectId)
+                .Select(g => g.OrderByDescending(l => l.Level).FirstOrDefault())
+                .ToList();
+
+            var userLessons = _userLessonService.GetAll()
+                .Where(l => l.UserId == currentUser.Id && l.IsPassed)
+                .Select(ul => new UserLessonViewModel
+                {
+                    LessonId = ul.LessonId ?? 0,
+                    PassedLevel = ul.PassedLevel,
+                    Title = ul.Lesson?.Title ?? "Unknown",
+                    RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
+                }).ToList();
+
+           
+            int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
             ViewBag.IsAdmin = adminUser && isOwner;
             ViewBag.RoleIdent = await _userManager.IsInRoleAsync(user, "user");
-            return View(user);
+            ViewBag.UserScore = userScore;
+
+            var model = new UserProfileViewModel
+            {
+                User = user,
+                UserLevels = userLevels,
+                UserLessons = userLessons
+            };
+
+            return View(model);
         }
         return NotFound();
     }
+
+
+
+
 
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> Edit()
     {
         var user = await _userManager.GetUserAsync(User);
-        
+
         ViewBag.User = user;
         var viewModel = new EditViewModel()
         {
@@ -70,7 +111,7 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Edit(EditViewModel model)
     {
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var user = await _userManager.GetUserAsync(User);
             if (model.UploadedFile is not null)
@@ -101,12 +142,12 @@ public class AccountController : Controller
         }
         return View(model);
     }
-    
+
     public IActionResult Register()
     {
         return View();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? uploadedFile)
     {
@@ -140,6 +181,13 @@ public class AccountController : Controller
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
 
+                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                user.TariffId = startTariff.Id;
+                user.TariffEndDate = null;
+                _context.Update(user);
+
+                await _context.SaveChangesAsync();
+
                 var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();
                 emailSender.SendEmail(model.Email, subject, message);
@@ -151,11 +199,11 @@ public class AccountController : Controller
         return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
-   private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
-   {
-    var code =  _twoFactorService.GenerateCode(user.Id);
-    var subject = "Ваш код подтверждения";
-    string message = $@"
+    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
+    {
+        var code = _twoFactorService.GenerateCode(user.Id);
+        var subject = "Ваш код подтверждения";
+        string message = $@"
         <html>
         <head>
             <style>
@@ -237,12 +285,12 @@ public class AccountController : Controller
             </div>
         </body>
         </html>";
-    return (subject, message);
-   }     
+        return (subject, message);
+    }
 
-   
+
     [HttpPost]
-    public async Task<IActionResult> ConfirmCode([FromBody]  ConfirmCodeRequest  model)
+    public async Task<IActionResult> ConfirmCode([FromBody] ConfirmCodeRequest model)
     {
         if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Code))
         {
@@ -257,13 +305,13 @@ public class AccountController : Controller
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
-        var isCodeValid =  _twoFactorService.VerifyCode(user.Id, model.Code);
+        var isCodeValid = _twoFactorService.VerifyCode(user.Id, model.Code);
         if (!isCodeValid)
         {
             ModelState.AddModelError("", "Неправильный код!.");
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
-    
+
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
@@ -296,7 +344,7 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
     {
-        return View(new LoginViewModel(){ReturnUrl = returnUrl});
+        return View(new LoginViewModel() { ReturnUrl = returnUrl });
     }
 
     [HttpPost]
@@ -320,7 +368,7 @@ public class AccountController : Controller
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
-                    return RedirectToAction("Profile", "Account", new {id = user.Id});
+                    return RedirectToAction("Profile", "Account", new { id = user.Id });
                 }
             }
             ModelState.AddModelError("LoginValue", "Invalid email, login or password!");
@@ -336,7 +384,7 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login", "Account");
     }
-    
+
     [Authorize]
     public async Task<IActionResult> Delete()
     {
@@ -355,6 +403,16 @@ public class AccountController : Controller
 
         return RedirectToAction("Register", "Account");
     }
-   
+    private int GetCurrentUserId()
+    {
+        var userId = int.Parse(_userManager.GetUserId(User));
+        return userId;
+    }
     
+    [Authorize]
+    public async Task<IActionResult> Rating()
+    {
+        return View();
+    }
+
 }

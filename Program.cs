@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<W3RootFileManager>();
+builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
 builder.Services.AddTransient<IUserCRUD, UserCRUD>();
@@ -72,6 +74,9 @@ builder.Services.AddTransient<ICRUDService<Subject>, CRUDService<Subject>>();
 builder.Services.AddTransient<IRepository<QuestionReport>, QuestionReportRepository>();
 builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<QuestionReport>>();
 
+builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
+builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
+
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();
@@ -81,6 +86,8 @@ try
 {
     var userManager = services.GetRequiredService<UserManager<User>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+    await AdminInitializer.SeedAdminUser(rolesManager, userManager);
 }
 catch (Exception ex)
 {
