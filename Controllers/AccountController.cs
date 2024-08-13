@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using YouCan.Entities;
+using YouCan.Repository;
 using YouCan.Service.Service;
 using YouCan.Services.Email;
 using YouCan.ViewModels;
@@ -9,6 +10,7 @@ using YouCan.ViewModels;
 namespace YouCan.Mvc;
 public class AccountController : Controller
 {
+    private readonly YouCanContext _context; 
     private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
@@ -178,6 +180,13 @@ public class AccountController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
+
+                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                user.TariffId = startTariff.Id;
+                user.TariffEndDate = null;
+                _context.Update(user);
+
+                await _context.SaveChangesAsync();
 
                 var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();
