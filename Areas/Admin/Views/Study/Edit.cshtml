@@ -27,7 +27,7 @@
                     Your browser does not support the video tag.
                 </video>
                 <h5 class="section-title">Здесь будет: Видеоматериал Урока</h5>
-                <input type="file" class="mx-auto form-control my-3" name="lessonVideo" placeholder="Выберите видеоматериал урока" required/>
+                <input asp-for="LessonVideo" type="text" class="mx-auto form-control my-3" placeholder="Вставьте ссылку на видеоматериал урока" required/>
             </div>
             <h2 class="section-title">Здесь будет: Описание</h2>
             <p class="description">
@@ -183,7 +183,7 @@
                     formData.append('LessonTitle2', document.querySelector('textarea[name="LessonTitle2"]').value);
                     formData.append('Description', document.querySelector('textarea[name="Description"]').value);
                     formData.append('Lecture', document.querySelector('textarea[name="Lecture"]').value);
-                    formData.append('LessonVideo', document.querySelector('input[name="lessonVideo"]').files[0]);
+                    formData.append('LessonVideo', document.querySelector('input[name="LessonVideo"]').files[0]);
         
                     const moduleForms = document.querySelectorAll('.module');
                     moduleForms.forEach((form, index) => {

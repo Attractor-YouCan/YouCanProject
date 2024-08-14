@@ -13,7 +13,7 @@ public class LessonModel
     public string LessonTitle2 { get; set; }
     [JsonPropertyName("description")]
     public string Description { get; set; }
-    public IFormFile? LessonVideo { get; set; }
+    public string? LessonVideo { get; set; }
     [JsonPropertyName("lecture")]
     public string Lecture { get; set; }
     [JsonPropertyName("modules")]
