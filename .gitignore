@@ -373,3 +373,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 [Mm]igrations/*
+
+*/[Mm]igrations/*

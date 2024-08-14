@@ -6,6 +6,8 @@
 
 .profile-container {
     max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .link-theme-secondary {
@@ -172,4 +174,128 @@ body {
 .edit-profile-button-body {
     margin-left: 7px;
     margin-right: 21px;
+}
+
+.btn-test {
+    width: 140px;
+    height: 48px;
+}
+
+.btn-test-square {
+    height: 48px;
+    width: 48px;
+    color: #C4C4C4;
+    border: 2px solid #C4C4C4;
+    background-color: white;
+    border-radius: 8px;
+    transition-duration: 0.25s;
+}
+
+    .btn-test-square:hover {
+        color: white;
+        background-color: #C4C4C4;
+    }
+
+.btn-send {
+    background-color: #FF5C00;
+    color: white;
+}
+
+    .btn-send:hover {
+        background-color: #FF5C00;
+        color: white;
+    }
+
+.btn-delete {
+    background-color: #9D9D9D;
+    color: white;
+}
+
+    .btn-delete:hover {
+        background-color: #9D9D9D;
+        color: white;
+    }
+
+.text-secondary-theme {
+    color: #9C9C9C;
+}
+
+.btn-math {
+    border: 1.5px solid #C4C4C4;
+    width: 99px;
+    height: 86px;
+    border-radius: 8px;
+    font-size: 40px;
+    font-weight: 400;
+    color: #C4C4C4;
+    background-color: white;
+}
+
+    .btn-math ~ input:checked {
+        border-color: #58CC02;
+        color: #58CC02;
+    }
+
+.btn-add-image {
+    width: 241px;
+    height: 44px;
+    border-radius: 4px;
+    background-color: #58CC02;
+}
+
+    .btn-add-image img {
+        width: 24px;
+        height: 24px;
+    }
+
+.img-to-load {
+    border: 1.5px solid #58CC02;
+}
+
+.btn-add-question {
+    width: 179px;
+    height: 34px;
+    background-color: #D9D9D9;
+    border-radius: 8px;
+    border: none;
+}
+
+/* Стили для квадратного radio button */
+.custom-radio {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+    .custom-radio input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+.checkmark {
+    display: block;
+    padding: auto;
+    border: 1.5px solid #C4C4C4;
+    width: 99px;
+    height: 86px;
+    border-radius: 8px;
+    font-size: 40px;
+    font-weight: 400;
+    color: #C4C4C4;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.custom-radio input:checked ~ .checkmark {
+    border-color: #58CC02;
+    color: #58CC02;
+}
+
+.checkmark:after {
+    font-size: 16px;
+    color: white;
 }

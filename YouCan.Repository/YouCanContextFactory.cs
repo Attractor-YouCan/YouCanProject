@@ -13,6 +13,7 @@ namespace YouCan.Repository
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
+                .AddUserSecrets<YouCanContextFactory>()
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<YouCanContext>();
