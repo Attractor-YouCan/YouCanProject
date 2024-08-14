@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -14,11 +16,13 @@ public class UsersController : Controller
     private readonly YouCanContext _context;
     private readonly UserManager<User> _userManager;
     private readonly IWebHostEnvironment _env;
-    public UsersController(YouCanContext context, UserManager<User> userManager, IWebHostEnvironment env)
+    private readonly ICRUDService<AdminAction> _adminActions;
+    public UsersController(YouCanContext context, UserManager<User> userManager, IWebHostEnvironment env, ICRUDService<AdminAction> adminActions)
     {
         _context = context;
         _userManager = userManager;
         _env = env;
+        _adminActions = adminActions;
     }
 
     public async Task<IActionResult> Index()
@@ -41,8 +45,20 @@ public class UsersController : Controller
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user != null)
             {
-                await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+                var userRole = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, userRole);
                 await _userManager.AddToRoleAsync(user, role);
+
+                var admin = await _userManager.GetUserAsync(User);
+
+                var log = new AdminAction
+                {
+                    UserId = admin.Id,
+                    Action = "Изменение прав доступа",
+                    ExecuteTime = DateTime.UtcNow,
+                    Details = $"{admin.UserName} изменил роль пользователя {user.UserName} с {userRole[0].ToString()} на {role}"
+                };
+                await _adminActions.Insert(log);
                 return RedirectToAction("Index");
             }
             return NotFound();
