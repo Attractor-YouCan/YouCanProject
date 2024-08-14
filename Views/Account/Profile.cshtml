@@ -89,6 +89,7 @@
     <canvas class="chart" id="myStyledBarChart" width="700" height="200"></canvas>
 
     @* календарь *@
+    <h2 class="mb-3 mt-4">Ударный режим</h2>
     <div class="calendar-container">
         <div class="calendar-header">
             <button class="prev-month">&lt;</button>
@@ -112,6 +113,23 @@
         </table>
     </div>
 
+
+    <div class="tariff-plan mt-4">
+        <div class="tariff-card">
+            <div class="icon">
+                <img src="@Url.Content("/profileIcons/calendar.png")" alt="Calendar">
+            </div>
+            <div class="tariff-info">
+                <h3>Тарифный план</h3>
+                <p>Активно до: 16.07.2023 17:30</p>
+                <button class="extend-btn">Продлить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="privacy-policy mt-4 mb-4">
+        <button class="policy-btn">Политика конфиденциальности</button>
+    </div>
 
     <script>
         let data = {
@@ -191,7 +209,8 @@
                 const month = date.getMonth();
                 const year = date.getFullYear();
 
-                monthYearElement.textContent = date.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
+                const monthName = date.toLocaleString('ru-RU', { month: 'long' });
+                monthYearElement.textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
                 const firstDayOfMonth = new Date(year, month, 1).getDay();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
