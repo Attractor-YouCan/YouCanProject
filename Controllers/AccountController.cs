@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Repository;
 using YouCan.Service.Service;
@@ -10,7 +12,6 @@ using YouCan.ViewModels;
 namespace YouCan.Mvc;
 public class AccountController : Controller
 {
-    private readonly YouCanContext _context; 
     private IUserCRUD _userService;
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
@@ -18,11 +19,13 @@ public class AccountController : Controller
     private ICRUDService<UserLevel> _userLevel;
     private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
+    private readonly ICRUDService<Tariff> _tariffs;
 
 
     public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService)
+        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService,
+        ICRUDService<Tariff> tariffs)
     {
         _userService = userService;
         _userManager = userManager;
@@ -31,6 +34,7 @@ public class AccountController : Controller
         _twoFactorService = twoFactorService;
         _userLevel = userLevel;
         _userLessonService = userLessonService;
+        _tariffs = tariffs;
     }
 
 
@@ -181,12 +185,10 @@ public class AccountController : Controller
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
 
-                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                var startTariff = _tariffs.GetAll().FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
                 user.TariffEndDate = null;
-                _context.Update(user);
-
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);
 
                 var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();

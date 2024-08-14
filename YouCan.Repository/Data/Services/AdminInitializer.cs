@@ -25,7 +25,8 @@ public class AdminInitializer
                 AvatarUrl = path,
                 FullName = fullName,
                 BirthDate = DateTime.UtcNow,
-                Disctrict = ""
+                Disctrict = "",
+                PhoneNumber = "0"
             };
             IdentityResult result = await _userManager.CreateAsync(superadmin, adminPassword);
             if (result.Succeeded)
@@ -40,7 +41,8 @@ public class AdminInitializer
             AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
             FullName = "Anton",
             BirthDate = DateTime.Today.ToUniversalTime(),
-            Disctrict = "Bishkek"
+            Disctrict = "Bishkek",
+            PhoneNumber = "1"
         };
         User user2 = new User()
         {
@@ -49,7 +51,8 @@ public class AdminInitializer
             AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
             FullName = "SynAntona",
             BirthDate = DateTime.Today.ToUniversalTime(),
-            Disctrict = "Osh"
+            Disctrict = "Osh",
+            PhoneNumber = "2"
         };
         User user3 = new User()
         {
@@ -58,7 +61,8 @@ public class AdminInitializer
             AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
             FullName = "John Ceena",
             BirthDate = DateTime.Today.ToUniversalTime(),
-            Disctrict = "Issyk-Kul"
+            Disctrict = "Issyk-Kul",
+            PhoneNumber = "3"
         };
         List<User> users = new List<User>() { user1, user2, user3 };
         foreach (var user in users)
