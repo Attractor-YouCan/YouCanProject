@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
       <UserSecretsId>d543739f-0504-4d16-8744-4acaa280bc99</UserSecretsId>
       <RootNamespace>YouCan</RootNamespace>
-      <RootNamespace>YouCan</RootNamespace>
   </PropertyGroup>
 
     <ItemGroup>

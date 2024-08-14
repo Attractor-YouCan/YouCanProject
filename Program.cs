@@ -26,6 +26,7 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddEntityFrameworkStores<YouCanContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddSingleton<W3RootFileManager>();
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
