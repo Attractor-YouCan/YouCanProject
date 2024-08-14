@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
@@ -76,6 +77,7 @@ public class UsersController : Controller
             {
                 user.TariffId = tariffId;
                 var tariff = await _context.Tariffs.FindAsync(tariffId);
+                var admin = await _userManager.GetUserAsync(User);
                 if (tariff != null)
                 {
                     if (tariff.Duration.HasValue)
@@ -97,6 +99,14 @@ public class UsersController : Controller
                             await _userManager.RemoveFromRoleAsync(user, "prouser");
                         }
                     }
+                    var log = new AdminAction
+                    {
+                        UserId = admin.Id,
+                        Action = "Изменение тарифа",
+                        ExecuteTime = DateTime.UtcNow,
+                        Details = $"{admin.UserName} изменил тариф пользователя {user.UserName} с {user.Tariff.Name} на {tariff.Name}"
+                    };
+                    await _adminActions.Insert(log);
                 }
 
                 _context.Update(user);
@@ -116,8 +126,18 @@ public class UsersController : Controller
             var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, true);
             var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue.ToUniversalTime());
 
+            var admin = await _userManager.GetUserAsync(User);
+
             if (lockUserTask.Succeeded && lockDateTask.Succeeded)
             {
+                var log = new AdminAction
+                {
+                    UserId = admin.Id,
+                    Action = "Блокировка пользователя",
+                    ExecuteTime = DateTime.UtcNow,
+                    Details = $"{admin.UserName} заблокировал пользователя {user.UserName}"
+                };
+                await _adminActions.Insert(log);
                 return RedirectToAction("Index");
             }
         }
@@ -132,8 +152,18 @@ public class UsersController : Controller
             var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
             var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
 
+            var admin = await _userManager.GetUserAsync(User);
+
             if (lockUserTask.Succeeded && lockDateTask.Succeeded)
             {
+                var log = new AdminAction
+                {
+                    UserId = admin.Id,
+                    Action = "Разблокировка пользователя",
+                    ExecuteTime = DateTime.UtcNow,
+                    Details = $"{admin.UserName} разблокировал пользователя {user.UserName}"
+                };
+                await _adminActions.Insert(log);
                 return RedirectToAction("Index");
             }
         }
@@ -180,16 +210,31 @@ public class UsersController : Controller
                 CreatedAt = DateTime.UtcNow.AddHours(6),
                 Disctrict = model.District
             };
+
+            var admin = await _userManager.GetUserAsync(User);
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
+
                 var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
                 user.TariffEndDate = null;
+
                 _context.Update(user);
                 await _context.SaveChangesAsync();
+
+                var log = new AdminAction
+                {
+                    UserId = admin.Id,
+                    Action = "Создание пользователя",
+                    ExecuteTime = DateTime.UtcNow,
+                    Details = $"{admin.UserName} создал пользователя {user.UserName}"
+                };
+                await _adminActions.Insert(log);
+
                 return RedirectToAction("Index");
             }
             foreach (var error in result.Errors)
@@ -236,6 +281,18 @@ public class UsersController : Controller
                     return NotFound();
                 }
             }
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction
+            {
+                UserId = admin.Id,
+                Action = "Редактирование пользователя",
+                ExecuteTime = DateTime.UtcNow,
+                Details = $"{admin.UserName} отредактировал пользователя {user.UserName}"
+            };
+            await _adminActions.Insert(log);
+
             await _userManager.UpdateAsync(oldUser);
             return RedirectToAction("Index");
         }
@@ -245,8 +302,17 @@ public class UsersController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         var user = await _context.Users.FindAsync(id);
+        var admin = await _userManager.GetUserAsync(User);
         if (user != null)
         {
+            var log = new AdminAction
+            {
+                UserId = admin.Id,
+                Action = "Удаление пользователя",
+                ExecuteTime = DateTime.UtcNow,
+                Details = $"{admin.UserName} удалил пользователя {user.UserName}"
+            };
+            await _adminActions.Insert(log);
             _context.Remove(user);
         }
         await _context.SaveChangesAsync();
