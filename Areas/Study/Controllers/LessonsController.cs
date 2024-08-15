@@ -37,7 +37,7 @@ public class LessonsController : Controller
                                        && ul.SubjectId == subTopicId);
         if (userLessons == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true, SubtopicId = null };
+            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true };
             await _userLessonService.Insert(userLessons);
         }
         ViewBag.CurrentLessonLevel = userLessons.PassedLevel;

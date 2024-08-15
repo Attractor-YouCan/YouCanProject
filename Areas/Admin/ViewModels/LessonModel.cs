@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using YouCan.Areas.Train.Dto;
 
 namespace YouCan.Areas.Admin.ViewModels;
 
@@ -18,6 +19,7 @@ public class LessonModel
     public string Lecture { get; set; }
     [JsonPropertyName("modules")]
     public List<LessonModuleModel>? Modules { get; set; }
+    public List<QuestionModel>? Questions { get; set; }
     
     public string ExistsVideoUrl { get; set; }
 }

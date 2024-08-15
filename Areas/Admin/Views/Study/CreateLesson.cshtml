@@ -39,7 +39,12 @@
             </div>
         </div>
         <div class="creationPage" data-page="2" style="display: none;">
+            <input type="hidden" asp-for="Questions" id="questionsObjs"/>
             <h5>Создание теста</h5>
+            <div id="question-container" class="mt-4">
+                <button type="button" class="btn btn-success add-question-button">Добавить Вопрос</button>
+                <!-- Question forms will be appended here dynamically -->
+            </div>
         </div>
         
         <div class="text-center my-3" id="pagination-container">
@@ -56,17 +61,84 @@
 {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+            function changeToImage(){
+                $('label[data-answer-input-type="image"]').removeClass("d-none");
+                $('input[data-answer-input-type="text"]').addClass("d-none");
+            }
+            function changeToText(){
+                $('label[data-answer-input-type="image"]').addClass("d-none");
+                $('input[data-answer-input-type="text"]').removeClass("d-none");
+            }
+            
         document.addEventListener("DOMContentLoaded", function () {
             let moduleCounter = 0;
-            let moduleObjs = [];
             let currentPage = 1;
             const totalPages = document.querySelectorAll('.creationPage').length;
+        
+            let questionCounter = 0;
+        
+            function addQuestion() {
+                questionCounter++;
+                const formId = `question-form-${questionCounter}`;
+        
+                const questionFormHtml = `
+                    <div class="question border border-secondary rounded-3 mt-4 p-3" id="${formId}">
+                        <input type="text" class="form-control" placeholder="Введите инструкцию к вопросу" name="instruction" />
+                        <input type="text" class="form-control mt-3" placeholder="Введите вопрос" name="text" />
+                        <input type="file" class="form-control mt-3" name="image" />
+                        <div class="answers mt-3">
+                            <button type="button" class="btn btn-primary add-answer-button">Добавить Ответ</button>
+                            <!-- Answer inputs will be appended here dynamically -->
+                        </div>
+                        <button type="button" class="btn btn-light mt-4 module-cancel-button">Отмена</button>
+                    </div>`;
+        
+                $('#question-container').append(questionFormHtml);
+        
+                // Event listener for adding answers
+                $(`#${formId} .add-answer-button`).click(function () {
+                    addAnswer(formId);
+                });
+        
+                $(`#${formId} .module-cancel-button`).click(function () {
+                    $(`#${formId}`).remove();
+                });
+            }
+        
+            function addAnswer(formId) {
+                const answerFormHtml = `
+                    <div class="answer align-items-center justify-content-between mb-3">
+                        <div class="col-auto">
+                            <input name="isCorrect" class="form-check" type="radio" />
+                        </div>
+                        <div class="col p-0">
+                            <input data-answer-input-type="text" name="answerText" class="form-control" placeholder="Введите текст ответа" />
+                            <input data-answer-input-type="image" name="answerImage" class="form-control mt-2" type="file" placeholder="Загрузите изображение ответа" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-danger cancel-answer-button">Отмена</button>
+                        </div>
+                    </div>`;
+            
+                const $answerContainer = $(`#${formId} .answers`);
+                const $newAnswerForm = $(answerFormHtml);
+                
+                $newAnswerForm.find('.cancel-answer-button').click(function () {
+                    $newAnswerForm.remove();
+                });
+            
+                $answerContainer.append($newAnswerForm);
+            }
+        
+            $('.add-question-button').click(function () {
+                addQuestion();
+            });
         
             function addModule() {
                 moduleCounter++;
                 const formId = `module-form-${moduleCounter}`;
         
-                const resumeFormHtml = 
+                const moduleFormHtml = 
                     `<div class="module border border-secondary rounded-3 mt-4 p-3" id="${formId}">
                         <h2 class="section-title">
                             <input type="text" class="form-control" placeholder="Введите тему модуля" name="moduleTitle"/> 
@@ -81,7 +153,7 @@
                         <button type="button" class="btn btn-light mt-4 ms-3 module-cancel-button">Отмена</button>
                     </div>`;
         
-                $('#module-change-div').append(resumeFormHtml);
+                $('#module-change-div').append(moduleFormHtml);
         
                 $(`#${formId} .module-cancel-button`).click(function() {
                     $(`#${formId}`).remove();
@@ -137,21 +209,62 @@
                     showPage(currentPage);
                 } else {
                     const formData = new FormData();
-        
-                    formData.append('LessonLevel', document.querySelector('input[name="LessonLevel"]').value);
-                    formData.append('LessonTitle', document.querySelector('input[name="LessonTitle"]').value);
-                    formData.append('LessonTitle2', document.querySelector('textarea[name="LessonTitle2"]').value);
-                    formData.append('Description', document.querySelector('textarea[name="Description"]').value);
-                    formData.append('Lecture', document.querySelector('textarea[name="Lecture"]').value);
-                    formData.append('LessonVideo', document.querySelector('input[name="LessonVideo"]').files[0]);
-        
+                    
+                    const lessonLevelElement = document.querySelector('input[name="LessonLevel"]');
+                    const lessonTitleElement = document.querySelector('input[name="LessonTitle"]');
+                    const lessonTitle2Element = document.querySelector('textarea[name="LessonTitle2"]');
+                    const descriptionElement = document.querySelector('textarea[name="Description"]');
+                    const lectureElement = document.querySelector('textarea[name="Lecture"]');
+                    const lessonVideoElement = document.querySelector('input[name="LessonVideo"]');
+            
+                    if (lessonLevelElement) formData.append('LessonLevel', lessonLevelElement.value);
+                    if (lessonTitleElement) formData.append('LessonTitle', lessonTitleElement.value);
+                    if (lessonTitle2Element) formData.append('LessonTitle2', lessonTitle2Element.value);
+                    if (descriptionElement) formData.append('Description', descriptionElement.value);
+                    if (lectureElement) formData.append('Lecture', lectureElement.value);
+                    if (lessonVideoElement && lessonVideoElement.files && lessonVideoElement.files.length > 0) {
+                        formData.append('LessonVideo', lessonVideoElement.files[0]);
+                    }
+            
                     const moduleForms = document.querySelectorAll('.module');
                     moduleForms.forEach((form, index) => {
-                        formData.append(`Modules[${index}].ModuleTitle`, form.querySelector('input[name="moduleTitle"]').value);
-                        formData.append(`Modules[${index}].ModuleContent`, form.querySelector('input[name="moduleContent"]').value);
-                        formData.append(`Modules[${index}].ModulePhoto`, form.querySelector('input[name="modulePhoto"]').files[0]);
+                        const moduleTitleElement = form.querySelector('input[name="moduleTitle"]');
+                        const moduleContentElement = form.querySelector('input[name="moduleContent"]');
+                        const modulePhotoElement = form.querySelector('input[name="modulePhoto"]');
+                        
+                        if (moduleTitleElement) formData.append(`Modules[${index}].ModuleTitle`, moduleTitleElement.value);
+                        if (moduleContentElement) formData.append(`Modules[${index}].ModuleContent`, moduleContentElement.value);
+                        if (modulePhotoElement && modulePhotoElement.files && modulePhotoElement.files.length > 0) {
+                            formData.append(`Modules[${index}].ModulePhoto`, modulePhotoElement.files[0]);
+                        }
                     });
-        
+            
+                    const questionForms = document.querySelectorAll('.question');
+                    questionForms.forEach((form, index) => {
+                        const instructionElement = form.querySelector('input[name="instruction"]');
+                        const textElement = form.querySelector('input[name="text"]');
+                        const imageElement = form.querySelector('input[name="image"]');
+            
+                        if (instructionElement) formData.append(`Questions[${index}].Instruction`, instructionElement.value);
+                        if (textElement) formData.append(`Questions[${index}].Text`, textElement.value);
+                        if (imageElement && imageElement.files && imageElement.files.length > 0) {
+                            formData.append(`Questions[${index}].Image`, imageElement.files[0]);
+                        }
+            
+                        const answerForms = form.querySelectorAll('.answers .answer');
+                        answerForms.forEach((answerForm, answerIndex) => {
+                            const answerTextElement = answerForm.querySelector('input[name="answerText"]');
+                            const answerImageElement = answerForm.querySelector('input[name="answerImage"]');
+                            const isCorrectElement = answerForm.querySelector('input[name="isCorrect"]');
+            
+                            if (answerTextElement) formData.append(`Questions[${index}].Answers[${answerIndex}].AnswerText`, answerTextElement.value);
+                            if (answerImageElement && answerImageElement.files && answerImageElement.files.length > 0) {
+                                formData.append(`Questions[${index}].Answers[${answerIndex}].AnswerImage`, answerImageElement.files[0]);
+                            }
+                            if (isCorrectElement) formData.append(`Questions[${index}].Answers[${answerIndex}].IsCorrect`, isCorrectElement.checked);
+                        });
+                    });
+            
                     axios.post('/Admin/Study/CreateLesson', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
@@ -165,6 +278,7 @@
                     });
                 }
             });
+
         
             // Bind validation to input events on the current page
             document.addEventListener('input', updatePaginationButtonState);

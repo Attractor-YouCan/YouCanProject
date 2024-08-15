@@ -58,16 +58,15 @@ public class StudyController : Controller
     {
         ViewBag.SubjectId = subjectId;
         Subject subject = await _subjectService.GetById(subjectId);
-        int? avaibleLevel = subject.Lessons.Select(l => l.LessonLevel).Max();
-        ViewBag.AvailableLevel = avaibleLevel + 1;
+        int? availableLevel = subject.Lessons.Select(l => l.LessonLevel).Max();
+        ViewBag.AvailableLevel = availableLevel + 1;
         return View();
     }
     
     [HttpPost]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> CreateLesson([FromForm] LessonModel model)
+    public async Task<IActionResult> CreateLesson([FromForm] LessonModel? model)
     {
-        // Ваша логика обработки данных
         return View();
     }
 
