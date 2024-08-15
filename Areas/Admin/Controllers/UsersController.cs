@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
+using YouCan.Service.Service;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -125,7 +126,14 @@ public class UsersController : Controller
     }
     public async Task<IActionResult> Details(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        User user = await _context.Users
+            .Include(u => u.Lessons)
+            .ThenInclude(l => l.Lesson)
+            .Include(u => u.Tests)
+            .ThenInclude(l => l.OrtTest)
+            .Include(u => u.Questions)
+            .Include(u => u.Statistic)
+            .FirstOrDefaultAsync(u => u.Id == id);
         if (user != null)
         {
             return View(user);

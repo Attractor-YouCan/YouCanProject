@@ -47,6 +47,29 @@
         <dd class="col-sm-10">
             <img style="width: 400px; height: 400px;" src="@Model.AvatarUrl" alt="..."/>
         </dd>
+        <dt class="col-sm-2">
+            Пройденные уроки
+        </dt>
+        <dd>
+            <h3>Уроки пользователя</h3>
+            @foreach (var lesson in Model.Lessons)
+            {
+                <ul>
+                    @if (lesson.IsPassed)
+                    {
+                        <li>
+                            <a class="text-success">@lesson.Lesson.Title</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="text-danger">@lesson.Lesson.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </dd>
     </dl>
 </div>
 <div>
