@@ -11,4 +11,5 @@ public class QuestionModel
     [JsonPropertyName("image")]
     public IFormFile? Image { get; set; }
     public List<AnswerModel> Answers { get; set; }
+   
 }
