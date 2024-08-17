@@ -1,4 +1,6 @@
 
+using YouCan.Entites.Models;
+
 namespace YouCan.Entities;
 
 public class Subject : EntityBase
@@ -10,6 +12,5 @@ public class Subject : EntityBase
     public Subject? Parent { get; set; }  
     public List<Subject>? SubSubjects { get; set; } 
     public List<Lesson>? Lessons { get; set; }
-
-    
+    public UserTestType UserTestType { get; set; } = UserTestType.Question;
 }

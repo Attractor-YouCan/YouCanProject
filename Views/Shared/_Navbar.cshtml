@@ -39,7 +39,7 @@
                 <img src="~/navbar_icons/board.png" alt="..." class="bx bx-grid-alt nav_icon board">
                 <span class="nav_name">ТЕСТ</span>
             </a>
-            <a href="#" class="nav_link">
+            <a asp-area="@null" asp-controller="Account" asp-action="Rating" class="nav_link" data-area="@null" data-controller="Account">
                 <img src="~/navbar_icons/star.png" alt="..." class="bx bx-grid-alt nav_icon star">
                 <span class="nav_name">РЕЙТИНГ</span>
             </a>
@@ -65,7 +65,7 @@
             <a class="col-2 nav-link" asp-area="Study" asp-controller="Subtopics" asp-action="Index">
                 <img class="img-fluid" src="~/navbar_icons/book.png" alt="...">
             </a>
-            <a class="col-2 nav-link" href="#">
+            <a class="col-2 nav-link" asp-area="@null" asp-controller="Account" asp-action="Rating">
                 <img class="img-fluid" src="~/navbar_icons/star.png" alt="...">
             </a>
             <a class="col-2 nav-link" asp-area="@null" asp-controller="Account" asp-action="Profile" >

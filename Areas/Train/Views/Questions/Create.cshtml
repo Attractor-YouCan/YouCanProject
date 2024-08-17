@@ -1,0 +1,111 @@
+﻿@model QuestionDto
+@{
+    ViewBag.Title = "Создать тренировочный тест";
+    Layout = "_Navbar";
+}
+
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <form class="col-md-7 col-lg-5 m-0" enctype="multipart/form-data" asp-action="Create" asp-controller="Questions" method="post">
+            <p class="text-center profile-title">Тренировка</p>
+            <hr>
+            <a href="javascript:history.back()" class="btn">
+                <img src="@Url.Content("~/profileIcons/arrow-back.svg")" />
+            </a>
+            <div class="mx-2">
+                <div class="mx-5">
+                    <h1 class="text-center fs-4">@ViewBag.Subject.Name</h1>@* Поле title для темы *@
+                    <p class="text-center fw-bold">Каждая аналогия в тесте состоит из пяти пар слов.</p>@* Поле subtitle для темы *@
+                    <p class="text-center fs-8 fw-bold text-secondary-theme">@* поле description для темы *@
+                        Первая пара выделена жирным шрифтом.
+                    </p>
+                </div>
+                <div class="text-center mb-5 row align-items-center m-0">
+                    <div class="col p-0">
+                        <input asp-for="SubjectId" class="d-none" />
+                        <input asp-for="Text" class="form-control mb-3" />
+                        <label asp-for="Instruction" class="form-label"></label>
+                        <input asp-for="Instruction" class="form-control mb-3" />
+                        <label asp-for="Image"
+                               class="btn-add-image p-0 d-flex flex-row align-items-center justify-content-center mb-3">
+                            <img class="me-2" src="@Url.Content("~/trainImages/add.png")">
+                            <p class="text-white fw-bold fs-8 p-0 m-0">
+                                Добавить фото
+                            </p>
+                            <input data-image-id="#question_image" class="d-none" asp-for="Image" type="file" onchange="readURL(this)" />
+                        </label>
+                        <img id="question_image" class="d-none img-fluid img-to-load" src="#" alt="your image" />
+                    </div>
+                </div>
+                <div class="d-flex flex-column mb-3">
+                    <label asp-for="AnswerIsImage">
+                        <input asp-for="AnswerIsImage" type="radio" value="false" onchange="changeToText();"/>
+                        Текстовые ответы
+                    </label>
+                    <label asp-for="AnswerIsImage">
+                        <input asp-for="AnswerIsImage" type="radio" value="true" onchange="changeToImage();"/>
+                        Графические ответы
+                    </label>
+                </div>
+                <div class="text-center mb-5">
+                    @for(int i = 0; i < Model.Answers.Count; i++)
+                    {
+                        <div class="row align-items-center justify-content-between mb-3 m-0">
+                            <div class="col-auto">
+                                <input asp-for="CorrectAnswerId" value="@i" class="form-check" type="radio" />
+                            </div>
+                            <div class="col p-0">
+                                <input data-answer-input-type="text" asp-for="Answers[i].Text" class="form-control" />
+                                <label data-answer-input-type="image" asp-for="Answers[i].Image"
+                                       class="d-none btn-add-image p-0 d-flex flex-row align-items-center justify-content-center mb-3">
+                                    <img class="me-2" src="@Url.Content("~/trainImages/add.png")">
+                                    <p class="text-white fw-bold fs-8 p-0 m-0">
+                                        Добавить фото
+                                    </p>
+                                    <input data-image-id="#answer_@i" class="d-none" asp-for="Answers[i].Image" type="file" onchange="readURL(this)" />
+                                </label>
+                                <img id="answer_@i" class="d-none img-fluid img-to-load" src="#" alt="your image" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row gx-2 justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-test btn-delete fw-bold" type="reset">Удалить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn btn-test btn-send fw-bold" type="submit">Отправить</button>
+                </div>
+                <div class="col-auto">
+                    <button class="col-auto btn-test-square fw-bold" type="button">?</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input.getAttribute("data-image-id")).attr('src', e.target.result).removeClass("d-none");
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function changeToImage(){
+            $('label[data-answer-input-type="image"]').removeClass("d-none");
+            $('input[data-answer-input-type="text"]').addClass("d-none");
+        }
+        function changeToText(){
+            $('label[data-answer-input-type="image"]').addClass("d-none");
+            $('input[data-answer-input-type="text"]').removeClass("d-none");
+        }
+    </script>
+}

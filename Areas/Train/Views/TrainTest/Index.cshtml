@@ -46,7 +46,7 @@ Layout = "_Layout";
             <label class="answer mt-4" role="button">
                 <input type="radio" name="answer-@Model.CurrentQuestion.Id" value="@answer.Id" class="answer-radio">
                 <span class="answer-number">@((char)('А' + i))</span>
-                <span class="answer-content h-100 w-100">@answer.Text</span>
+                <span class="answer-content h-100 w-100">@answer.Content</span>
             </label>
             }
         </div>
