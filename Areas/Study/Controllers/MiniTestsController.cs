@@ -85,8 +85,8 @@ public class MiniTestsController : Controller
     [HttpGet]
     public IActionResult Result(bool isPassed, int lessonId, int subtopicId)
     {
-        ViewBag.LessonId = lessonId;
-        ViewBag.SubtopicId = subtopicId;
+        ViewData["LessonId"] = lessonId;
+        ViewData["SubtopicId"] = subtopicId;
         return View(isPassed);
     }
 }
