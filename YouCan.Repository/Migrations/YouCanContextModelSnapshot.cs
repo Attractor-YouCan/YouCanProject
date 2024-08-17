@@ -1584,7 +1584,7 @@ namespace YouCan.Repository.Migrations
                     b.Property<int>("TotalExperience")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -2203,9 +2203,7 @@ namespace YouCan.Repository.Migrations
                 {
                     b.HasOne("YouCan.Entities.User", "User")
                         .WithOne("Statistic")
-                        .HasForeignKey("YouCan.Entities.Statistic", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("YouCan.Entities.Statistic", "UserId");
 
                     b.Navigation("User");
                 });

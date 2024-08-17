@@ -240,7 +240,7 @@ namespace YouCan.Repository.Migrations
                     Streak = table.Column<int>(type: "integer", nullable: false),
                     TotalExperience = table.Column<int>(type: "integer", nullable: false),
                     StudyMinutes = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -249,8 +249,7 @@ namespace YouCan.Repository.Migrations
                         name: "FK_Statistics_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

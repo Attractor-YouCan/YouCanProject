@@ -21,7 +21,7 @@
                         <p class="profile-text-secondary">@Model.PhoneNumber</p>
                         <div class="d-flex flex-row align-items-center">
                             <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img>
-                            <p class="profile-text-secondary ms-1">Регистрация -</p>
+                            <p class="profile-text-secondary ms-1">Регистрация - @Model.CreatedAt?.ToString("MMMM yyyy")</p>
                         </div>
                     </div>
                     <div class="">
@@ -42,7 +42,7 @@
 
     @* Статистика *@
     <h2 class="mb-3 mt-4">Статистика</h2>
-    <div class="row row-cols-2 row-cols-md-2 g-2">
+    <div class="row row-cols-2 row-cols-md-2 g-2 statistic">
         <div class="col">
             <div class="profile-stat-card d-flex align-items-center p-2 color-shock-mode">
                 <img src="@Url.Content("/profileIcons/fire.png")" alt="fire-icon">
@@ -86,7 +86,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <h2 class="mb-3 mt-4">Опыт за неделю</h2>
     
-    <canvas class="chart" id="myStyledBarChart" width="700" height="200"></canvas>
+    <canvas class="chart" id="myStyledBarChart" ></canvas>
 
     @* календарь *@
     <h2 class="mb-3 mt-4">Ударный режим</h2>

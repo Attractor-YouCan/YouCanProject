@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using YouCan.Entities;
 
 namespace YouCan.Services;
@@ -35,31 +35,41 @@ public class AdminInitializer
         }
         User user1 = new User()
         {
-            Email = "qwe@qwe", 
-            UserName = "qwe", 
-            AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
+            Email = "qwe@qwe",
+            UserName = "qwe",
+            AvatarUrl = "/userImages/defProf-ProfileN=1.png",
             FullName = "Anton",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Bishkek"
         };
         User user2 = new User()
         {
-            Email = "asd@asd", 
-            UserName = "asd", 
-            AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
+            Email = "asd@asd",
+            UserName = "asd",
+            AvatarUrl = "/userImages/defProf-ProfileN=1.png",
             FullName = "SynAntona",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Osh"
         };
         User user3 = new User()
         {
-            Email = "zxc@zxc", 
-            UserName = "zxc", 
-            AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
+            Email = "zxc@zxc",
+            UserName = "zxc",
+            AvatarUrl = "/userImages/defProf-ProfileN=1.png",
             FullName = "John Ceena",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Issyk-Kul"
         };
+        /*User profileTest = new User()
+        {
+            Email = "qwe@qwe",
+            UserName = "qwe",
+            AvatarUrl = "/userImages/defProf-ProfileN=1.png",
+            FullName = "Qwe Qwe",
+            BirthDate = DateTime.Today.ToUniversalTime(),
+            Disctrict = "qweqweqeq",
+            Statistic = new Statistic { Streak = 5, TotalExperience = 1000, StudyMinutes = new TimeSpan(2, 30, 0) }
+        };*/
         List<User> users = new List<User>() { user1, user2, user3 };
         foreach (var user in users)
         {
