@@ -10,6 +10,8 @@ public class QuestionModel
     public string? Text { get; set; }
     [JsonPropertyName("image")]
     public IFormFile? Image { get; set; }
+    [JsonPropertyName("questionExistsPhotoUrlElement")]
+    public string? QuestionExistsPhotoUrlElement { get; set; }
     public List<AnswerModel> Answers { get; set; }
    
 }
