@@ -68,6 +68,12 @@ namespace YouCan.Repository.Migrations
                             Id = 3,
                             Name = "admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "prouser",
+                            NormalizedName = "PROUSER"
                         });
                 });
 
@@ -174,6 +180,75 @@ namespace YouCan.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("UserExperience", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ExperiencePoints")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserExperiences");
+                });
+
+            modelBuilder.Entity("YouCan.Entites.Models.Tariff", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tariffs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Start",
+                            Price = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Duration = 1,
+                            Name = "Pro",
+                            Price = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Duration = 3,
+                            Name = "Premium",
+                            Price = 2
+                        });
+                });
+
             modelBuilder.Entity("YouCan.Entities.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -182,15 +257,15 @@ namespace YouCan.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -202,590 +277,590 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 1,
+                            Content = "A больше",
                             IsCorrect = false,
-                            QuestionId = 1,
-                            Text = "A больше"
+                            QuestionId = 1
                         },
                         new
                         {
                             Id = 2,
+                            Content = "B больше",
                             IsCorrect = true,
-                            QuestionId = 1,
-                            Text = "B больше"
+                            QuestionId = 1
                         },
                         new
                         {
                             Id = 3,
+                            Content = " оба равны",
                             IsCorrect = false,
-                            QuestionId = 1,
-                            Text = " оба равны"
+                            QuestionId = 1
                         },
                         new
                         {
                             Id = 4,
+                            Content = "нельзя сравнить",
                             IsCorrect = false,
-                            QuestionId = 1,
-                            Text = "нельзя сравнить"
+                            QuestionId = 1
                         },
                         new
                         {
                             Id = 5,
+                            Content = "Площадь под функции f(x)",
                             IsCorrect = false,
-                            QuestionId = 2,
-                            Text = "Площадь под функции f(x)"
+                            QuestionId = 2
                         },
                         new
                         {
                             Id = 6,
+                            Content = "интеграл от f(x) от 0 до x",
                             IsCorrect = false,
-                            QuestionId = 2,
-                            Text = "интеграл от f(x) от 0 до x"
+                            QuestionId = 2
                         },
                         new
                         {
                             Id = 7,
+                            Content = "Функция, производная которой равна f(x)",
                             IsCorrect = true,
-                            QuestionId = 2,
-                            Text = "Функция, производная которой равна f(x)"
+                            QuestionId = 2
                         },
                         new
                         {
                             Id = 8,
+                            Content = "Функция, производная которой равна Y(f-k)",
                             IsCorrect = false,
-                            QuestionId = 2,
-                            Text = "Функция, производная которой равна Y(f-k)"
+                            QuestionId = 2
                         },
                         new
                         {
                             Id = 9,
+                            Content = "Грамматика это чудо",
                             IsCorrect = false,
-                            QuestionId = 3,
-                            Text = "Грамматика это чудо"
+                            QuestionId = 3
                         },
                         new
                         {
                             Id = 10,
+                            Content = "Грамматика это таска",
                             IsCorrect = false,
-                            QuestionId = 3,
-                            Text = "Грамматика это таска"
+                            QuestionId = 3
                         },
                         new
                         {
                             Id = 11,
+                            Content = "Грамматика это пипец",
                             IsCorrect = false,
-                            QuestionId = 3,
-                            Text = "Грамматика это пипец"
+                            QuestionId = 3
                         },
                         new
                         {
                             Id = 12,
+                            Content = "Грамматика это 5 по русскому",
                             IsCorrect = true,
-                            QuestionId = 3,
-                            Text = "Грамматика это 5 по русскому"
+                            QuestionId = 3
                         },
                         new
                         {
                             Id = 69,
+                            Content = "Грамматика это чудо",
                             IsCorrect = false,
-                            QuestionId = 18,
-                            Text = "Грамматика это чудо"
+                            QuestionId = 18
                         },
                         new
                         {
                             Id = 70,
+                            Content = "Грамматика это таска",
                             IsCorrect = false,
-                            QuestionId = 18,
-                            Text = "Грамматика это таска"
+                            QuestionId = 18
                         },
                         new
                         {
                             Id = 71,
+                            Content = "Грамматика это пипец",
                             IsCorrect = false,
-                            QuestionId = 18,
-                            Text = "Грамматика это пипец"
+                            QuestionId = 18
                         },
                         new
                         {
                             Id = 72,
+                            Content = "Грамматика это 5 по русскому",
                             IsCorrect = true,
-                            QuestionId = 18,
-                            Text = "Грамматика это 5 по русскому"
+                            QuestionId = 18
                         },
                         new
                         {
                             Id = 73,
+                            Content = "A больше",
                             IsCorrect = false,
-                            QuestionId = 19,
-                            Text = "A больше"
+                            QuestionId = 19
                         },
                         new
                         {
                             Id = 74,
+                            Content = "B больше",
                             IsCorrect = true,
-                            QuestionId = 19,
-                            Text = "B больше"
+                            QuestionId = 19
                         },
                         new
                         {
                             Id = 75,
+                            Content = " оба равны",
                             IsCorrect = false,
-                            QuestionId = 19,
-                            Text = " оба равны"
+                            QuestionId = 19
                         },
                         new
                         {
                             Id = 76,
+                            Content = "нельзя сравнить",
                             IsCorrect = false,
-                            QuestionId = 19,
-                            Text = "нельзя сравнить"
+                            QuestionId = 19
                         },
                         new
                         {
                             Id = 77,
+                            Content = "Площадь под функции f(x)",
                             IsCorrect = false,
-                            QuestionId = 16,
-                            Text = "Площадь под функции f(x)"
+                            QuestionId = 16
                         },
                         new
                         {
                             Id = 78,
+                            Content = "интеграл от f(x) от 0 до x",
                             IsCorrect = false,
-                            QuestionId = 16,
-                            Text = "интеграл от f(x) от 0 до x"
+                            QuestionId = 16
                         },
                         new
                         {
                             Id = 79,
+                            Content = "Функция, производная которой равна f(x)",
                             IsCorrect = true,
-                            QuestionId = 16,
-                            Text = "Функция, производная которой равна f(x)"
+                            QuestionId = 16
                         },
                         new
                         {
                             Id = 80,
+                            Content = "Функция, производная которой равна Y(f-k)",
                             IsCorrect = false,
-                            QuestionId = 16,
-                            Text = "Функция, производная которой равна Y(f-k)"
+                            QuestionId = 16
                         },
                         new
                         {
                             Id = 81,
+                            Content = "Грамматика это чудо",
                             IsCorrect = false,
-                            QuestionId = 17,
-                            Text = "Грамматика это чудо"
+                            QuestionId = 17
                         },
                         new
                         {
                             Id = 82,
+                            Content = "Грамматика это таска",
                             IsCorrect = false,
-                            QuestionId = 17,
-                            Text = "Грамматика это таска"
+                            QuestionId = 17
                         },
                         new
                         {
                             Id = 83,
+                            Content = "Грамматика это пипец",
                             IsCorrect = false,
-                            QuestionId = 17,
-                            Text = "Грамматика это пипец"
+                            QuestionId = 17
                         },
                         new
                         {
                             Id = 84,
+                            Content = "Грамматика это 5 по русскому",
                             IsCorrect = true,
-                            QuestionId = 17,
-                            Text = "Грамматика это 5 по русскому"
+                            QuestionId = 17
                         },
                         new
                         {
                             Id = 49,
+                            Content = "A больше",
                             IsCorrect = false,
-                            QuestionId = 4,
-                            Text = "A больше"
+                            QuestionId = 4
                         },
                         new
                         {
                             Id = 50,
+                            Content = "B больше",
                             IsCorrect = true,
-                            QuestionId = 4,
-                            Text = "B больше"
+                            QuestionId = 4
                         },
                         new
                         {
                             Id = 51,
+                            Content = " оба равны",
                             IsCorrect = false,
-                            QuestionId = 4,
-                            Text = " оба равны"
+                            QuestionId = 4
                         },
                         new
                         {
                             Id = 52,
+                            Content = "нельзя сравнить",
                             IsCorrect = false,
-                            QuestionId = 4,
-                            Text = "нельзя сравнить"
+                            QuestionId = 4
                         },
                         new
                         {
                             Id = 53,
+                            Content = "Площадь под функции f(x)",
                             IsCorrect = false,
-                            QuestionId = 5,
-                            Text = "Площадь под функции f(x)"
+                            QuestionId = 5
                         },
                         new
                         {
                             Id = 54,
+                            Content = "интеграл от f(x) от 0 до x",
                             IsCorrect = false,
-                            QuestionId = 5,
-                            Text = "интеграл от f(x) от 0 до x"
+                            QuestionId = 5
                         },
                         new
                         {
                             Id = 55,
+                            Content = "Функция, производная которой равна f(x)",
                             IsCorrect = true,
-                            QuestionId = 5,
-                            Text = "Функция, производная которой равна f(x)"
+                            QuestionId = 5
                         },
                         new
                         {
                             Id = 56,
+                            Content = "Функция, производная которой равна Y(f-k)",
                             IsCorrect = false,
-                            QuestionId = 5,
-                            Text = "Функция, производная которой равна Y(f-k)"
+                            QuestionId = 5
                         },
                         new
                         {
                             Id = 57,
+                            Content = "Грамматика это чудо",
                             IsCorrect = false,
-                            QuestionId = 6,
-                            Text = "Грамматика это чудо"
+                            QuestionId = 6
                         },
                         new
                         {
                             Id = 58,
+                            Content = "Грамматика это таска",
                             IsCorrect = false,
-                            QuestionId = 6,
-                            Text = "Грамматика это таска"
+                            QuestionId = 6
                         },
                         new
                         {
                             Id = 59,
+                            Content = "Грамматика это пипец",
                             IsCorrect = false,
-                            QuestionId = 6,
-                            Text = "Грамматика это пипец"
+                            QuestionId = 6
                         },
                         new
                         {
                             Id = 60,
+                            Content = "Грамматика это 5 по русскому",
                             IsCorrect = true,
-                            QuestionId = 6,
-                            Text = "Грамматика это 5 по русскому"
+                            QuestionId = 6
                         },
                         new
                         {
                             Id = 61,
+                            Content = "A больше",
                             IsCorrect = false,
-                            QuestionId = 20,
-                            Text = "A больше"
+                            QuestionId = 20
                         },
                         new
                         {
                             Id = 62,
+                            Content = "B больше",
                             IsCorrect = true,
-                            QuestionId = 20,
-                            Text = "B больше"
+                            QuestionId = 20
                         },
                         new
                         {
                             Id = 63,
+                            Content = " оба равны",
                             IsCorrect = false,
-                            QuestionId = 20,
-                            Text = " оба равны"
+                            QuestionId = 20
                         },
                         new
                         {
                             Id = 64,
+                            Content = "нельзя сравнить",
                             IsCorrect = false,
-                            QuestionId = 20,
-                            Text = "нельзя сравнить"
+                            QuestionId = 20
                         },
                         new
                         {
                             Id = 65,
+                            Content = "Площадь под функции f(x)",
                             IsCorrect = false,
-                            QuestionId = 21,
-                            Text = "Площадь под функции f(x)"
+                            QuestionId = 21
                         },
                         new
                         {
                             Id = 66,
+                            Content = "интеграл от f(x) от 0 до x",
                             IsCorrect = false,
-                            QuestionId = 21,
-                            Text = "интеграл от f(x) от 0 до x"
+                            QuestionId = 21
                         },
                         new
                         {
                             Id = 67,
+                            Content = "Функция, производная которой равна f(x)",
                             IsCorrect = true,
-                            QuestionId = 21,
-                            Text = "Функция, производная которой равна f(x)"
+                            QuestionId = 21
                         },
                         new
                         {
                             Id = 68,
+                            Content = "Функция, производная которой равна Y(f-k)",
                             IsCorrect = false,
-                            QuestionId = 21,
-                            Text = "Функция, производная которой равна Y(f-k)"
+                            QuestionId = 21
                         },
                         new
                         {
                             Id = 13,
+                            Content = "ве...ти концерт",
                             IsCorrect = true,
-                            QuestionId = 7,
-                            Text = "ве...ти концерт"
+                            QuestionId = 7
                         },
                         new
                         {
                             Id = 14,
+                            Content = "ве...ти груз",
                             IsCorrect = false,
-                            QuestionId = 7,
-                            Text = "ве...ти груз"
+                            QuestionId = 7
                         },
                         new
                         {
                             Id = 15,
+                            Content = "ни...кая температура",
                             IsCorrect = false,
-                            QuestionId = 7,
-                            Text = "ни...кая температура"
+                            QuestionId = 7
                         },
                         new
                         {
                             Id = 16,
+                            Content = "передвигались пол...ком",
                             IsCorrect = false,
-                            QuestionId = 7,
-                            Text = "передвигались пол...ком"
+                            QuestionId = 7
                         },
                         new
                         {
                             Id = 17,
+                            Content = "Лето будет жаркое и (сухое).",
                             IsCorrect = false,
-                            QuestionId = 8,
-                            Text = "Лето будет жаркое и (сухое)."
+                            QuestionId = 8
                         },
                         new
                         {
                             Id = 18,
+                            Content = "Надо купить пакет (сухого) молока.",
                             IsCorrect = false,
-                            QuestionId = 8,
-                            Text = "Надо купить пакет (сухого) молока."
+                            QuestionId = 8
                         },
                         new
                         {
                             Id = 19,
+                            Content = "Матч закончился с (сухим) счетом.",
                             IsCorrect = false,
-                            QuestionId = 8,
-                            Text = "Матч закончился с (сухим) счетом."
+                            QuestionId = 8
                         },
                         new
                         {
                             Id = 20,
+                            Content = "В ванной висит (сухое) полотенце",
                             IsCorrect = true,
-                            QuestionId = 8,
-                            Text = "В ванной висит (сухое) полотенце"
+                            QuestionId = 8
                         },
                         new
                         {
                             Id = 21,
+                            Content = "в...рыхлённый граблями",
                             IsCorrect = true,
-                            QuestionId = 9,
-                            Text = "в...рыхлённый граблями"
+                            QuestionId = 9
                         },
                         new
                         {
                             Id = 22,
+                            Content = "в...копанный огород",
                             IsCorrect = false,
-                            QuestionId = 9,
-                            Text = "в...копанный огород"
+                            QuestionId = 9
                         },
                         new
                         {
                             Id = 23,
+                            Content = "в...порхнувший с ветки",
                             IsCorrect = false,
-                            QuestionId = 9,
-                            Text = "в...порхнувший с ветки"
+                            QuestionId = 9
                         },
                         new
                         {
                             Id = 24,
+                            Content = "в...тавленный в текст",
                             IsCorrect = false,
-                            QuestionId = 9,
-                            Text = "в...тавленный в текст"
+                            QuestionId = 9
                         },
                         new
                         {
                             Id = 25,
+                            Content = "Слева стояли такие высокие здания, что мимо (их) проплывали облака.",
                             IsCorrect = false,
-                            QuestionId = 10,
-                            Text = "Слева стояли такие высокие здания, что мимо (их) проплывали облака."
+                            QuestionId = 10
                         },
                         new
                         {
                             Id = 26,
+                            Content = "Впереди шла стройная женщина, а позади (её) бежал малыш.",
                             IsCorrect = false,
-                            QuestionId = 10,
-                            Text = "Впереди шла стройная женщина, а позади (её) бежал малыш."
+                            QuestionId = 10
                         },
                         new
                         {
                             Id = 27,
+                            Content = "На углу улицы я увидел мальчика, возле (его) стояла корзина с цветами.",
                             IsCorrect = false,
-                            QuestionId = 10,
-                            Text = "На углу улицы я увидел мальчика, возле (его) стояла корзина с цветами."
+                            QuestionId = 10
                         },
                         new
                         {
                             Id = 28,
+                            Content = "Когда Мурат свернул на шоссе, то увидел, что навстречу (ему) медленно движется колонна машин.",
                             IsCorrect = true,
-                            QuestionId = 10,
-                            Text = "Когда Мурат свернул на шоссе, то увидел, что навстречу (ему) медленно движется колонна машин."
+                            QuestionId = 10
                         },
                         new
                         {
                             Id = 29,
+                            Content = "выполняющееся",
                             IsCorrect = false,
-                            QuestionId = 11,
-                            Text = "выполняющееся"
+                            QuestionId = 11
                         },
                         new
                         {
                             Id = 30,
+                            Content = "выполняемое",
                             IsCorrect = true,
-                            QuestionId = 11,
-                            Text = "выполняемое"
+                            QuestionId = 11
                         },
                         new
                         {
                             Id = 31,
+                            Content = "выполненное",
                             IsCorrect = false,
-                            QuestionId = 11,
-                            Text = "выполненное"
+                            QuestionId = 11
                         },
                         new
                         {
                             Id = 32,
+                            Content = "выполнявшееся",
                             IsCorrect = false,
-                            QuestionId = 11,
-                            Text = "выполнявшееся"
+                            QuestionId = 11
                         },
                         new
                         {
                             Id = 33,
+                            Content = "прекрасный",
                             IsCorrect = true,
-                            QuestionId = 12,
-                            Text = "прекрасный"
+                            QuestionId = 12
                         },
                         new
                         {
                             Id = 34,
+                            Content = "ужасный",
                             IsCorrect = false,
-                            QuestionId = 12,
-                            Text = "ужасный"
+                            QuestionId = 12
                         },
                         new
                         {
                             Id = 35,
+                            Content = "быстрый",
                             IsCorrect = false,
-                            QuestionId = 12,
-                            Text = "быстрый"
+                            QuestionId = 12
                         },
                         new
                         {
                             Id = 36,
+                            Content = "медленный",
                             IsCorrect = false,
-                            QuestionId = 12,
-                            Text = "медленный"
+                            QuestionId = 12
                         },
                         new
                         {
                             Id = 37,
+                            Content = "низкий",
                             IsCorrect = true,
-                            QuestionId = 13,
-                            Text = "низкий"
+                            QuestionId = 13
                         },
                         new
                         {
                             Id = 38,
+                            Content = "высокий",
                             IsCorrect = false,
-                            QuestionId = 13,
-                            Text = "высокий"
+                            QuestionId = 13
                         },
                         new
                         {
                             Id = 39,
+                            Content = "широкий",
                             IsCorrect = false,
-                            QuestionId = 13,
-                            Text = "широкий"
+                            QuestionId = 13
                         },
                         new
                         {
                             Id = 40,
+                            Content = "длинный",
                             IsCorrect = false,
-                            QuestionId = 13,
-                            Text = "длинный"
+                            QuestionId = 13
                         },
                         new
                         {
                             Id = 41,
+                            Content = "бежать",
                             IsCorrect = true,
-                            QuestionId = 14,
-                            Text = "бежать"
+                            QuestionId = 14
                         },
                         new
                         {
                             Id = 42,
+                            Content = "дерево",
                             IsCorrect = false,
-                            QuestionId = 14,
-                            Text = "дерево"
+                            QuestionId = 14
                         },
                         new
                         {
                             Id = 43,
+                            Content = "красный",
                             IsCorrect = false,
-                            QuestionId = 14,
-                            Text = "красный"
+                            QuestionId = 14
                         },
                         new
                         {
                             Id = 44,
+                            Content = "медленно",
                             IsCorrect = false,
-                            QuestionId = 14,
-                            Text = "медленно"
+                            QuestionId = 14
                         },
                         new
                         {
                             Id = 45,
+                            Content = "стол",
                             IsCorrect = true,
-                            QuestionId = 15,
-                            Text = "стол"
+                            QuestionId = 15
                         },
                         new
                         {
                             Id = 46,
+                            Content = "быстро",
                             IsCorrect = false,
-                            QuestionId = 15,
-                            Text = "быстро"
+                            QuestionId = 15
                         },
                         new
                         {
                             Id = 47,
+                            Content = "играть",
                             IsCorrect = false,
-                            QuestionId = 15,
-                            Text = "играть"
+                            QuestionId = 15
                         },
                         new
                         {
                             Id = 48,
+                            Content = "красивый",
                             IsCorrect = false,
-                            QuestionId = 15,
-                            Text = "красивый"
+                            QuestionId = 15
                         });
                 });
 
@@ -1315,8 +1390,13 @@ namespace YouCan.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AnswersIsImage")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Content")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("Instruction")
@@ -1326,6 +1406,9 @@ namespace YouCan.Repository.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<int?>("Point")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TestId")
@@ -1339,6 +1422,8 @@ namespace YouCan.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SubjectId");
+
                     b.HasIndex("TestId");
 
                     b.HasIndex("UserId");
@@ -1349,6 +1434,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 1,
+                            AnswersIsImage = false,
                             Content = "23 : 34",
                             Instruction = "Что больше?",
                             IsPublished = false,
@@ -1359,6 +1445,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 2,
+                            AnswersIsImage = false,
                             Content = "Что такое интеграл?",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1369,6 +1456,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 3,
+                            AnswersIsImage = false,
                             Content = "Грамматика это___",
                             Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
                             IsPublished = false,
@@ -1379,6 +1467,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 4,
+                            AnswersIsImage = false,
                             Content = "Птица : Гнездо",
                             Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
                             IsPublished = false,
@@ -1389,6 +1478,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 5,
+                            AnswersIsImage = false,
                             Content = "Что такое интеграл?",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1399,6 +1489,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 6,
+                            AnswersIsImage = false,
                             Content = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1409,6 +1500,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 18,
+                            AnswersIsImage = false,
                             Content = "23 : 34",
                             Instruction = "Что больше?",
                             IsPublished = false,
@@ -1419,6 +1511,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 19,
+                            AnswersIsImage = false,
                             Content = "Что такое интеграл?",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1429,6 +1522,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 20,
+                            AnswersIsImage = false,
                             Content = "Грамматика это___",
                             Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
                             IsPublished = false,
@@ -1439,6 +1533,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 21,
+                            AnswersIsImage = false,
                             Content = "Птица : Гнездо",
                             Instruction = "Отметьте вариант, наиболее близкий к контрольной паре",
                             IsPublished = false,
@@ -1449,6 +1544,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 16,
+                            AnswersIsImage = false,
                             Content = "Что такое интеграл?",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1459,6 +1555,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 17,
+                            AnswersIsImage = false,
                             Content = "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн.",
                             Instruction = "Отвечайте на следующие вопросы",
                             IsPublished = false,
@@ -1469,6 +1566,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 7,
+                            AnswersIsImage = false,
                             Content = "В каком слове вместо точек следует вставить букву с?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1477,6 +1575,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 8,
+                            AnswersIsImage = false,
                             Content = "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1485,6 +1584,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 9,
+                            AnswersIsImage = false,
                             Content = "В каком слове вместо точек следует вставить букву з?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1493,6 +1593,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 10,
+                            AnswersIsImage = false,
                             Content = "В каком предложении подчеркнутое слово употреблено в правильной форме?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1501,6 +1602,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 11,
+                            AnswersIsImage = false,
                             Content = "Задание, ... нами, не вызывает особых затруднений.",
                             Instruction = "Какое слово следует вставить вместо точек в предложение?",
                             IsPublished = false,
@@ -1509,6 +1611,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 12,
+                            AnswersIsImage = false,
                             Content = "Какое слово является синонимом к слову 'красивый'?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1517,6 +1620,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 13,
+                            AnswersIsImage = false,
                             Content = "Какое слово является антонимом к слову 'высокий'?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1525,6 +1629,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 14,
+                            AnswersIsImage = false,
                             Content = "Какое слово является глаголом?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1533,6 +1638,7 @@ namespace YouCan.Repository.Migrations
                         new
                         {
                             Id = 15,
+                            AnswersIsImage = false,
                             Content = "Какое слово обозначает предмет?",
                             Instruction = "Выберите правильный вариант",
                             IsPublished = false,
@@ -1584,13 +1690,7 @@ namespace YouCan.Repository.Migrations
                     b.Property<int>("TotalExperience")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Statistics");
                 });
@@ -1616,6 +1716,9 @@ namespace YouCan.Repository.Migrations
                     b.Property<int>("SubjectType")
                         .HasColumnType("integer");
 
+                    b.Property<int>("UserTestType")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
@@ -1628,14 +1731,16 @@ namespace YouCan.Repository.Migrations
                             Id = 1,
                             ImageUrl = "/topicImages/mathematics1icon.png",
                             Name = "Mathematics",
-                            SubjectType = 0
+                            SubjectType = 0,
+                            UserTestType = 0
                         },
                         new
                         {
                             Id = 2,
                             ImageUrl = "/topicImages/grammarIcon.png",
                             Name = "Russian",
-                            SubjectType = 0
+                            SubjectType = 0,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1643,7 +1748,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/mathematics1icon.png",
                             Name = "Mathematics1",
                             ParentId = 1,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1651,7 +1757,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/mathematics2icon.png",
                             Name = "Mathematics2",
                             ParentId = 1,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1659,7 +1766,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/analogyIcon.png",
                             Name = "Analogy",
                             ParentId = 2,
-                            SubjectType = 0
+                            SubjectType = 0,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1667,7 +1775,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/grammarIcon.png",
                             Name = "Grammar",
                             ParentId = 2,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1675,7 +1784,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/readUnderstIcon.png",
                             Name = "Reading and Understanding",
                             ParentId = 2,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 1
                         },
                         new
                         {
@@ -1683,7 +1793,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/analogyIcon.png",
                             Name = "Analogy",
                             ParentId = 5,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1691,7 +1802,8 @@ namespace YouCan.Repository.Migrations
                             ImageUrl = "/topicImages/readUnderstIcon.png",
                             Name = "Addition of Offers",
                             ParentId = 5,
-                            SubjectType = 1
+                            SubjectType = 1,
+                            UserTestType = 0
                         });
                 });
 
@@ -1768,6 +1880,9 @@ namespace YouCan.Repository.Migrations
                     b.Property<int>("GainingExperience")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("LessonId")
                         .HasColumnType("integer");
 
@@ -1780,7 +1895,13 @@ namespace YouCan.Repository.Migrations
                     b.Property<int?>("SubjectId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
                     b.Property<int?>("TimeForTestInMin")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -1794,6 +1915,8 @@ namespace YouCan.Repository.Migrations
 
                     b.HasIndex("SubjectId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Tests");
 
                     b.HasData(
@@ -1801,6 +1924,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 1,
                             GainingExperience = 0,
+                            IsPublished = false,
                             LessonId = 12,
                             OrtInstructionId = 1,
                             OrtTestId = 1,
@@ -1811,6 +1935,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 2,
                             GainingExperience = 0,
+                            IsPublished = false,
                             LessonId = 13,
                             OrtInstructionId = 2,
                             OrtTestId = 1,
@@ -1821,6 +1946,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 4,
                             GainingExperience = 0,
+                            IsPublished = false,
                             OrtInstructionId = 3,
                             OrtTestId = 1,
                             SubjectId = 7,
@@ -1830,6 +1956,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 5,
                             GainingExperience = 0,
+                            IsPublished = false,
                             OrtInstructionId = 4,
                             OrtTestId = 1,
                             SubjectId = 2,
@@ -1839,6 +1966,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 3,
                             GainingExperience = 0,
+                            IsPublished = false,
                             SubjectId = 6
                         });
                 });
@@ -1938,8 +2066,20 @@ namespace YouCan.Repository.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<int?>("StatisticId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("TariffEndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("TariffId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("UserLessonScore")
+                        .HasColumnType("integer");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -1953,6 +2093,10 @@ namespace YouCan.Repository.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("StatisticId");
+
+                    b.HasIndex("TariffId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -2004,10 +2148,10 @@ namespace YouCan.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Level")
+                    b.Property<int?>("Level")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SubtopicId")
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserId")
@@ -2015,7 +2159,7 @@ namespace YouCan.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubtopicId");
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("UserId");
 
@@ -2111,6 +2255,17 @@ namespace YouCan.Repository.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("UserExperience", b =>
+                {
+                    b.HasOne("YouCan.Entities.User", "User")
+                        .WithMany("UserExperiences")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("YouCan.Entities.Answer", b =>
                 {
                     b.HasOne("YouCan.Entities.Question", "Question")
@@ -2167,6 +2322,10 @@ namespace YouCan.Repository.Migrations
 
             modelBuilder.Entity("YouCan.Entities.Question", b =>
                 {
+                    b.HasOne("YouCan.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId");
+
                     b.HasOne("YouCan.Entities.Test", "Test")
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
@@ -2174,6 +2333,8 @@ namespace YouCan.Repository.Migrations
                     b.HasOne("YouCan.Entities.User", "User")
                         .WithMany("Questions")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Subject");
 
                     b.Navigation("Test");
 
@@ -2195,15 +2356,6 @@ namespace YouCan.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("YouCan.Entities.Statistic", b =>
-                {
-                    b.HasOne("YouCan.Entities.User", "User")
-                        .WithOne("Statistic")
-                        .HasForeignKey("YouCan.Entities.Statistic", "UserId");
 
                     b.Navigation("User");
                 });
@@ -2246,6 +2398,10 @@ namespace YouCan.Repository.Migrations
                         .WithMany()
                         .HasForeignKey("SubjectId");
 
+                    b.HasOne("YouCan.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Lesson");
 
                     b.Navigation("OrtInstruction");
@@ -2253,6 +2409,23 @@ namespace YouCan.Repository.Migrations
                     b.Navigation("OrtTest");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("YouCan.Entities.User", b =>
+                {
+                    b.HasOne("YouCan.Entities.Statistic", "Statistic")
+                        .WithMany()
+                        .HasForeignKey("StatisticId");
+
+                    b.HasOne("YouCan.Entites.Models.Tariff", "Tariff")
+                        .WithMany()
+                        .HasForeignKey("TariffId");
+
+                    b.Navigation("Statistic");
+
+                    b.Navigation("Tariff");
                 });
 
             modelBuilder.Entity("YouCan.Entities.UserLessons", b =>
@@ -2286,11 +2459,9 @@ namespace YouCan.Repository.Migrations
 
             modelBuilder.Entity("YouCan.Entities.UserLevel", b =>
                 {
-                    b.HasOne("YouCan.Entities.Subtopic", "Subtopic")
+                    b.HasOne("YouCan.Entities.Subject", "Subject")
                         .WithMany()
-                        .HasForeignKey("SubtopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectId");
 
                     b.HasOne("YouCan.Entities.User", "User")
                         .WithMany("UserLevels")
@@ -2298,7 +2469,7 @@ namespace YouCan.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subtopic");
+                    b.Navigation("Subject");
 
                     b.Navigation("User");
                 });
@@ -2370,9 +2541,9 @@ namespace YouCan.Repository.Migrations
 
                     b.Navigation("Questions");
 
-                    b.Navigation("Statistic");
-
                     b.Navigation("Tests");
+
+                    b.Navigation("UserExperiences");
 
                     b.Navigation("UserLevels");
                 });

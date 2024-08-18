@@ -26,8 +26,9 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<OrtInstruction> OrtInstructions { get; set; }
     public DbSet<PassedQuestion> PassedQuestions { get; set; }
     public DbSet<Tariff> Tariffs { get; set; }
+    public DbSet<UserExperience> UserExperiences { get; set; }
 
-protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Subject>()
             .HasMany(t => t.SubSubjects)
@@ -36,8 +37,12 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         modelBuilder.Entity<OrtInstruction>()
             .HasOne(t => t.Test)
             .WithOne(o => o.OrtInstruction)
-            .HasForeignKey<Test>(o => o.OrtInstructionId); 
-        
+            .HasForeignKey<Test>(o => o.OrtInstructionId);
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.UserExperiences)
+            .WithOne(ue => ue.User)
+            .HasForeignKey(ue => ue.UserId);
+
         base.OnModelCreating(modelBuilder);
         new OrtTestInitializer(modelBuilder).Seed();
         new TopicInitializer(modelBuilder).Seed();
@@ -49,7 +54,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
                 new IdentityRole<int> { Id = 2, Name = "manager", NormalizedName = "MANAGER" },
                 new IdentityRole<int> { Id = 3, Name = "admin", NormalizedName = "ADMIN" },
-                new IdentityRole<int> { Id = 4, Name = "prouser", NormalizedName = "PROUSER"}
+                new IdentityRole<int> { Id = 4, Name = "prouser", NormalizedName = "PROUSER" }
             );
         modelBuilder.Entity<Tariff>()
             .HasData(
@@ -59,6 +64,6 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
             );
         new TrainTestInitializer(modelBuilder).Seed();
     }
-    public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
+    public YouCanContext(DbContextOptions<YouCanContext> options) : base(options) { }
 
 }

@@ -64,20 +64,22 @@ public class AdminInitializer
             Disctrict = "Issyk-Kul",
             PhoneNumber = "3"
         };
-        /*User profileTest = new User()
+        User profileTest = new User()
         {
-            Email = "qwe@qwe",
-            UserName = "qwe",
+            Email = "ewq@ewq",
+            UserName = "Alex",
             AvatarUrl = "/userImages/defProf-ProfileN=1.png",
             FullName = "Qwe Qwe",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "qweqweqeq",
-            Statistic = new Statistic { Streak = 5, TotalExperience = 1000, StudyMinutes = new TimeSpan(2, 30, 0) }
-        };*/
-        List<User> users = new List<User>() { user1, user2, user3 };
+            PhoneNumber = "4",
+            Statistic = new Statistic { Id = 1, Streak = 5, TotalExperience = 1000, StudyMinutes = new TimeSpan(2, 30, 0) },
+            StatisticId = 1
+        };
+        List<User> users = new List<User>() { user1, user2, user3, profileTest };
         foreach (var user in users)
         {
-            IdentityResult resultOfUser = await _userManager.CreateAsync(user, "Qwe123");
+            IdentityResult resultOfUser = await _userManager.CreateAsync(user, "qweAa1_");
             if (resultOfUser.Succeeded)
                 await _userManager.AddToRoleAsync(user, "user");
         }

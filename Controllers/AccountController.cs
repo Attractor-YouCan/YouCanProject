@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entites.Models;
 using YouCan.Entities;
-using YouCan.Repository;
 using YouCan.Service.Service;
 using YouCan.Services.Email;
 using YouCan.ViewModels;
@@ -17,6 +16,7 @@ public class AccountController : Controller
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private ICRUDService<UserLevel> _userLevel;
+    private ICRUDService<UserExperience> _userExperiance;
     private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
     private readonly ICRUDService<Tariff> _tariffs;
@@ -69,8 +69,16 @@ public class AccountController : Controller
                     RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
                 }).ToList();
 
-           
+
             int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
+            var last7Days = DateTime.UtcNow.AddDays(-6).Date;
+            var weeklyExperience = user.UserExperiences
+                .Where(ue => ue.Date >= last7Days)
+                .GroupBy(ue => ue.Date.Date)
+                .Select(g => new { Date = g.Key, Experience = g.Sum(ue => ue.ExperiencePoints) })
+                .OrderBy(g => g.Date)
+                .ToList();
 
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
@@ -82,7 +90,8 @@ public class AccountController : Controller
             {
                 User = user,
                 UserLevels = userLevels,
-                UserLessons = userLessons
+                UserLessons = userLessons,
+                WeeklyExperience = weeklyExperience
             };
 
             return View(model);
@@ -317,11 +326,11 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
-        
 
-        return Json(new { success = true, userId = user.Id  });
+
+        return Json(new { success = true, userId = user.Id });
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
     {
@@ -337,11 +346,11 @@ public class AccountController : Controller
         }
         var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
         EmailSender emailSender = new EmailSender();
-         emailSender.SendEmail(user.Email, subject, message);
+        emailSender.SendEmail(user.Email, subject, message);
 
         return Json(new { success = true });
     }
-    
+
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -410,7 +419,7 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-    
+
     [Authorize]
     public async Task<IActionResult> Rating()
     {

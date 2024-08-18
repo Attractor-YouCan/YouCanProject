@@ -16,7 +16,9 @@ public class User : IdentityUser<int>
     public DateTime? TariffEndDate { get; set; }
 
     public int UserLessonScore { get; set; }
+    public int? StatisticId { get; set; }
     public Statistic? Statistic { get; set; }
+    public List<UserExperience> UserExperiences { get; set; }
     public List<UserLessons>? Lessons { get; set; }
     public List<UserLevel>? UserLevels { get; set; }
     public List<UserOrtTest>? Tests { get; set; }
@@ -27,6 +29,7 @@ public class User : IdentityUser<int>
         Questions = new List<Question>();
         Lessons = new List<UserLessons>();
         UserLevels = new List<UserLevel>();
+        UserExperiences = new List<UserExperience>();
         Tests = new();
     }
 }
