@@ -46,7 +46,8 @@ public class ValidationController : Controller
     [AcceptVerbs("GET", "POST")]
     public bool CheckPhoneNumber(string PhoneNumber)
     {
-        return !_userService.GetAll().Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
+        var b = !_userService.GetAll().Any(u => u.PhoneNumber.ToLower().Trim() == PhoneNumber.ToLower().Trim());
+        return b;
     }
     
     [AcceptVerbs("GET", "POST")]
