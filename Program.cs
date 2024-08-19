@@ -77,6 +77,9 @@ builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<Question
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
 builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
 
+builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
+builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction>>();
+
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();
