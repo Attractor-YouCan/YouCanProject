@@ -93,50 +93,53 @@ public class StudyController : Controller
             };
             await _testService.Insert(test);
             await _lessonService.Update(lesson);
-            foreach (var module in model.Modules)
-            {
-                string? moduleFileName = null;
-                if (module.ModulePhoto != null)
-                    moduleFileName = await fileManager.SaveFormFileAsync("lessonResources", module.ModulePhoto);
-                LessonModule newModule = new LessonModule()
+            if (model.Modules != null)
+                foreach (var module in model.Modules)
                 {
-                    Title = module.ModuleTitle,
-                    Content = module.ModuleContent,
-                    PhotoUrl = moduleFileName,
-                    LessonId = lesson.Id
-                };
-                await _lessonModuleService.Insert(newModule);
-                await _lessonService.Update(lesson);
-            }
-            foreach (var question in model.Questions)
-            {
-                string? questionFileName = null;
-                if (question.Image != null)
-                    questionFileName = await fileManager.SaveFormFileAsync("lessonResources", question.Image);
-                Question newQuestion = new Question()
-                {
-                    Instruction = question.Instruction,
-                    Content = question.Text, 
-                    ImageUrl = questionFileName,
-                    IsPublished = true,
-                    Point = 1,
-                    SubjectId = model.SubjectId,
-                    TestId = test.Id
-                };
-                await _questionService.Insert(newQuestion);
-                await _testService.Update(test);
-                foreach (var answer in question.Answers)
-                {
-                    Answer newAnswer = new Answer()
+                    string? moduleFileName = null;
+                    if (module.ModulePhoto != null)
+                        moduleFileName = await fileManager.SaveFormFileAsync("lessonResources", module.ModulePhoto);
+                    LessonModule newModule = new LessonModule()
                     {
-                        Content = answer.AnswerText,
-                        IsCorrect = answer.IsCorrect,
-                        QuestionId = newQuestion.Id
+                        Title = module.ModuleTitle,
+                        Content = module.ModuleContent,
+                        PhotoUrl = moduleFileName,
+                        LessonId = lesson.Id
                     };
-                    await _answerService.Insert(newAnswer);
-                    await _questionService.Update(newQuestion);
+                    await _lessonModuleService.Insert(newModule);
+                    await _lessonService.Update(lesson);
                 }
-            }
+
+            if (model.Questions != null)
+                foreach (var question in model.Questions)
+                {
+                    string? questionFileName = null;
+                    if (question.Image != null)
+                        questionFileName = await fileManager.SaveFormFileAsync("lessonResources", question.Image);
+                    Question newQuestion = new Question()
+                    {
+                        Instruction = question.Instruction,
+                        Content = question.Text, 
+                        ImageUrl = questionFileName,
+                        IsPublished = true,
+                        Point = 1,
+                        SubjectId = model.SubjectId,
+                        TestId = test.Id
+                    };
+                    await _questionService.Insert(newQuestion);
+                    await _testService.Update(test);
+                    foreach (var answer in question.Answers)
+                    {
+                        Answer newAnswer = new Answer()
+                        {
+                            Content = answer.AnswerText,
+                            IsCorrect = answer.IsCorrect,
+                            QuestionId = newQuestion.Id
+                        };
+                        await _answerService.Insert(newAnswer);
+                        await _questionService.Update(newQuestion);
+                    }
+                }
             await _lessonService.Update(lesson);
             return Ok(new {subjectId = lesson.SubjectId});
         }
