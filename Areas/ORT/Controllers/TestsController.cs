@@ -101,6 +101,7 @@ public class TestsController : Controller
         else
             userOrtTest.IsPassed = false;
         await _userOrtTestService.Update(userOrtTest);
+        
         // Return the result data in the response
         return Ok(new { ortTestResultModels });
     }

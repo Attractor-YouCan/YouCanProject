@@ -11,8 +11,6 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Statistic> Statistics { get; set; }
-    public DbSet<Topic> Topics { get; set; }
-    public DbSet<Subtopic> Subtopics { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<Test> Tests { get; set; }
     public DbSet<Question> Questions { get; set; }
@@ -40,11 +38,11 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
             .HasForeignKey<Test>(o => o.OrtInstructionId); 
         
         base.OnModelCreating(modelBuilder);
-        new OrtTestInitializer(modelBuilder).Seed();
-        new TopicInitializer(modelBuilder).Seed();
-        new LessonInitializer(modelBuilder).Seed();
-        new TestInitializer(modelBuilder).Seed();
-
+        new SubjectInitializer(modelBuilder).Seed();
+        //new OrtTestInitializer(modelBuilder).Seed();
+        //new LessonInitializer(modelBuilder).Seed();
+        //new TestInitializer(modelBuilder).Seed();
+        
         modelBuilder.Entity<IdentityRole<int>>()
             .HasData(
                 new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
@@ -58,7 +56,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 new Tariff { Id = 2, Name = "Pro", Duration = 1, Price = 1 },
                 new Tariff { Id = 3, Name = "Premium", Duration = 3, Price = 2 }
             );
-        new TrainTestInitializer(modelBuilder).Seed();
+        //new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}
 
