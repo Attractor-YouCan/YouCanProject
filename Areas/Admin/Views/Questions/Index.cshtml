@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<YouCan.Entities.Question>
 
 @{
-    ViewData["Title"] = "Index";
+    Layout = "_Admin";
 }
 
 <h1>Index</h1>
@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Test)
             </th>
             <th>
-                @Html.DisplayNameFor(model => typeof(YouCan.Entities.User))
+                User
             </th>
             <th></th>
         </tr>

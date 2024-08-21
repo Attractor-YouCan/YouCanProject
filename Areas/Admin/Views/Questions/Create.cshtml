@@ -1,7 +1,7 @@
 ﻿@model YouCan.Entities.Question
 
 @{
-    ViewData["Title"] = "Create";
+    Layout = "_Admin";
 }
 
 <h1>Create</h1>
@@ -34,7 +34,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
