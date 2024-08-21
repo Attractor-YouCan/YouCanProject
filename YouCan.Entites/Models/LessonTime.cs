@@ -14,4 +14,5 @@ public class LessonTime : EntityBase
     public int LessonId { get; set; }
     public Lesson? Lesson { get; set; }
     public TimeSpan TimeSpent { get; set; }
+    public DateOnly Date { get; set; }
 }
