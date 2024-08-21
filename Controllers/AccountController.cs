@@ -411,11 +411,6 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-    
-    [Authorize]
-    public async Task<IActionResult> Rating()
-    {
-        return View();
-    }
+   
 
 }

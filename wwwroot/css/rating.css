@@ -186,6 +186,27 @@
     background-color: #fffae6;
     margin-bottom: 30px;
 }
+.league-header .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.league-header img {
+    transition: transform 0.3s ease;
+}
+
+.league-header img.centered.large {
+    transform: scale(1.2); /* Increase size for the centered image */
+}
+
+.league-header img.medium {
+    transform: scale(1); /* Normal size for medium images */
+}
+
+.league-header img.small {
+    transform: scale(0.8); /* Smaller size for small images */
+}
 
 @media (max-width: 768px) {
     .header {

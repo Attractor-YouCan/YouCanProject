@@ -1,38 +1,444 @@
 @model IEnumerable<YouCan.Entities.League>
 
 @{
-ViewData["Title"] = "Leagues";
+ViewBag.Title = "Combined Rating Page";
+Layout = "_NavBar";
 }
 
-<h2>Leagues</h2>
+<link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>League Name</th>
-        <th>Min Points</th>
-        <th>Max Points</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-    <tr>
-        <td>@item.LeagueName</td>
-        <td>@item.MinPoints</td>
-        <td>@item.MaxPoints</td>
-        <td>@item.StartDate.ToShortDateString()</td>
-        <td>@item.EndDate.ToShortDateString()</td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>
-    </tr>
+<div class="container">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="time-left">
+            <img src="/ratingimages/timer.png" alt="time" />
+            <span>123 дн. осталось</span>
+        </div>
+        <div class="score-info">
+            <div class="coin">
+                <img src="/ratingimages/coin-bal.png" alt="coin" />
+                <span>1024</span>
+            </div>
+            <div class="fire">
+                <img src="/ratingimages/fire.png" alt="fire" />
+                <span>7</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- League Header with Swiper -->
+    <div class="swiper-container league-header">
+        <div class="swiper-wrapper">
+            @foreach (var league in Model)
+            {
+            var imageClass = league.LeagueName.ToLower() switch
+            {
+            "bronze" => "small",
+            "silver" => "medium",
+            "gold" => "large",
+            "platinum" => "medium",
+            "diamond" => "small",
+            _ => "small"
+            };
+
+            <div class="swiper-slide">
+                <img src="@Url.Content($"~/ratingimages/{league.LeagueName.Trim().ToLower()}.png")"
+                     alt="@league.LeagueName" data-league="@league.LeagueName.Trim().ToLower()" class="@imageClass" />
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- League Title -->
+    <div class="league-title">Золотая лига</div>
+
+    <!-- Leaderboard Section -->
+    <div class="leaderboard"></div>
+
+    <!-- Floating Button -->
+    <div class="footer-button">
+        <button class="floating-button">Где я?</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    const leagueData = {
+        bronze: [
+            { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" },
+            { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" },
+            { name: "Илон Маск", score: 16485, img: "/ratingimages/Mask.png" },
+            { name: "Илон Маск", score: 14000, img: "/ratingimages/Mask.png" },
+            { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" },
+            { name: "Илон Маск", score: 20000, img: "/ratingimages/Mask.png" },
+        ],
+        silver: [
+            { name: "Джефф Безос", score: 17700, img: "/ratingimages/Mask.png" },
+            { name: "Уоррен Баффет", score: 20000, img: "/ratingimages/Mask.png" },
+            { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" },
+            { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" },
+        ],
+        gold: [
+            { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" },
+            { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" },
+            { name: "Уоррен Баффет", score: 17000, img: "/ratingimages/Mask.png" },
+            { name: "Билл Гейтс", score: 18000, img: "/ratingimages/Mask.png" },
+        ],
+        platinum: [
+            { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" },
+            { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" },
+            { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" },
+            { name: "Уоррен Баффет", score: 14000, img: "/ratingimages/Mask.png" },
+        ],
+        diamond: [
+            { name: "Уоррен Баффет", score: 14000, img: "/ratingimages/Mask.png" },
+            { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" },
+            { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" },
+            { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" },
+        ],
+    };
+
+    const leagueNames = {
+        bronze: "Бронзовая лига",
+        silver: "Серебряная лига",
+        gold: "Золотая лига",
+        platinum: "Платиновая лига",
+        diamond: "Алмазная лига",
+    };
+
+    const swiper = new Swiper('.swiper-container', {
+        effect: 'cards',
+       
+        slidesPerView: 5,
+        centeredSlides: true,
+        slideToClickedSlide: true,
+        loop: true,
+    });
+
+    function updateLeaderboard(league) {
+        const leaderboard = document.querySelector(".leaderboard");
+        leaderboard.innerHTML = "";
+
+        const sortedData = [...leagueData[league]].sort((a, b) => b.score - a.score);
+
+        sortedData.forEach((item, index) => {
+            const row = document.createElement("div");
+            row.className = "row";
+
+            let medalImg = "";
+            if (index === 0) {
+                medalImg = "/ratingimages/first.png";
+            } else if (index === 1) {
+                medalImg = "/ratingimages/second.png";
+            } else if (index === 2) {
+                medalImg = "/ratingimages/third.png";
+            }
+
+            let changeImg = "";
+            let changeValue = "";
+            let changeColor = "";
+
+            if (item.score > 16000) {
+                changeImg = "/ratingimages/arrow-up.png";
+                changeValue = (item.score - 16000);
+                changeColor = "text-success";
+            } else if (item.score < 15000) {
+                changeImg = "/ratingimages/arrow-down.png";
+                changeValue = (15000 - item.score);
+                changeColor = "text-danger";
+            }
+
+            row.innerHTML = `
+                <div class="col-1 position">
+                    ${medalImg ? `<img src="${medalImg}" alt="Medal" width="30" height="40" />` : index + 1}
+                </div>
+                <div class="col-7 user-info">
+                    <img src="${item.img}" alt="User" width="40" height="40" />
+                    <span>${item.name}</span>
+                </div>
+                <div class="col-2 score">
+                    ${item.score} очков
+                    <div class="change">
+                        ${changeImg ? `<img class="changeImg" src="${changeImg}" alt="Change" />` : ''}
+                        <span class="change-value ${changeColor}">${changeValue}</span>
+                    </div>
+                </div>
+            `;
+            leaderboard.appendChild(row);
+        });
     }
-    </tbody>
-</table>
 
-<a asp-action="Create">Create New League</a>
+    function updateLeagueIcons(league) {
+        swiper.slides.forEach(slide => {
+            const img = slide.querySelector('img');
+            img.classList.remove('centered', 'small', 'medium', 'large');
+            if (img.dataset.league === league) {
+                img.classList.add('centered', 'large');
+            } else {
+                img.classList.add(img.dataset.league === league ? 'large' : 'medium');
+            }
+        });
+
+        updateLeaderboard(league);
+        document.querySelector('.league-title').textContent = leagueNames[league];
+    }
+
+    swiper.on('slideChange', function () {
+        const activeSlide = swiper.slides[swiper.activeIndex];
+        const activeLeague = activeSlide.querySelector('img').dataset.league;
+        updateLeagueIcons(activeLeague);
+    });
+
+    document.querySelectorAll(".league-header img").forEach((img) => {
+        img.addEventListener("click", () => {
+            const league = img.dataset.league;
+            updateLeagueIcons(league);
+        });
+    });
+
+    document.querySelector('.footer-button button').addEventListener('click', () => {
+        const username = 'Тим Кук';
+        const leaderboard = document.querySelector('.leaderboard');
+        const rows = Array.from(leaderboard.querySelectorAll('.row'));
+
+        const existingHighlight = leaderboard.querySelector('.highlighted');
+        if (existingHighlight) {
+            existingHighlight.classList.remove('highlighted');
+        }
+
+        const userRow = rows.find(row => row.querySelector('.user-info span').textContent === username);
+        if (userRow) {
+            userRow.classList.add('highlighted');
+            leaderboard.prepend(userRow);
+        }
+    });
+
+    // Initialize with diamond league as active
+    updateLeagueIcons("diamond");
+</script>
+}
+
+
+@* *@
+@* @model IEnumerable<YouCan.Entities.League> *@
+@* *@
+@* @{ *@
+@* ViewBag.Title = "Combined Rating Page"; *@
+@* Layout = "_NavBar"; *@
+@* } *@
+@* <link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" /> *@
+@* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" /> *@
+@* <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script> *@
+@* *@
+@* <div class="container"> *@
+@*     <!-- Header Section --> *@
+@*     <div class="header"> *@
+@*         <div class="time-left"> *@
+@*             <img src="/ratingimages/timer.png" alt="time" /> *@
+@*             <span>123 дн. осталось</span> *@
+@*         </div> *@
+@*         <div class="score-info"> *@
+@*             <div class="coin"> *@
+@*                 <img src="/ratingimages/coin-bal.png" alt="coin" /> *@
+@*                 <span>1024</span> *@
+@*             </div> *@
+@*             <div class="fire"> *@
+@*                 <img src="/ratingimages/fire.png" alt="fire" /> *@
+@*                 <span>7</span> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* *@
+@*     <!-- League Header with Swiper --> *@
+@*     <div class="swiper-container league-header"> *@
+@*         <div class="swiper-wrapper"> *@
+@*             @foreach (var league in Model) *@
+@*             { *@
+@*             var imageClass = league.LeagueName.ToLower() switch *@
+@*             { *@
+@*             "bronze" => "small", *@
+@*             "silver" => "medium", *@
+@*             "gold" => "large", *@
+@*             "platinum" => "medium", *@
+@*             "diamond" => "small", *@
+@*             _ => "small" *@
+@*             }; *@
+@* *@
+@*             <div class="swiper-slide"> *@
+@*                 <img src="@Url.Content($"~/ratingimages/{league.LeagueName.Trim().ToLower()}.png")" *@
+@*                      alt="@league.LeagueName" data-league="@league.LeagueName.Trim().ToLower()" class="@imageClass" /> *@
+@*             </div> *@
+@*             } *@
+@*         </div> *@
+@*     </div> *@
+@* *@
+@* *@
+@*     <!-- League Title --> *@
+@*     <div class="league-title">Золотая лига</div> *@
+@* *@
+@*     <!-- Leaderboard Section --> *@
+@*     <div class="leaderboard"></div> *@
+@* *@
+@*     <!-- Floating Button --> *@
+@*     <div class="footer-button"> *@
+@*         <button class="floating-button">Где я?</button> *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* @section Scripts { *@
+@*     <script> *@
+@*     const leagueData = { *@
+@*         bronze: [ *@
+@*             { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Илон Маск", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Илон Маск", score: 14000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Илон Маск", score: 20000, img: "/ratingimages/Mask.png" }, *@
+@*         ], *@
+@*         silver: [ *@
+@*             { name: "Джефф Безос", score: 17700, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Уоррен Баффет", score: 20000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*         ], *@
+@*         gold: [ *@
+@*             { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Уоррен Баффет", score: 17000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Билл Гейтс", score: 18000, img: "/ratingimages/Mask.png" }, *@
+@*         ], *@
+@*         platinum: [ *@
+@*             { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Уоррен Баффет", score: 14000, img: "/ratingimages/Mask.png" }, *@
+@*         ], *@
+@*         diamond: [ *@
+@*             { name: "Уоррен Баффет", score: 14000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Билл Гейтс", score: 15000, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Тим Кук", score: 16485, img: "/ratingimages/Mask.png" }, *@
+@*             { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" }, *@
+@*         ], *@
+@*     }; *@
+@* *@
+@*     const leagueNames = { *@
+@*         bronze: "Бронзовая лига", *@
+@*         silver: "Серебряная лига", *@
+@*         gold: "Золотая лига", *@
+@*         platinum: "Платиновая лига", *@
+@*         diamond: "Алмазная лига", *@
+@*     }; *@
+@* *@
+@*     const swiper = new Swiper('.swiper-container', { *@
+@*         slidesPerView: 5, *@
+@*         centeredSlides: true, *@
+@*         slideToClickedSlide: true, *@
+@*         repeat: true, *@
+@*         loop: true, *@
+@*     }); *@
+@* *@
+@*     function updateLeaderboard(league) { *@
+@*         const leaderboard = document.querySelector(".leaderboard"); *@
+@*         leaderboard.innerHTML = ""; *@
+@* *@
+@*         const sortedData = [...leagueData[league]].sort((a, b) => b.score - a.score); *@
+@* *@
+@*         sortedData.forEach((item, index) => { *@
+@*             const row = document.createElement("div"); *@
+@*             row.className = "row"; *@
+@* *@
+@*             let medalImg = ""; *@
+@*             if (index === 0) { *@
+@*                 medalImg = "/ratingimages/first.png"; *@
+@*             } else if (index === 1) { *@
+@*                 medalImg = "/ratingimages/second.png"; *@
+@*             } else if (index === 2) { *@
+@*                 medalImg = "/ratingimages/third.png"; *@
+@*             } *@
+@* *@
+@*             let changeImg = ""; *@
+@*             let changeValue = ""; *@
+@*             let changeColor = ""; *@
+@* *@
+@*             if (item.score > 16000) { *@
+@*                 changeImg = "/ratingimages/arrow-up.png"; *@
+@*                 changeValue = (item.score - 16000); *@
+@*                 changeColor = "text-success"; *@
+@*             } else if (item.score < 15000) { *@
+@*                 changeImg = "/ratingimages/arrow-down.png"; *@
+@*                 changeValue = (15000 - item.score); *@
+@*                 changeColor = "text-danger"; *@
+@*             } *@
+@* *@
+@*             row.innerHTML = ` *@
+@*                     <div class="col-1 position"> *@
+@*                         ${medalImg ? `<img src="${medalImg}" alt="Medal" width="30" height="40" />` : index + 1} *@
+@*                     </div> *@
+@*                     <div class="col-7 user-info"> *@
+@*                         <img src="${item.img}" alt="User" width="40" height="40" /> *@
+@*                         <span>${item.name}</span> *@
+@*                     </div> *@
+@*                     <div class="col-2 score"> *@
+@*                         ${item.score} очков *@
+@*                         <div class="change"> *@
+@*                             ${changeImg ? `<img class="changeImg" src="${changeImg}" alt="Change" />` : ''} *@
+@*                             <span class="change-value ${changeColor}">${changeValue}</span> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 `; *@
+@*             leaderboard.appendChild(row); *@
+@*         }); *@
+@*     } *@
+@* *@
+@*     function updateLeagueIcons(league) { *@
+@*         swiper.slides.forEach(slide => { *@
+@*             const img = slide.querySelector('img'); *@
+@*             img.classList.remove('centered', 'small', 'medium', 'large'); *@
+@*             if (img.dataset.league === league) { *@
+@*                 img.classList.add('centered', 'large'); *@
+@*             } else { *@
+@*                 img.classList.add(img.dataset.league === league ? 'large' : 'medium'); *@
+@*             } *@
+@*         }); *@
+@* *@
+@*         updateLeaderboard(league); *@
+@*         document.querySelector('.league-title').textContent = leagueNames[league]; *@
+@*     } *@
+@* *@
+@*     swiper.on('slideChange', function () { *@
+@*         const activeSlide = swiper.slides[swiper.activeIndex]; *@
+@*         const activeLeague = activeSlide.querySelector('img').dataset.league; *@
+@*         updateLeagueIcons(activeLeague); *@
+@*     }); *@
+@* *@
+@*     document.querySelectorAll(".league-header img").forEach((img) => { *@
+@*         img.addEventListener("click", () => { *@
+@*             const league = img.dataset.league; *@
+@*             updateLeagueIcons(league); *@
+@*         }); *@
+@*     }); *@
+@* *@
+@*     document.querySelector('.footer-button button').addEventListener('click', () => { *@
+@*         const username = 'Тим Кук'; *@
+@*         const leaderboard = document.querySelector('.leaderboard'); *@
+@*         const rows = Array.from(leaderboard.querySelectorAll('.row')); *@
+@* *@
+@*         const existingHighlight = leaderboard.querySelector('.highlighted'); *@
+@*         if (existingHighlight) { *@
+@*             existingHighlight.classList.remove('highlighted'); *@
+@*         } *@
+@* *@
+@*         const userRow = rows.find(row => row.querySelector('.user-info span').textContent === username); *@
+@*         if (userRow) { *@
+@*             userRow.classList.add('highlighted'); *@
+@*             leaderboard.prepend(userRow); *@
+@*         } *@
+@*     }); *@
+@* *@
+@*     // Initialize with diamond league *@
+@*     updateLeaderboard('diamond'); *@
+@* </script> *@
+@* } *@

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,10 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         
         base.OnModelCreating(modelBuilder);
         new SubjectInitializer(modelBuilder).Seed();
-        new OrtTestInitializer(modelBuilder).Seed();
-        new LessonInitializer(modelBuilder).Seed();
-        new TestInitializer(modelBuilder).Seed();
-
+        //new OrtTestInitializer(modelBuilder).Seed();
+        //new LessonInitializer(modelBuilder).Seed();
+        //new TestInitializer(modelBuilder).Seed();
+        
         modelBuilder.Entity<IdentityRole<int>>()
             .HasData(
                 new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
@@ -58,6 +59,54 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 new Tariff { Id = 2, Name = "Pro", Duration = 1, Price = 1 },
                 new Tariff { Id = 3, Name = "Premium", Duration = 3, Price = 2 }
             );
+        
+        modelBuilder.Entity<League>().HasData(
+            new League
+            {
+                Id = 1,
+                LeagueName = "Bronze",
+                MinPoints = 0,
+                MaxPoints = 999,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            },
+            new League
+            {
+                Id = 2,
+                LeagueName = "Silver",
+                MinPoints = 1000,
+                MaxPoints = 1999,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            },
+            new League
+            {
+                Id = 3,
+                LeagueName = "Gold",
+                MinPoints = 2000,
+                MaxPoints = 2999,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            },
+            new League
+            {
+                Id = 4,
+                LeagueName = "Platinum",
+                MinPoints = 3000,
+                MaxPoints = 3999,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            },
+            new League
+            {
+                Id = 5,
+                LeagueName = "Diamond",
+                MinPoints = 4000,
+                MaxPoints = int.MaxValue,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            }
+        );
         new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}

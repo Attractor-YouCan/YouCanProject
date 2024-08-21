@@ -17,7 +17,7 @@ public class User : IdentityUser<int>
     public DateTime TariffStartDate { get; set; }
     public DateTime? TariffEndDate { get; set; }
     
-    public int LeagueId { get; set; }
+    public int? LeagueId { get; set; }
     public League? League { get; set; }
     
     public int Rank { get; set; } 
