@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using YouCan.Areas.Study.Dto;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
@@ -13,13 +15,15 @@ public class LessonsController : Controller
     private ICRUDService<Lesson> _lessonService;
     private ICRUDService<UserLessons> _userLessonService;
     private UserManager<User> _userManager;
-
+    private ICRUDService<LessonTime> _lessonTimeService;
     public LessonsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
+        ICRUDService<LessonTime> lessonTimeService,
         UserManager<User> userManager)
     {
         _lessonService = lessonService;
         _userLessonService = userLessonService;
+        _lessonTimeService = lessonTimeService;
         _userManager = userManager;
     }
 
@@ -61,5 +65,28 @@ public class LessonsController : Controller
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)
             return View(lesson);
         return NotFound("Пройдите предыдущий урок, чтобы открыть");
+    }
+    [HttpPost]
+    public async Task<IActionResult> LogTime([FromBody] LessonTimeDto model)
+    {
+        if(ModelState.IsValid)
+        {
+            var lesson = _lessonService.GetById(model.LessonId);
+            if(lesson is null)
+            {
+                return NotFound($"Lesson with id: {model.LessonId} not found");
+            }
+            var user = await _userManager.GetUserAsync(User);
+            var lessonTime = new LessonTime()
+            {
+                LessonId = model.LessonId,
+                UserId = user.Id,
+                TimeSpent = TimeSpan.FromMilliseconds(model.TimeSpent),
+                Date = DateOnly.FromDateTime(DateTime.Now),
+            };
+            await _lessonTimeService.Insert(lessonTime);
+            return Ok();
+        }
+        return BadRequest();
     }
 }
