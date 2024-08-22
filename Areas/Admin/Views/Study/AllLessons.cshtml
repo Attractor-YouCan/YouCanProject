@@ -1,0 +1,46 @@
+@model List<Lesson>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@if (Model.Count == 0 || Model == null)
+{
+    <h5> Уроков еще нет !</h5>
+}
+else
+{
+    <div class="col-10 mx-auto my-5 ">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#Id Урока</th>
+                <th scope="col">Тема Урока</th>
+                <th scope="col">Предмет</th>
+                <th scope="col">Уровень</th>
+                <th scope="col">Требуемый Уровень</th>
+                <th scope="col">CRUD</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var lesson in Model)
+            {
+                <tr>
+                    <th scope="row">@lesson.Id</th>
+                    <td>@lesson.Title</td>
+                    <td>@lesson.Subject.Name</td>
+                    <td>@lesson.LessonLevel</td>
+                    <td>@lesson.RequiredLevel</td>
+                    <td>
+                        <a class="btn btn-outline-success" asp-action="Edit" asp-route-lessonId="@lesson.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+<div class="col-6 mx-auto">
+    <a class="btn btn-primary" asp-action="CreateLesson" asp-route-subjectId="@ViewBag.SubjectId">Добавить Урок</a>
+</div>
