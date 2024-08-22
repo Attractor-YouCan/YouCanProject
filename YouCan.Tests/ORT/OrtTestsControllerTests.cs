@@ -6,7 +6,7 @@ using YouCan.Areas.ORT.Controllers;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
-namespace YouCan.Tests;
+namespace YouCan.Tests.ORT;
 
 public class OrtTestsControllerTests
 {
