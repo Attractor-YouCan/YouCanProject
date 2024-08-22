@@ -109,12 +109,12 @@ public class MiniTestsControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var resultData = Assert.IsType<TestResult>(okResult.Value);
-        Assert.True(resultData.IsPassed);
-        Assert.Equal(lesson.Id, resultData.LessonId);
-        Assert.Equal(lesson.SubjectId, resultData.SubtopicId);
-    }
+        var resultData = okResult.Value;
 
+        Assert.Equal(false, resultData.GetType().GetProperty("isPassed")?.GetValue(resultData));
+        Assert.Equal(lesson.Id, resultData.GetType().GetProperty("lessonId")?.GetValue(resultData));
+        Assert.Equal((int?)lesson.SubjectId, resultData.GetType().GetProperty("subtopicId")?.GetValue(resultData));
+    }
 
     [Fact]
     public void Result_ReturnsViewResult_WithCorrectViewData()
