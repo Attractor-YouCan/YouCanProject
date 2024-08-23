@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Xunit.Sdk;
 using YouCan.Areas.Study.Controllers;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
@@ -12,15 +14,17 @@ public class LessonsControllerTests
       private readonly Mock<ICRUDService<Lesson>> _lessonServiceMock;
       private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
       private readonly Mock<UserManager<User>> _userManagerMock;
+      private readonly Mock<ICRUDService<LessonTime>> _lessonTimeMock;
       private readonly LessonsController _controller;
 
       public LessonsControllerTests()
       {
           _lessonServiceMock = new Mock<ICRUDService<Lesson>>();
+          _lessonTimeMock = new Mock<ICRUDService<LessonTime>>();
           _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
           _userManagerMock = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
-          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object, _userManagerMock.Object);
+          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object, _lessonTimeMock.Object, _userManagerMock.Object);
       }
 
       [Fact]
