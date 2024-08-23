@@ -1,3 +1,4 @@
+
 @model IEnumerable<YouCan.Entities.League>
 
 @{
@@ -6,8 +7,10 @@ Layout = "_NavBar";
 }
 
 <link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
 
 <div class="container  rating-main">
     <!-- Header Section -->
@@ -28,18 +31,25 @@ Layout = "_NavBar";
         </div>
     </div>
 
-    
-    <div class="swiper-container swiper1 ">
-        <div class="swiper-wrapper">
-            @foreach (var league in Model)
-            {
-            <div class="swiper-slide">
-                <img src="@Url.Content($"~/ratingimages/{league.LeagueName.Trim().ToLower()}.png")"
-                     alt="@league.LeagueName" data-league="@league.LeagueName.Trim().ToLower()" />
+
+    <main class="main">
+
+        <div class="swiper swiper1 ">
+            <div class="swiper-wrapper">
+                @foreach (var league in Model)
+                {
+                <div class="swiper-slide">
+                    <img src="@Url.Content($"~/ratingimages/{league.LeagueName.Trim().ToLower()}.png")"
+                         alt="@league.LeagueName" data-league="@league.LeagueName.Trim().ToLower()" />
+                </div>
+                }
+                
             </div>
-            }
         </div>
-    </div>
+
+    </main>
+
+
 
     <!-- League Title -->
     <div class="league-title">Золотая лига</div>
@@ -51,10 +61,12 @@ Layout = "_NavBar";
     <div class="footer-button">
         <button class="floating-button">Где я?</button>
     </div>
+
 </div>
 
 @section Scripts {
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
     const leagueData = {
         bronze: [
             { name: "Джефф Безос", score: 15700, img: "/ratingimages/Mask.png" },
@@ -99,25 +111,36 @@ Layout = "_NavBar";
     };
 
 
-    var swiper = new Swiper(".swiper-container", {
-        slidesPerView: "5",
-        centeredSlides: true,
-        slidesPerGroup: 1,
-        spaceBetween: 44,
-        loop: true,
-        breakpoints: {
-            // Adjust the number of visible slides for different screen sizes
-            320: {
-                slidesPerView: 3,
-                spaceBetween: 10,
+        var swiper = new Swiper(".swiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slideToClickedSlide: true,
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 100,
+                modifier: 3,
+                slideShadows: true
             },
-            768: {
-                slidesPerView: 5,
-                spaceBetween: 20,
-            },
-        }
-    });
-    
+            loop: true,
+            breakpoints: {
+                640: {
+                    slidesPerView: 'auto'
+                },
+                768: {
+                    slidesPerView: 'auto'
+                },
+                1024: {
+                    slidesPerView: 'auto'
+                },
+                1560: {
+                    slidesPerView: 'auto'
+                }
+            }
+        });
+
+
 
     function updateLeaderboard(league) {
         const leaderboard = document.querySelector(".leaderboard");
@@ -217,7 +240,7 @@ Layout = "_NavBar";
         }
     });
 
-    // Initialize with diamond league as active
+  
     updateLeagueIcons("diamond");
 </script>
 }

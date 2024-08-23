@@ -107,7 +107,7 @@
 }
 
 .leaderboard {
-    
+    /*margin: 0 auto;*/
     max-width: 100%;
     padding: 0 15px;
 }
@@ -195,50 +195,73 @@
     background-color: #fffae6;
     margin-bottom: 30px;
 }
-.swiper1{
-    margin-left: auto;
-    margin-right: auto;
+/*.swiper1{*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*    position: relative;*/
+/*    overflow: hidden;*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*    z-index: 1;*/
+/*    !*display: block;*!*/
+/*}*/
+/*.swiper1 .swiper-wrapper{*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    !*width: 800px;*!*/
+/*    padding-left: 260px;*/
+/*}*/
+
+
+
+.main {
     position: relative;
-    overflow: hidden;
-    list-style: none;
-    padding: 0;
-    z-index: 1;
-    /*display: block;*/
-}
-.swiper1 .swiper-wrapper{
-    display: flex;
-    align-items: center;
-    /*width: 800px;*/
-    padding-left: 260px;
+    width: calc(min(90rem, 90%));
+    margin: 0 auto;
+    min-height: 100vh;
+    column-gap: 3rem;
+    padding-block: min(20vh, 3rem);
 }
 
+.swiper {
+    width: 100%;
+    padding-top: 3.125rem;
+    /*perspective: 800px!important;*/
+}
 .swiper-slide{
+    width: fit-content!important;
+    /*width: 100px;*/
+    height: 100px!important;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: self-start;
     text-align: center;
     font-size: 18px;
     background: #fff;
-    width: 40px!important;
-    height: 40px;
     margin: auto 2.5px;
-
     overflow: hidden;
 }
-.swiper-slide img {
-    transition: transform 0.3s ease;
-    cursor: pointer;
+
+.swiper-slide img{
     width: 100%;
     height: 100%;
-}
-.swiper-slide-prev,
- .swiper-slide-next {
-    width: 60px!important;
-    height: 60px!important;
+    object-fit: cover;
 }
 
 
 
-.swiper-slide-active {
-    width: 80px!important;
-    height: 80px!important;
+@media screen and (min-width: 48rem) {
+    .main {
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 93.75rem) {
+    .swiper {
+        width: 85%;
+    }
 }
 
 
@@ -247,14 +270,14 @@
         align-items: flex-start;
     }
 
-        .header .time-left {
-            font-size: 8px;
-        }
+    .header .time-left {
+        font-size: 8px;
+    }
 
-        .header .score-info {
-            margin-bottom: 10px;
-            font-size: 12px;
-        }
+    .header .score-info {
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
 
     .league-title {
         font-size: 18px;
@@ -289,19 +312,19 @@
         font-size: 10px;
     }
 
-        .leaderboard .position img {
-            width: 15px;
-            height: 20px;
-        }
+    .leaderboard .position img {
+        width: 15px;
+        height: 20px;
+    }
 
     .leaderboard .user-info {
         font-size: 10px;
     }
 
-        .leaderboard .user-info img {
-            width: 20px;
-            height: 20px;
-        }
+    .leaderboard .user-info img {
+        width: 20px;
+        height: 20px;
+    }
 
     .leaderboard .score {
         font-size: 10px;
@@ -319,14 +342,14 @@
         margin-right: 12px;
     }
 
-        .change .change-value {
-            font-size: 7px;
-        }
+    .change .change-value {
+        font-size: 7px;
+    }
 
-        .change .changeImg {
-            width: 8px;
-            height: 8px;
-        }
+    .change .changeImg {
+        width: 8px;
+        height: 8px;
+    }
 }
 
 .leaderboard .change {
@@ -343,11 +366,12 @@
     margin-left: 10px;
 }
 
-    .change img {
-        width: 16px;
-        height: 16px;
-    }
+.change img {
+    width: 16px;
+    height: 16px;
+}
 
-    .change .change-value {
-        margin-left: 5px;
-    }
+.change .change-value {
+    margin-left: 5px;
+}
+

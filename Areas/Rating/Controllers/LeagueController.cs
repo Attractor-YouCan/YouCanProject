@@ -20,7 +20,7 @@ namespace YouCan.Areas.Rating.Controllers
         // GET: Rating/League
         public async Task<IActionResult> Index()
         {
-            var leagues = _leagueRepository.GetAll();
+            var leagues = _leagueRepository.GetAll().ToList();
             return View(leagues);
         }
 
