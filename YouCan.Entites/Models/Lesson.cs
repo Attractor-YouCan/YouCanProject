@@ -11,12 +11,8 @@ public class Lesson : EntityBase
     
     public int RequiredLevel { get; set; }
     public int? LessonLevel { get; set; }
-
-    public int? SubtopicId { get; set; }
-    public Subtopic? Subtopic { get; set; }
-    
     //Привязка внешнего ключа к Subject
-    public int? SubjectId { get; set; }
+    public int SubjectId { get; set; }
     public Subject? Subject { get; set; }
 
     public List<Test> Tests { get; set; }
