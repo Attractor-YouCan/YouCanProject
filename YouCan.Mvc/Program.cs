@@ -10,7 +10,9 @@ using YouCan.Services;
 using YouCan.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddControllersWithViews()
+    .AddViewLocalization();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -113,6 +115,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("ru"),
+    new CultureInfo("ky")
+};
+app.UseRequestLocalization(new RequestLocalizationOptions()
+{
+    DefaultRequestCulture = new RequestCulture("ru"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures,
+});
 
 app.UseRouting();
 app.UseAuthentication();
