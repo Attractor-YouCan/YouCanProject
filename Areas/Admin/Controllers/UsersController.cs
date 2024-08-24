@@ -66,7 +66,7 @@ public class UsersController : Controller
                     if (tariff.Duration.HasValue)
                     {
                         user.TariffEndDate = DateTime.UtcNow.AddMonths((int)tariff.Duration);
-
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "user"))
                         {
                             await _userManager.AddToRoleAsync(user, "prouser");
@@ -76,6 +76,7 @@ public class UsersController : Controller
                     else
                     {
                         user.TariffEndDate = null;
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "prouser"))
                         {
                             await _userManager.AddToRoleAsync(user, "user");
@@ -179,6 +180,7 @@ public class UsersController : Controller
                 await _userManager.SetLockoutEnabledAsync(user, false);
                 var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow; 
                 user.TariffEndDate = null;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
