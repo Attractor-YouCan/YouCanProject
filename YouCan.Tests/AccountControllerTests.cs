@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
@@ -104,13 +105,18 @@ public class AccountControllerTests
         // Arrange
         var model = new RegisterViewModel
         {
-            Email = "test@example.com",
+            Email = "test@gmail.com",
+            PhoneNumber = "0 777 88 89 99",
+            District = "Ik",
+            BirthDate = DateTime.Now.AddYears(-20),
+            FirstName = "qw",
+            LastName = "asd",
             UserName = "TestUser",
             Password = "Test@1234"
         };
 
         _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), model.Password))
-                        .ReturnsAsync(IdentityResult.Success);
+            .ReturnsAsync(IdentityResult.Success);
         _tariffsMock.Setup(t => t.GetAll()).Returns(new List<Tariff> { new Tariff { Name = "Start", Id = 1 } }.AsQueryable());
 
         // Act
@@ -118,9 +124,12 @@ public class AccountControllerTests
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        dynamic jsonData = jsonResult.Value;
-        Assert.True(jsonData.success);
-        Assert.Equal(model.Email, jsonData.email.ToString());
+        var jsonString = JsonConvert.SerializeObject(jsonResult.Value);
+        var deserializedData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+    
+        Assert.NotNull(deserializedData); 
+        Assert.True((bool)deserializedData["success"]); 
+        Assert.Equal(model.Email, deserializedData["email"].ToString()); 
     }
 
     [Fact]
