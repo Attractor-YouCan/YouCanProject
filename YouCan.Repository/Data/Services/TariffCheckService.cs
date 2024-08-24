@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using YouCan.Entities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using YouCan.Entities;
 
 namespace YouCan.Services;
 

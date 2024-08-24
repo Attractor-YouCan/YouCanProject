@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\YouCan.Entites\YouCan.Entites.csproj" />
+        <ProjectReference Include="..\YouCan.Entities\YouCan.Entities.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 {

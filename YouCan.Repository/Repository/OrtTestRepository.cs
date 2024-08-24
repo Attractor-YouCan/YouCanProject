@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class OrtTestRepository : IRepository<OrtTest>
 {
@@ -29,7 +29,7 @@ public class OrtTestRepository : IRepository<OrtTest>
             .Include(t => t.Tests)
                 .ThenInclude(s => s.OrtInstruction)
             .AsEnumerable();
-        
+
     }
 
     public async Task<OrtTest> Get(int id)

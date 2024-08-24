@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class QuestionRepository : IRepository<Question>
 {
@@ -23,7 +23,7 @@ public class QuestionRepository : IRepository<Question>
         return entitis
             .Include(q => q.Answers)
             .Include(q => q.Test)
-                .ThenInclude(t=> t.Subject)
+                .ThenInclude(t => t.Subject)
             .Include(q => q.User)
             .AsEnumerable();
     }
@@ -33,7 +33,7 @@ public class QuestionRepository : IRepository<Question>
         return await entitis
             .Include(q => q.Answers)
             .Include(q => q.Test)
-            .ThenInclude(t=> t.Subject)
+            .ThenInclude(t => t.Subject)
             .Include(q => q.User)
             .SingleOrDefaultAsync(q => q.Id == id);
     }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using YouCan.Entities;
-using YouCan.Entites.Models;
 using System.Linq;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class AdminActionRepository : IRepository<AdminAction>
 {
