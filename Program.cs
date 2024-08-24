@@ -77,6 +77,9 @@ builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<Question
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
 builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
 
+builder.Services.AddTransient<IRepository<UserExperience>, UserExperianceRepository>();
+builder.Services.AddTransient<ICRUDService<UserExperience>, CRUDService<UserExperience>>();
+
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();

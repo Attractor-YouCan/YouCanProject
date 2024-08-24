@@ -58,7 +58,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-experience">
                 <img src="@Url.Content("/profileIcons/coin.png")" alt="experience-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@Model.User.Statistic.TotalExperience</p>
+                    <p class="stat-card-title mb-0">@Model.User.UserExperiences.Sum(e => e.ExperiencePoints)</p>
                     <p class="stat-card-subtitle mb-0">Очки опыта</p>
                 </div>
             </div>
@@ -135,67 +135,67 @@
 
     <script>
         let data = {
-            labels: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.Date.ToString("dd.MM")))),
-            datasets: [{
-                label: 'Опыт за неделю',
-                data: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.Experience))),
-                backgroundColor: [
-                    'rgba(255, 165, 0, 0.7)',
-                    'rgba(50, 205, 50, 0.7)',
-                    'rgba(135, 206, 235, 0.7)',
-                    'rgba(255, 69, 0, 0.7)',
-                    'rgba(135, 206, 250, 0.7)',
-                    'rgba(135, 206, 250, 0.7)',
-                    'rgba(50, 205, 50, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(255, 165, 0, 1)',
-                    'rgba(50, 205, 50, 1)',
-                    'rgba(135, 206, 235, 1)',
-                    'rgba(255, 69, 0, 1)',
-                    'rgba(135, 206, 250, 1)',
-                    'rgba(135, 206, 250, 1)',
-                    'rgba(50, 205, 50, 1)'
-                ],
-                borderWidth: 2,
-                borderRadius: 10,
-                barPercentage: 0.5,
-                categoryPercentage: 0.5,
-                hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
-                hoverBorderColor: 'rgba(255, 99, 132, 1)'
-            }]
-        };
+            labels: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.Date.ToString("ddd")))),
+        datasets: [{
+            label: 'Опыт за неделю',
+            data: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.ExperiencePoints))),
+            backgroundColor: [
+                'rgba(255, 165, 0, 0.7)',
+                'rgba(50, 205, 50, 0.7)',
+                'rgba(135, 206, 235, 0.7)',
+                'rgba(255, 69, 0, 0.7)',
+                'rgba(255, 165, 0, 0.7)',
+                'rgba(135, 206, 250, 0.7)',
+                'rgba(50, 205, 50, 0.7)'
+            ],
+            borderColor: [
+                'rgba(255, 165, 0, 1)',
+                'rgba(50, 205, 50, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(255, 69, 0, 1)',
+                'rgba(255, 165, 0, 1)',
+                'rgba(135, 206, 250, 1)',
+                'rgba(50, 205, 50, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 10,
+            barPercentage: 0.5,
+            categoryPercentage: 0.5,
+            hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
+            hoverBorderColor: 'rgba(255, 99, 132, 1)'
+        }]
+    };
 
-        let options = {
-            responsive: false,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 25
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
+    let options = {
+        responsive: false,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    stepSize: 25
                 }
             },
-            plugins: {
-                legend: {
+            x: {
+                grid: {
                     display: false
                 }
             }
-        };
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    };
 
-        let ctx = document.getElementById('myStyledBarChart').getContext('2d');
-        let myStyledBarChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: options
-        });
+    let ctx = document.getElementById('myStyledBarChart').getContext('2d');
+    let myStyledBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
 
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -205,6 +205,10 @@
             const nextMonthButton = document.querySelector('.next-month');
 
             let currentDate = new Date();
+
+            
+            const heatwaveStart = new Date('2024-08-15');
+            const heatwaveEnd = new Date('2024-08-25');
 
             function renderCalendar(date) {
                 const month = date.getMonth();
@@ -221,7 +225,7 @@
                 calendarContainer.querySelector('tbody').innerHTML = '';
                 let row = document.createElement('tr');
 
-                // Fill in days from previous month if the month doesn't start on Monday
+                
                 for (let i = 1; i < (firstDayOfMonth === 0 ? 7 : firstDayOfMonth); i++) {
                     let cell = document.createElement('td');
                     cell.classList.add('inactive');
@@ -229,7 +233,7 @@
                     row.appendChild(cell);
                 }
 
-                // Fill in the days of the current month
+                
                 for (let day = 1; day <= daysInMonth; day++) {
                     if (row.children.length === 7) {
                         calendarContainer.querySelector('tbody').appendChild(row);
@@ -238,15 +242,22 @@
                     let cell = document.createElement('td');
                     cell.textContent = day;
 
-                    // Highlight current day
+                    
                     if (day === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
                         cell.classList.add('active');
+                    }
+
+                    
+                    const cellDate = new Date(year, month, day);
+
+                    if (cellDate >= heatwaveStart && cellDate <= heatwaveEnd) {
+                        cell.classList.add('heatwave');
                     }
 
                     row.appendChild(cell);
                 }
 
-                // Fill in days from the next month if the last week is not full
+                
                 while (row.children.length < 7) {
                     let cell = document.createElement('td');
                     cell.classList.add('inactive');
@@ -269,6 +280,8 @@
 
             renderCalendar(currentDate);
         });
+
+
     </script>
 
 </div>

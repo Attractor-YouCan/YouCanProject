@@ -25,7 +25,7 @@ public class AccountController : Controller
     public AccountController(IUserCRUD userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
         TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Tariff> tariffs)
+        ICRUDService<Tariff> tariffs, ICRUDService<UserExperience> userExperiance)
     {
         _userService = userService;
         _userManager = userManager;
@@ -35,6 +35,7 @@ public class AccountController : Controller
         _userLevel = userLevel;
         _userLessonService = userLessonService;
         _tariffs = tariffs;
+        _userExperiance = userExperiance;
     }
 
 
@@ -73,10 +74,10 @@ public class AccountController : Controller
             int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
 
             var last7Days = DateTime.UtcNow.AddDays(-6).Date;
-            var weeklyExperience = user.UserExperiences
-                .Where(ue => ue.Date >= last7Days)
+            List<UserExperience> weeklyExperience = _userExperiance.GetAll()
+                .Where(ue => ue.Date >= last7Days && ue.UserId == user.Id)
                 .GroupBy(ue => ue.Date.Date)
-                .Select(g => new { Date = g.Key, Experience = g.Sum(ue => ue.ExperiencePoints) })
+                .Select(g => new UserExperience { Date = g.Key, ExperiencePoints = g.Sum(ue => ue.ExperiencePoints) })
                 .OrderBy(g => g.Date)
                 .ToList();
 

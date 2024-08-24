@@ -1687,9 +1687,6 @@ namespace YouCan.Repository.Migrations
                     b.Property<TimeSpan>("StudyMinutes")
                         .HasColumnType("interval");
 
-                    b.Property<int>("TotalExperience")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.ToTable("Statistics");

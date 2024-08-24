@@ -1,7 +1,7 @@
 ﻿using YouCan.Entities;
 
 
-public class UserExperience
+public class UserExperience : EntityBase
 {
     public int Id { get; set; }
     public int UserId { get; set; }

@@ -73,8 +73,17 @@ public class AdminInitializer
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "qweqweqeq",
             PhoneNumber = "4",
-            Statistic = new Statistic { Id = 1, Streak = 5, TotalExperience = 1000, StudyMinutes = new TimeSpan(2, 30, 0) },
-            StatisticId = 1
+            Statistic = new Statistic { Id = 1, Streak = 5, StudyMinutes = new TimeSpan(2, 30, 0) },
+            StatisticId = 1,
+            UserExperiences = {
+            new UserExperience {Id = 1, UserId = 5, Date = new DateTime(2024, 8, 24, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
+            new UserExperience {Id = 2, UserId = 5, Date = new DateTime(2024, 8, 23, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 },
+            new UserExperience {Id = 3, UserId = 5, Date = new DateTime(2024, 8, 22, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 10 },
+            new UserExperience {Id = 4, UserId = 5, Date = new DateTime(2024, 8, 21, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 50 },
+            new UserExperience {Id = 5, UserId = 5, Date = new DateTime(2024, 8, 20, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
+            new UserExperience {Id = 6, UserId = 5, Date = new DateTime(2024, 8, 19, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 35 },
+            new UserExperience {Id = 7, UserId = 5, Date = new DateTime(2024, 8, 18, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 }
+            }
         };
         List<User> users = new List<User>() { user1, user2, user3, profileTest };
         foreach (var user in users)
