@@ -110,6 +110,7 @@
     /*margin: 0 auto;*/
     max-width: 100%;
     padding: 0 15px;
+    transition: 0.3s ease-in;
 }
 
     .leaderboard .row {
@@ -218,7 +219,7 @@
     position: relative;
     width: calc(min(90rem, 90%));
     margin: 0 auto;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     column-gap: 3rem;
     padding-block: min(20vh, 3rem);
 }
