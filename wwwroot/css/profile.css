@@ -232,6 +232,40 @@ body {
 
 /*календарь*/
 .calendar td.heatwave {
+    position: relative;
+    background: rgba(255, 0, 0, 0.3);
+    color: black;
+}
+
+.calendar .heatwave.start::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0));
+    border-radius: 50%;
+}
+
+.calendar .heatwave.end::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0));
+    border-radius: 50%;
+}
+
+.calendar .heatwave.full::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(to right, rgba(255, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 100%);
 }
 
@@ -241,39 +275,23 @@ body {
 }
 
 .calendar .heatwave {
-    position: relative;
-    background: rgba(255, 0, 0, 0.3);
+    border-radius: 50%;
 }
 
-    .calendar .heatwave::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 0, 0, 0.3);
-        z-index: -1;
-    }
-.calendar td.heatwave {
-    position: relative;
+.calendar td.active {
+    background-color: #26a6d7;
+    color: #fff;
+    font-weight: bold;
 }
 
-.calendar .heatwave {
-    background: rgba(255, 0, 0, 0.3);
+.calendar td:hover {
+    background-color: #e6f7ff;
 }
 
-    .calendar .heatwave.start {
-        border-radius: 5px 0 0 5px;
-    }
+.calendar .active:hover {
+    background-color: #1e90ff;
+}
 
-    .calendar .heatwave.end {
-        border-radius: 0 5px 5px 0;
-    }
-
-    .calendar .heatwave.full {
-        border-radius: 0;
-    }
 .calendar-container {
     width: 440px;
     border: solid 2px #C4C4C4;
@@ -322,20 +340,6 @@ body {
 
     .calendar td {
         border-radius: 50%;
-    }
-
-    .calendar .active {
-        background-color: #26a6d7;
-        color: #fff;
-        font-weight: bold;
-    }
-
-    .calendar td:hover {
-        background-color: #e6f7ff;
-    }
-
-    .calendar .active:hover {
-        background-color: #1e90ff;
     }
 
 

@@ -73,13 +73,20 @@ public class AccountController : Controller
 
             int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
 
-            var last7Days = DateTime.UtcNow.AddDays(-6).Date;
+            var last7Days = Enumerable.Range(0, 7)
+            .Select(i => DateTime.UtcNow.AddDays(-i).Date)
+            .ToList();
             List<UserExperience> weeklyExperience = _userExperiance.GetAll()
-                .Where(ue => ue.Date >= last7Days && ue.UserId == user.Id)
-                .GroupBy(ue => ue.Date.Date)
-                .Select(g => new UserExperience { Date = g.Key, ExperiencePoints = g.Sum(ue => ue.ExperiencePoints) })
-                .OrderBy(g => g.Date)
-                .ToList();
+            .Where(ue => ue.Date >= last7Days.Min() && ue.UserId == user.Id)
+            .GroupBy(ue => ue.Date.Date)
+            .Select(g => new UserExperience
+            {
+                Date = g.Key,
+                ExperiencePoints = g.Sum(ue => ue.ExperiencePoints)
+            }).ToList();
+            weeklyExperience = last7Days
+            .Select(day => weeklyExperience.FirstOrDefault(we => we.Date == day) ?? new UserExperience { Date = day, ExperiencePoints = 0 })
+            .OrderBy(we => we.Date).ToList();
 
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;

@@ -206,7 +206,6 @@
 
             let currentDate = new Date();
 
-            
             const heatwaveStart = new Date('2024-08-15');
             const heatwaveEnd = new Date('2024-08-25');
 
@@ -219,13 +218,12 @@
 
                 const firstDayOfMonth = new Date(year, month, 1).getDay();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-
                 const daysInPreviousMonth = new Date(year, month, 0).getDate();
 
                 calendarContainer.querySelector('tbody').innerHTML = '';
                 let row = document.createElement('tr');
 
-                
+                // Fill in the previous month's days
                 for (let i = 1; i < (firstDayOfMonth === 0 ? 7 : firstDayOfMonth); i++) {
                     let cell = document.createElement('td');
                     cell.classList.add('inactive');
@@ -233,7 +231,7 @@
                     row.appendChild(cell);
                 }
 
-                
+                // Fill in the current month's days
                 for (let day = 1; day <= daysInMonth; day++) {
                     if (row.children.length === 7) {
                         calendarContainer.querySelector('tbody').appendChild(row);
@@ -242,22 +240,28 @@
                     let cell = document.createElement('td');
                     cell.textContent = day;
 
-                    
+                    // Highlight today's date
                     if (day === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
                         cell.classList.add('active');
                     }
 
-                    
                     const cellDate = new Date(year, month, day);
 
+                    // Apply the heatwave class based on the range
                     if (cellDate >= heatwaveStart && cellDate <= heatwaveEnd) {
-                        cell.classList.add('heatwave');
+                        if (cellDate.getTime() === heatwaveStart.getTime()) {
+                            cell.classList.add('heatwave', 'start');
+                        } else if (cellDate.getTime() === heatwaveEnd.getTime()) {
+                            cell.classList.add('heatwave', 'end');
+                        } else {
+                            cell.classList.add('heatwave', 'full');
+                        }
                     }
 
                     row.appendChild(cell);
                 }
 
-                
+                // Fill in the next month's days
                 while (row.children.length < 7) {
                     let cell = document.createElement('td');
                     cell.classList.add('inactive');
