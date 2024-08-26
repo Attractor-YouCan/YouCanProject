@@ -20,8 +20,7 @@ public class LessonsController : Controller
     private ICRUDService<LessonTime> _lessonTimeService;
     public LessonsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
-        UserManager<User> userManager,
-        ICRUDService<UserLevel> userLevel)
+        ICRUDService<UserLevel> userLevel,
         ICRUDService<LessonTime> lessonTimeService,
         UserManager<User> userManager)
     {

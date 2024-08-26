@@ -33,11 +33,23 @@ public class StatController : Controller
         ViewBag.Users = users;
         
         ViewBag.TestCount  = tests.Count;
-        ViewBag.UserCount = _userManager.Users.Count(); 
+        ViewBag.UserCount = _userManager.Users.Count();
 
-        ViewBag.Tariff1 = new {Name = users[0].Name, Count = users[0].Count };
-        ViewBag.Tariff2 = new {Name = users[1].Name, Count = users[1].Count};
-        ViewBag.Tariff3 = new {Name = users[2].Name, Count = users[2].Count};
+        ViewBag.Tariff1 = _userManager.Users
+            .Include(u => u.Tariff)
+            .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
+            .Select(t => new { Name = t.Key, Count = t.Count() })
+            .FirstOrDefaultAsync(t => t.Name == "Start");
+        ViewBag.Tariff2 = _userManager.Users
+            .Include(u => u.Tariff)
+            .GroupBy(u => u.Tariff.Name)
+            .Select(t => new { Name = t.Key, Count = t.Count() })
+            .FirstOrDefaultAsync(t => t.Name == "Pro");
+        ViewBag.Tariff3 = _userManager.Users
+            .Include(u => u.Tariff)
+            .GroupBy(u => u.Tariff.Name)
+            .Select(t => new { Name = t.Key, Count = t.Count() })
+            .FirstOrDefaultAsync(t => t.Name == "Premium");
 
         ViewBag.AllNewUsers = CalculateAllNewUsers();
         ViewBag.NewStartUsers = CalcualteStartUsers();

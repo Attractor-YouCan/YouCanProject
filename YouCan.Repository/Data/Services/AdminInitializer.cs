@@ -26,7 +26,8 @@ public class AdminInitializer
                 FullName = fullName,
                 BirthDate = DateTime.UtcNow,
                 Disctrict = "",
-                PhoneNumber = "0"
+                PhoneNumber = "0",
+                TariffId = 3
             };
             IdentityResult result = await _userManager.CreateAsync(superadmin, adminPassword);
             if (result.Succeeded)
@@ -42,7 +43,8 @@ public class AdminInitializer
             FullName = "Anton",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Bishkek",
-            PhoneNumber = "1"
+            PhoneNumber = "1",
+            TariffId = 2
         };
         User user2 = new User()
         {
@@ -52,7 +54,8 @@ public class AdminInitializer
             FullName = "SynAntona",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Osh",
-            PhoneNumber = "2"
+            PhoneNumber = "2",
+            TariffId = 1
         };
         User user3 = new User()
         {
@@ -62,7 +65,8 @@ public class AdminInitializer
             FullName = "John Ceena",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Issyk-Kul",
-            PhoneNumber = "3"
+            PhoneNumber = "3",
+            TariffId = 1
         };
         List<User> users = new List<User>() { user1, user2, user3 };
         foreach (var user in users)
