@@ -49,7 +49,10 @@ public class MiniTestsController : Controller
         UserLevel? userLevels = _userLevel.GetAll()
             .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
 
-        UserLessons? userLesson = _userLessonService.GetAll().FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
+        UserLessons? userLesson = _userLessonService.GetAll()
+            .FirstOrDefault(ul => ul.UserId == currentUser.Id && 
+                ul.SubjectId == lesson.SubjectId && 
+                ul.LessonId == lesson.Id);
 
         int passingCount = (
             from question in test.Questions

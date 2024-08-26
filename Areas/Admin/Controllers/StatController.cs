@@ -14,9 +14,10 @@ public class StatController : Controller
     public StatController(UserManager<User> userManager, ICRUDService<Test> testManager)
     {
         _userManager = userManager;
-        _testsManager = testManager;
+        _testsManager = testManager; 
     }
-    public async Task<IActionResult> Home()
+    [Route("[area]/[controller]/")]
+    public async Task<IActionResult> Stat()
     {
         var tests = _testsManager.GetAll()
             .GroupBy(t => t.Subject?.Name ?? "Без урока")

@@ -23,13 +23,9 @@
                 <a class="nav_link mx-auto">
                     <span class="nav_logo-name">YouCan</span>
                 </a>
-                <a class="nav_link mx-auto first">
+                <a class="nav_link mx-auto first" asp-action="Stat" asp-controller="Stat" asp-area="Admin">
                     <img src="~/adminIcons/stats.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
                     <span class="nav_name">Статистика</span>
-                </a>
-                <a class="nav_link mx-auto">
-                    <img src="~/adminIcons/test.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
-                    <span class="nav_name">Пробный тест</span>
                 </a>
                 <a class="nav_link mx-auto" asp-action="Index" asp-controller="Users" asp-area="Admin">
                     <img src="~/adminIcons/users.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
@@ -60,7 +56,7 @@
         </nav>
     </div>
 
-    <main role="main">
+    <main role="main" class="pb-5">
         <div class="container">
             <!-- jQuery -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
