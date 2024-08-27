@@ -48,6 +48,7 @@
       <Content Remove="YouCan.Service\**" />
       <Content Remove="YouCan.Repository\**" />
       <Content Remove="YouCan.Entites\**" />
+      <Content Remove="YouCan.Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -95,6 +96,9 @@
       <_ContentIncludedByDefault Remove="publish\appsettings.json" />
       <_ContentIncludedByDefault Remove="publish\YouCan.deps.json" />
       <_ContentIncludedByDefault Remove="publish\YouCan.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Tests\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Tests\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="YouCan.Tests\obj\YouCan.Tests.csproj.nuget.dgspec.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -318,18 +322,21 @@
       <Compile Remove="YouCan.Service\**" />
       <Compile Remove="YouCan.Repository\**" />
       <Compile Remove="YouCan.Entites\**" />
+      <Compile Remove="YouCan.Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Remove="YouCan.Service\**" />
       <EmbeddedResource Remove="YouCan.Repository\**" />
       <EmbeddedResource Remove="YouCan.Entites\**" />
+      <EmbeddedResource Remove="YouCan.Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="YouCan.Service\**" />
       <None Remove="YouCan.Repository\**" />
       <None Remove="YouCan.Entites\**" />
+      <None Remove="YouCan.Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
