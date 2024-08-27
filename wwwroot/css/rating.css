@@ -1,6 +1,10 @@
 ﻿body {
     font-family: Montserrat, sans-serif;
 }
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
 .rating-main{
     display: flex;
     justify-content: center;
@@ -19,7 +23,6 @@
     padding: 10px 20px;
 }
 
-    .header .time-left,
     .header .score-info {
         display: flex;
         align-items: center;
@@ -217,9 +220,9 @@
 
 .main {
     position: relative;
-    width: calc(min(90rem, 90%));
+    /*width: calc(min(90rem, 60%));*/
+    width: 28%;
     margin: 0 auto;
-    /*min-height: 100vh;*/
     column-gap: 3rem;
     padding-block: min(20vh, 3rem);
 }
@@ -264,7 +267,11 @@
         width: 85%;
     }
 }
-
+@media (max-width: 1024px) {
+    .main{
+        width: 45%;
+    }
+}
 
 @media (max-width: 768px) {
     .header {
@@ -295,6 +302,9 @@
     .change img {
         width: 12px;
         height: 12px;
+    }
+    .main {
+        width: 60%;
     }
 }
 

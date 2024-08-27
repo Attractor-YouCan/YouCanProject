@@ -162,7 +162,7 @@ a {
     height: 100vh
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 767px) {
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
         padding-left: calc(var(--nav-width) + 2rem)
@@ -224,7 +224,6 @@ a {
     width: 170px;
     height: 28px;
     gap: 0;
-    opacity: 0;
 }
 
 .book {
