@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BottomContentCardDescription2" xml:space="preserve">
+    <value>Вы можете учиться в нужном вам темпе и изучать доп. предметы которые важны для вашего будущего!</value>
+  </data>
+  <data name="BottomContentCardDescription1" xml:space="preserve">
+    <value>Мы предлагаем полноценную программу подготовки, охватывающую все аспекты ОРТ!</value>
+  </data>
+  <data name="BottomContentCardDescription3" xml:space="preserve">
+    <value>Благодаря нашему игровому формату, регулярные уроки становятся рутиной. Веселые задания и приятные напоминания помогут вам привить привычку к обучению!</value>
+  </data>
+  <data name="BottomContentCardDescription4" xml:space="preserve">
+    <value>Вы учите только то, что вам нужно, без ненужных деталей и лишней информации!</value>
+  </data>
+  <data name="BottomContentCardTitle1" xml:space="preserve">
+    <value>Комплексный подход</value>
+  </data>
+  <data name="BottomContentCardTitle2" xml:space="preserve">
+    <value>Индивидуальное обучение</value>
+  </data>
+  <data name="BottomContentCardTitle3" xml:space="preserve">
+    <value>Стимул к учёбе</value>
+  </data>
+  <data name="BottomContentCardTitle4" xml:space="preserve">
+    <value>Без воды</value>
+  </data>
+  <data name="BottomContentTitle" xml:space="preserve">
+    <value>Почему вам точно понравится Youcan?</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>У меня уже есть аккаунт</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="SubjectBiology" xml:space="preserve">
+    <value>Биология</value>
+  </data>
+  <data name="SubjectChemistry" xml:space="preserve">
+    <value>Химия</value>
+  </data>
+  <data name="SubjectEnglish" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="SubjectHistory" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="SubjectKyrgyz" xml:space="preserve">
+    <value>Кыргызский</value>
+  </data>
+  <data name="SubjectMath" xml:space="preserve">
+    <value>Математика</value>
+  </data>
+  <data name="SubjectPhysics" xml:space="preserve">
+    <value>Физика</value>
+  </data>
+  <data name="SubjectRussian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="TopContentDescription" xml:space="preserve">
+    <value>Обучайтесь с Youcan с удовольствием и увлечением. Получайте баллы за верные ответы, открывайте новые материалы и совершенствуйте навыки тестирования. Наши компактные занятия действительно действуют!</value>
+  </data>
+  <data name="TopContentTitle" xml:space="preserve">
+    <value>Онлайн ресурс №1 для подготовки к ОРТ</value>
+  </data>
+  <data name="GoToProfile" xml:space="preserve">
+    <value>Перейти к профилю</value>
+  </data>
+  <data name="FooterInfoAgreement" xml:space="preserve">
+    <value>Используя «Youcan!», вы принимаете &lt;пользовательское соглашение&gt; и &lt;политику обработки персональных данных&gt;</value>
+  </data>
+  <data name="FooterPayment" xml:space="preserve">
+    <value>Принимаем к оплате</value>
+  </data>
+  <data name="FooterTime" xml:space="preserve">
+    <value>Сайт работает по бишкекскому времени: {0}</value>
+  </data>
+  <data name="FooterTitle" xml:space="preserve">
+    <value>«Youcan!» — безопасный онлайн-сервис для подготовки к ОРТ</value>
+  </data>
+  <data name="LastTextLandingTitle" xml:space="preserve">
+    <value>Можно учится всегда и везде!</value>
+  </data>
+  <data name="LinkAboutPayment" xml:space="preserve">
+    <value>Об оплате</value>
+  </data>
+  <data name="LinkAboutProject" xml:space="preserve">
+    <value>О проекте</value>
+  </data>
+  <data name="LinkContacts" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+  <data name="LinkCooperation" xml:space="preserve">
+    <value>Для сотрудничества</value>
+  </data>
+  <data name="LinkHelp" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="LinkOurTeam" xml:space="preserve">
+    <value>Наша команда</value>
+  </data>
+  <data name="LinkSiteTrailer" xml:space="preserve">
+    <value>Трейлер о сайте</value>
+  </data>
+  <data name="LinkWeUse" xml:space="preserve">
+    <value>Мы используем</value>
+  </data>
+  <data name="MoreDetails" xml:space="preserve">
+    <value>Подробнее</value>
+  </data>
+  <data name="PrefooterInfoTextsBlockSubtitle1" xml:space="preserve">
+    <value>Теперь у вас есть время на друзей, любимые занятия и семью.&lt;br /&gt;Вы не тратите время и деньги на транспорт, ведь учится
+можно везде.</value>
+  </data>
+  <data name="PrefooterInfoTextsBlockSubtitle2" xml:space="preserve">
+    <value>Современный дизайн, созданный для удобства пользователей сайта.&lt;br /&gt;Можно учится как на телефоне, так и на компьютере.</value>
+  </data>
+  <data name="PrefooterInfoTextsBlockTitle1" xml:space="preserve">
+    <value>Экономия времени</value>
+  </data>
+  <data name="PrefooterInfoTextsBlockTitle2" xml:space="preserve">
+    <value>Удобный интерфейс</value>
+  </data>
+  <data name="PrefooterInfoTextsSubtitle" xml:space="preserve">
+    <value>У нас есть все, чтобы сделать вашу учебу более приятной и беззаботной</value>
+  </data>
+  <data name="PrefooterInfoTextsTitle" xml:space="preserve">
+    <value>Заботимся о вас и вашем времени</value>
+  </data>
+  <data name="PreparingBlockLink" xml:space="preserve">
+    <value>Начать сейчас</value>
+  </data>
+  <data name="PreparingBlockText" xml:space="preserve">
+    <value>Подготовься к ОРТ вместе с Youcan</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="TimeBlock" xml:space="preserve">
+    <value>Цены ниже – качество выше!</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Набери высокие &lt;br&gt;баллы на ОРТ &lt;span&gt;вместе &lt;br&gt;с YouCan&lt;/span&gt;</value>
+  </data>
+  <data name="YouCanTrailerSubtitle" xml:space="preserve">
+    <value>Смотрите трейлер.</value>
+  </data>
+  <data name="YouCanTrailerTitle" xml:space="preserve">
+    <value>Как подготовиться к ОРТ эффективно?</value>
+  </data>
+</root>
