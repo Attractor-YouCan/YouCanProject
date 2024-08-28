@@ -1,4 +1,7 @@
 ﻿@using YouCan.Mvc.ViewModels.Account
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model EditViewModel
 
 @{
@@ -8,7 +11,7 @@
 <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
 
 <div class="container ps-5 pb-6rem">
-    <h1 class="text-center profile-title">Профиль</h1>
+    <h1 class="text-center profile-title">@Localizer["Profile"]</h1>
     <hr>
     <a asp-action="Profile" class="btn">
         <img src="@Url.Content("~/profileIcons/arrow-back.svg")" />
@@ -21,8 +24,8 @@
                 <p class="profile-text-secondary">@ViewBag.User.PhoneNumber</p>
                 <div class="d-flex flex-row align-items-center">
                     <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img>
-                    <p class="profile-text-secondary ms-1">Регистрация -</p>
-                </div>
+                    <p class="profile-text-secondary ms-1">@Localizer["RegisterDate", ViewBag.User.CreatedAt.ToString("MMMM yyyy", CultureInfo.CurrentCulture)]</p>
+                </div
             </div>
             <div class="">
                 <img class="profile-img" src="@Url.Content($"~{ViewBag.User.AvatarUrl}")" alt="avatar">
@@ -32,47 +35,46 @@
 
     <form class="mx-3" asp-action="Edit" asp-controller="Account" enctype="multipart/form-data">
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Аккаунт</label>
-            <button class="col-auto btn btn-save">Сохранить изменения</button>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["Account"]</label>
+            <button class="col-auto btn btn-save">@Localizer["Save"]</button>
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Фото профиля</label>
-            <label asp-for="UploadedFile" class="col-auto btn btn-load">Выбрать файл</label>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["ProfilePhoto"]</label>
+            <label asp-for="UploadedFile" class="col-auto btn btn-load">@Localizer["SelectFile"]</label>
             <input asp-for="UploadedFile" class="d-none"/>
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <p class="col-3 col-sm-2 col-lg-1 text-end p-0"></p>
-            <p id="input-file-text" class="p-0 fs-8 form-width">Максимальный размер изображения — 1 Мб</p>
+            <p id="input-file-text" class="p-0 fs-8 form-width">@Localizer["MaxFileSize"]</p>
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">ФИО</label>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["FullName"]</label>
             <input asp-for="FullName" class="col-auto form-control-theme" />
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Номер телефона</label>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["PhoneNumber"]</label>
             <input asp-for="PhoneNumber" type="number" class="col-auto form-control-theme" />
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Регион</label>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["District"]</label>
             <input asp-for="District" class="col-auto form-control-theme" />
         </div>
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
-            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Дата рождения</label>
+            <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["BirthDate"]</label>
             <input asp-for="BirthDate" type="date" class="col-auto form-control-theme" />
         </div>
     </form>
     <form class="d-flex justify-content-center" asp-action="LogOut" asp-controller="Account">
-        <button type="submit" class="border-0 bg-transparent p-0 text-center d-block fw-bold text-decoration-none link-theme-secondary">Выйти</button>
+        <button type="submit" class="border-0 bg-transparent p-0 text-center d-block fw-bold text-decoration-none link-theme-secondary">@Localizer["Logout"]</button>
     </form>
     <a asp-action="Delete" asp-controller="Account" class="text-center d-block fw-bold text-decoration-none link-theme-danger">
-        Удалить аккаунт
+        @Localizer["RemoveAccount"]
     </a>
 </div>
 
 @section Scripts{
     <script>
         $('input[type=file]').on('change', function () {
-            console.log("ABOBA");
             let file = this.files[0];
             $('#input-file-text').html(file.name);
         });
