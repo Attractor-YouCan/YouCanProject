@@ -35,17 +35,17 @@ public class StatController : Controller
         ViewBag.TestCount  = tests.Count;
         ViewBag.UserCount = _userManager.Users.Count();
 
-        ViewBag.Tariff1 = _userManager.Users
+        ViewBag.Tariff1 = await _userManager.Users
             .Include(u => u.Tariff)
             .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
             .Select(t => new { Name = t.Key, Count = t.Count() })
             .FirstOrDefaultAsync(t => t.Name == "Start");
-        ViewBag.Tariff2 = _userManager.Users
+        ViewBag.Tariff2 = await _userManager.Users
             .Include(u => u.Tariff)
             .GroupBy(u => u.Tariff.Name)
             .Select(t => new { Name = t.Key, Count = t.Count() })
             .FirstOrDefaultAsync(t => t.Name == "Pro");
-        ViewBag.Tariff3 = _userManager.Users
+        ViewBag.Tariff3 = await _userManager.Users
             .Include(u => u.Tariff)
             .GroupBy(u => u.Tariff.Name)
             .Select(t => new { Name = t.Key, Count = t.Count() })
