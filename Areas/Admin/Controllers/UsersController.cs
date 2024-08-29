@@ -150,7 +150,7 @@ public class UsersController : Controller
         User user = await _userManager.FindByIdAsync(id.ToString());
         if (user != null)
         {
-            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
+            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, null);
             var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
 
             var admin = await _userManager.GetUserAsync(User);
