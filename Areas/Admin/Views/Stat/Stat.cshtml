@@ -1,4 +1,5 @@
-﻿@{
+﻿@using YouCan.Entites.Models
+@{
     Layout = "_Admin";
     List<string> colors = new(){
         "red",
@@ -8,63 +9,64 @@
         "rgba(255, 0, 168, 1)",
         "green"
     };
-    var tariff1 = ViewBag.Tariff1.Name;
-    var tariff2 = ViewBag.Tariff2.Name;
-    var tariff3 = ViewBag.Tariff3.Name;
 }
 
-<div class="d-flex mb-3">
-    <div class="card mb-3 ms-3" style="height: 172px;">
+<div class="d-flex mb-3 justify-content-between">
+    <div class="card mb-3" style="height: 172px;">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-4 pt-5 ps-3">
                 <img src="~/adminIcons/list.png" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.UserCount</h5>
+
+                      <h5 class="card-title">@ViewBag.UsersCount</h5>
+                    
                     <p class="card-text">Общая аудитория</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewBag.AllNewUsers)% (30 дней)</small></p>
+                    <p class="card-text"><small class="text-body-secondary">@(ViewData["AllNewUsers"])% (30 дней)</small></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-3 ms-5" style="height: 172px;">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-4 pt-5 ps-3">
                 <img src="~/adminIcons/box.png" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.Tariff1.Count</h5>
-                    <p class="card-text">@ViewBag.Tariff1.Name юзеры</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewBag.NewStartUsers)% (30 дней)</small></p>
+
+                    <h5 class="card-title">@ViewBag.Start.Users.Count</h5>
+                    <p class="card-text">@ViewBag.Start.Name юзеры</p>
+                    
+                    <p class="card-text"><small class="text-body-secondary">@(ViewData["NewStartUsers"])% (30 дней)</small></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-3 ms-5" style="height: 172px;">
         <div class="row g-0">
-            <div class="col-md-4 stat-icon">
+            <div class="col-md-4 pt-5 ps-3">
                 <img src="~/adminIcons/list.png" class="rounded-start img-fluid m-1" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.Tariff2.Count</h5>
-                    <p class="card-text">@ViewBag.Tariff2.Name юзеры</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewBag.NewProUsers)% (30 дней)</small></p>
+                    <h5 class="card-title">@ViewBag.Pro.Users.Count</h5>
+                    <p class="card-text">@ViewBag.Pro.Name юзеры</p>
+                    <p class="card-text"><small class="text-body-secondary">@(ViewData["NewProUsers"])% (30 дней)</small></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-3 ms-5 me-3" style="height: 172px;">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-4 pt-5 ps-3">
                 <img src="~/adminIcons/list.png" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.Tariff3.Count</h5>
-                    <p class="card-text">@ViewBag.Tariff3.Name юзеры</p>
+                    <h5 class="card-title">@ViewBag.Premium.Users.Count</h5>
+                    <p class="card-text">@ViewBag.Premium.Name юзеры</p>
                     <p class="card-text"><small class="text-body-secondary">@(ViewBag.NewPremiumUsers)% (30 дней)</small></p>
                 </div>
             </div>
@@ -120,10 +122,13 @@
                 <!-- Список уроков с количеством тестов -->
                 @for(int i = 0; i < ViewBag.TestCount; i++)
                 {
-                    <li class="d-flex justify-content-between align-items-center ms-4 mt-3">
-                        <span class="subject-name">@ViewBag.Tests[i].Name</span>
-                        <span class="count"><i style="color: @colors[i]" class="bi bi-square-fill me-3 color-count"></i>@ViewBag.Tests[i].Count</span>
-                    </li>
+                    @if (ViewBag.Tests[i] != null)
+                    {
+                        <li class="d-flex justify-content-between align-items-center ms-4 mt-3">
+                            <span class="subject-name">@ViewBag.Tests[i].Name</span>
+                            <span class="count"><i style="color: @colors[i]" class="bi bi-square-fill me-3 color-count"></i>@ViewBag.Tests[i].Count</span>
+                        </li>
+                    }
                 }
             </ul>
         </div>
@@ -140,9 +145,9 @@
         var myLineChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ["@tariff1", "Всего"],
+                labels: ["Start", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Tariff1.Count, @ViewBag.UserCount],
+                    data: [@ViewBag.Start.Users.Count, @ViewData["UsersCount"]],
                     backgroundColor: ["rgba(255, 91, 91, 1)", "rgba(255, 91, 91, 0.15)"]
                 }]
             },
@@ -152,9 +157,9 @@
         var myLineChart2 = new Chart(ctx2, {
             type: 'pie',
             data: {
-                labels: ["@tariff2", "Всего"],
+                labels: ["Pro", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Tariff2.Count, @ViewBag.UserCount],
+                    data: [@ViewBag.Pro.Users.Count, @ViewData["UsersCount"]],
                     backgroundColor: ["rgba(0, 176, 116, 1)", "rgba(0, 176, 116, 0.15)"]
                 }]
             },
@@ -164,9 +169,9 @@
         var myLineChart3 = new Chart(ctx3, {
             type: 'pie',
             data: {
-                labels: ["@tariff3", "Всего"],
+                labels: ["Premium", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Tariff3.Count, @ViewBag.UserCount],
+                    data: [@ViewBag.Premium.Users.Count, @ViewData["UsersCount"]],
                     backgroundColor: ["rgba(45, 156, 219, 1)", "rgba(45, 156, 219, 0.15)"]
                 }]
             },

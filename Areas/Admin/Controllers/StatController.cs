@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
 
@@ -11,10 +12,12 @@ public class StatController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly ICRUDService<Test> _testsManager;
-    public StatController(UserManager<User> userManager, ICRUDService<Test> testManager)
+    private readonly ICRUDService<Tariff> _tariffManager;
+    public StatController(UserManager<User> userManager, ICRUDService<Test> testManager, ICRUDService<Tariff> tariffManager)
     {
         _userManager = userManager;
-        _testsManager = testManager; 
+        _testsManager = testManager;
+        _tariffManager = tariffManager;
     }
     [Route("[area]/[controller]/")]
     public async Task<IActionResult> Stat()
@@ -25,7 +28,7 @@ public class StatController : Controller
             .ToList();
         var users = _userManager.Users
             .Include(u => u.Tariff)
-            .GroupBy(u => u.Tariff.Name)
+            .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
             .Select(g => new { Name = g.Key, Count = g.Count() })
             .ToList();
 
@@ -33,28 +36,19 @@ public class StatController : Controller
         ViewBag.Users = users;
         
         ViewBag.TestCount  = tests.Count;
-        ViewBag.UserCount = _userManager.Users.Count();
+        ViewData["UsersCount"] = _userManager.Users.Count();
 
-        ViewBag.Tariff1 = await _userManager.Users
-            .Include(u => u.Tariff)
-            .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
-            .Select(t => new { Name = t.Key, Count = t.Count() })
-            .FirstOrDefaultAsync(t => t.Name == "Start");
-        ViewBag.Tariff2 = await _userManager.Users
-            .Include(u => u.Tariff)
-            .GroupBy(u => u.Tariff.Name)
-            .Select(t => new { Name = t.Key, Count = t.Count() })
-            .FirstOrDefaultAsync(t => t.Name == "Pro");
-        ViewBag.Tariff3 = await _userManager.Users
-            .Include(u => u.Tariff)
-            .GroupBy(u => u.Tariff.Name)
-            .Select(t => new { Name = t.Key, Count = t.Count() })
-            .FirstOrDefaultAsync(t => t.Name == "Premium");
+        ViewBag.Start = _tariffManager.GetAll()
+            .FirstOrDefault(t => t.Name == "Start");
+        ViewBag.Pro = _tariffManager.GetAll()
+            .FirstOrDefault(t => t.Name == "Pro");
+        ViewBag.Premium = _tariffManager.GetAll()
+            .FirstOrDefault(t => t.Name == "Premium");
 
-        ViewBag.AllNewUsers = CalculateAllNewUsers();
-        ViewBag.NewStartUsers = CalcualteStartUsers();
-        ViewBag.NewProUsers = CalcualteProUsers();
-        ViewBag.NewPremiumUsers = CalcualtePremiumUsers();
+        ViewData["AllNewUsers"] = CalculateAllNewUsers();
+        ViewData["NewStartUsers"] = CalcualteStartUsers();
+        ViewData["NewProUsers"] = CalculateProUsers();
+        ViewData["NewPremiumUsers"] = CalculatePremiumUsers();
 
         return View();
     }
@@ -82,7 +76,7 @@ public class StatController : Controller
         double percent = startCount / usersCount * 100;
         return percent;
     }
-    public double CalcualteProUsers()
+    public double CalculateProUsers()
     {
         double usersCount = _userManager.Users.Count();
         var proTariffUsers = _userManager.Users
@@ -95,7 +89,7 @@ public class StatController : Controller
         double percent = proCount / usersCount * 100;
         return percent;
     }
-    public double CalcualtePremiumUsers()
+    public double CalculatePremiumUsers()
     {
         double usersCount = _userManager.Users.Count();
         var premiumTariffUsers = _userManager.Users
