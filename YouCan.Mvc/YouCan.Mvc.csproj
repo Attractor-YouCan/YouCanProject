@@ -17,6 +17,7 @@
       </PackageReference>
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+      <PackageReference Include="Razor.Templating.Core" Version="2.0.0" />
     </ItemGroup>
 
     <ItemGroup>

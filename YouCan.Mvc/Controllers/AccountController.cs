@@ -6,6 +6,8 @@ using YouCan.Mvc.Services.Email;
 using YouCan.Mvc.ViewModels.Account;
 using YouCan.Service;
 using YouCan.Entities;
+using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
+using Razor.Templating.Core;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
@@ -188,7 +190,7 @@ public class AccountController : Controller
                 user.TariffEndDate = null;
                 await _userManager.UpdateAsync(user);
 
-                var (subject, message) = GenerateEmailConfirmationContentAsync(user, model.UserName);
+                var (subject, message) = await GenerateEmailConfirmationContentAsync(user, model.UserName);
                 EmailSender emailSender = new EmailSender();
                 emailSender.SendEmail(model.Email, subject, message);
                 return Json(new { success = true, email = user.Email });
@@ -199,92 +201,16 @@ public class AccountController : Controller
         return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
-    private (string subject, string message) GenerateEmailConfirmationContentAsync(User user, string userName)
+    private async Task<(string subject, string message)> GenerateEmailConfirmationContentAsync(User user, string userName)
     {
         var code = _twoFactorService.GenerateCode(user.Id);
         var subject = "Ваш код подтверждения";
-        string message = $@"
-        <html>
-        <head>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    color: #333;
-                    background-color: #f4f4f4;
-                    padding: 20px;
-                }}
-                .container {{
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    border: 1px solid #ddd;
-                    border-radius: 10px;
-                    background-color: #fff;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }}
-                .header {{
-                    text-align: center;
-                    background-color: #1252b3;
-                    color: white;
-                    padding: 10px;
-                    border-top-left-radius: 10px;
-                    border-top-right-radius: 10px;
-                }}
-                .header h1 {{
-                    margin: 0;
-                }}
-                .content {{
-                    padding: 20px;
-                }}
-                .content p {{
-                    margin: 10px 0;
-                }}
-                .content a {{
-                    color: #4CAF50;
-                    text-decoration: none;
-                }}
-                .button {{
-                    display: inline-block;
-                    padding: 10px 20px;
-                    margin: 20px 0;
-                    font-size: 16px;
-                    color: white;
-                    background-color: #1252b3;
-                    border: none;
-                    border-radius: 5px;
-                    text-align: center;
-                    text-decoration: none;
-                }}
-                .footer {{
-                    text-align: center;
-                    padding: 10px;
-                    font-size: 12px;
-                    color: #777;
-                    border-top: 1px solid #ddd;
-                    background-color: #f7f7f7;
-                    border-bottom-left-radius: 10px;
-                    border-bottom-right-radius: 10px;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>Добро пожаловать в YouCan!</h1>
-                </div>
-                <div class='content'>
-                    <p>Твой никнейм:</p>
-                    <p><strong>{userName}</strong></p>
-                    <p>Код активации:</p>
-                    <h2>{code}</h2>
-                </div>
-                <div class='footer'>
-                    <p>Благодарим что присоединилсь к YouCan!</p>
-                </div>
-            </div>
-        </body>
-        </html>";
+        string message = await RazorTemplateEngine.RenderAsync("~/Views/Account/EmailConfirmationMessage.cshtml",
+            new EmailConfirmationViewModel()
+            {
+                Code = code,
+                Username = user.UserName
+            });
         return (subject, message);
     }
 
@@ -333,7 +259,7 @@ public class AccountController : Controller
         {
             return Json(new { success = false, errors = new[] { "User not found." } });
         }
-        var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
+        var (subject, message) = await GenerateEmailConfirmationContentAsync(user, user.UserName);
         EmailSender emailSender = new EmailSender();
          emailSender.SendEmail(user.Email, subject, message);
 

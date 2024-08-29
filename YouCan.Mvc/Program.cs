@@ -87,6 +87,10 @@ builder.Services.AddTransient<ICrudService<LessonTime>, CrudService<LessonTime>>
 
 builder.Services.AddScoped<TwoFactorService>();
 
+//After all the dependencies
+builder.Services.AddRazorTemplating();
+
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
