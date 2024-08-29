@@ -187,6 +187,7 @@ public class AccountController : Controller
 
                 var startTariff = _tariffs.GetAll().FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow;
                 user.TariffEndDate = null;
                 await _userManager.UpdateAsync(user);
 

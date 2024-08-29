@@ -18,4 +18,9 @@ public class Tariff : EntityBase
                                        // когда он подключает тариф то к дате плюсуется длительность тарифа
                                        // Пример реализации
                                        // user.TariffEndDate = user.TariffEndDate.AddMonths(user.Tariff.Duration)
+    public List<User> Users { get; set; }
+    public Tariff()
+    {
+        Users = new List<User>();   
+    }
 }
