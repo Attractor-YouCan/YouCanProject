@@ -21,6 +21,7 @@ public class TariffRepository : IRepository<Tariff>
     public IEnumerable<Tariff> GetAll()
     {
         return entitis
+            .Include(t => t.Users)
             .AsEnumerable();
     }
 

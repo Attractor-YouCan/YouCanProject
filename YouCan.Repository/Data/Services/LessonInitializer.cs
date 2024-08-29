@@ -43,14 +43,14 @@ public class LessonInitializer
 
             5. ∫cos(x) dx = sin(x) + C
             """,
-            LessonId = 12
+            LessonId = 1
         },
         new LessonModule
         {
             Id = 2,
             Title = "Основные формулы",
             Content = "<p>1. ∫a dx = ax + C</p><p>2. ∫x^n dx = (x^(n+1))/(n+1) + C</p><p>3. ∫e^x dx = e^x + C</p><p>4. ∫sin(x) dx = -cos(x) + C</p><p>5. ∫cos(x) dx = sin(x) + C</p>",
-            LessonId = 12
+            LessonId = 1
         },
         new LessonModule
         {
@@ -58,7 +58,7 @@ public class LessonInitializer
             Title = "Основные формулы",
             Content = "<p>1. ∫a dx = ax + C</p><p>2. ∫x^n dx = (x^(n+1))/(n+1) + C</p><p>3. ∫e^x dx = e^x + C</p><p>4. ∫sin(x) dx = -cos(x) + C</p><p>5. ∫cos(x) dx = sin(x) + C</p>",
             PhotoUrl = "/studyImages/Screenshot_1.png",
-            LessonId = 12
+            LessonId = 1
         }
     );
     }
