@@ -66,47 +66,38 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 Id = 1,
                 LeagueName = "Bronze",
                 MinPoints = 0,
-                MaxPoints = 999,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(1)
+                MaxPoints = 999
             },
             new League
             {
                 Id = 2,
                 LeagueName = "Silver",
                 MinPoints = 1000,
-                MaxPoints = 1999,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(1)
+                MaxPoints = 1999
             },
             new League
             {
                 Id = 3,
                 LeagueName = "Gold",
                 MinPoints = 2000,
-                MaxPoints = 2999,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(1)
+                MaxPoints = 2999
             },
             new League
             {
                 Id = 4,
                 LeagueName = "Platinum",
                 MinPoints = 3000,
-                MaxPoints = 3999,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(1)
+                MaxPoints = 3999
             },
             new League
             {
                 Id = 5,
                 LeagueName = "Diamond",
                 MinPoints = 4000,
-                MaxPoints = int.MaxValue,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(1)
+                MaxPoints = int.MaxValue
             }
         );
+        
         new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options){}

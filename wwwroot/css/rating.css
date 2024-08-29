@@ -199,22 +199,6 @@ body::-webkit-scrollbar {
     background-color: #fffae6;
     margin-bottom: 30px;
 }
-/*.swiper1{*/
-/*    margin-left: auto;*/
-/*    margin-right: auto;*/
-/*    position: relative;*/
-/*    overflow: hidden;*/
-/*    list-style: none;*/
-/*    padding: 0;*/
-/*    z-index: 1;*/
-/*    !*display: block;*!*/
-/*}*/
-/*.swiper1 .swiper-wrapper{*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    !*width: 800px;*!*/
-/*    padding-left: 260px;*/
-/*}*/
 
 
 
@@ -230,11 +214,9 @@ body::-webkit-scrollbar {
 .swiper {
     width: 100%;
     padding-top: 3.125rem;
-    /*perspective: 800px!important;*/
 }
 .swiper-slide{
     width: fit-content!important;
-    /*width: 100px;*/
     height: 100px!important;
     display: flex;
     flex-direction: column;

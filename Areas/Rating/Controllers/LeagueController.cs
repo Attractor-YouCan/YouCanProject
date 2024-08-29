@@ -20,24 +20,102 @@ namespace YouCan.Areas.Rating.Controllers
             _leagueRepository = leagueRepository;
             _userManager = userManager;
         }
-
-        // GET: Rating/League
+        
         public async Task<IActionResult> Index()
         {
             var leagues = _leagueRepository.GetAll().ToList();
             
-            var users = await _userManager.Users
-                .Include(u => u.League) // Ensure that the League is included
-                .OrderByDescending(u => u.Rank) // Order users by their rank
-                .ToListAsync();
+            // var users = await _userManager.Users
+            //     .Include(u => u.League)
+            //     .OrderByDescending(u => u.Rank)
+            //     .ToListAsync();
             
-            var viewModel = new CombinedRatingViewModel
-            {
-                Leagues = leagues,
-                Users = users
-            };
-            return View(viewModel);
+            //
+            // foreach (var user in users)
+            // {
+            //     await AssignUserToLeagueAsync(user, leagues);
+            // }
+            
+            // var viewModel = new CombinedRatingViewModel
+            // {
+            //     Leagues = leagues,
+            //     Users = users
+            // };
+            return View(leagues);
         }
+
+        // private async Task AssignUserToLeagueAsync(User user, List<League> leagues)
+        // {
+        //     foreach (var league in leagues)
+        //     {
+        //         if (user.UserLessonScore >= league.MinPoints && user.UserLessonScore <= league.MaxPoints)
+        //         {
+        //             user.LeagueId = league.Id;
+        //             user.League = league;
+        //             break;
+        //         }
+        //     }
+        //
+        //     if (user.LeagueId == null)
+        //     {
+        //       
+        //     }
+        //     
+        //     _userManager.UpdateAsync(user).Wait();
+        // }
+
+        private async  Task<List<User>> GetUserLeaderboardLeague(string leagueName)
+        {
+            if (leagueName == null)
+            {
+                return null;
+            }
+            var leagueRepo = _leagueRepository.GetAll()
+                .FirstOrDefault(l => l.LeagueName.ToLower().Trim() == leagueName.ToLower().Trim());
+            // var leagueRepo = _leagueRepository.Get(leagueName)
+            if (leagueRepo == null)
+            {
+                return null;
+            }
+            var users = await _userManager.Users
+                .Include(u => u.League)
+                .OrderByDescending(u => u.Rank)
+                .ToListAsync();
+
+            var leagueUsers = new List<User>();
+            foreach (var user in users)
+            {
+                    if (user.UserLessonScore >= leagueRepo.MinPoints && user.UserLessonScore <= leagueRepo.MaxPoints)
+                    {
+                        leagueUsers.Add(user);
+                    }
+            }
+            
+            return leagueUsers;
+        }
+        
+        [HttpGet]
+        public async Task<JsonResult> GetUsersByLeague(string leagueName)
+        {
+            var users = await GetUserLeaderboardLeague(leagueName);
+
+            if (users == null)
+            {
+                return Json(new List<object>()); // Return empty list if no users
+            }
+
+            var result = users.Select(user => new
+            {
+                user.Id,
+                user.FullName,
+                user.AvatarUrl,
+                user.Rank,
+                user.UserLessonScore
+            }).ToList();
+
+            return Json(result);
+        }
+
 
         // GET: Rating/League/Create
         public IActionResult Create()
@@ -126,12 +204,6 @@ namespace YouCan.Areas.Rating.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: Rating/League/UpdateLeagues
-        public async Task<IActionResult> UpdateLeagues()
-        {
-            await _leagueRepository.UpdateLeaguesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        
     }
 }

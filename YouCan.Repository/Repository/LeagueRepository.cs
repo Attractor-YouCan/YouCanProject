@@ -65,36 +65,18 @@ namespace YouCan.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateLeagueAsync(string leagueName, int minPoints, int maxPoints, DateTime startDate, DateTime endDate)
+        public async Task CreateLeagueAsync(string leagueName, int minPoints, int maxPoints)
         {
             var league = new League
             {
                 LeagueName = leagueName,
                 MinPoints = minPoints,
                 MaxPoints = maxPoints,
-                StartDate = startDate,
-                EndDate = endDate
             };
 
             _entities.Add(league);
             await _context.SaveChangesAsync();
         }
-
-        public async Task UpdateLeaguesAsync()
-        {
-            var now = DateTime.UtcNow;
-            var leagues = await _entities.Where(l => l.EndDate <= now).ToListAsync();
-
-            foreach (var league in leagues)
-            {
-                // Logic to reset or update the league
-                league.StartDate = now;
-                league.EndDate = now.AddMonths(1); // For example, reset to next month
-
-                // Recalculate ranks or other logic here
-            }
-
-            await _context.SaveChangesAsync();
-        }
+        
     }
 }

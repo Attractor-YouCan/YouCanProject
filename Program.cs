@@ -5,13 +5,17 @@ using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Repository.Repository;
-using YouCan.Service.BackgroundServices;
 using YouCan.Service.Service;
 using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -29,7 +33,7 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
 
 builder.Services.AddSingleton<W3RootFileManager>();
 builder.Services.AddScoped<LeagueRepository>();
-builder.Services.AddHostedService<LeagueUpdateService>();
+
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
