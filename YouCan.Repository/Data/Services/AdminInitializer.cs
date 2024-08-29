@@ -27,7 +27,8 @@ public class AdminInitializer
                 BirthDate = DateTime.UtcNow,
                 Disctrict = "",
                 PhoneNumber = "0",
-                TariffId = 3
+                TariffId = 3,
+                TariffStartDate = DateTime.UtcNow,
             };
             IdentityResult result = await _userManager.CreateAsync(superadmin, adminPassword);
             if (result.Succeeded)
@@ -37,14 +38,15 @@ public class AdminInitializer
         }
         User user1 = new User()
         {
-            Email = "qwe@qwe", 
-            UserName = "qwe", 
-            AvatarUrl = "/userImages/defProf-ProfileN=1.png", 
+            Email = "qwe@qwe",
+            UserName = "qwe",
+            AvatarUrl = "/userImages/defProf-ProfileN=1.png",
             FullName = "Anton",
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Bishkek",
             PhoneNumber = "1",
-            TariffId = 2
+            TariffId = 2,
+            TariffStartDate = DateTime.UtcNow
         };
         User user2 = new User()
         {
@@ -55,7 +57,8 @@ public class AdminInitializer
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Osh",
             PhoneNumber = "2",
-            TariffId = 1
+            TariffId = 1,
+            TariffStartDate = DateTime.UtcNow
         };
         User user3 = new User()
         {
@@ -66,7 +69,8 @@ public class AdminInitializer
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "Issyk-Kul",
             PhoneNumber = "3",
-            TariffId = 1
+            TariffId = 1,
+            TariffStartDate = DateTime.UtcNow
         };
         List<User> users = new List<User>() { user1, user2, user3 };
         foreach (var user in users)
