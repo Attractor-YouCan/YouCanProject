@@ -31,7 +31,6 @@ public class StatController : Controller
             .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
             .Select(g => new { Name = g.Key, Count = g.Count() })
             .ToList();
-
         ViewBag.Tests = tests;
         ViewBag.Users = users;
         
