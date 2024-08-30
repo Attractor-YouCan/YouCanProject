@@ -29,4 +29,24 @@ public class ORTController : Controller
         }
         return NotFound();
     }
+    [HttpGet]
+    public async Task<IActionResult> Edit(int ortId)
+    {
+        var ort = await _ortManager.GetById(ortId);
+        if (ort != null)
+        {
+            return View(ort);
+        }
+        return NotFound();
+    }
+    [HttpPost]
+    public async Task<IActionResult> Edit(OrtTest ort)
+    {
+        if (ModelState.IsValid)
+        {
+            await _ortManager.Update(ort);
+            return RedirectToAction("Details", new {ortId = ort.Id});   
+        }
+        return BadRequest();
+    }
 }

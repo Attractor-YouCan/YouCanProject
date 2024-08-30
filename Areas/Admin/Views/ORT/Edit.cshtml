@@ -1,0 +1,42 @@
+﻿@model OrtTest
+
+@{
+    Layout = "_Admin";
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>OrtTest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OrtLevel" class="control-label"></label>
+                <input asp-for="OrtLevel" class="form-control" />
+                <span asp-validation-for="OrtLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeForTestInMin" class="control-label"></label>
+                <input asp-for="TimeForTestInMin" class="form-control" />
+                <span asp-validation-for="TimeForTestInMin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language" class="control-label"></label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
