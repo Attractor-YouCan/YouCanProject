@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entites.Models;
 using YouCan.Entities;
-using YouCan.Services;
 
 namespace YouCan.Repository;
 
@@ -26,7 +25,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Tariff> Tariffs { get; set; }
     public DbSet<AdminAction> AdminActions { get; set; }
     public DbSet<LessonTime> LessonTimes { get; set; }
-
+    
 protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Subject>()
