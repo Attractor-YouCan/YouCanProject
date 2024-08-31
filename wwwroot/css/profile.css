@@ -231,43 +231,45 @@ body {
 }
 
 /*календарь*/
-.calendar td.heatwave {
+.calendar td {
     position: relative;
-    background: rgba(255, 0, 0, 0.3);
-    color: black;
+    padding: 10px;
+    overflow: hidden;
 }
 
-.calendar .heatwave.start::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0));
-    border-radius: 50%;
-}
+    .calendar td.heatwave.start::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 167, 255, 0.3);
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+    }
 
-.calendar .heatwave.end::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0));
-    border-radius: 50%;
-}
+    .calendar td.heatwave.end::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 167, 255, 0.3);
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+    }
 
-.calendar .heatwave.full::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(255, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 100%);
-}
+    .calendar td.heatwave.full::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 167, 255, 0.3);
+    }
 
 .calendar td {
     position: relative;
@@ -275,7 +277,7 @@ body {
 }
 
 .calendar .heatwave {
-    border-radius: 50%;
+   
 }
 
 .calendar td.active {
@@ -336,10 +338,6 @@ body {
     .calendar th {
         font-weight: normal;
         color: #666;
-    }
-
-    .calendar td {
-        border-radius: 50%;
     }
 
 
