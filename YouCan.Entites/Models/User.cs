@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using YouCan.Entites.Models;
+using YouCan.Entities;
 
 namespace YouCan.Entities;
 
@@ -15,6 +16,11 @@ public class User : IdentityUser<int>
     public Tariff? Tariff { get; set; }
     public DateTime TariffStartDate { get; set; }
     public DateTime? TariffEndDate { get; set; }
+    
+    public int? LeagueId { get; set; }
+    public League? League { get; set; }
+    
+    public int Rank { get; set; } 
 
     public int UserLessonScore { get; set; }
     public Statistic? Statistic { get; set; }
