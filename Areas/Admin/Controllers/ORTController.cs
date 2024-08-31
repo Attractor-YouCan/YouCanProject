@@ -49,4 +49,11 @@ public class ORTController : Controller
         }
         return BadRequest();
     }
+
+    [HttpGet]
+    public IActionResult CreateTest(int ortId)
+    {
+        ViewBag.ortId = ortId;
+        return View();
+    }
 }
