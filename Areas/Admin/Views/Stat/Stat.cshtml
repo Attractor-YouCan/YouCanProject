@@ -1,4 +1,6 @@
-﻿@using YouCan.Entites.Models
+﻿@using YouCan.Areas.Admin.ViewModels
+@using YouCan.Entites.Models
+@model StatViewModel
 @{
     Layout = "_Admin";
     List<string> colors = new(){
@@ -20,10 +22,10 @@
             <div class="col-md-8">
                 <div class="card-body">
 
-                      <h5 class="card-title">@ViewBag.UsersCount</h5>
+                      <h5 class="card-title">@Model.UsersCount</h5>
                     
                     <p class="card-text">Общая аудитория</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewData["AllNewUsers"])% (30 дней)</small></p>
+                    <p class="card-text"><small class="text-body-secondary">@(Model.AllNewUsers)% (30 дней)</small></p>
                 </div>
             </div>
         </div>
@@ -36,10 +38,10 @@
             <div class="col-md-8">
                 <div class="card-body">
 
-                    <h5 class="card-title">@ViewBag.Start.Users.Count</h5>
-                    <p class="card-text">@ViewBag.Start.Name юзеры</p>
+                    <h5 class="card-title">@Model.Start.Users.Count</h5>
+                    <p class="card-text">@Model.Start.Name юзеры</p>
                     
-                    <p class="card-text"><small class="text-body-secondary">@(ViewData["NewStartUsers"])% (30 дней)</small></p>
+                    <p class="card-text"><small class="text-body-secondary">@(Model.NewStartUsers)% (30 дней)</small></p>
                 </div>
             </div>
         </div>
@@ -51,9 +53,9 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.Pro.Users.Count</h5>
-                    <p class="card-text">@ViewBag.Pro.Name юзеры</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewData["NewProUsers"])% (30 дней)</small></p>
+                    <h5 class="card-title">@Model.Pro.Users.Count</h5>
+                    <p class="card-text">@Model.Pro.Name юзеры</p>
+                    <p class="card-text"><small class="text-body-secondary">@(Model.NewProUsers)% (30 дней)</small></p>
                 </div>
             </div>
         </div>
@@ -65,9 +67,9 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">@ViewBag.Premium.Users.Count</h5>
-                    <p class="card-text">@ViewBag.Premium.Name юзеры</p>
-                    <p class="card-text"><small class="text-body-secondary">@(ViewBag.NewPremiumUsers)% (30 дней)</small></p>
+                    <h5 class="card-title">@Model.Premium.Users.Count</h5>
+                    <p class="card-text">@Model.Premium.Name юзеры</p>
+                    <p class="card-text"><small class="text-body-secondary">@(Model.NewPremiumUsers)% (30 дней)</small></p>
                 </div>
             </div>
         </div>
@@ -120,13 +122,16 @@
         <div class="col-md-5 mt-3">
             <ul class="list-group">
                 <!-- Список уроков с количеством тестов -->
-                @for(int i = 0; i < ViewBag.TestCount; i++)
+                @for(int i = 0; i < Model.Tests.Count; i++)
                 {
-                    @if (ViewBag.Tests[i] != null)
+                    @if (Model.Tests[i] != null)
                     {
                         <li class="d-flex justify-content-between align-items-center ms-4 mt-3">
-                            <span class="subject-name">@ViewBag.Tests[i].Name</span>
-                            <span class="count"><i style="color: @colors[i]" class="bi bi-square-fill me-3 color-count"></i>@ViewBag.Tests[i].Count</span>
+                            <span class="subject-name">@Model.Tests[i].Name</span>
+                            <span class="count">
+                                <i style="color: @colors[i]" class="bi bi-square-fill me-3 color-count"></i>
+                                @Model.Tests[i].Count
+                            </span>
                         </li>
                     }
                 }
@@ -147,7 +152,7 @@
             data: {
                 labels: ["Start", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Start.Users.Count, @ViewData["UsersCount"]],
+                    data: [@Model.Start.Users.Count, @Model.UsersCount],
                     backgroundColor: ["rgba(255, 91, 91, 1)", "rgba(255, 91, 91, 0.15)"]
                 }]
             },
@@ -159,7 +164,7 @@
             data: {
                 labels: ["Pro", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Pro.Users.Count, @ViewData["UsersCount"]],
+                    data: [@Model.Pro.Users.Count, @Model.UsersCount],
                     backgroundColor: ["rgba(0, 176, 116, 1)", "rgba(0, 176, 116, 0.15)"]
                 }]
             },
@@ -171,7 +176,7 @@
             data: {
                 labels: ["Premium", "Всего"],
                 datasets: [{
-                    data: [@ViewBag.Premium.Users.Count, @ViewData["UsersCount"]],
+                    data: [@Model.Premium.Users.Count, @Model.UsersCount],
                     backgroundColor: ["rgba(45, 156, 219, 1)", "rgba(45, 156, 219, 0.15)"]
                 }]
             },
