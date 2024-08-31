@@ -24,45 +24,9 @@ namespace YouCan.Areas.Rating.Controllers
         public async Task<IActionResult> Index()
         {
             var leagues = _leagueRepository.GetAll().ToList();
-            
-            // var users = await _userManager.Users
-            //     .Include(u => u.League)
-            //     .OrderByDescending(u => u.Rank)
-            //     .ToListAsync();
-            
-            //
-            // foreach (var user in users)
-            // {
-            //     await AssignUserToLeagueAsync(user, leagues);
-            // }
-            
-            // var viewModel = new CombinedRatingViewModel
-            // {
-            //     Leagues = leagues,
-            //     Users = users
-            // };
             return View(leagues);
         }
-
-        // private async Task AssignUserToLeagueAsync(User user, List<League> leagues)
-        // {
-        //     foreach (var league in leagues)
-        //     {
-        //         if (user.UserLessonScore >= league.MinPoints && user.UserLessonScore <= league.MaxPoints)
-        //         {
-        //             user.LeagueId = league.Id;
-        //             user.League = league;
-        //             break;
-        //         }
-        //     }
-        //
-        //     if (user.LeagueId == null)
-        //     {
-        //       
-        //     }
-        //     
-        //     _userManager.UpdateAsync(user).Wait();
-        // }
+        
 
         private async  Task<List<User>> GetUserLeaderboardLeague(string leagueName)
         {
@@ -72,7 +36,6 @@ namespace YouCan.Areas.Rating.Controllers
             }
             var leagueRepo = _leagueRepository.GetAll()
                 .FirstOrDefault(l => l.LeagueName.ToLower().Trim() == leagueName.ToLower().Trim());
-            // var leagueRepo = _leagueRepository.Get(leagueName)
             if (leagueRepo == null)
             {
                 return null;
@@ -101,7 +64,7 @@ namespace YouCan.Areas.Rating.Controllers
 
             if (users == null)
             {
-                return Json(new List<object>()); // Return empty list if no users
+                return Json(new List<object>()); 
             }
 
             var result = users.Select(user => new

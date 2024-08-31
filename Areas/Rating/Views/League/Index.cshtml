@@ -87,11 +87,11 @@ Layout = "_NavBar";
                     type: 'GET',
                     data: { leagueName: leagueName },
                     success: function (data) {
-                        $(".loader").hide(); // Hide the loader
+                        $(".loader").hide(); 
 
                         console.log("Received data:", data);
 
-                        // Check if $values exists in the response
+                     
                         var users = data.$values;
 
                         if (Array.isArray(users)) {
@@ -113,14 +113,14 @@ Layout = "_NavBar";
                         }
                     },
                     error: function (xhr, status, error) {
-                        $(".loader").hide(); // Hide the loader
+                        $(".loader").hide(); 
                         console.error("An error occurred while fetching the users: ", error);
                     }
                 });
-            }, 300); // Adjust the debounce delay as needed
+            }, 300); 
         }
 
-        // Initialize Swiper
+     
         var swiper = new Swiper(".swiper", {
             slidesPerView: 'auto',
             effect: "coverflow",
@@ -142,7 +142,7 @@ Layout = "_NavBar";
             }
         });
 
-        // Initial load
+     
         updateLeagueAndUsers();
     });
 </script>
