@@ -1,4 +1,7 @@
 @using YouCan.Mvc.ViewModels.Account
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model LoginViewModel
 
 @{
@@ -55,7 +58,7 @@
                             <span class="text-danger" asp-validation-for="LoginValue"></span>
                         </label>
                         <div class="phone-wrapper">
-                            <input asp-for="LoginValue" type="text" class="form-control" placeholder="Номер телефона или Email" id="email">
+                            <input asp-for="LoginValue" type="text" class="form-control" placeholder="@Localizer["Login"]" id="email">
                         </div>
                     </div>
                     <div class="input-group  password-wrapper">
@@ -63,18 +66,17 @@
                             <span class="text-danger" asp-validation-for="Password"></span>
                         </label>
                         <div class="password-wrapper">
-                            <input asp-for="Password" type="password" class="form-control" placeholder="Пароль" id="pass" aria-describedby="button-addon1">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="@Localizer["Password"]" id="pass" aria-describedby="button-addon1">
                             <span class="toggle-password">
                                 <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon" width="32" height="32">
                             </span>
                         </div>
                     </div>
-                    <a href="#" class="forgot-password">Забыли пароль?</a>
-                    <button type="submit" class="loginBtn">ВОЙТИ</button>
+                    <a href="#" class="forgot-password">@Localizer["ForgotPassword"]</a>
+                    <button type="submit" class="loginBtn">@Localizer["LoginButton"]</button>
                 </form>
                 <p class="terms">
-                    Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>
-                    с нашими <a href="#">Условиями</a> и <a href="#">Политикой конфиденциальности</a>.
+                        @Localizer.Links("TermsAgreement", x => Html.ActionLink(x, "TermsOfUse", "Home"), x => Html.ActionLink(x, "PrivacyPolicy", "Home"))
                 </p>
             </div>
 
