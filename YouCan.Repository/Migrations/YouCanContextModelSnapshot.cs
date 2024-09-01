@@ -2037,6 +2037,12 @@ namespace YouCan.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("ImpactModeEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ImpactModeStart")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 

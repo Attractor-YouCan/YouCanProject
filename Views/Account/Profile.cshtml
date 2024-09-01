@@ -1,6 +1,7 @@
 
 
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
 @model YouCan.ViewModels.UserProfileViewModel
 
 @{
@@ -206,8 +207,13 @@
 
             let currentDate = new Date();
 
-            const heatwaveStart = new Date('2024-09-15');
-            const heatwaveEnd = new Date('2024-09-25');
+            // Установим точное время для начала и конца периода heatwave
+            const heatwaveStart = new Date('@String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.ImpactModeStart)');
+            const heatwaveEnd = new Date('@String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.ImpactModeEnd)');
+
+            function normalizeDate(date) {
+                return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            }
 
             function renderCalendar(date) {
                 const month = date.getMonth();
@@ -237,17 +243,17 @@
                     let cell = document.createElement('td');
                     cell.textContent = day;
 
-                    const cellDate = new Date(year, month, day);
+                    const cellDate = normalizeDate(new Date(year, month, day));
 
                     // Применение класса heatwave
-                    if (cellDate >= heatwaveStart && cellDate <= heatwaveEnd) {
+                    if (cellDate >= normalizeDate(heatwaveStart) && cellDate <= normalizeDate(heatwaveEnd)) {
                         // Если начало периода
-                        if (cellDate.getTime() === heatwaveStart.getTime() || row.children.length === 0) {
+                        if (cellDate.getTime() === normalizeDate(heatwaveStart).getTime() || row.children.length === 0) {
                             cell.classList.add('heatwave', 'start');
                         }
 
                         // Если конец периода или последний день строки
-                        if (cellDate.getTime() === heatwaveEnd.getTime() || row.children.length === 6) {
+                        if (cellDate.getTime() === normalizeDate(heatwaveEnd).getTime() || row.children.length === 6) {
                             cell.classList.add('heatwave', 'end');
                         }
 
