@@ -135,6 +135,9 @@
   <data name="MaxFileSize" xml:space="preserve">
     <value>Максимальный размер изображения — 1 Мб</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Редактировать профиль</value>
+  </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>Номер телефона</value>
   </data>

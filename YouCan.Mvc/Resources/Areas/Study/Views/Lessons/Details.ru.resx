@@ -123,6 +123,9 @@
   <data name="Description" xml:space="preserve">
     <value>Описание</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Урок</value>
+  </data>
   <data name="Test" xml:space="preserve">
     <value>Пройти тест</value>
   </data>

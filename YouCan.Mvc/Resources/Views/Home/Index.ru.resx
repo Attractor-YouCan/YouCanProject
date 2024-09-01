@@ -271,4 +271,7 @@
   <data name="YouCanTrailerTitle" xml:space="preserve">
     <value>Как подготовиться к ОРТ эффективно?</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Главная страница</value>
+  </data>
 </root>

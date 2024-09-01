@@ -5,7 +5,7 @@
 @model List<Subject>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = @Localizer["PageTitle"];
     Layout = "_Layout";
 }
 
@@ -16,7 +16,7 @@
 </style>
 <nav class="navbar navbar-light border-bottom">
     <div class="container-fluid">
-        <span class="navbar-text mx-auto">Тренировка</span>
+        <span class="navbar-text mx-auto">@Localizer["Train"]</span>
     </div>
 </nav>
 <a class="navbar-brand" href="javascript:history.back()" style="margin-left: 30px; text-decoration: none; color: inherit;">

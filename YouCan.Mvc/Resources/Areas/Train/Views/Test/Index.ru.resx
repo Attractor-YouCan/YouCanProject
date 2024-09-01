@@ -126,6 +126,9 @@
   <data name="Description" xml:space="preserve">
     <value>Здесь вы можете создать свои вопросы к ОРТ и поделиться ими, &lt;br/&gt;а также пройти тесты с вопросами, созданными другими пользователями.</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
   <data name="Train" xml:space="preserve">
     <value>Тренировка</value>
   </data>

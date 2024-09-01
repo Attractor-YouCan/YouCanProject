@@ -117,22 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CompleteToNext" xml:space="preserve">
-    <value>Пройдите предыдущий урок, чтобы открыть</value>
-  </data>
-  <data name="Empty" xml:space="preserve">
-    <value>Уроков еще нет!</value>
-  </data>
-  <data name="LessonAgain" xml:space="preserve">
-    <value>Изучать снова</value>
-  </data>
-  <data name="LessonNumber" xml:space="preserve">
-    <value>Урок номер</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Открыть</value>
-  </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>Уроки</value>
+    <value>Рейтинг</value>
   </data>
 </root>

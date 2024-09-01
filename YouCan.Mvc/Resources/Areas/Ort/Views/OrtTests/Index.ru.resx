@@ -123,6 +123,9 @@
   <data name="Empty" xml:space="preserve">
     <value>Тестов еще нет!</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Пробные тесты</value>
+  </data>
   <data name="TestRules" xml:space="preserve">
     <value>Правила прохождения теста</value>
   </data>

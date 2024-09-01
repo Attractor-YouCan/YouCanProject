@@ -132,6 +132,9 @@
   <data name="Next" xml:space="preserve">
     <value>Дальше</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Регистрация аккаунта</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Регистрация</value>
   </data>

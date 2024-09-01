@@ -1,5 +1,8 @@
-﻿@{
-    ViewBag.Title = "rating";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = Localizer["PageTitle"];
     Layout = "_NavBar";
 }
 <link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" />

@@ -126,6 +126,9 @@
   <data name="Instruction" xml:space="preserve">
     <value>Инструкция</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Создать тренировочный тест</value>
+  </data>
   <data name="Remove" xml:space="preserve">
     <value>Удалить</value>
   </data>

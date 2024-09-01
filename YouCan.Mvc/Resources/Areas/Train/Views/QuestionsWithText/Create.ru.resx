@@ -120,6 +120,9 @@
   <data name="AddQuestion" xml:space="preserve">
     <value>Добавить вопрос</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Создать тренировочный тест</value>
+  </data>
   <data name="Remove" xml:space="preserve">
     <value>Удалить</value>
   </data>

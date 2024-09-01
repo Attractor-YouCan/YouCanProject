@@ -120,4 +120,7 @@
   <data name="LinkEdit" xml:space="preserve">
     <value>Редактировать</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
 </root>

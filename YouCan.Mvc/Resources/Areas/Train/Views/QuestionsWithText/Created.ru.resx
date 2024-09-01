@@ -123,6 +123,9 @@
   <data name="GoodQuestion" xml:space="preserve">
     <value>Хороший вопрос!</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Тренировочный тест создан</value>
+  </data>
   <data name="Return" xml:space="preserve">
     <value>Вернуться в меню</value>
   </data>

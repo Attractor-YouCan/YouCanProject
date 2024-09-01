@@ -126,6 +126,9 @@
   <data name="NotPassedTitle" xml:space="preserve">
     <value>Неудача!</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Результат прохождения урока</value>
+  </data>
   <data name="StartAgain" xml:space="preserve">
     <value>Повторить</value>
   </data>

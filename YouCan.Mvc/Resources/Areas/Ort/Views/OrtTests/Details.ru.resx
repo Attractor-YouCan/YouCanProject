@@ -129,4 +129,7 @@
   <data name="Ok" xml:space="preserve">
     <value>Хорошо</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Информация о тесте</value>
+  </data>
 </root>

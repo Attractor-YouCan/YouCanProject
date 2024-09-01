@@ -126,6 +126,9 @@
   <data name="Next" xml:space="preserve">
     <value>Следующий</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Прохождение теста урока</value>
+  </data>
   <data name="Previous" xml:space="preserve">
     <value>Предыдущий</value>
   </data>

@@ -129,6 +129,9 @@
   <data name="Finish" xml:space="preserve">
     <value>Завершить</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Прохождение теста</value>
+  </data>
   <data name="Previous" xml:space="preserve">
     <value>Предыдущий</value>
   </data>

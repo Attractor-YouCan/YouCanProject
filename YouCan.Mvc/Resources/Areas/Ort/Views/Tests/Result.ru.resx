@@ -123,6 +123,9 @@
   <data name="AmountPoints" xml:space="preserve">
     <value>Общее Количество баллов</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Результат пробного теста</value>
+  </data>
   <data name="RightAnswers" xml:space="preserve">
     <value>Правильные ответы</value>
   </data>
