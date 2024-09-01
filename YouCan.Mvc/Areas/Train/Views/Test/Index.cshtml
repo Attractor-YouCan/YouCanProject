@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
     ViewBag.Title = "title";
     Layout = "_Navbar";
 }
@@ -7,7 +10,7 @@
         <a class="navbar-brand" href="#">
             <img src="/trainImages/logo.png" alt="Logo" />
         </a>
-        <span class="navbar-text mx-auto text-center">Тренировка</span>
+        <span class="navbar-text mx-auto text-center">@Localizer["Train"]</span>
         <div style="width: 100px"></div>
     </div>
 </nav>
@@ -15,8 +18,7 @@
     <img src="/trainImages/Group 89.png" alt="Training" class="img-fluid mb-3" />
     <p class="mb-3">
         <strong>
-            Здесь вы можете создать свои вопросы к ОРТ и поделиться ими, <br/>а также
-            пройти тесты с вопросами, созданными другими пользователями.
+            @Localizer["Description"]
         </strong>
     </p>
     <div class="row justify-content-center mb-4">
@@ -26,8 +28,8 @@
                 <div class="card-body d-flex align-items-center">
                     <img src="/trainImages/соз.png" alt="Take Test Image" class="img-fluid mr-3" />
                     <div>
-                        <h5 class="card-title">Создать тест</h5>
-                        <p class="card-text">Получай баллы за созданный вопрос. Делись своими знаниями!</p>
+                        <h5 class="card-title">@Localizer["CreateTestTitle"]</h5>
+                        <p class="card-text">@Localizer["CreateTestSubtitle"]</p>
                     </div>
                 </div>
             </div>
@@ -37,8 +39,8 @@
                 <div class="card-body d-flex align-items-center">
                     <img src="/trainImages/пройти.png" alt="Take Test Image" class="img-fluid mr-3" />
                     <div>
-                        <h5 class="card-title">Пройти тест</h5>
-                        <p class="card-text">Хочешь потренироваться? Попробуй пройти этот тест и заработай баллы!</p>
+                        <h5 class="card-title">@Localizer["TrainTestTitle"]</h5>
+                        <p class="card-text">@Localizer["TrainTestSubtitle"]</p>
                     </div>
                 </div>
             </div>

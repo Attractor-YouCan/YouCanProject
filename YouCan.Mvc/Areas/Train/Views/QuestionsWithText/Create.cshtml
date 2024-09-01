@@ -1,4 +1,7 @@
-﻿@model TestDto
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@model TestDto
 
 @{
     ViewBag.Title = "Создать тренировочный тест";
@@ -10,7 +13,7 @@
 <div class="container">
     <div class="row justify-content-center mb-5">
         <form class="col-md-7 col-lg-5 m-0" asp-action="Create" method="post">
-            <p class="text-center profile-title">Тренировка</p>
+            <p class="text-center profile-title">@Localizer["Train"]</p>
             <hr>
             <a href="javascript:history.back()" class="btn">
                 <img src="@Url.Content("~/profileIcons/arrow-back.svg")" />
@@ -53,16 +56,16 @@
                     }
                 </div>
                 <div class="text-center mb-5">
-                    <button id="add-question-btn" class="btn-add-question" type="button">Добавить вопрос</button>
+                    <button id="add-question-btn" class="btn-add-question" type="button">@Localizer["AddQuestion"]</button>
                 </div>
             </div>
 
             <div class="row gx-2 justify-content-center">
                 <div class="col-auto">
-                    <button class="btn btn-test btn-delete fw-bold" type="reset">Удалить</button>
+                    <button class="btn btn-test btn-delete fw-bold" type="reset">@Localizer["Remove"]</button>
                 </div>
                 <div class="col-auto">
-                    <button class="col-auto btn btn-test btn-send fw-bold" type="submit">Отправить</button>
+                    <button class="col-auto btn btn-test btn-send fw-bold" type="submit">@Localizer["Send"]</button>
                 </div>
                 <div class="col-auto">
                     <button class="col-auto btn-test-square fw-bold" type="button">?</button>

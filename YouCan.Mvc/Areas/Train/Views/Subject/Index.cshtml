@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @using YouCan.Services
 @model List<Subject>
 
@@ -30,13 +33,13 @@
 <div class="container text-center my-5 px-4">
     <p class="mb-3">
         <strong>
-            Отлично!<br/>Давай проверим твои силы.<br/>Выбери нужный раздел:
+            @Localizer["SelectSubject"]
         </strong>
     </p>
     <div class="row justify-content-center mt-5">
         @if (Model.Count == 0)
         {
-            <h3>Предметов еще пока что нет!</h3>
+            <h3>@Localizer["Empty"]</h3>
         }
         else
         {
