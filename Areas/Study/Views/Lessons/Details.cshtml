@@ -14,8 +14,8 @@
 
     <div class="video-container embed-responsive embed-responsive-16by9">
         <video class="embed-responsive-item" controls>
-            <source src="~/lessonResources/lessonVideo.mp4" type="video/mp4" />
-            <source src="~/lessonResources/lessonVideo.ogg" type="video/ogg" />
+            <source src="~@Model.VideoUrl" type="video/mp4" />
+            <source src="~@Model.VideoUrl" type="video/ogg" />
             Your browser does not support the video tag.
         </video>
     </div>
@@ -42,3 +42,34 @@
       } 
     <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
 </div>
+@section Scripts{
+    <script>
+        let startTime = Date.now();
+
+        window.addEventListener("beforeunload", function () {
+            let endTime = Date.now();
+            let timeSpent = endTime - startTime;
+
+            let data = {
+                timeSpent: timeSpent,
+                lessonId: @Model.Id // ID текущего урока
+            };
+            console.log(JSON.stringify(data));
+            fetch('@Url.Action("LogTime", "Lessons", new { Area = "Study" })', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                keepalive: true // Ensures the request is completed even if the page is closed
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to log time:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error logging time:', error);
+            });
+        });
+
+    </script>
+}

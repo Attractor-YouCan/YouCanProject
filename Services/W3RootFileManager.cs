@@ -17,7 +17,7 @@ public class W3RootFileManager(IWebHostEnvironment webHostEnvironment)
         {
             await file.CopyToAsync(stream);
         }
-        return localPath;
+        return "/"+localPath;
     }
     public bool DeleteFile(string localPath)
     {

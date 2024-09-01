@@ -6,10 +6,8 @@ public class UserLessons : EntityBase
 
     public int UserId { get; set; }
     public User? User { get; set; }
-    public int? SubtopicId { get; set; }
-    public Subtopic? Subtopic { get; set; }
     //Альтернатива
-    public int? SubjectId { get; set; }
+    public int SubjectId { get; set; }
     public Subject? Subject { get; set; }
     public int? PassedLevel { get; set; }
     public int? LessonId { get; set; }
