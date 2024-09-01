@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,27 +32,27 @@
             </a>
             <a asp-area="Study" asp-controller="Subtopics" asp-action="Index" class="nav_link" data-area="Study" data-controller="Subtopics">
                 <img src="~/navbar_icons/book.png" alt="..." class="bx bx-grid-alt nav_icon book">
-                <span class="nav_name">ОБУЧЕНИЕ</span>
+                <span class="nav_name">@Localizer["Study"]</span>
             </a>
             <a asp-area="Train" asp-controller="Test" asp-action="Index" class="nav_link" data-area="Train" data-controller="Train">
                 <img src="~/navbar_icons/biceps.png" alt="..." class="bx bx-grid-alt nav_icon biceps">
-                <span class="nav_name">ТРЕНИРОВКА</span>
+                <span class="nav_name">@Localizer["Train"]</span>
             </a>
             <a asp-area="ORT" asp-controller="OrtTests" asp-action="Index" class="nav_link">
                 <img src="~/navbar_icons/board.png" alt="..." class="bx bx-grid-alt nav_icon board">
-                <span class="nav_name">ТЕСТ</span>
+                <span class="nav_name">@Localizer["Test"]</span>
             </a>
             <a asp-area="@null" asp-controller="Account" asp-action="Rating" class="nav_link" data-area="@null" data-controller="Account">
                 <img src="~/navbar_icons/star.png" alt="..." class="bx bx-grid-alt nav_icon star">
-                <span class="nav_name">РЕЙТИНГ</span>
+                <span class="nav_name">@Localizer["Rating"]</span>
             </a>
             <a asp-area="@null" asp-controller="Account" asp-action="Profile" class="nav_link" data-area="@null" data-controller="Account">
                 <img src="~/navbar_icons/profile.png" alt="..." class="bx bx-grid-alt nav_icon profile">
-                <span class="nav_name">ПРОФИЛЬ</span>
+                <span class="nav_name">@Localizer["Profile"]</span>
             </a>
             <a href="#" class="nav_link">
                 <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
-                <span class="nav_name">ЕЩЕ</span>
+                <span class="nav_name">@Localizer["More"]</span>
             </a>
         </div>
     </nav>
