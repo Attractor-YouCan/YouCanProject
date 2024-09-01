@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model List<OrtTest>
 @{
@@ -9,23 +12,23 @@
 
 <div class="container ort-trial-block">
     <img class="align-self-center" src="~/ortIcons/logo.svg" alt="logo-youcan"/>
-    <p>Пробный тест</p>
+    <p>@Localizer["TrialTest"]</p>
 </div>
 <hr/>
 
 
 <h5 class="col-10 mx-auto border border-1 rounded-3 text-center py-sm-4 py-3 px-1 ">
-    Правила прохождения теста
+    @Localizer["TestRules"]
 </h5>
 
 @if (Model == null || Model.Count == 0)
 {
-    <h5> Тестов еще нет!</h5>
+    <h5>@Localizer["Empty"]</h5>
 }
 else
 {
     <div class="text-center mt-4">
-            <h5 class="mx-auto"> Доступные вам тесты</h5>
+            <h5 class="mx-auto">@Localizer["AvailableTests"]</h5>
     </div>
     <div class="col-8 mx-auto tests mt-5">
         @foreach (var ortTest in Model)
@@ -34,14 +37,14 @@ else
             {
                 <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
                     <div class="ort-trial-block-paddings border border-1 text-success fw-bold text-center rounded-3 border-success mt-3">
-                        <span>Пробный тест № @ortTest.OrtLevel</span>
+                        <span>@Localizer.GetString("TrialTestNumber", ortTest.OrtLevel)</span>
                     </div> 
                 </a>
             }
             else
             {
                 <div style="color: #C4C4C4" class="ort-trial-block-paddings border border-1 rounded-3 te fw-bold text-center border-light-subtle mt-3">
-                    <span>Пробный тест № @ortTest.OrtLevel</span>
+                    <span>@Localizer.GetString("TrialTestNumber", ortTest.OrtLevel)</span>
                 </div>
             }
         }

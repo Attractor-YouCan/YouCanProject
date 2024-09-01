@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model List<YouCan.Mvc.Areas.Ort.ViewModels.OrtTestResultModel>
 
 @{
@@ -10,12 +13,12 @@
 @foreach(var result in Model)
 {
     <p class="border border-success">
-        <h5>Правильные ответы :  @result.RightsCount</h5>
-            <h5>Общее количество ответов : @result.QuestionCount</h5>
-            <h5>ID теста : @result.TestId</h5>
-            <h5>Минут потраченных : @result.SpentTimeInMin</h5>
-            <h5>Количество баллов теста : @result.TestPoints</h5>
-            <h5>Общее Количество баллов : @result.PointsSum</h5>
+        <h5>@Localizer["RightAnswers"] :  @result.RightsCount</h5>
+        <h5>@Localizer["Amount"] : @result.QuestionCount</h5>
+        <h5>@Localizer["TestId"] : @result.TestId</h5>
+        <h5>@Localizer["SpentTime"] : @result.SpentTimeInMin</h5>
+        <h5>@Localizer["TestPoints"] : @result.TestPoints</h5>
+        <h5>@Localizer["AmointPoints"] : @result.PointsSum</h5>
     </p>
     
 }

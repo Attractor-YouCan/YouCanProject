@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @using YouCan.Entities
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model             OrtTest
@@ -13,10 +16,10 @@
         <a asp-action="Index" asp-controller="OrtTests">
             <img src="~/ortIcons/Vector-3.png"/>
         </a>
-        <p>Основные сведения о тесте</p>
+        <p>@Localizer["AboutTest"]</p>
     </div>
     
-    <p class="my-4 ort-trial-test_details-block_text">Цель теста выявить способных к дальнейшему обучения абитуриентов.
+    <p class="my-4 ort-trial-test_details-block_text">Цель теста выявить способных к дальнейшему обучению абитуриентов.
         <br/>
         Этот тест дает Вам возможность показать что Вы знаете и умеете делать реально, . . .
     </p>
@@ -41,8 +44,8 @@
                     <div class="accordion-body">
                         <p>@test.OrtInstruction.Description</p>
                         <p>
-                            <span> Количество заданий: @test.OrtInstruction.QuestionsCount</span> <br/>
-                            <span> Время: @test.OrtInstruction.TimeInMin минут</span>
+                            <span>@Localizer.GetString("AmountTasks", test.OrtInstruction.QuestionsCount)</span> <br/>
+                            <span>@Localizer.GetString("AmountTime", test.OrtInstruction.TimeInMin)</span>
                         </p>
                     </div>
                 </div>
@@ -52,5 +55,5 @@
 </div>
 
 <div class="mt-auto text-center mb-4">
-    <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="ort-trial-test_details-block_btn">Хорошо</a>
+    <a asp-controller="Tests" asp-action="Index" asp-route-ortTestId="@Model.Id" class="ort-trial-test_details-block_btn">@Localizer["Ok"]</a>
 </div>

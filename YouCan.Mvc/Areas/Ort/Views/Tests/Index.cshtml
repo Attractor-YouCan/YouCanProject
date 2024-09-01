@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @using YouCan.Entities
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model List<Test>
@@ -21,7 +24,7 @@
         <span>00:00:00</span>
     </div>
     <div class="col-6">
-        <button class="btn btn-danger text-white" id="next-page">Завершить
+        <button class="btn btn-danger text-white" id="next-page">@Localizer["Finish"]
             <span id="finishTestName"></span></button>
     </div>
     <div class="col-3" id="total-countdown">
@@ -32,7 +35,7 @@
 <div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
     @if (Model.Count == 0 || Model == null)
     {
-        <h5>Тестов еще нет!</h5>
+        <h5>@Localizer["Empty"]</h5>
     }
     else
     {
@@ -64,19 +67,19 @@
             </div>
         }
         <div class="text-center my-5" id="pagination-container">
-            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Предыдущий</button>
+            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>@Localizer["Previous"]</button>
             <span id="page-info"></span>
         </div>
     }
 </div>
 
 <button class="btn btn-outline-success text-success fixed-answers-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-    Ответы
+    @Localizer["Answers"]
 </button>
 
 <div class="offcanvas offcanvas-bottom h-50" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Ответы!</h5>
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">@Localizer["Answers"]</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -156,7 +159,7 @@
                 timers[testId].interval = setInterval(function () {
                     if (timers[testId].timeLeft <= 0) {
                         clearInterval(timers[testId].interval);
-                        countdownElement.innerHTML = "Время вышло!";
+                        countdownElement.innerHTML = "@Localizer["TimeOut"]";
                     } else {
                         timers[testId].timeLeft--;
                         updateCountdown(testId);
@@ -191,14 +194,14 @@
 
             function updateTotalCountdown() {
                 const totalTimeLeft = Object.values(timers).reduce((acc, timer) => acc + timer.timeLeft, 0);
-                document.getElementById('total-countdown').innerHTML = `${formatTime(totalTimeLeft)} <br> <span>Общее время</span>`;
+                document.getElementById('total-countdown').innerHTML = `${formatTime(totalTimeLeft)} <br> <span>@Localizer["AmountTime"]</span>`;
             }
 
             function updatePaginationButtonState() {
                 document.getElementById('prev-page').disabled = currentPage === 1;
                 const currentTestContainer = testContainers[currentPage - 1];
                 const testNameForButton = currentTestContainer.dataset.testname;
-                document.getElementById('next-page').textContent = 'Завершить ' + testNameForButton;
+                document.getElementById('next-page').textContent = '@Localizer["Finish"] ' + testNameForButton;
 
                 document.querySelectorAll('.answer-radio').forEach(function (radio) {
                     if (radio.checked) {
