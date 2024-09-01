@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model Test
 
 @{
@@ -18,7 +21,7 @@
 <div class="col-10 col-sm-8 col-md-6 mx-auto mt-5">
     @if (Model.Questions.Count == 0 || Model.Questions == null)
     {
-        <h5> Вопросов еще пока что нет !</h5>
+        <h5>@Localizer["Empty"]</h5>
     }
     else
     {
@@ -40,9 +43,9 @@
             </div>
         }
         <div class="text-center mt-5" id="pagination-container">
-            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>Предыдущий</button>
+            <button class="btn btn-secondary py-2 px-1 px-lg-4" id="prev-page" disabled>@Localizer["Previous"]</button>
             <span id="page-info"></span>
-            <button class="btn btn-success shadow py-2 ms-3 px-1 px-lg-4" id="next-page">Сделующий</button>
+            <button class="btn btn-success shadow py-2 ms-3 px-1 px-lg-4" id="next-page">@Localizer["Next"]</button>
         </div>
     }
 </div>
@@ -67,35 +70,35 @@
                 });
                 
                 function updatePaginationButtonState() {
-                            const questionContainers = document.querySelectorAll('.question-container');
-                            const currentPageContainer = questionContainers[currentPage - 1];
-                            const currentPageAnswers = currentPageContainer.querySelectorAll('.answer-radio');
-                            let isAnySelected = Array.from(currentPageAnswers).some(radio => radio.checked);
-                            const totalQuestions = questionContainers.length;
-                            // Update "Next" or "Finish" button based on currentPage and selected answers
-                            if (currentPage === Math.ceil(questionContainers.length / questionsPerPage)) {
-                                document.getElementById('next-page').textContent = isAnySelected ? 'Закончить' : 'Следующий';
-                            } else {
-                                document.getElementById('next-page').textContent = 'Следующий';
-                            }
+                    const questionContainers = document.querySelectorAll('.question-container');
+                    const currentPageContainer = questionContainers[currentPage - 1];
+                    const currentPageAnswers = currentPageContainer.querySelectorAll('.answer-radio');
+                    let isAnySelected = Array.from(currentPageAnswers).some(radio => radio.checked);
+                    const totalQuestions = questionContainers.length;
+                    // Update "Next" or "Finish" button based on currentPage and selected answers
+                    if (currentPage === Math.ceil(questionContainers.length / questionsPerPage)) {
+                        document.getElementById('next-page').textContent = isAnySelected ? '@Localizer["Finish"]' : '@Localizer["Next"]';
+                    } else {
+                    document.getElementById('next-page').textContent = '@Localizer["Next"]';
+                    }
                 
-                            document.getElementById('next-page').disabled = !isAnySelected || (currentPage === Math.ceil(questionContainers.length / questionsPerPage) && !isAllAnswersSelected());
-                            document.getElementById('prev-page').disabled = currentPage === 1;
+                    document.getElementById('next-page').disabled = !isAnySelected || (currentPage === Math.ceil(questionContainers.length / questionsPerPage) && !isAllAnswersSelected());
+                    document.getElementById('prev-page').disabled = currentPage === 1;
                 
-                            let progressBar = document.getElementById('progress-bar');
-                            let percentage = (currentPage / Math.ceil(totalQuestions / questionsPerPage)) * 100;
-                            progressBar.style.width = percentage + '%';
+                    let progressBar = document.getElementById('progress-bar');
+                    let percentage = (currentPage / Math.ceil(totalQuestions / questionsPerPage)) * 100;
+                    progressBar.style.width = percentage + '%';
                             
-                            currentPageAnswers.forEach(function(radio) {
-                                if (radio.checked) {
-                                    radio.parentElement.style.backgroundColor = '#58CC02';
-                                    radio.parentElement.classList.add('text-white');
-                                } else {
-                                    radio.parentElement.style.backgroundColor = '';
-                                    radio.parentElement.classList.remove('text-white');
-                                }
-                            });
+                    currentPageAnswers.forEach(function(radio) {
+                        if (radio.checked) {
+                            radio.parentElement.style.backgroundColor = '#58CC02';
+                            radio.parentElement.classList.add('text-white');
+                        } else {
+                            radio.parentElement.style.backgroundColor = '';
+                            radio.parentElement.classList.remove('text-white');
                         }
+                    });
+                }
                 function isAllAnswersSelected() {
                             const questionContainers = document.querySelectorAll('.question-container');
                             for (let i = 0; i < questionContainers.length; i++) {

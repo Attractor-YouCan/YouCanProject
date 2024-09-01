@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model Lesson
 
 @{
@@ -20,12 +23,12 @@
         </video>
     </div>
 
-    <h2 class="section-title">Описание</h2>
+    <h2 class="section-title">@Localizer["Description"]</h2>
     <p class="description">
         @Model.Description
     </p>
 
-    <h2 class="section-title">Подробно о лекции</h2>
+    <h2 class="section-title">@Localizer["AboutLesson"]</h2>
     <p class="lecture">
         @Model.Lecture
     </p>
@@ -40,7 +43,7 @@
             }
         </div>
       } 
-    <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
+    <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">@Localizer["Test"]</a>
 </div>
 @section Scripts{
     <script>

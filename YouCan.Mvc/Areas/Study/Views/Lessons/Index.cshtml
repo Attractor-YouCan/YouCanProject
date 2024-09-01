@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model List<Lesson>
 @{
     ViewBag.Title = "title";
@@ -10,7 +13,7 @@
 
 @if (Model == null || Model.Count == 0)
 {
-    <h4>Уроков еще нет!</h4>
+    <h4>@Localizer["Empty"]</h4>
 }
 else
 {
@@ -55,10 +58,10 @@ else
                                 <span class="popover-lesson-title">${lessonTitle}</span>
                             </div>
                             <div class="col-12 mt-3">
-                                <span class="">Урок номер ${lessonLevel}</span>
+                                        <span class="">@Localizer["LessonNumber"] ${lessonLevel}</span>
                             </div>
                             <div class="col-12 mt-4">
-                                <a href="@Url.Action("Details", "Lessons")?lessonId=${lessonId}" class="btn popover-button mt-2" role="button"><strong>Изучать снова</strong></a>
+                                <a href="@Url.Action("Details", "Lessons")?lessonId=${lessonId}" class="btn popover-button mt-2" role="button"><strong>@Localizer["LessonAgain"]</strong></a>
                             </div>
                         </div>`;
             } else if ((lessonLevel - 1) === currentLessonLevel) {
@@ -68,12 +71,12 @@ else
                                 <span class="popover-lesson-title">${lessonTitle}</span>
                             </div>
                             <div class="col-12 mt-3">
-                                <span class="">Урок номер ${lessonLevel}</span>
+                                <span class="">@Localizer["LessonNumber"] ${lessonLevel}</span>
                             </div>
                             <div class="col-12 mt-4">
                                 <a href="@Url.Action("Details", "Lessons")?lessonId=${lessonId}" class="btn  popover-button" role="button">
                                     <img src="@Url.Content("~/studyImages/openButton.svg")" class="h-100">
-                                    <strong>Открыть</strong>
+                                    <strong>@Localizer["Open"]</strong>
                                 </a>
                             </div>
                         </div>`;
@@ -84,7 +87,7 @@ else
                                 <strong class="popover-lesson-title">${lessonTitle}</strong>
                             </div>
                             <div class="col-12 mt-3">
-                                Пройдите предыдущий урок, чтобы открыть
+                                @Localizer["CompleteToNext"]
                             </div>
                         </div>`;
             }
