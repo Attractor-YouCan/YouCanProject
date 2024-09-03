@@ -1,17 +1,22 @@
 pipeline {
     agent any
 
+    triggers {
+        // Trigger the pipeline on any push to the 'main' branch
+        githubPush()
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Attractor-YouCan/YouCanProject.git'
+                git branch: 'main', url: 'https://github.com/Attractor-YouCan/YouCanProject.git'
             }
         }
         stage('Build') {
             steps {
                 script {
-                    sh 'docker-compose down' 
-                    sh 'docker-compose build --no-cache' 
+                    sh 'docker-compose down'
+                    sh 'docker-compose build --no-cache'
                 }
             }
         }
