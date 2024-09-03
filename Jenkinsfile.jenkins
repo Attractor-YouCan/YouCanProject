@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Attractor-YouCan/YouCanProject.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    sh 'docker-compose down' 
+                    sh 'docker-compose build --no-cache' 
+                }
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                script {
+                    sh 'docker-compose run --rm web dotnet test /app/YouCan.Test/YouCan.Test.csproj'
+                }
+            }
+        }
+        stage('Deploy') {
+            when {
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                }
+            }
+            steps {
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Процесс завершен.'
+        }
+    }
+}
