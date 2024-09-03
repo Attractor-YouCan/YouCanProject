@@ -15,9 +15,12 @@ public class LessonsController : Controller
     private ICRUDService<Lesson> _lessonService;
     private ICRUDService<UserLessons> _userLessonService;
     private UserManager<User> _userManager;
+    private readonly ICRUDService<UserLevel> _userLevel;
+
     private ICRUDService<LessonTime> _lessonTimeService;
     public LessonsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
+        ICRUDService<UserLevel> userLevel,
         ICRUDService<LessonTime> lessonTimeService,
         UserManager<User> userManager)
     {
@@ -25,6 +28,7 @@ public class LessonsController : Controller
         _userLessonService = userLessonService;
         _lessonTimeService = lessonTimeService;
         _userManager = userManager;
+        _userLevel = userLevel;
     }
 
     public async Task<IActionResult> Index(int subTopicId)
@@ -36,15 +40,19 @@ public class LessonsController : Controller
         if (currentUser == null)
             return NotFound("No user");
 
-        UserLessons? userLessons =  _userLessonService.GetAll()
-            .FirstOrDefault(ul => ul.UserId == currentUser.Id
-                                       && ul.SubjectId == subTopicId);
-        if (userLessons == null)
+        UserLevel? userLevel = _userLevel.GetAll()
+            .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == subTopicId);
+        if (userLevel == null)
         {
-            userLessons = new UserLessons() { UserId = currentUser.Id, SubjectId = subTopicId, PassedLevel = 0, IsPassed = true };
-            await _userLessonService.Insert(userLessons);
+            userLevel = new()
+            {
+                UserId = currentUser.Id,
+                SubjectId = subTopicId,
+                Level = 0,
+            };
+            await _userLevel.Insert(userLevel);
         }
-        ViewBag.CurrentLessonLevel = userLessons.PassedLevel;
+        ViewBag.CurrentLessonLevel = userLevel.Level;
         return View(lessons);
     }
 
@@ -55,15 +63,28 @@ public class LessonsController : Controller
         Lesson? lesson = await _lessonService.GetById(lessonId);
         if (lesson == null)
             return NotFound("No Lesson!");
-        UserLessons? userLessons = _userLessonService.GetAll()
+        UserLevel? userLevel = _userLevel.GetAll()
             .FirstOrDefault(ul => ul.UserId == currentUser.Id
             && ul.SubjectId == lesson.SubjectId);
-        if (lesson.LessonLevel > userLessons.PassedLevel + 1)
+        if (lesson.LessonLevel > userLevel.Level + 1)
             return RedirectToAction("Index", new { subTopicId = lesson.SubjectId });
-        if (userLessons == null)
+        if (userLevel == null)
             return NotFound("NO UserLesson!");
-        if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)
+        if (userLevel.Level >= lesson.LessonLevel || userLevel.Level + 1 == lesson.LessonLevel)
+        {
+            if (_userLessonService.GetAll().FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.LessonId == lesson.Id) == null)
+            {
+                UserLessons userLesson = new()
+                {
+                    UserId = currentUser.Id,
+                    LessonId = lesson.Id,
+                    IsPassed = false,
+                    SubjectId = lesson.SubjectId
+                };
+                await _userLessonService.Insert(userLesson);
+            }
             return View(lesson);
+        }
         return NotFound("Пройдите предыдущий урок, чтобы открыть");
     }
     [HttpPost]

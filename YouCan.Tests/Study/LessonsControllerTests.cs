@@ -16,6 +16,7 @@ public class LessonsControllerTests
       private readonly Mock<UserManager<User>> _userManagerMock;
       private readonly Mock<ICRUDService<LessonTime>> _lessonTimeMock;
       private readonly LessonsController _controller;
+      private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
 
       public LessonsControllerTests()
       {
@@ -23,8 +24,8 @@ public class LessonsControllerTests
           _lessonTimeMock = new Mock<ICRUDService<LessonTime>>();
           _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
           _userManagerMock = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
-
-          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object, _lessonTimeMock.Object, _userManagerMock.Object);
+          _userLevelMock = new Mock<ICRUDService<UserLevel>>();
+          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object,_userLevelMock.Object,  _lessonTimeMock.Object, _userManagerMock.Object );
       }
 
       [Fact]

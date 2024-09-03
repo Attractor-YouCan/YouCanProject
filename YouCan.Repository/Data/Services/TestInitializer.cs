@@ -39,8 +39,8 @@ public class TestInitializer
             );
         
         _modelBuilder.Entity<Test>().HasData(
-            new Test(){Id = 1, LessonId = 12, OrtTestId = 1, SubjectId = 1, OrtInstructionId = 1, TimeForTestInMin = 40},//Альтернатива LessonId = 1
-            new Test(){Id = 2, LessonId = 13, OrtTestId = 1, SubjectId = 5, OrtInstructionId = 2, TimeForTestInMin = 40}, //Альтернатива LessonId = 2
+            new Test(){Id = 1, LessonId = 1, OrtTestId = 1, SubjectId = 1, OrtInstructionId = 1, TimeForTestInMin = 40},//Альтернатива LessonId = 1
+            new Test(){Id = 2, LessonId = 2, OrtTestId = 1, SubjectId = 5, OrtInstructionId = 2, TimeForTestInMin = 40}, //Альтернатива LessonId = 2
             new Test(){Id = 4,  OrtTestId = 1, SubjectId = 7, OrtInstructionId = 3, TimeForTestInMin = 30},
             new Test(){Id = 5,  OrtTestId = 1, SubjectId = 2, OrtInstructionId = 4, TimeForTestInMin = 30} 
         );
