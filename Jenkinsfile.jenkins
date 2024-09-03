@@ -1,8 +1,10 @@
 pipeline {
     agent any
-
+    environment {
+        DB_USER = credentials('db-user')
+        DB_PASSWORD = credentials('db-password')
+    }
     triggers {
-        // Trigger the pipeline on any push to the 'main' branch
         githubPush()
     }
 
