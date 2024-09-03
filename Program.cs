@@ -11,6 +11,11 @@ using YouCan.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -27,6 +32,8 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<W3RootFileManager>();
+builder.Services.AddScoped<LeagueRepository>();
+
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
@@ -76,6 +83,9 @@ builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<Question
 
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
 builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
+
+builder.Services.AddTransient<IRepository<League>, LeagueRepository>();
+builder.Services.AddTransient<ICRUDService<League>, CRUDService<League>>();
 
 builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
 builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction>>();
