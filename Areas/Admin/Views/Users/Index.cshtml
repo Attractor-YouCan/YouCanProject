@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "_Layout";
+    Layout = "_Admin";
 }
 
 <h1>Index</h1>
@@ -124,21 +124,21 @@
                     }
                 </td>
                 <td>
-                    @user.LockoutEnabled
+                    @(user.LockoutEnabled && user.LockoutEnd != null)
                 </td>
                 <td>
                     @if (User.IsInRole("admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a>
-                        <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
-                        <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
+                        <a class="btn btn-primary btn-sm m-1" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                        <a class="btn btn-warning btn-sm m-1" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                        <a class="btn btn-danger btn-sm m-1" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
                         @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
                         {
-                            <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                            <a class="btn btn-primary btn-sm m-1" asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
                         }
                         else
                         {
-                            <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                            <a class="btn btn-danger btn-sm m-1" asp-action="Block" asp-route-id="@user.Id">Block</a>
                         }
                     }
                 </td>
