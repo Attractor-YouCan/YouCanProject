@@ -9,6 +9,15 @@ pipeline {
     }
 
     stages {
+        stage('Print Environment Variables') {
+            steps {
+                script {
+                    sh 'echo DB_USER=$DB_USER'
+                    sh 'echo DB_PASSWORD=$DB_PASSWORD'
+                }
+            }
+        }
+    
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/Attractor-YouCan/YouCanProject.git'
