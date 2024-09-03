@@ -11,13 +11,16 @@ public class ORTController : Controller
     private readonly ICRUDService<Test> _testsManager;
     private readonly ICRUDService<OrtInstruction> _instructionsManager;
     private readonly UserManager<User> _userManager;
+    private readonly ICRUDService<Subject> _subjectManager;
     public ORTController(UserManager<User> userManager, ICRUDService<Test> testManager,
-                         ICRUDService<OrtInstruction> instructionsManager, ICRUDService<OrtTest> ortManager)
+                         ICRUDService<OrtInstruction> instructionsManager, ICRUDService<OrtTest> ortManager,
+                         ICRUDService<Subject> subjectManager)
     {
         _userManager = userManager;
         _testsManager = testManager;
         _instructionsManager = instructionsManager;
         _ortManager = ortManager;
+        _subjectManager = subjectManager;
     }
     public IActionResult Index() => View(_ortManager.GetAll().ToList());
     public async Task<IActionResult> Details(int ortId)
@@ -54,6 +57,27 @@ public class ORTController : Controller
     public IActionResult CreateTest(int ortId)
     {
         ViewBag.ortId = ortId;
+        ViewBag.OrtInstructions = _instructionsManager.GetAll().ToList();
+        ViewData["Subjects"] = _subjectManager.GetAll().ToList();   
         return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> CreateTest(Test test, string? description)
+    {
+        if (test != null)
+        {
+            await _testsManager.Insert(test);
+            OrtInstruction instruction = new()
+            {
+                TestId = test.Id,
+                Description = description,
+                TimeInMin = test.TimeForTestInMin
+            };
+            await _instructionsManager.Insert(instruction);
+            test.OrtInstructionId = instruction.Id;
+            await _testsManager.Update(test);
+            return RedirectToAction("Details", new { ortId = test.OrtTestId });
+        }
+        return BadRequest();
     }
 }
