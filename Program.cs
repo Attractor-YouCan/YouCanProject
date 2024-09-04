@@ -19,6 +19,9 @@ builder.Services.AddControllers()
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
+builder.Configuration
+    .AddJsonFile("appsettings.Production.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
