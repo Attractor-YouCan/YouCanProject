@@ -14,6 +14,8 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Проверка готовности сервиса базы данных
+    volumes:
+      - data-protection-keys:/root/.aspnet/DataProtection-Keys  # Тома для защиты данных
     networks:
       - webnet
 
@@ -48,6 +50,8 @@ services:
 
 volumes:
   pgdata:
+    driver: local
+  data-protection-keys:  # Том для ключей защиты данных
     driver: local
 
 networks:

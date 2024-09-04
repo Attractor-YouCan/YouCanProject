@@ -10,6 +10,11 @@ using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM  DB_USER: {dbUser}");
+Console.WriteLine($" CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_PASSWORD: {dbPassword}");
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
