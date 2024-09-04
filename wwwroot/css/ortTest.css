@@ -90,6 +90,18 @@
     bottom: 14px;
 }
 
+.total-points {
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #0a418f;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.total-points-br {
+    display: none;
+}
+
 @media screen and (max-width: 768px) {
     .fixed-answers-button{
         bottom: 80px;
@@ -115,6 +127,12 @@
     .ort-trial-test_details-block_text {
         font-size: 14px;
         text-align: start;
+    }
+}
+
+@media (max-width: 425px) {
+    .total-points-br {
+        display: block;
     }
 }
 
