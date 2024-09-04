@@ -8,8 +8,6 @@ services:
     ports:
       - "5000:80"  # Проксирование порта 80 внутри контейнера на порт 5000 хоста
     environment:
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
       - ASPNETCORE_ENVIRONMENT=Production  # Настройка окружения ASP.NET Core
     depends_on:
       - db
