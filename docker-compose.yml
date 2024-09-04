@@ -12,7 +12,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Проверка готовности сервиса базы данных
     networks:
       - webnet
 
@@ -23,11 +24,16 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: YouCan
     ports:
-      - "5435:5432"  # Порт хоста 5435 проксируется на порт 5432 контейнера
+      - "5432:5432"  # Использование стандартного порта PostgreSQL
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - webnet
+    healthcheck:  # Проверка состояния здоровья сервиса базы данных
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: nginx:latest
