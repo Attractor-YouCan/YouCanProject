@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:90"  # Проксирование порта 80 внутри контейнера на порт 5000 хоста
+      - "5001:90"  # Проксирование порта 80 внутри контейнера на порт 5000 хоста
     environment:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
