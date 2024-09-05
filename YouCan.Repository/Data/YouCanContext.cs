@@ -1,9 +1,9 @@
-using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entites.Models;
 using YouCan.Entities;
+using YouCan.Services;
 
 namespace YouCan.Repository;
 
@@ -27,8 +27,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<League> Leagues { get; set; }
     public DbSet<AdminAction> AdminActions { get; set; }
     public DbSet<LessonTime> LessonTimes { get; set; }
-    
-protected override void OnModelCreating(ModelBuilder modelBuilder)
+
     public DbSet<UserExperience> UserExperiences { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,7 +50,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         //new OrtTestInitializer(modelBuilder).Seed();
         //new LessonInitializer(modelBuilder).Seed();
         //new TestInitializer(modelBuilder).Seed();
-        
+
         modelBuilder.Entity<IdentityRole<int>>()
             .HasData(
                 new IdentityRole<int> { Id = 1, Name = "user", NormalizedName = "USER" },
@@ -65,7 +64,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 new Tariff { Id = 2, Name = "Pro", Duration = 1, Price = 1 },
                 new Tariff { Id = 3, Name = "Premium", Duration = 3, Price = 2 }
             );
-        
+
         modelBuilder.Entity<League>().HasData(
             new League
             {
@@ -103,7 +102,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
                 MaxPoints = int.MaxValue
             }
         );
-        
+
         new TrainTestInitializer(modelBuilder).Seed();
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options) { }

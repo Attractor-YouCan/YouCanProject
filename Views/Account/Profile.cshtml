@@ -1,7 +1,5 @@
-
-
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using System.Globalization
+@using System.Text.Json
 @model YouCan.ViewModels.UserProfileViewModel
 
 @{
@@ -86,7 +84,6 @@
 
 
     @* график *@
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <h2 class="mb-3 mt-4">Опыт за неделю</h2>
     
     <canvas class="chart" id="myStyledBarChart" ></canvas>
@@ -124,7 +121,7 @@
             </div>
             <div class="tariff-info">
                 <h3>Тарифный план</h3>
-                <p>Активно до: 16.07.2023 17:30</p>
+                <p>Активно до: @Model.User.TariffEndDate</p>
                 <button class="extend-btn">Продлить</button>
             </div>
         </div>
@@ -134,12 +131,13 @@
         <button class="policy-btn">Политика конфиденциальности</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let data = {
-            labels: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.Date.ToString("ddd")))),
+            labels: @Html.Raw(JsonSerializer.Serialize(Model.WeeklyExperience.Select(e => e.Date.ToString("ddd")))),
         datasets: [{
             label: 'Опыт за неделю',
-            data: @Html.Raw(Json.Serialize(Model.WeeklyExperience.Select(e => e.ExperiencePoints))),
+                data: @Html.Raw(JsonSerializer.Serialize(Model.WeeklyExperience.Select(e => e.ExperiencePoints))),
             backgroundColor: [
                 'rgba(255, 165, 0, 0.7)',
                 'rgba(50, 205, 50, 0.7)',
