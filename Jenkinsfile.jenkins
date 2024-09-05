@@ -3,8 +3,8 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent any
     environment {
-        DB_USER = credentials('db-user')
-        DB_PASSWORD = credentials('db-password')
+        DB_USER = credentials('dbUser')
+        DB_PASSWORD = credentials('passwordDb')
     }
     triggers {
         githubPush()
@@ -20,24 +20,32 @@ pipeline {
                 script {
                     // Остановить контейнеры перед сборкой
                     sh 'docker-compose down'
-                    
                     // Собрать контейнеры с использованием переменных окружения
-                    sh """
-                    docker-compose build --build-arg DB_USER=${DB_USER} --build-arg DB_PASSWORD=${DB_PASSWORD}
-                    """
-                    
-                    // Запустить контейнеры
-                    sh "docker-compose up -d"
+                    withCredentials([string(credentialsId: 'dbUser', variable: 'DB_USER'), 
+                                     string(credentialsId: 'passwordDb', variable: 'DB_PASSWORD')]) {
+                        sh """
+                        docker-compose build
+                        """
+                    }
+                    withCredentials([string(credentialsId: 'dbUser', variable: 'DB_USER'), 
+                                     string(credentialsId: 'passwordDb', variable: 'DB_PASSWORD')]) {
+                        sh """
+                        docker-compose up -d
+                        """
+                    }
                 }
             }
         }
         stage('Run Tests') {
             steps {
                 script {
-                    // Запустить тесты внутри контейнера
-                    sh """
-                    docker-compose run --rm web dotnet test /app/YouCan.Test/YouCan.Test.csproj
-                    """
+                    // Передача переменных в контейнер для запуска тестов
+                    withCredentials([string(credentialsId: 'dbUser', variable: 'DB_USER'), 
+                                     string(credentialsId: 'passwordDb', variable: 'DB_PASSWORD')]) {
+                        sh """
+                        docker-compose run --rm -e DB_USER=${DB_USER} -e DB_PASSWORD=${DB_PASSWORD} web dotnet test /app/YouCan.Test/YouCan.Test.csproj
+                        """
+                    }
                 }
             }
         }
@@ -50,16 +58,20 @@ pipeline {
             steps {
                 script {
                     // Развертывание на удаленном сервере
-                    sh """
-                    ssh -o StrictHostKeyChecking=no user@188.166.120.70 '
+                    withCredentials([string(credentialsId: 'dbUser', variable: 'DB_USER'), 
+                                     string(credentialsId: 'passwordDb', variable: 'DB_PASSWORD')]) {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no user@188.166.120.70 '
                         export DB_USER=${DB_USER}
                         export DB_PASSWORD=${DB_PASSWORD}
                         cd /var/lib/jenkins/workspace/YouCanN1
                         docker-compose down
                         docker-compose pull
                         docker-compose up -d
-                    '
-                    """
+                        '
+                        """
+                    }
+                    
                 }
             }
         }

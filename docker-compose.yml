@@ -16,8 +16,6 @@ services:
         condition: service_healthy  # Проверка готовности сервиса базы данных
     volumes:
       - data-protection-keys:/root/.aspnet/DataProtection-Keys  # Тома для защиты данных
-    networks:
-      - webnet
 
   db:
     image: postgres:13
@@ -29,8 +27,6 @@ services:
       - "5432:5432"  # Использование стандартного порта PostgreSQL
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - webnet
     healthcheck:  # Проверка состояния здоровья сервиса базы данных
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
@@ -55,6 +51,3 @@ volumes:
   data-protection-keys:  # Том для ключей защиты данных
     driver: local
 
-networks:
-  webnet:
-    driver: bridge
