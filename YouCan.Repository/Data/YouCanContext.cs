@@ -27,7 +27,6 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<League> Leagues { get; set; }
     public DbSet<AdminAction> AdminActions { get; set; }
     public DbSet<LessonTime> LessonTimes { get; set; }
-
     public DbSet<UserExperience> UserExperiences { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

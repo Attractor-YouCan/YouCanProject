@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
@@ -22,10 +21,15 @@ public class AccountController : Controller
     private readonly ICRUDService<Tariff> _tariffs;
 
 
-    public AccountController(IUserCRUD userService, UserManager<User> userManager,
-        SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Tariff> tariffs, ICRUDService<UserExperience> userExperiance)
+    public AccountController(IUserCRUD userService, 
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IWebHostEnvironment environment,
+        TwoFactorService twoFactorService,
+        ICRUDService<UserLevel> userLevel, 
+        ICRUDService<UserLessons> userLessonService,
+        ICRUDService<Tariff> tariffs,
+        ICRUDService<UserExperience> userExperiance)
     {
         _userService = userService;
         _userManager = userManager;
