@@ -42,8 +42,6 @@ services:
     depends_on:
       web:
         condition: service_started  # Проверка, что web-сервис начал работать
-    networks:
-      - webnet
 
 volumes:
   pgdata:
