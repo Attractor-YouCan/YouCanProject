@@ -8,9 +8,9 @@ services:
     ports:
       - "5001:80"  # Проксирование порта 80 внутри контейнера на порт 5001 хоста
     environment:
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - ASPNETCORE_ENVIRONMENT=Production
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: Production
     depends_on:
       db:
         condition: service_healthy  # Проверка готовности сервиса базы данных
@@ -44,7 +44,8 @@ services:
     ports:
       - "90:80"  # Проксирование порта 80 контейнера на порт 90 хоста
     depends_on:
-      - web
+      web:
+        condition: service_started  # Проверка, что web-сервис начал работать
     networks:
       - webnet
 
