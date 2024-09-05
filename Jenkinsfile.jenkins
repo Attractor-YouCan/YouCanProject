@@ -1,3 +1,5 @@
+properties([disableConcurrentBuilds()])
+
 pipeline {
     agent any
     environment {
@@ -7,7 +9,6 @@ pipeline {
     triggers {
         githubPush()
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -17,15 +18,26 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    // Остановить контейнеры перед сборкой
                     sh 'docker-compose down'
-                    sh 'docker-compose build --no-cache'
+                    
+                    // Собрать контейнеры с использованием переменных окружения
+                    sh """
+                    docker-compose build --build-arg DB_USER=${DB_USER} --build-arg DB_PASSWORD=${DB_PASSWORD}
+                    """
+                    
+                    // Запустить контейнеры
+                    sh "docker-compose up -d"
                 }
             }
         }
         stage('Run Tests') {
             steps {
                 script {
-                    sh 'docker-compose run --rm web dotnet test /app/YouCan.Test/YouCan.Test.csproj'
+                    // Запустить тесты внутри контейнера
+                    sh """
+                    docker-compose run --rm web dotnet test /app/YouCan.Test/YouCan.Test.csproj
+                    """
                 }
             }
         }
@@ -37,7 +49,17 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    // Развертывание на удаленном сервере
+                    sh """
+                    ssh -o StrictHostKeyChecking=no user@188.166.120.70 '
+                        export DB_USER=${DB_USER}
+                        export DB_PASSWORD=${DB_PASSWORD}
+                        cd /var/lib/jenkins/workspace/YouCanN1
+                        docker-compose down
+                        docker-compose pull
+                        docker-compose up -d
+                    '
+                    """
                 }
             }
         }
@@ -45,6 +67,17 @@ pipeline {
     post {
         always {
             echo 'Процесс завершен.'
+            script {
+                sh """
+                docker-compose down
+                """
+            }
+        }
+        failure {
+            echo 'Процесс завершился с ошибкой.'
+        }
+        success {
+            echo 'Процесс завершился успешно.'
         }
     }
 }
