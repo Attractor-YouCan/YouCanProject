@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using YouCan.Areas.Admin.Controllers;
+using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
@@ -38,7 +39,6 @@ public class StatControllerTests
             new Test { Id = 3, Subject = null }
         }.AsQueryable();
 
-        //Нужно перепроверить метод, так как при Tariff = null возникает исключение
         var users = new List<User>
         {
             new User { Id = 1, Tariff = new Tariff { Name = "Pro" }, CreatedAt = DateTime.UtcNow.AddDays(-10) },
@@ -60,15 +60,15 @@ public class StatControllerTests
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsType<StatViewModel>(viewResult.Model);
 
-        // Validate the data in ViewBag and ViewData
-        var testsFromView = viewResult.ViewData["Tests"] as IEnumerable<dynamic>;
-        var usersFromView = viewResult.ViewData["Users"] as IEnumerable<dynamic>;
-
-        Assert.NotNull(testsFromView);
-        Assert.NotNull(usersFromView);
-        Assert.Equal(2, viewResult.ViewData["TestCount"]);
-        Assert.Equal(2, viewResult.ViewData["UsersCount"]);
+        Assert.NotNull(model.Tests);
+        Assert.NotNull(model.Users);
+        Assert.Equal(2, model.Tests.Count);
+        Assert.Equal(2, model.UsersCount);
+        Assert.NotNull(model.Start);
+        Assert.NotNull(model.Pro);
+        Assert.NotNull(model.Premium);
     }
 
     [Fact]
