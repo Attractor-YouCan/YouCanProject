@@ -26,7 +26,7 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 
     public async Task<T> Get(int id)
     {
-        return await entitis.Include("Statistic").Include("UserExperiences").SingleOrDefaultAsync(x => x.Id == id);
+        return await entitis.Include("Statistic").Include("UserExperiences").Include("League").SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task Insert(T entity)

@@ -48,7 +48,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-shock-mode">
                 <img src="@Url.Content("/profileIcons/fire.png")" alt="fire-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@Model.User.Statistic.Streak</p>
+                    <p class="stat-card-title mb-0">@((Model.User?.Statistic?.Streak ?? 0))</p>
                     <p class="stat-card-subtitle mb-0">Ударный режим</p>
                 </div>
             </div>
@@ -57,7 +57,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-experience">
                 <img src="@Url.Content("/profileIcons/coin.png")" alt="experience-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@Model.User.UserExperiences.Sum(e => e.ExperiencePoints)</p>
+                    <p class="stat-card-title mb-0">@((Model.User.UserExperiences?.Sum(e => e.ExperiencePoints) ?? 0))</p>
                     <p class="stat-card-subtitle mb-0">Очки опыта</p>
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-current-league">
                 <img src="@Url.Content("/profileIcons/league.png")" alt="league-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">Золотая</p>
+                    <p class="stat-card-title mb-0">@((Model.User.League?.LeagueName ?? "-"))</p>
                     <p class="stat-card-subtitle mb-0">Текущая лига</p>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-study-time">
                 <img src="@Url.Content("/profileIcons/league.png")" alt="clock-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@Model.User.Statistic.StudyMinutes.TotalMinutes</p>
+                    <p class="stat-card-title mb-0">@((Model.User.Statistic?.StudyMinutes.TotalMinutes ?? 0))</p>
                     <p class="stat-card-subtitle mb-0">Минуты за учебой</p>
                 </div>
             </div>
@@ -121,7 +121,7 @@
             </div>
             <div class="tariff-info">
                 <h3>Тарифный план</h3>
-                <p>Активно до: @Model.User.TariffEndDate</p>
+                <p>Активно до: @((Model.User.TariffEndDate?.ToString("dd.MM.yyyy") ?? "-"))</p>
                 <button class="extend-btn">Продлить</button>
             </div>
         </div>
