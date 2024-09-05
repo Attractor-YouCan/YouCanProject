@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using YouCan.Mvc.Areas.Study.Dto;
 using YouCan.Service;
 using YouCan.Entities;
+using Microsoft.Extensions.Localization;
 
 namespace YouCan.Mvc.Areas.Study.Controllers;
 
@@ -15,15 +16,18 @@ public class LessonsController : Controller
     private ICrudService<UserLessons> _userLessonService;
     private UserManager<User> _userManager;
     private ICrudService<LessonTime> _lessonTimeService;
+    private IStringLocalizer<AccountController> _localizer;
     public LessonsController(ICrudService<Lesson> lessonService,
         ICrudService<UserLessons> userLessonService,
         ICrudService<LessonTime> lessonTimeService,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        IStringLocalizer<LessonsController> localizer)
     {
         _lessonService = lessonService;
         _userLessonService = userLessonService;
         _lessonTimeService = lessonTimeService;
         _userManager = userManager;
+        _localizer = localizer;
     }
 
     public async Task<IActionResult> Index(int subTopicId)
@@ -63,7 +67,7 @@ public class LessonsController : Controller
             return NotFound("NO UserLesson!");
         if (userLessons.PassedLevel >= lesson.LessonLevel || userLessons.PassedLevel + 1 == lesson.LessonLevel)
             return View(lesson);
-        return NotFound("Пройдите предыдущий урок, чтобы открыть");
+        return NotFound(_localizer["NotUnlocked"]);
     }
     [HttpPost]
     public async Task<IActionResult> LogTime([FromBody] LessonTimeDto model)

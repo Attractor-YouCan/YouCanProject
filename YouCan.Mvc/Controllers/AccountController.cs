@@ -8,6 +8,7 @@ using YouCan.Service;
 using YouCan.Entities;
 using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
 using Razor.Templating.Core;
+using Microsoft.Extensions.Localization;
 
 namespace YouCan.Mvc;
 public class AccountController : Controller
@@ -20,12 +21,13 @@ public class AccountController : Controller
     private ICrudService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
     private readonly ICrudService<Tariff> _tariffs;
-
+    private readonly IStringLocalizer _localizer;
 
     public AccountController(IUserCrud userService, UserManager<User> userManager,
         SignInManager<User> signInManager, IWebHostEnvironment environment,
         TwoFactorService twoFactorService, ICrudService<UserLevel> userLevel, ICrudService<UserLessons> userLessonService,
-        ICrudService<Tariff> tariffs)
+        ICrudService<Tariff> tariffs,
+        IStringLocalizer<AccountController> localizer)
     {
         _userService = userService;
         _userManager = userManager;
@@ -35,8 +37,8 @@ public class AccountController : Controller
         _userLevel = userLevel;
         _userLessonService = userLessonService;
         _tariffs = tariffs;
+        _localizer = localizer;
     }
-
 
     [Authorize]
     public async Task<IActionResult> Profile(int? userId)
@@ -89,10 +91,6 @@ public class AccountController : Controller
         }
         return NotFound();
     }
-
-
-
-
 
     [HttpGet]
     [Authorize]
@@ -197,14 +195,14 @@ public class AccountController : Controller
             }
         }
 
-        ModelState.AddModelError("", "Что-то пошло не так! Пожалуйста, проверьте всю информацию");
+        ModelState.AddModelError("", _localizer["Wrong"]);
         return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
     private async Task<(string subject, string message)> GenerateEmailConfirmationContentAsync(User user, string userName)
     {
         var code = _twoFactorService.GenerateCode(user.Id);
-        var subject = "Ваш код подтверждения";
+        var subject = _localizer["YourCode"];
         string message = await RazorTemplateEngine.RenderAsync("~/Views/Account/EmailConfirmationMessage.cshtml",
             new EmailConfirmationViewModel()
             {
@@ -220,21 +218,21 @@ public class AccountController : Controller
     {
         if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Code))
         {
-            ModelState.AddModelError("", "Ведите код!.");
+            ModelState.AddModelError("", _localizer["EnterCode"]);
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
-            ModelState.AddModelError("", "Пользователь не найден!.");
+            ModelState.AddModelError("", _localizer["NotFound"]);
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
         var isCodeValid = _twoFactorService.VerifyCode(user.Id, model.Code);
         if (!isCodeValid)
         {
-            ModelState.AddModelError("", "Неправильный код!.");
+            ModelState.AddModelError("", _localizer["WrongCode"]);
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
