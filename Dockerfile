@@ -21,10 +21,14 @@ RUN dotnet restore "./YouCan.Mvc.csproj"
 COPY . .
 RUN dotnet publish "YouCan.Mvc.csproj" -c Release -o /app/publish
 
-# Создание образа для тестов
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
+# Применение миграций
+FROM build AS migrations
 WORKDIR /app
 COPY --from=build /app/publish .
+COPY ["YouCan.Mvc.csproj", "./"]
+
+# Применение миграций
+RUN dotnet ef database update --startup-project /app/publish/YouCan.Mvc.dll
 
 # Создание финального образа на основе Runtime
 FROM base AS final
