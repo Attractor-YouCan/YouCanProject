@@ -11,7 +11,7 @@ WORKDIR /src
 RUN dotnet tool install --global dotnet-ef
 
 # Обновите переменную PATH, чтобы dotnet-ef был доступен в контейнере
-ENV PATH="$PATH:/root/.dotnet/tools"
+ENV PATH="${PATH}:/root/.dotnet/tools"
 
 # Копируем файлы проекта и выполняем восстановление зависимостей
 COPY ["YouCan.Mvc.csproj", "./"]
@@ -27,13 +27,6 @@ WORKDIR /app
 
 # Копируем опубликованные файлы из этапа сборки
 COPY --from=build /app/publish .
-
-# Копируем скрипт запуска в контейнер
-COPY scripts/entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
-
-# Установка скрипта запуска в качестве команды по умолчанию
-ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Запуск приложения
 CMD ["dotnet", "YouCan.Mvc.dll"]
