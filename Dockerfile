@@ -1,47 +1,46 @@
-# Используйте официальный .NET Runtime образ для запуска приложения
+# Базовый образ для выполнения приложения
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-# Используйте официальный .NET SDK образ для сборки и выполнения миграций
+# Образ для сборки и миграций
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Копируем файлы проекта и выполняем восстановление зависимостей
+# Копируем файлы проектов и восстанавливаем зависимости
 COPY YouCan.Mvc/YouCan.Mvc.csproj YouCan.Mvc/
 COPY YouCan.Service/YouCan.Service.csproj YouCan.Service/
 COPY YouCan.Repository/YouCan.Repository.csproj YouCan.Repository/
 COPY YouCan.Test/YouCan.Test.csproj YouCan.Test/
 
-# Восстанавливаем зависимости
+# Восстановление зависимостей для всех проектов
 RUN dotnet restore YouCan.Mvc/YouCan.Mvc.csproj
 
-# Копируем остальные файлы проекта и выполняем публикацию
+# Копируем все файлы проектов
 COPY . .
 RUN dotnet publish YouCan.Mvc/YouCan.Mvc.csproj -c Release -o /app/publish
 
-# Применение миграций
+# Образ для выполнения миграций
 FROM build AS migrations
 WORKDIR /app
 COPY --from=build /app/publish .
-COPY YouCan.Mvc/YouCan.Mvc.csproj YouCan.Mvc/
 
 # Применение миграций
-RUN dotnet ef database update --startup-project /app/publish/YouCan.Mvc.dll
+RUN dotnet ef database update --startup-project YouCan.Mvc/YouCan.Mvc.csproj
 
-# Создание образа для тестов
+# Образ для выполнения тестов
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
 WORKDIR /src
 
-# Копируем тестовые проекты и зависимости
+# Копируем проекты для тестирования и зависимости
 COPY YouCan.Test/YouCan.Test.csproj YouCan.Test/
 RUN dotnet restore YouCan.Test/YouCan.Test.csproj
 COPY . .
 
-# Выполнение тестов
-RUN dotnet test YouCan.Test/YouCan.Test.csproj
+# Выполнение юнит-тестов
+RUN dotnet test YouCan.Test/YouCan.Test.csproj --no-restore --verbosity normal
 
-# Создание финального образа на основе Runtime
+# Финальный образ на основе Runtime
 FROM base AS final
 WORKDIR /app
 
