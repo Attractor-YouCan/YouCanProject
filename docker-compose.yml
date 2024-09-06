@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: final  # Используем только финальный образ для запуска
     container_name: web
     ports:
       - "5001:80"
@@ -56,13 +57,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: test
-    command: dotnet test /src/YouCan.Test/YouCan.Test.csproj
+      target: test  # Используем образ для тестов
+    container_name: web_test
     depends_on:
       db:
         condition: service_healthy
     networks:
       - webnet
+    entrypoint: ["dotnet", "test", "/src/YouCan.Test/YouCan.Test.csproj"]
 
 volumes:
   pgdata:
