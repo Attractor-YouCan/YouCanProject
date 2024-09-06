@@ -10,23 +10,28 @@ using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Проверка переменных окружения
 var dbUser = Environment.GetEnvironmentVariable("DB_USER");
 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM  DB_USER: {dbUser}");
-Console.WriteLine($" CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_PASSWORD: {dbPassword}");
+Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_USER: {dbUser}");
+Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_PASSWORD: {dbPassword}");
 
+// Добавление конфигураций
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();  // Загружаем переменные окружения
+
+// Добавление сервисов
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables();
 
+// Проверка строки подключения
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-
+Console.WriteLine($"Connection String: {connection}");
 builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection, x => x.MigrationsAssembly("YouCan.Repository")))
     .AddIdentity<User, IdentityRole<int>>(options =>
     {

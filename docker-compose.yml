@@ -23,6 +23,10 @@ services:
     container_name: postgresDb
     env_file:
       - variables.env  # Используем файл переменных окружения
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: YouCan
     ports:
       - "5432:5432"
     volumes:
