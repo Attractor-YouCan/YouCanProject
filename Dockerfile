@@ -29,8 +29,11 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Копируем скрипт запуска в контейнер
-COPY entrypoint.sh /app/
+COPY scripts/entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh
 
-# Используем скрипт как ENTRYPOINT
+# Установка скрипта запуска в качестве команды по умолчанию
 ENTRYPOINT ["/app/entrypoint.sh"]
+
+# Запуск приложения
+CMD ["dotnet", "YouCan.Mvc.dll"]
