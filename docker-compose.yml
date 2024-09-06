@@ -52,6 +52,18 @@ services:
     networks:
       - webnet
 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test
+    command: dotnet test /src/YouCan.Test/YouCan.Test.csproj
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - webnet
+
 volumes:
   pgdata:
     driver: local

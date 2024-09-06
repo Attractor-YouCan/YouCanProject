@@ -30,6 +30,18 @@ COPY ["YouCan.Mvc.csproj", "./"]
 # Применение миграций
 RUN dotnet ef database update --startup-project /app/publish/YouCan.Mvc.dll
 
+# Создание образа для тестов
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
+WORKDIR /src
+
+# Копируем тестовые проекты и зависимости
+COPY ["YouCan.Test/YouCan.Test.csproj", "YouCan.Test/"]
+RUN dotnet restore "YouCan.Test/YouCan.Test.csproj"
+COPY . .
+
+# Выполнение тестов
+RUN dotnet test "YouCan.Test/YouCan.Test.csproj"
+
 # Создание финального образа на основе Runtime
 FROM base AS final
 WORKDIR /app
