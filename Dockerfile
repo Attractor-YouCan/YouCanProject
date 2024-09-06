@@ -28,8 +28,9 @@ WORKDIR /app
 # Копируем опубликованные файлы из этапа сборки
 COPY --from=build /app/publish .
 
-# Выполнение миграций перед запуском приложения
-ENTRYPOINT ["dotnet", "ef", "database", "update", "--project", "YouCan.Repository/YouCan.Repository.csproj", "--startup-project", "YouCan.Mvc.csproj", "--context", "YouCanContext"]
+# Копируем скрипт запуска в контейнер
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
 
-# Запуск приложения
-CMD ["dotnet", "YouCan.Mvc.dll"]
+# Используем скрипт как ENTRYPOINT
+ENTRYPOINT ["/app/entrypoint.sh"]
