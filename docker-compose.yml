@@ -7,17 +7,14 @@ services:
       dockerfile: Dockerfile
     container_name: web
     ports:
-      - "5001:80"  # Проксирование порта 80 внутри контейнера на порт 5001 хоста
+      - "5001:80"
     env_file:
-      - variables.env
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      - variables.env  # Используем файл переменных окружения
     depends_on:
       db:
-        condition: service_healthy  # Проверка готовности сервиса базы данных
+        condition: service_healthy
     volumes:
-      - data-protection-keys:/root/.aspnet/DataProtection-Keys  # Тома для защиты данных
+      - data-protection-keys:/root/.aspnet/DataProtection-Keys
     networks:
       - webnet
 
@@ -25,18 +22,14 @@ services:
     image: postgres:13
     container_name: postgresDb
     env_file:
-      - variables.env
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: YouCan
+      - variables.env  # Используем файл переменных окружения
     ports:
-      - "5432:5432"  # Использование стандартного порта PostgreSQL
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - webnet
-    healthcheck:  # Проверка состояния здоровья сервиса базы данных
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
       timeout: 5s
@@ -48,17 +41,17 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "90:80"  # Проксирование порта 80 контейнера на порт 90 хоста
+      - "90:80"
     depends_on:
       web:
-        condition: service_started  # Проверка, что web-сервис начал работать
+        condition: service_started
     networks:
       - webnet
 
 volumes:
   pgdata:
     driver: local
-  data-protection-keys:  # Том для ключей защиты данных
+  data-protection-keys:
     driver: local
 
 networks:
