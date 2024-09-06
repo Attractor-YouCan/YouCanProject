@@ -46,7 +46,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "90:80"
+      - "80:80"
     depends_on:
       web:
         condition: service_started
