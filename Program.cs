@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
@@ -10,16 +11,28 @@ using YouCan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Проверка переменных окружения
-var dbUser = Environment.GetEnvironmentVariable("DB_USER");
-var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_USER: {dbUser}");
-Console.WriteLine($"CHECK IN PROGRAM CHECK IN PROGRAM CHECK IN PROGRAM DB_PASSWORD: {dbPassword}");
+// Добавляем поддержку конфигурации Steeltoe для работы с переменными окружения
+builder.AddCloudFoundryConfiguration();
 
-// Добавление конфигураций
+// Добавление конфигураций из appsettings.json и переменных окружения
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();  // Загружаем переменные окружения
+
+// Чтение переменных окружения через Steeltoe
+var dbUser = builder.Configuration["DB_USER"];
+var dbPassword = builder.Configuration["DB_PASSWORD"];
+
+// Проверяем, что переменные окружения правильно загружены
+Console.WriteLine($"CHECK IN PROGRAM: DB_USER: {dbUser}");
+Console.WriteLine($"CHECK IN PROGRAM: DB_PASSWORD: {dbPassword}");
+
+// Установка строки подключения с переменными окружения
+string connection = $"Server=db;Port=5432;Database=YouCan;User Id={dbUser};Password={dbPassword};";
+builder.Configuration["ConnectionStrings:DefaultConnection"] = connection;
+
+// Проверка строки подключения
+Console.WriteLine($"Connection String: {connection}");
 
 // Добавление сервисов
 builder.Services.AddControllersWithViews();
@@ -29,10 +42,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
 
-// Проверка строки подключения
-string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine($"Connection String: {connection}");
-builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection, x => x.MigrationsAssembly("YouCan.Repository")))
+// Настройка DbContext и Identity
+builder.Services.AddDbContext<YouCanContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("YouCan.Repository")))
     .AddIdentity<User, IdentityRole<int>>(options =>
     {
         options.Password.RequiredLength = 6;
