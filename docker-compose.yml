@@ -7,14 +7,15 @@ services:
       dockerfile: Dockerfile
     container_name: web
     ports:
-      - "5001:80"  # порт для внутреннего приложения
-    env_file:
-      - variables.env
+      - "5001:80"  # Порт для внутреннего приложения
+    environment:  # Используем переменные окружения напрямую
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - webnet
     depends_on:
       - db
-    command: /bin/sh -c "sleep 10 && dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc/YouCan.Mvc.csproj"  # добавлена задержка для инициализации БД
+    command: /bin/sh -c "sleep 10 && dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc/YouCan.Mvc.csproj"  # Задержка для инициализации БД
 
   db:
     image: postgres:latest
@@ -34,9 +35,9 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80"  # основной порт для доступа к веб-приложению через Nginx
+      - "80:80"  # Основной порт для доступа к веб-приложению через Nginx
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # путь к конфигурационному файлу Nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Путь к конфигурационному файлу Nginx
     depends_on:
       - web
     networks:
