@@ -4,9 +4,9 @@ WORKDIR /src
 
 # Копируем файлы проекта и выполняем восстановление зависимостей
 COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
-COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
-COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
-COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
+COPY ["YouCan.Entities/YouCan.Entities.csproj", "../YouCan.Entities/"]
+COPY ["YouCan.Repository/YouCan.Repository.csproj", "../YouCan.Repository/"]
+COPY ["YouCan.Tests/YouCan.Tests.csproj", "../YouCan.Tests/"]
 
 # Копируем остальные файлы проекта
 COPY . .
@@ -25,11 +25,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrations
 WORKDIR /app
 COPY --from=build /app/publish .
 COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
-COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
-COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
+COPY ["YouCan.Entities/YouCan.Entities.csproj", "../YouCan.Entities/"]
+COPY ["YouCan.Repository/YouCan.Repository.csproj", "../YouCan.Repository/"]
 
 # Применение миграций
-RUN dotnet ef database update --project /src/YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc.dll
+RUN dotnet ef database update --project /src/../YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc.dll
 
 # Создание финального образа на основе Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
