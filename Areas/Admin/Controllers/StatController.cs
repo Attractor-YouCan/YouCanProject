@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
@@ -24,33 +25,36 @@ public class StatController : Controller
     {
         var tests = _testsManager.GetAll()
             .GroupBy(t => t.Subject?.Name ?? "Без урока")
-            .Select(g => new {Name = g.Key, Count = g.Count()})
+            .Select(g => new GroupQueryType {Name = g.Key, Count = g.Count()})
             .ToList();
         var users = _userManager.Users
             .Include(u => u.Tariff)
-            .GroupBy(u => u.Tariff.Name ?? "Без тарифа")
-            .Select(g => new { Name = g.Key, Count = g.Count() })
+            .GroupBy(u => u.Tariff.Name)
+            .Select(g => new GroupQueryType { Name = g.Key, Count = g.Count() })
             .ToList();
 
-        ViewBag.Tests = tests;
-        ViewBag.Users = users;
-        
-        ViewBag.TestCount  = tests.Count;
-        ViewData["UsersCount"] = _userManager.Users.Count();
-
-        ViewBag.Start = _tariffManager.GetAll()
+        var start = _tariffManager.GetAll()
             .FirstOrDefault(t => t.Name == "Start");
-        ViewBag.Pro = _tariffManager.GetAll()
+        var pro = _tariffManager.GetAll()
             .FirstOrDefault(t => t.Name == "Pro");
-        ViewBag.Premium = _tariffManager.GetAll()
+        var premium = _tariffManager.GetAll()
             .FirstOrDefault(t => t.Name == "Premium");
 
-        ViewData["AllNewUsers"] = CalculateAllNewUsers();
-        ViewData["NewStartUsers"] = CalcualteStartUsers();
-        ViewData["NewProUsers"] = CalculateProUsers();
-        ViewData["NewPremiumUsers"] = CalculatePremiumUsers();
+        StatViewModel svm = new()
+        {
+            Users = users,
+            Tests = tests,
+            Start = start,
+            Pro = pro,
+            Premium = premium,
+            UsersCount = _userManager.Users.Count(),
+            AllNewUsers = CalculateAllNewUsers(),
+            NewStartUsers = CalcualteStartUsers(),
+            NewProUsers = CalculateProUsers(),
+            NewPremiumUsers = CalculatePremiumUsers()
+        };
 
-        return View();
+        return View(svm);
     }
     public double CalculateAllNewUsers()
     {

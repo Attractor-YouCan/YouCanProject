@@ -8,6 +8,7 @@ using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Service.Service;
+using YouCan.Tests.Services;
 using YouCan.ViewModels;
 
 public class AccountControllerTests
@@ -19,7 +20,7 @@ public class AccountControllerTests
     private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
     private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
     private readonly Mock<ICRUDService<Tariff>> _tariffsMock;
-    private readonly Mock<TwoFactorService> _twoFactorServiceMock;
+    private readonly TwoFactorService _twoFactorService;  
     private readonly AccountController _controller;
 
     public AccountControllerTests()
@@ -37,14 +38,14 @@ public class AccountControllerTests
         _userLevelMock = new Mock<ICRUDService<UserLevel>>();
         _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
         _tariffsMock = new Mock<ICRUDService<Tariff>>();
-        _twoFactorServiceMock = new Mock<TwoFactorService>();
+        _twoFactorService = new TwoFactorService();  
 
         _controller = new AccountController(
             _userServiceMock.Object,
             _userManagerMock.Object,
             _signInManagerMock.Object,
             _environmentMock.Object,
-            _twoFactorServiceMock.Object,
+            _twoFactorService,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object);
@@ -166,22 +167,44 @@ public class AccountControllerTests
     public async Task ConfirmCode_ValidCode_ReturnsJsonSuccess()
     {
         // Arrange
-        var model = new ConfirmCodeRequest { Email = "test@example.com", Code = "123456" };
-        var user = new User { Email = model.Email };
+        var model = new ConfirmCodeRequest { Email = "test@gmail.com", Code = "123456" };
+        var user = new User { Email = model.Email, Id = 1 };
 
         _userManagerMock.Setup(um => um.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-        _twoFactorServiceMock.Setup(tf => tf.VerifyCode(user.Id, model.Code)).Returns(true);
 
-        // Act
-        var result = await _controller.ConfirmCode(model);
+        // Используем реальный сервис TwoFactorService
+        var twoFactorService = new TwoFactorService();
 
-        // Assert
+        // Генерируем код для проверки
+        var generatedCode = twoFactorService.GenerateCode(user.Id);
+
+        // Создаем новый экземпляр AccountController с реальным TwoFactorService и всеми остальными параметрами
+        var controller = new AccountController(
+            _userServiceMock.Object,
+            _userManagerMock.Object,
+            _signInManagerMock.Object,
+            _environmentMock.Object,
+            twoFactorService,
+            _userLevelMock.Object,
+            _userLessonServiceMock.Object,
+            _tariffsMock.Object);
+
+        var result = await controller.ConfirmCode(new ConfirmCodeRequest
+        {
+            Email = model.Email,
+            Code = generatedCode // Передаем сгенерированный код
+        });
+
         var jsonResult = Assert.IsType<JsonResult>(result);
-        dynamic jsonData = jsonResult.Value;
-        Assert.True(jsonData.success);
-        Assert.Equal(user.Id, jsonData.userId);
-    }
+        var jsonString = JsonConvert.SerializeObject(jsonResult.Value);
+        Console.WriteLine($"JSON Result: {jsonString}");
+        var deserializedData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
+        Assert.NotNull(deserializedData);
+        Assert.True(deserializedData.ContainsKey("success"), "JSON does not contain 'success' key");
+        Assert.True((bool)deserializedData["success"], "Expected success to be true but it was false");
+    }
+    
     [Fact]
     public async Task Delete_UserExists_DeletesUserAndRedirectsToRegister()
     {

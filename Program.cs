@@ -118,6 +118,7 @@ builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction
 builder.Services.AddTransient<IRepository<LessonTime>, LessonTimeRepository>();
 builder.Services.AddTransient<ICRUDService<LessonTime>, CRUDService<LessonTime>>();
 
+
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();
