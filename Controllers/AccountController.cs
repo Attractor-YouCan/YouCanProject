@@ -21,12 +21,12 @@ public class AccountController : Controller
     private readonly ICRUDService<Tariff> _tariffs;
 
 
-    public AccountController(IUserCRUD userService, 
+    public AccountController(IUserCRUD userService,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IWebHostEnvironment environment,
         TwoFactorService twoFactorService,
-        ICRUDService<UserLevel> userLevel, 
+        ICRUDService<UserLevel> userLevel,
         ICRUDService<UserLessons> userLessonService,
         ICRUDService<Tariff> tariffs,
         ICRUDService<UserExperience> userExperiance)
@@ -432,6 +432,6 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-   
+
 
 }

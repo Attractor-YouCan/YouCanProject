@@ -19,11 +19,11 @@ public class TrainTestController : Controller
     private UserManager<User> _userManager;
 
 
-    public TrainTestController(ICRUDService<PassedQuestion> passedQuestionService, 
-        ICRUDService<Subject> subjectService, 
+    public TrainTestController(ICRUDService<PassedQuestion> passedQuestionService,
+        ICRUDService<Subject> subjectService,
         ICRUDService<QuestionReport> questionReportService,
-        ICRUDService<Test> testService, 
-        ICRUDService<Question> questionService, 
+        ICRUDService<Test> testService,
+        ICRUDService<Question> questionService,
         UserManager<User> userManager)
     {
         _passedQuestionService = passedQuestionService;
@@ -43,7 +43,7 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
 
-        Test? test =  _testService.GetAll()
+        Test? test = _testService.GetAll()
             .FirstOrDefault(t => t.SubjectId == subSubjectId);
 
         if (test == null)
@@ -51,7 +51,7 @@ public class TrainTestController : Controller
 
         var subjectId = test.SubjectId;
 
-        var answeredQuestionIds =  _passedQuestionService.GetAll()
+        var answeredQuestionIds = _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
             .Select(pq => pq.QuestionId)
             .ToList();
@@ -81,7 +81,7 @@ public class TrainTestController : Controller
         return View(viewModel);
     }
 
-    
+
     [HttpPost]
     public async Task<IActionResult> GetNextQuestion([FromForm] int currentPage, [FromForm] int subtopicId)
     {
@@ -89,18 +89,18 @@ public class TrainTestController : Controller
 
         if (user == null)
             return Unauthorized();
-        int pageSize = 1; 
-        var test = _testService.GetAll().FirstOrDefault( t => t.SubjectId == subtopicId);
+        int pageSize = 1;
+        var test = _testService.GetAll().FirstOrDefault(t => t.SubjectId == subtopicId);
 
         if (test == null)
             return NotFound("Test not found!");
-        
+
         var subjectId = test.SubjectId;
         ViewBag.SubjectName = _subjectService.GetAll()
             .Where(s => s.Id == subjectId)
             .Select(s => s.Name)
             .FirstOrDefault()!;
-        
+
         var answeredQuestionIds = _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
             .Select(pq => pq.QuestionId)
@@ -109,14 +109,14 @@ public class TrainTestController : Controller
             .Where(q => !answeredQuestionIds.Contains(q.Id))
             .OrderBy(q => q.Id)
             .ToList();
-    
+
         int pageToLoad = currentPage + 1;
-    
+
         if (pageToLoad > questions.Count && pageToLoad < 0)
         {
             return Json(new { finished = true });
         }
-    
+
         var question = questions.Skip((pageToLoad - 1) * pageSize).Take(pageSize).FirstOrDefault();
 
         if (question == null)
@@ -124,10 +124,12 @@ public class TrainTestController : Controller
 
         return PartialView("_QuestionPartial", question);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CheckAnswer([FromBody] AnswerCheckModel model)
     {
+        var user = await _userManager.GetUserAsync(User);
+
         var question = await _questionService.GetById(model.QuestionId);
         if (question == null)
             return NotFound("Question not found!");
@@ -137,6 +139,11 @@ public class TrainTestController : Controller
             return NotFound("Answer not found!");
 
         bool isCorrect = selectedAnswer.IsCorrect;
+        if (isCorrect)
+        {
+            user.UserExperiences.Add(new UserExperience { UserId = user.Id, Date = DateTime.UtcNow, ExperiencePoints = 5 });
+            await _userManager.UpdateAsync(user);
+        }
         return Json(new { isCorrect });
     }
 
@@ -148,7 +155,7 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
 
-        var answeredQuestionIds =  _passedQuestionService.GetAll()
+        var answeredQuestionIds = _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
             .Select(pq => pq.QuestionId)
             .ToList();
@@ -157,7 +164,7 @@ public class TrainTestController : Controller
         {
             if (answeredQuestionIds.Contains(answer.QuestionId))
             {
-                continue; 
+                continue;
             }
 
             var question = await _questionService.GetById(answer.QuestionId);
@@ -172,8 +179,8 @@ public class TrainTestController : Controller
         }
         return Ok();
     }
-    
-    
+
+
     [HttpPost]
     public async Task<IActionResult> ReportQuestion([FromBody] QuestionReportModel model)
     {
@@ -185,7 +192,7 @@ public class TrainTestController : Controller
                 return NotFound("Question not found!");
             }
             var user = await _userManager.GetUserAsync(User);
-            
+
             if (user == null)
             {
                 return Unauthorized();

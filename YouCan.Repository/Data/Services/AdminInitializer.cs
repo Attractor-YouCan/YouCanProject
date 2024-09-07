@@ -154,10 +154,15 @@ public class AdminInitializer
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "qweqweqeq",
             PhoneNumber = "4",
-            Statistic = new Statistic { Id = 1, Streak = 5, StudyMinutes = new TimeSpan(2, 30, 0) },
+            Statistic = new Statistic
+            {
+                Id = 1,
+                Streak = 5,
+                StudyMinutes = new TimeSpan(2, 30, 0),
+                ImpactModeStart = new DateTime(2024, 8, 6, 0, 0, 0, DateTimeKind.Utc),
+                ImpactModeEnd = new DateTime(2024, 9, 05, 0, 0, 0, DateTimeKind.Utc)
+            },
             StatisticId = 1,
-            ImpactModeStart = new DateTime(2024, 8, 6, 0, 0, 0, DateTimeKind.Utc),
-            ImpactModeEnd = new DateTime(2024, 9, 05, 0, 0, 0, DateTimeKind.Utc),
             UserExperiences = {
             new UserExperience {Id = 1, UserId = 5, Date = new DateTime(2024, 8, 30, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
             new UserExperience {Id = 2, UserId = 5, Date = new DateTime(2024, 8, 31, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 },
