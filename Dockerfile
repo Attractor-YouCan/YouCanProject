@@ -9,8 +9,8 @@ COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
 
-# Восстановление зависимостей
-RUN dotnet restore "YouCan.Mvc.csproj"
+# Восстановление зависимостей для всех проектов
+RUN dotnet restore "YouCan.sln"
 
 # Копируем остальные файлы проекта
 COPY . .
