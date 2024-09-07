@@ -4,7 +4,7 @@ WORKDIR /src
 
 # Копируем файлы решения и проектов
 COPY ["YouCan.sln", "./"]
-COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
+COPY ["YouCan.Mvc.csproj", "YouCan.Mvc/"]
 COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Service/YouCan.Service.csproj", "YouCan.Service/"]
