@@ -2,13 +2,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-
-# Создание финального образа с .NET Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-WORKDIR /app
-
 # Копируем файлы решения и проекты
 COPY ["YouCan.sln", "./"]
 COPY ["YouCan.Mvc.csproj", "./"]
@@ -31,6 +24,10 @@ RUN dotnet test "YouCan.Tests/YouCan.Tests.csproj" --no-restore
 
 # Публикация приложения
 RUN dotnet publish "YouCan.Mvc.csproj" -c Release -o /app/publish
+
+# Создание финального образа с .NET Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
 
 # Копируем опубликованные файлы из этапа сборки
 COPY --from=build /app/publish .
