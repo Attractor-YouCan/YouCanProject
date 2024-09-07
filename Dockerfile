@@ -4,13 +4,13 @@ WORKDIR /src
 
 # Копируем файлы решения и проектов
 COPY ["YouCan.sln", "./"]
-COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
-COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
+COPY ["YouCan.Mvc.csproj", "YouCan.Mvc/"]
+COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
 
 # Восстановление зависимостей
-RUN dotnet restore "YouCan.Mvc/YouCan.Mvc.csproj"
+RUN dotnet restore "YouCan.Mvc.csproj"
 
 # Копируем остальные файлы проекта
 COPY . .
@@ -22,7 +22,7 @@ RUN dotnet build "YouCan.Mvc.csproj" -c Release -o /app/build
 RUN dotnet test "YouCan.Tests/YouCan.Tests.csproj" --no-restore
 
 # Публикация приложения
-RUN dotnet publish "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/publish
+RUN dotnet publish "YouCan.Mvc.csproj" -c Release -o /app/publish
 
 # Создание финального образа
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
