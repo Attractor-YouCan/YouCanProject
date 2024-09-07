@@ -16,10 +16,10 @@ services:
     networks:
       - webnet
     depends_on:
-      - db
+      - postgresDb
     command: /bin/sh -c "dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj"  # Команда для обновления БД и запуска приложения
 
-  db:
+  postgresDb:
     image: postgres:latest
     container_name: postgresDb
     environment:
