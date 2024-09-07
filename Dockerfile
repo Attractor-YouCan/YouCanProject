@@ -6,6 +6,7 @@ WORKDIR /src
 COPY ["YouCan.sln", "./"]
 COPY ["YouCan.Mvc.csproj", "./"]
 COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
+COPY ["YouCan.Service/YouCan.Service.csproj", "YouCan.Service/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
 
