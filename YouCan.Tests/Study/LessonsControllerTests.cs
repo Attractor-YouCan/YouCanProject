@@ -13,19 +13,20 @@ public class LessonsControllerTests
 {
       private readonly Mock<ICRUDService<Lesson>> _lessonServiceMock;
       private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
+      private readonly Mock<ICRUDService<UserLevel>> _userLevelServiceMock;
       private readonly Mock<UserManager<User>> _userManagerMock;
       private readonly Mock<ICRUDService<LessonTime>> _lessonTimeMock;
       private readonly LessonsController _controller;
-      private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
 
       public LessonsControllerTests()
       {
           _lessonServiceMock = new Mock<ICRUDService<Lesson>>();
+          _userLevelServiceMock = new Mock<ICRUDService<UserLevel>>();
           _lessonTimeMock = new Mock<ICRUDService<LessonTime>>();
           _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
           _userManagerMock = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
-          _userLevelMock = new Mock<ICRUDService<UserLevel>>();
-          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object,_userLevelMock.Object,  _lessonTimeMock.Object, _userManagerMock.Object );
+
+          _controller = new LessonsController(_lessonServiceMock.Object, _userLessonServiceMock.Object, _userLevelServiceMock.Object, _lessonTimeMock.Object, _userManagerMock.Object);
       }
 
       [Fact]
@@ -87,10 +88,14 @@ public class LessonsControllerTests
           var lesson = new Lesson { Id = 1, LessonLevel = 1, SubjectId = 1 };
           _lessonServiceMock.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync(lesson);
 
-          var user = new User { Id = 1, AvatarUrl = "asda", Disctrict = "asf", EmailConfirmed = true, FullName = "fasasf", UserLessonScore = 1, };          _userManagerMock.Setup(u => u.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
+          var user = new User { Id = 1, AvatarUrl = "asda", Disctrict = "asf", EmailConfirmed = true, FullName = "fasasf", UserLessonScore = 1 };
+          _userManagerMock.Setup(u => u.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
 
           var userLessons = new UserLessons { UserId = user.Id, SubjectId = 1, PassedLevel = 1 };
           _userLessonServiceMock.Setup(s => s.GetAll()).Returns(new List<UserLessons> { userLessons }.AsQueryable());
+
+          var userLevel = new UserLevel { UserId = user.Id, SubjectId = lesson.SubjectId, Level = 1 };
+          _userLevelServiceMock.Setup(s => s.GetAll()).Returns(new List<UserLevel> { userLevel }.AsQueryable());
 
           // Act
           var result = await _controller.Details(1);

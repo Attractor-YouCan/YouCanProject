@@ -35,9 +35,9 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var users = await _userManager.Users.Include(u => u.Tariff).OrderBy(u => u.Id).ToListAsync();
+        var users =  _userManager.Users.Include(u => u.Tariff).OrderBy(u => u.Id).ToList();
 
-        ViewBag.Roles = await _roleManager.Roles.ToListAsync();
+        ViewBag.Roles =  _roleManager.Roles.ToList();
         ViewBag.Tariffs = _tariffManager.GetAll().ToList();
 
         return View(users);
@@ -77,7 +77,7 @@ public class UsersController : Controller
     {
         if (tariffId.HasValue)
         {
-            var user = await _userManager.Users.Include(u => u.Tariff).FirstOrDefaultAsync(u => u.Id == id);
+            var user =  _userManager.Users.Include(u => u.Tariff).FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
                 user.TariffId = tariffId;
