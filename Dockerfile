@@ -1,38 +1,30 @@
-# Используйте официальный .NET SDK образ для сборки, тестирования и выполнения миграций
+# Используем официальный .NET SDK образ для сборки
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Копируем файлы проекта и выполняем восстановление зависимостей
+# Копируем файлы решения и проектов
+COPY ["YouCan.sln", "./"]
 COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
 COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
-COPY ["YouCan.sln", "./"]
 
 # Восстановление зависимостей
 RUN dotnet restore "YouCan.Mvc/YouCan.Mvc.csproj"
 
-# Копируем все файлы проекта
+# Копируем остальные файлы проекта
 COPY . .
+
+# Сборка проекта
+RUN dotnet build "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/build
 
 # Запуск юнит-тестов
 RUN dotnet test "YouCan.Tests/YouCan.Tests.csproj" --no-restore
 
-# Выполняем публикацию
+# Публикация приложения
 RUN dotnet publish "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/publish
 
-# Применение миграций
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrations
-WORKDIR /app
-COPY --from=build /app/publish .
-COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
-COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
-COPY ["YouCan.sln", "./"]
-
-# Применение миграций
-RUN dotnet ef database update --project YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc.dll
-
-# Создание финального образа на основе Runtime
+# Создание финального образа
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
