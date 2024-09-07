@@ -17,7 +17,7 @@ services:
       - webnet
     depends_on:
       - db
-    command: /bin/sh -c "sleep 10 && dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj --startup-project /app/YouCan.Mvc/YouCan.Mvc.csproj"  # добавлена задержка для инициализации БД
+    command: /bin/sh -c "dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj"  # Команда для обновления БД и запуска приложения
 
   db:
     image: postgres:latest

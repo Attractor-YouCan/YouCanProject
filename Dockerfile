@@ -1,7 +1,7 @@
 # Используем официальный образ .NET SDK 8.0
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 # Устанавливаем dotnet-ef tool
-RUN dotnet tool install --global dotnet-ef --version 8.0.0
+RUN dotnet tool install --global dotnet-ef --version 8.0.7
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 WORKDIR /app
@@ -16,10 +16,6 @@ COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
 
 # Копируем все файлы
 COPY . .
-
-# Выполняем миграции
-WORKDIR /app/YouCan.Repository
-RUN dotnet ef database update --project YouCan.Repository.csproj
 
 # Сборка всех проектов
 RUN dotnet build "YouCan.sln" -c Release -o /app/build
