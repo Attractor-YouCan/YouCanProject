@@ -16,13 +16,13 @@ RUN dotnet restore "YouCan.Mvc/YouCan.Mvc.csproj"
 COPY . .
 
 # Сборка проекта
-RUN dotnet build "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/build
+RUN dotnet build "YouCan.Mvc.csproj" -c Release -o /app/build
 
 # Запуск юнит-тестов
 RUN dotnet test "YouCan.Tests/YouCan.Tests.csproj" --no-restore
 
 # Публикация приложения
-RUN dotnet publish "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/publish
+RUN dotnet publish "YouCan.Mvc.csproj" -c Release -o /app/publish
 
 # Создание финального образа
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
@@ -32,4 +32,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Запуск приложения
-CMD ["dotnet", "YouCan.Mvc.dll"]
+CMD ["dotnet", "bin/Debug/net8.0/YouCan.Mvc.dll"]
