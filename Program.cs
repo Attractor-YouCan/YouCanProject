@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
@@ -8,25 +9,7 @@ using YouCan.Repository.Repository;
 using YouCan.Service.Service;
 using YouCan.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
-// Добавление конфигураций из appsettings.json и переменных окружения
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables(); // Загружаем переменные окружения
-
-// Получение переменных окружения
-var dbUser = builder.Configuration["DB_USER"];
-var dbPassword = builder.Configuration["DB_PASSWORD"];
-
-// Замена переменных в строке подключения
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    .Replace("${DB_USER}", dbUser)
-    .Replace("${DB_PASSWORD}", dbPassword);
-
-// Проверка строки подключения
-Console.WriteLine($"Connection String: {connectionString}");
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
@@ -35,7 +18,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
 
-builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connectionString, x => x.MigrationsAssembly("YouCan.Repository")))
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connection, x => x.MigrationsAssembly("YouCan.Repository")))
     .AddIdentity<User, IdentityRole<int>>(options =>
     {
         options.Password.RequiredLength = 6;
