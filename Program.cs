@@ -8,8 +8,67 @@ using YouCan.Repository;
 using YouCan.Repository.Repository;
 using YouCan.Service.Service;
 using YouCan.Services;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Путь к файлам appsettings.json
+string[] appsettingsPaths = new[]
+{
+    "appsettings.json",
+    "YouCan.Repository/appsettings.json" // Добавьте пути к другим файлам appsettings.json, если они есть
+};
+
+// Получение переменных окружения
+var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "defaultUser";
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "defaultPassword";
+string connectionString = "";
+// Проходим по каждому файлу appsettings.json
+foreach (var path in appsettingsPaths)
+{
+    // Проверяем, существует ли файл
+    if (!File.Exists(path))
+    {
+        Console.WriteLine($"Файл {path} не найден.");
+        continue;
+    }
+    
+    try
+    {
+        // Загружаем JSON содержимое
+        var jsonString = File.ReadAllText(path);
+        var jsonObject = JsonNode.Parse(jsonString);
+
+        // Получаем секцию соединения из JSON
+        var connectionStrings = jsonObject?["ConnectionStrings"] as JsonObject;
+
+        if (connectionStrings != null && connectionStrings["DefaultConnection"] != null)
+        {
+            // Замена переменных в строке подключения
+            connectionString = connectionStrings["DefaultConnection"].ToString()
+                .Replace("${DB_USER}", dbUser)
+                .Replace("${DB_PASSWORD}", dbPassword);
+
+            // Обновление строки подключения в JSON
+            connectionStrings["DefaultConnection"] = connectionString;
+
+            // Сохранение измененного JSON обратно в файл
+            File.WriteAllText(path, jsonObject.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine($"Файл {path} успешно обновлен.");
+        }
+        else
+        {
+            Console.WriteLine($"Секция 'ConnectionStrings' или 'DefaultConnection' не найдена в файле {path}.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка при обработке файла {path}: {ex.Message}");
+    }
+}
+
 
 // Добавляем поддержку конфигурации Steeltoe для работы с переменными окружения
 builder.AddCloudFoundryConfiguration();
@@ -19,20 +78,8 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();  // Загружаем переменные окружения
 
-// Чтение переменных окружения через Steeltoe
-var dbUser = builder.Configuration["DB_USER"];
-var dbPassword = builder.Configuration["DB_PASSWORD"];
-
-// Проверяем, что переменные окружения правильно загружены
-Console.WriteLine($"CHECK IN PROGRAM: DB_USER: {dbUser}");
-Console.WriteLine($"CHECK IN PROGRAM: DB_PASSWORD: {dbPassword}");
-
-// Установка строки подключения с переменными окружения
-string connection = $"Server=db;Port=5432;Database=YouCan;User Id={dbUser};Password={dbPassword};";
-builder.Configuration["ConnectionStrings:DefaultConnection"] = connection;
-
 // Проверка строки подключения
-Console.WriteLine($"Connection String: {connection}");
+Console.WriteLine($"Connection String: {connectionString}");
 
 // Добавление сервисов
 builder.Services.AddControllersWithViews();
@@ -42,9 +89,15 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
 
-// Настройка DbContext и Identity
-builder.Services.AddDbContext<YouCanContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("YouCan.Repository")))
+builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
+
+builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connectionString, x => x.MigrationsAssembly("YouCan.Repository")))
     .AddIdentity<User, IdentityRole<int>>(options =>
     {
         options.Password.RequiredLength = 6;
@@ -55,6 +108,8 @@ builder.Services.AddDbContext<YouCanContext>(options =>
     })
     .AddEntityFrameworkStores<YouCanContext>()
     .AddDefaultTokenProviders();
+
+
 
 builder.Services.AddSingleton<W3RootFileManager>();
 builder.Services.AddScoped<LeagueRepository>();
