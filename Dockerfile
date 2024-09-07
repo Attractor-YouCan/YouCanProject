@@ -1,6 +1,10 @@
-# Используем официальный образ .NET SDK для сборки и тестов
+# Используем официальный образ .NET SDK 8.0
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
+
+# Устанавливаем dotnet-ef tool
+RUN dotnet tool install --global dotnet-ef --version 8.0.0
+ENV PATH="${PATH}:/root/.dotnet/tools"
 
 # Копируем файлы решения и проекты
 COPY ["YouCan.sln", "./"]
@@ -10,11 +14,12 @@ COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Service/YouCan.Service.csproj", "YouCan.Service/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
 
-# Восстановление зависимостей
-RUN dotnet restore "YouCan.sln"
-
 # Копируем все файлы
 COPY . .
+
+# Выполняем миграции
+WORKDIR /app/YouCan.Repository
+RUN dotnet ef database update --project YouCan.Repository.csproj --startup-project ../YouCan.Mvc/YouCan.Mvc.csproj
 
 # Сборка всех проектов
 RUN dotnet build "YouCan.sln" -c Release -o /app/build
