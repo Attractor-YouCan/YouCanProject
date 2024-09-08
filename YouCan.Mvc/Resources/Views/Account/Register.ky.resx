@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,61 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Посмотри видео и узнай, &lt;br/&gt;как подготовиться вместе с Youcan!</value>
+  <data name="Register" xml:space="preserve">
+    <value>Каттоо</value>
   </data>
-  <data name="Confirm" xml:space="preserve">
-    <value>ПОДТВЕРДИТЬ</value>
+  <data name="FirstName" xml:space="preserve">
+    <value>Аты</value>
   </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Подтверждение пароля</value>
+  <data name="LastName" xml:space="preserve">
+    <value>Фамилиясы</value>
   </data>
-  <data name="CreateAccount" xml:space="preserve">
-    <value>СОЗДАТЬ АККАУНТ</value>
-  </data>
-  <data name="DidNotReceive" xml:space="preserve">
-    <value>Код не пришел?</value>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Телефондун номери</value>
   </data>
   <data name="District" xml:space="preserve">
     <value>Район</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Электронная почта</value>
+  <data name="Password" xml:space="preserve">
+    <value>Сыр сөз</value>
   </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>Имя</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Фамилия</value>
+  <data name="Confirm" xml:space="preserve">
+    <value>Макул</value>
   </data>
   <data name="Next" xml:space="preserve">
-    <value>Далее</value>
+    <value>Алга</value>
   </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Регистрация аккаунта</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Пароль</value>
-  </data>
-  <data name="PhoneNumber" xml:space="preserve">
-    <value>Номер телефона</value>
-  </data>
-  <data name="ProfilePhoto" xml:space="preserve">
-    <value>Фото профиля</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Регистрация</value>
-  </data>
-  <data name="Resend" xml:space="preserve">
-    <value>Отправить повторно</value>
-  </data>
-  <data name="Sent" xml:space="preserve">
-    <value>На вашу почту {0} был отправлен&lt;br /&gt;6-значный код для подтверждения</value>
-  </data>
-  <data name="Terms" xml:space="preserve">
-    <value>Выполняя вход в аккаунт YouCan, вы соглашаетесь &lt;br&gt;с нашими &lt;Условиями&gt; и &lt;Политикой конфиденциальности&gt;.</value>
+  <data name="Email" xml:space="preserve">
+    <value>Электрондук почтасы</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Никнейм</value>
+  </data>
+  <data name="ProfilePhoto" xml:space="preserve">
+    <value>Профилдин сүрөтү</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Аккаунтту каттоо</value>
+  </data>
+  <data name="AboutUs" xml:space="preserve">
+    <value>Видеону карап, Youcan менен кандайча даярдануу керектигин бил!</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Паролду текшерүү</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>АККАУНТТУ ЖАРАТУУ</value>
+  </data>
+  <data name="DidNotReceive" xml:space="preserve">
+    <value>Код келген жокпу?</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>YouCan аккаунтуна кирүү менен сиз &lt;Ушул шарттар&gt; жана &lt;Жеке маалыматтарды иштеп чыгуу саясаты&gt; менен макулсуз.</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Сиздин почтаңызга {0} 6-санды код жиберилди&lt;br /&gt;текшерүү үчүн</value>
+  </data>
+  <data name="Resend" xml:space="preserve">
+    <value>Кайрадан жиберүү</value>
   </data>
 </root>
