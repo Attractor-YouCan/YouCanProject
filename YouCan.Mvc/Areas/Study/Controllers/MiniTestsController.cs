@@ -44,8 +44,13 @@ public class MiniTestsController : Controller
         User? currentUser = await _userManager.GetUserAsync(User);
         Test? test = await _testService.GetById(selectedAnswers[0].TestId);
         Lesson? lesson = await _lessonService.GetById((int)test.LessonId!);
-        UserLessons? userLesson = _userLessonService.GetAll()
+        UserLevel? userLevels = _userLevel.GetAll()
             .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
+
+        UserLessons? userLesson = _userLessonService.GetAll()
+            .FirstOrDefault(ul => ul.UserId == currentUser.Id && 
+                ul.SubjectId == lesson.SubjectId && 
+                ul.LessonId == lesson.Id);
 
         int passingCount = (
             from question in test.Questions
@@ -55,19 +60,11 @@ public class MiniTestsController : Controller
         ).Count();
         if (passingCount >= 2)
         {
-            userLesson.PassedLevel = lesson.LessonLevel;
+            userLevels.Level = lesson.LessonLevel;
+
             userLesson.IsPassed = true;
-            userLesson.LessonId = lesson.Id;
-        
-            UserLevel userLevel = new UserLevel()
-            {
-                Level = lesson.LessonLevel,
-                UserId = currentUser.Id,
-                User = currentUser,
-                SubjectId = lesson.SubjectId,
-                Subject = lesson.Subject
-            };
-            await _userLevel.Update(userLevel);
+
+            await _userLevel.Update(userLevels);
             // await _userManager.UpdateAsync(currentUser);
             await _userLessonService.Update(userLesson);
         }
@@ -83,8 +80,8 @@ public class MiniTestsController : Controller
     [HttpGet]
     public IActionResult Result(bool isPassed, int lessonId, int subtopicId)
     {
-        ViewBag.LessonId = lessonId;
-        ViewBag.SubtopicId = subtopicId;
+        ViewData["LessonId"] = lessonId;
+        ViewData["SubtopicId"] = subtopicId;
         return View(isPassed);
     }
 }

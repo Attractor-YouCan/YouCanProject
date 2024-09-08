@@ -5,35 +5,38 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using YouCan.Entities;
 using YouCan.Mvc.ViewModels.Account;
-using YouCan.Repository;
 using YouCan.Service;
-using YouCan.Entities;
 
 namespace YouCan.Mvc.Areas.Admin.Controllers;
 [Area("Admin")]
 [Authorize(Roles = "admin, manager")]
 public class UsersController : Controller
 {
-    private readonly YouCanContext _context;
     private readonly UserManager<User> _userManager;
     private readonly IWebHostEnvironment _env;
     private readonly ICrudService<AdminAction> _adminActions;
-    public UsersController(YouCanContext context, UserManager<User> userManager, IWebHostEnvironment env, ICrudService<AdminAction> adminActions)
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
+    private readonly ICrudService<Tariff> _tariffManager;
+
+    public UsersController(UserManager<User> userManager, 
+        IWebHostEnvironment env, 
+        ICrudService<AdminAction> adminActions, 
+        RoleManager<IdentityRole<int>> roleManager,
+        ICrudService<Tariff> tariffManager)
     {
-        _context = context;
         _userManager = userManager;
         _env = env;
         _adminActions = adminActions;
+        _roleManager = roleManager;
+        _tariffManager = tariffManager;
     }
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.Include(u => u.Tariff)
-            .OrderBy(u => u.Id)
-            .ToListAsync();
+        var users =  _userManager.Users.Include(u => u.Tariff).OrderBy(u => u.Id).ToList();
 
-        ViewBag.Roles = await _context.Roles.ToListAsync();
-        ViewBag.Tariffs = await _context.Tariffs.ToListAsync();
+        ViewBag.Roles =  _roleManager.Roles.ToList();
+        ViewBag.Tariffs = _tariffManager.GetAll().ToList();
 
         return View(users);
     }
@@ -72,18 +75,18 @@ public class UsersController : Controller
     {
         if (tariffId.HasValue)
         {
-            var user = await _context.Users.Include(u => u.Tariff).FirstOrDefaultAsync(u => u.Id == id);
+            var user =  _userManager.Users.Include(u => u.Tariff).FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
                 user.TariffId = tariffId;
-                var tariff = await _context.Tariffs.FindAsync(tariffId);
+                var tariff = await _tariffManager.GetById((int)tariffId); //_context.Tariffs.FindAsync(tariffId);
                 var admin = await _userManager.GetUserAsync(User);
                 if (tariff != null)
                 {
                     if (tariff.Duration.HasValue)
                     {
                         user.TariffEndDate = DateTime.UtcNow.AddMonths((int)tariff.Duration);
-
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "user"))
                         {
                             await _userManager.AddToRoleAsync(user, "prouser");
@@ -93,6 +96,7 @@ public class UsersController : Controller
                     else
                     {
                         user.TariffEndDate = null;
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "prouser"))
                         {
                             await _userManager.AddToRoleAsync(user, "user");
@@ -109,8 +113,7 @@ public class UsersController : Controller
                     await _adminActions.Insert(log);
                 }
 
-                _context.Update(user);
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user); //_context.Update(user);
                 return RedirectToAction("Index");
             }
             return NotFound();
@@ -149,7 +152,7 @@ public class UsersController : Controller
         User user = await _userManager.FindByIdAsync(id.ToString());
         if (user != null)
         {
-            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
+            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, null);
             var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
 
             var admin = await _userManager.GetUserAsync(User);
@@ -171,7 +174,14 @@ public class UsersController : Controller
     }
     public async Task<IActionResult> Details(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        User user = await _userManager.Users
+            .Include(u => u.Lessons)
+            .ThenInclude(l => l.Lesson)
+            .Include(u => u.Tests)
+            .ThenInclude(l => l.OrtTest)
+            .Include(u => u.Questions)
+            .Include(u => u.Statistic)
+            .FirstOrDefaultAsync(u => u.Id == id);
         if (user != null)
         {
             return View(user);
@@ -219,12 +229,12 @@ public class UsersController : Controller
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
 
-                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                var startTariff = _tariffManager.GetAll().FirstOrDefault(t => t.Name == "Start"); //_context.Tariffs.FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow; 
                 user.TariffEndDate = null;
 
-                _context.Update(user);
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);  //_context.Update(user);
 
                 var log = new AdminAction
                 {
@@ -301,7 +311,7 @@ public class UsersController : Controller
     }
     public async Task<IActionResult> Delete(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _userManager.FindByIdAsync(id.ToString()); //await _context.Users.FindAsync(id);
         var admin = await _userManager.GetUserAsync(User);
         if (user != null)
         {
@@ -313,9 +323,8 @@ public class UsersController : Controller
                 Details = $"{admin.UserName} удалил пользователя {user.UserName}"
             };
             await _adminActions.Insert(log);
-            _context.Remove(user);
+            await _userManager.DeleteAsync(user);
         }
-        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 }

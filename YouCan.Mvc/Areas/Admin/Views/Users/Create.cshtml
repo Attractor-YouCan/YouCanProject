@@ -2,7 +2,7 @@
 @model YouCan.Mvc.ViewModels.Account.RegisterViewModel
 @{
     ViewBag.Title = "";
-    Layout = "_Layout";
+    Layout = "_Admin";
 }
 <div class="container">
     <div class="row row-cols-1 mt-5">
@@ -93,8 +93,3 @@
         </div>
     </div>
 </div>
-@section Scripts{
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

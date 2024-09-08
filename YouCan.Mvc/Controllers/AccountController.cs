@@ -6,7 +6,6 @@ using YouCan.Mvc.Services.Email;
 using YouCan.Mvc.ViewModels.Account;
 using YouCan.Service;
 using YouCan.Entities;
-using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
 using Razor.Templating.Core;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
@@ -19,15 +18,21 @@ public class AccountController : Controller
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private ICrudService<UserLevel> _userLevel;
+    private ICrudService<UserExperience> _userExperiance;
     private ICrudService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
     private readonly ICrudService<Tariff> _tariffs;
     private readonly IStringLocalizer _localizer;
 
-    public AccountController(IUserCrud userService, UserManager<User> userManager,
-        SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService, ICrudService<UserLevel> userLevel, ICrudService<UserLessons> userLessonService,
+    public AccountController(IUserCrud userService, 
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IWebHostEnvironment environment,
+        TwoFactorService twoFactorService,
+        ICrudService<UserLevel> userLevel,
+        ICrudService<UserLessons> userLessonService,
         ICrudService<Tariff> tariffs,
+        ICrudService<UserExperience> userExperiance,
         IStringLocalizer<AccountController> localizer)
     {
         _userService = userService;
@@ -39,6 +44,7 @@ public class AccountController : Controller
         _userLessonService = userLessonService;
         _tariffs = tariffs;
         _localizer = localizer;
+        _userExperiance = userExperiance;
     }
 
     [Authorize]
@@ -72,8 +78,23 @@ public class AccountController : Controller
                     RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
                 }).ToList();
 
-           
+
             int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
+            var last7Days = Enumerable.Range(0, 7)
+            .Select(i => DateTime.UtcNow.AddDays(-i).Date)
+            .ToList();
+            List<UserExperience> weeklyExperience = _userExperiance.GetAll()
+            .Where(ue => ue.Date >= last7Days.Min() && ue.UserId == user.Id)
+            .GroupBy(ue => ue.Date.Date)
+            .Select(g => new UserExperience
+            {
+                Date = g.Key,
+                ExperiencePoints = g.Sum(ue => ue.ExperiencePoints)
+            }).ToList();
+            weeklyExperience = last7Days
+            .Select(day => weeklyExperience.FirstOrDefault(we => we.Date == day) ?? new UserExperience { Date = day, ExperiencePoints = 0 })
+            .OrderBy(we => we.Date).ToList();
 
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
@@ -85,7 +106,8 @@ public class AccountController : Controller
             {
                 User = user,
                 UserLevels = userLevels,
-                UserLessons = userLessons
+                UserLessons = userLessons,
+                WeeklyExperience = weeklyExperience
             };
 
             return View(model);
@@ -187,6 +209,7 @@ public class AccountController : Controller
 
                 var startTariff = _tariffs.GetAll().FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow;
                 user.TariffEndDate = null;
                 await _userManager.UpdateAsync(user);
 
@@ -241,11 +264,11 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
-        
 
-        return Json(new { success = true, userId = user.Id  });
+
+        return Json(new { success = true, userId = user.Id });
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
     {
@@ -261,11 +284,11 @@ public class AccountController : Controller
         }
         var (subject, message) = await GenerateEmailConfirmationContentAsync(user, user.UserName);
         EmailSender emailSender = new EmailSender();
-         emailSender.SendEmail(user.Email, subject, message);
+        emailSender.SendEmail(user.Email, subject, message);
 
         return Json(new { success = true });
     }
-    
+
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -334,11 +357,6 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-    
-    [Authorize]
-    public async Task<IActionResult> Rating()
-    {
-        return View();
-    }
+   
 
 }

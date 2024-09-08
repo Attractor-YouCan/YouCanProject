@@ -60,7 +60,8 @@ public class StudyController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateLesson(int subjectId) 
     {
-        ViewBag.SubjectId = subjectId;
+        //ViewBag.SubjectId = subjectId;
+        ViewData["SubjectId"] = subjectId;
         Subject subject = await _subjectService.GetById(subjectId);
         int? availableLevel = subject.Lessons.Select(l => l.LessonLevel).Max();
         ViewBag.AvailableLevel = availableLevel == null ? 1 : availableLevel + 1;
@@ -143,7 +144,7 @@ public class StudyController : Controller
             await _lessonService.Update(lesson);
             return Ok(new {subjectId = lesson.SubjectId});
         }
-        ViewBag.SubjectId = model.SubjectId;
+        ViewData["SubjectId"] = model.SubjectId;
         return View(model);
     }
 
@@ -168,7 +169,7 @@ public class StudyController : Controller
         LessonModel lessonModel = new LessonModel
         {
             Id = lesson.Id,
-            LessonLevel = (int)lesson.LessonLevel,
+            LessonLevel = lesson.LessonLevel ?? 0,
             ExistsVideoUrl = lesson.VideoUrl,
             LessonTitle = lesson.Title,
             LessonTitle2 = lesson.SubTitle,

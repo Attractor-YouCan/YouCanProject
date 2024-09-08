@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Repository", "YouCan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Service", "YouCan.Service\YouCan.Service.csproj", "{8AD56F19-A321-45B2-B6C5-8FAA036DF484}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Tests", "YouCan.Tests\YouCan.Tests.csproj", "{EDFE53BF-F764-439A-BDE0-14163A0DB243}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8AD56F19-A321-45B2-B6C5-8FAA036DF484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AD56F19-A321-45B2-B6C5-8FAA036DF484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AD56F19-A321-45B2-B6C5-8FAA036DF484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

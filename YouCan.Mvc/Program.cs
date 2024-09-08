@@ -14,6 +14,11 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -30,6 +35,8 @@ builder.Services.AddDbContext<YouCanContext>(options => options.UseNpgsql(connec
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<W3RootFileManager>();
+builder.Services.AddScoped<LeagueRepository>();
+
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
@@ -80,11 +87,17 @@ builder.Services.AddTransient<ICrudService<QuestionReport>, CrudService<Question
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
 builder.Services.AddTransient<ICrudService<Tariff>, CrudService<Tariff>>();
 
+builder.Services.AddTransient<IRepository<League>, LeagueRepository>();
+builder.Services.AddTransient<ICrudService<League>, CrudService<League>>();
+
 builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
 builder.Services.AddTransient<ICrudService<AdminAction>, CrudService<AdminAction>>();
 
 builder.Services.AddTransient<IRepository<LessonTime>, LessonTimeRepository>();
 builder.Services.AddTransient<ICrudService<LessonTime>, CrudService<LessonTime>>();
+
+builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceRepository>();
+builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExperience>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 
