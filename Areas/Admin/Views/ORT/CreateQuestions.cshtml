@@ -164,7 +164,7 @@
                 }
             })
             .then(function (response) {
-                window.location.href = `@Url.Action("Index", "ORT")`;
+                window.location.href = `@Url.Action("Details", "ORT", new {ortId = ViewBag.OrtId})`;
             })
             .catch(function (error) {
                 console.error('Error: 963', error);

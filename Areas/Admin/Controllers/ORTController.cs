@@ -91,8 +91,10 @@ public class ORTController : Controller
     }
 
     [HttpGet]
-    public IActionResult CreateQuestions(int testId)
+    public async Task<IActionResult> CreateQuestions(int testId)
     {
+        var test = await _testsManager.GetById(testId);
+        ViewBag.OrtId = test.OrtTestId;
         ViewBag.TestId = testId;
         return View();
     }
