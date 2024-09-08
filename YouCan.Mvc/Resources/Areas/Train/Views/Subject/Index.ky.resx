@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Empty" xml:space="preserve">
+    <value>Предметтер азырынча жок!</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
+  <data name="SelectSubject" xml:space="preserve">
+    <value>Жакшы!&lt;br/&gt;Күчүңдү текшерели.&lt;br/&gt;Керектүү бөлүмдү тандаңыз:<br />Күчүңүздү текшерели.<br />Керектүү бөлүмдү тандаңыз:</value>
+  </data>
+  <data name="Train" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
+</root>
