@@ -7,17 +7,16 @@ services:
       dockerfile: Dockerfile
     container_name: web
     ports:
-      - "5001:80"  # порт для внутреннего приложения
+      - "5001:80"
     env_file:
       - variables.env
-    environment: # Используем переменные окружения напрямую
+    environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - webnet
     depends_on:
       - postgresDb
-    command: /bin/sh -c "dotnet ef database update --project /app/YouCan.Repository/YouCan.Repository.csproj"  # Команда для обновления БД и запуска приложения
 
   postgresDb:
     image: postgres:latest
@@ -33,13 +32,26 @@ services:
     networks:
       - webnet
 
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: migrations
+    entrypoint: ["dotnet", "ef", "database", "update", "--project", "/app/YouCan.Repository/YouCan.Repository.csproj"]
+    depends_on:
+      - postgresDb
+    env_file:
+      - variables.env
+    networks:
+      - webnet
+
   nginx:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80"  # основной порт для доступа к веб-приложению через Nginx
+      - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # путь к конфигурационному файлу Nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - web
     networks:
