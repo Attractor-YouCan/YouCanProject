@@ -180,6 +180,30 @@ namespace YouCan.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("UserExperience", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ExperiencePoints")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserExperiences");
+                });
+
             modelBuilder.Entity("YouCan.Entites.Models.AdminAction", b =>
                 {
                     b.Property<int>("Id")
@@ -932,16 +956,7 @@ namespace YouCan.Repository.Migrations
                     b.Property<TimeSpan>("StudyMinutes")
                         .HasColumnType("interval");
 
-                    b.Property<int>("TotalExperience")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Statistics");
                 });
@@ -1158,6 +1173,12 @@ namespace YouCan.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("ImpactModeEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ImpactModeStart")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("LeagueId")
                         .HasColumnType("integer");
 
@@ -1190,6 +1211,9 @@ namespace YouCan.Repository.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<int?>("StatisticId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("TariffEndDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -1219,6 +1243,8 @@ namespace YouCan.Repository.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("StatisticId");
 
                     b.HasIndex("TariffId");
 
@@ -1374,6 +1400,17 @@ namespace YouCan.Repository.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("UserExperience", b =>
+                {
+                    b.HasOne("YouCan.Entities.User", "User")
+                        .WithMany("UserExperiences")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("YouCan.Entites.Models.AdminAction", b =>
                 {
                     b.HasOne("YouCan.Entities.User", "User")
@@ -1494,17 +1531,6 @@ namespace YouCan.Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("YouCan.Entities.Statistic", b =>
-                {
-                    b.HasOne("YouCan.Entities.User", "User")
-                        .WithOne("Statistic")
-                        .HasForeignKey("YouCan.Entities.Statistic", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("YouCan.Entities.Subject", b =>
                 {
                     b.HasOne("YouCan.Entities.Subject", "Parent")
@@ -1553,11 +1579,17 @@ namespace YouCan.Repository.Migrations
                         .WithMany("Users")
                         .HasForeignKey("LeagueId");
 
+                    b.HasOne("YouCan.Entities.Statistic", "Statistic")
+                        .WithMany()
+                        .HasForeignKey("StatisticId");
+
                     b.HasOne("YouCan.Entites.Models.Tariff", "Tariff")
                         .WithMany("Users")
                         .HasForeignKey("TariffId");
 
                     b.Navigation("League");
+
+                    b.Navigation("Statistic");
 
                     b.Navigation("Tariff");
                 });
@@ -1671,9 +1703,9 @@ namespace YouCan.Repository.Migrations
 
                     b.Navigation("Questions");
 
-                    b.Navigation("Statistic");
-
                     b.Navigation("Tests");
+
+                    b.Navigation("UserExperiences");
 
                     b.Navigation("UserLevels");
                 });

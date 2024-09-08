@@ -94,6 +94,8 @@ builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction
 builder.Services.AddTransient<IRepository<LessonTime>, LessonTimeRepository>();
 builder.Services.AddTransient<ICRUDService<LessonTime>, CRUDService<LessonTime>>();
 
+builder.Services.AddTransient<IRepository<UserExperience>, UserExperianceRepository>();
+builder.Services.AddTransient<ICRUDService<UserExperience>, CRUDService<UserExperience>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 

@@ -22,6 +22,7 @@ public class AccountControllerTests
     private readonly Mock<ICRUDService<Tariff>> _tariffsMock;
     private readonly TwoFactorService _twoFactorService;  
     private readonly AccountController _controller;
+    private readonly Mock<ICRUDService<UserExperience>> _userExperienceMock;
 
     public AccountControllerTests()
     {
@@ -48,7 +49,8 @@ public class AccountControllerTests
             _twoFactorService,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
-            _tariffsMock.Object);
+            _tariffsMock.Object,
+            _userExperienceMock.Object);
     }
 
     [Fact]
