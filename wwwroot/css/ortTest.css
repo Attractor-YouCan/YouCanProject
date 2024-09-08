@@ -102,6 +102,14 @@
     display: none;
 }
 
+.ans-form-block {
+    margin-left: 11px;
+}
+
+.answers-form {
+    margin-left: 7px;
+}
+
 @media screen and (max-width: 768px) {
     .fixed-answers-button{
         bottom: 80px;

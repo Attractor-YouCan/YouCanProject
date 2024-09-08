@@ -50,7 +50,7 @@
                         @for (int i = 0; i < question.Answers.Count; i++)
                         {
                             Answer answer = question.Answers[i];
-                            char answerNum = (char)('A' + i);
+                            char answerNum = (char)('А' + i);
                             <label class="answer mt-4" role="button">
                                 <span class="answer-number">@answerNum</span>
                                 <span class="answer-content h-100 w-100">@answer.Content</span>
@@ -78,13 +78,13 @@
     </div>
     <div class="offcanvas-body">
         <div class="answers-parent">
-            <div class="answers header ms-1">
+            <div class="answers header ans-form-block">
                 @for (var answerIndex = 0; answerIndex < 5; answerIndex++)
                 {
-                    <span class="answer-@(answerIndex + 1)">
+                    <span class="answer-@(answerIndex + 1) answers-form">
                         @if (Model.SelectMany(test => test.Questions).Any(question => question.Answers.Count > answerIndex))
                         {
-                            @((char)('A' + answerIndex))
+                            @((char)('А' + answerIndex))
                         }
                     </span>
                 }
@@ -100,7 +100,7 @@
                         <span class="number">@questionNum</span>
                         @foreach (var answer in question.Answers)
                         {
-                            <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
+                            <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio ms-1">
                         }
                     </div>
                 }
