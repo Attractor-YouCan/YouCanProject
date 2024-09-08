@@ -23,6 +23,7 @@ public class AccountController : Controller
     private readonly TwoFactorService _twoFactorService;
     private readonly ICrudService<Tariff> _tariffs;
     private readonly IStringLocalizer _localizer;
+    private readonly IRazorTemplateEngine _razorTemplateEngine;
 
     public AccountController(IUserCrud userService, 
         UserManager<User> userManager,
@@ -33,7 +34,8 @@ public class AccountController : Controller
         ICrudService<UserLessons> userLessonService,
         ICrudService<Tariff> tariffs,
         ICrudService<UserExperience> userExperiance,
-        IStringLocalizer<AccountController> localizer)
+        IStringLocalizer<AccountController> localizer,
+        IRazorTemplateEngine razorTemplateEngine)
     {
         _userService = userService;
         _userManager = userManager;
@@ -45,6 +47,7 @@ public class AccountController : Controller
         _tariffs = tariffs;
         _localizer = localizer;
         _userExperiance = userExperiance;
+        _razorTemplateEngine = razorTemplateEngine;
     }
 
     [Authorize]
@@ -228,7 +231,7 @@ public class AccountController : Controller
     {
         var code = _twoFactorService.GenerateCode(user.Id);
         var subject = _localizer["YourCode"];
-        string message = await RazorTemplateEngine.RenderAsync("~/Views/Account/EmailConfirmationMessage.cshtml",
+        string message = await _razorTemplateEngine.RenderAsync("~/Views/Account/EmailConfirmationMessage.cshtml",
             new EmailConfirmationViewModel()
             {
                 Code = code,
