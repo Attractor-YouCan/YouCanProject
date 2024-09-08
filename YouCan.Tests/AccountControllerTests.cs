@@ -38,7 +38,8 @@ public class AccountControllerTests
         _userLevelMock = new Mock<ICRUDService<UserLevel>>();
         _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
         _tariffsMock = new Mock<ICRUDService<Tariff>>();
-        _twoFactorService = new TwoFactorService();  
+        _twoFactorService = new TwoFactorService();
+        _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
 
         _controller = new AccountController(
             _userServiceMock.Object,
