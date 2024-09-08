@@ -32,14 +32,7 @@
                         <span class="textLogo">youcan</span>
                     </a>
 
-                    <div class="language-switch">
-                        <span>Рус</span>
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <span>Кыр</span>
-                    </div>
+                    @await Html.PartialAsync("_LanguageSwitch")
 
                 </nav>
             </div>
@@ -84,9 +77,12 @@
     </div>
 </section>
 
+    @section Scripts {
+        <script src="~/js/landing.js"></script>
+        <script src="~/js/auth.js"></script>
+        @await Html.PartialAsync("_LanguageSwitchScript")
+    }
 
-<script src="~/js/landing.js"></script>
-<script src="~/js/auth.js"></script>
 </body>
 </html>
 

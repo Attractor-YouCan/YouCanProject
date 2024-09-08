@@ -12,7 +12,8 @@ using YouCan.Entities;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddControllersWithViews()
-    .AddViewLocalization();
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -90,7 +91,6 @@ builder.Services.AddScoped<TwoFactorService>();
 //After all the dependencies
 builder.Services.AddRazorTemplating();
 
-
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
@@ -125,11 +125,19 @@ var supportedCultures = new[]
     new CultureInfo("ru"),
     new CultureInfo("ky")
 };
+
 app.UseRequestLocalization(new RequestLocalizationOptions()
 {
     DefaultRequestCulture = new RequestCulture("ru"),
     SupportedCultures = supportedCultures,
     SupportedUICultures = supportedCultures,
+    RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new QueryStringRequestCultureProvider(),
+        new UserProfileRequestCultureProvider(builder.Services.BuildServiceProvider().GetService<UserManager<User>>()),
+        new CookieRequestCultureProvider(),
+        new AcceptLanguageHeaderRequestCultureProvider()
+    }
 });
 
 app.UseRouting();

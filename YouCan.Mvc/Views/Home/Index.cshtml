@@ -43,14 +43,12 @@ Layout = "_layout";
                                     @User.Identity.Name</a>
                             </li>
                             <li>
-                                <div class="language-switch">
-                                    <span style="color: #000">Рус</span>
-                                    <label class="switch">
-                                        <input type="checkbox" id="languageSwitch">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span style="color: #000">Кыр</span>
-                                </div>
+                                <style>
+                                    .language-switch span {
+                                        color: #000;
+                                    }
+                                </style>
+                                @await Html.PartialAsync("_LanguageSwitch")
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -66,14 +64,7 @@ Layout = "_layout";
                         }
                         else
                         {
-                        <div class="language-switch">
-                            <span>Рус</span>
-                            <label class="switch">
-                                <input type="checkbox" id="languageSwitch">
-                                <span class="slider"></span>
-                            </label>
-                            <span>Кыр</span>
-                        </div>
+                            @await Html.PartialAsync("_LanguageSwitch")
                         }
                     </div>
 
@@ -209,32 +200,32 @@ Layout = "_layout";
                 <img src="~/landingIcons/lending1.svg" class="img-fluid mb-3 mx-auto" alt="Subscription Image" />
                 <p class="title-card-first-last">Старт</p>
                 <p class="price-info-first-last">
-                    <strong>0 <span>С</span> /</strong> в месяц
+                    @Localizer["Free"]
                 </p>
                 <ul class="text-list-first-last">
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        10 бесплатных уроков
+                        @Localizer["StartFeatures1"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Информация о ВУЗах
+                        @Localizer["StartFeatures2"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        1 пробный тест ОРТ
+                        @Localizer["StartFeatures3"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Рейтинг пользователей
+                        @Localizer["StartFeatures4"]
                     </li>
                 </ul>
                 <a href="#" class="btn btn-first-last text-center mt-auto">Ваш тариф</a>
@@ -246,38 +237,38 @@ Layout = "_layout";
                 <img src="~/landingIcons/lending1.svg" class="img-fluid mb-3 mx-auto" alt="Subscription Image" />
                 <p class="title-card">Про</p>
                 <p class="price-info">
-                    <strong>1200 <span>С</span> /</strong> в месяц
+                    <strong>1200 <span>С</span> /</strong> @Localizer["PerMonth"]
                 </p>
                 <ul class="text-list">
                     <li>
                         <div class="checkbox-container-middle">
                             <div class="checkbox-icon-middle"></div>
                         </div>
-                        Доступ ко всем урокам
+                        @Localizer["ProFeatures1"]
                     </li>
                     <li>
                         <div class="checkbox-container-middle">
                             <div class="checkbox-icon-middle"></div>
                         </div>
-                        Информация о ВУЗах
+                        @Localizer["StartFeatures2"]
                     </li>
                     <li>
                         <div class="checkbox-container-middle">
                             <div class="checkbox-icon-middle"></div>
                         </div>
-                        Все пробные тесты ОРТ
+                        @Localizer["ProFeatures3"]
                     </li>
                     <li>
                         <div class="checkbox-container-middle">
                             <div class="checkbox-icon-middle"></div>
                         </div>
-                        Рейтинг пользователей
+                        @Localizer["ProFeatures4"]
                     </li>
                     <li>
                         <div class="checkbox-container-middle">
                             <div class="checkbox-icon-middle"></div>
                         </div>
-                        Хранилище задач ОРТ
+                        @Localizer["ProFeatures5"]
                     </li>
                 </ul>
                 <a href="#" class="btn btn-select text-center mt-auto">@Localizer["Select"]</a>
@@ -296,37 +287,37 @@ Layout = "_layout";
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Скидка -15% на 3 месяца
+                        @Localizer["PremiumFeatures1"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Доступ ко всем урокам
+                        @Localizer["ProFeatures1"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Информация о ВУЗах
+                        @Localizer["StartFeatures2"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Все пробные тесты ОРТ
+                        @Localizer["ProFeatures3"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Рейтинг пользователей
+                        @Localizer["ProFeatures4"]
                     </li>
                     <li>
                         <div class="checkbox-container">
                             <div class="checkbox-icon"></div>
                         </div>
-                        Хранилище задач ОРТ
+                        @Localizer["ProFeatures5"]
                     </li>
                 </ul>
                 <a href="#" class="btn btn-first-last text-center mt-auto">@Localizer["Select"]</a>
@@ -354,32 +345,32 @@ Layout = "_layout";
                             alt="Subscription Image" />
                         <p class="title-card-first-last">Старт</p>
                         <p class="price-info-first-last">
-                            <strong>0 <span>С</span> /</strong> в месяц
+                            @Localizer["Free"]
                         </p>
                         <ul class="text-list-first-last">
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                10 бесплатных уроков
+                                @Localizer["StartFeatures1"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Информация о ВУЗах
+                                @Localizer["StartFeatures2"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                1 пробный тест ОРТ
+                                @Localizer["StartFeatures3"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Рейтинг пользователей
+                                @Localizer["StartFeatures4"]
                             </li>
                         </ul>
                         <a href="#" class="btn btn-first-last text-center mt-auto">Ваш тариф</a>
@@ -412,38 +403,38 @@ Layout = "_layout";
                             alt="Subscription Image" />
                         <p class="title-card">Про</p>
                         <p class="price-info">
-                            <strong>1200 <span>С</span> /</strong> в месяц
+                            <strong>1200 <span>С</span> /</strong> @Localizer["PerMonth"]
                         </p>
                         <ul class="text-list">
                             <li>
                                 <div class="checkbox-container-middle">
                                     <div class="checkbox-icon-middle"></div>
                                 </div>
-                                Доступ ко всем урокам
+                                @Localizer["ProFeatures1"]
                             </li>
                             <li>
                                 <div class="checkbox-container-middle">
                                     <div class="checkbox-icon-middle"></div>
                                 </div>
-                                Информация о ВУЗах
+                                @Localizer["StartFeatures2"]
                             </li>
                             <li>
                                 <div class="checkbox-container-middle">
                                     <div class="checkbox-icon-middle"></div>
                                 </div>
-                                Все пробные тесты ОРТ
+                                @Localizer["ProFeatures3"]
                             </li>
                             <li>
                                 <div class="checkbox-container-middle">
                                     <div class="checkbox-icon-middle"></div>
                                 </div>
-                                Рейтинг пользователей
+                                @Localizer["ProFeatures4"]
                             </li>
                             <li>
                                 <div class="checkbox-container-middle">
                                     <div class="checkbox-icon-middle"></div>
                                 </div>
-                                Хранилище задач ОРТ
+                                @Localizer["ProFeatures5"]
                             </li>
                         </ul>
                         <a href="#" class="btn btn-select text-center mt-auto">@Localizer["Select"]</a>
@@ -475,44 +466,44 @@ Layout = "_layout";
                             alt="Subscription Image" />
                         <p class="title-card-first-last">Премиум</p>
                         <p class="price-info-first-last">
-                            <strong>3000 <span>С</span> /</strong> на 3 месяца
+                            <strong>3000 <span>С</span> /</strong> @Localizer["Per3Months"]
                         </p>
                         <ul class="text-list-first-last">
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Скидка -15% на 3 месяца
+                                @Localizer["PremiumFeatures1"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Доступ ко всем урокам
+                                @Localizer["ProFeatures1"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Информация о ВУЗах
+                                @Localizer["StartFeatures2"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Все пробные тесты ОРТ
+                                @Localizer["ProFeatures3"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Рейтинг пользователей
+                                @Localizer["ProFeatures4"]
                             </li>
                             <li>
                                 <div class="checkbox-container">
                                     <div class="checkbox-icon"></div>
                                 </div>
-                                Хранилище задач ОРТ
+                                @Localizer["ProFeatures5"]
                             </li>
                         </ul>
                         <a href="#" class="btn btn-first-last text-center mt-auto">@Localizer["Select"]</a>
@@ -667,6 +658,10 @@ Layout = "_layout";
             </div>
         </footer>
     </section>
-    <script src="~/js/landing.js"></script>
+    @section Scripts{
+        <script src="~/js/landing.js"></script>
+        @await Html.PartialAsync("_LanguageSwitchScript")
+    }
+
 </body>
 </html>

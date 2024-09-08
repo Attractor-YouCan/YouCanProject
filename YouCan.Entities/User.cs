@@ -9,7 +9,7 @@ public class User : IdentityUser<int>
     public DateTime? BirthDate { get; set; }
     public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
     public string Disctrict { get; set; }
-
+    public string Language { get; set; } = "ru";
     public int? TariffId { get; set; }
     public Tariff? Tariff { get; set; }
     public DateTime? TariffEndDate { get; set; }

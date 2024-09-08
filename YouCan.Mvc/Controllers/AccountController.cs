@@ -9,8 +9,9 @@ using YouCan.Entities;
 using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
 using Razor.Templating.Core;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
-namespace YouCan.Mvc;
+namespace YouCan.Mvc.Controllers;
 public class AccountController : Controller
 {
     private IUserCrud _userService;
@@ -174,7 +175,8 @@ public class AccountController : Controller
                 Disctrict = model.District,
                 AvatarUrl = path,
                 BirthDate = model.BirthDate.ToUniversalTime(),
-                CreatedAt = DateTime.UtcNow.AddHours(6)
+                CreatedAt = DateTime.UtcNow.AddHours(6),
+                Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

@@ -1,0 +1,17 @@
+﻿@using System.Globalization
+<div class="language-switch">
+    <span>Рус</span>
+    <label class="switch">
+        @if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ru")
+        {
+
+            <input type="checkbox" id="languageSwitch">
+        }
+        else
+        {
+            <input type="checkbox" id="languageSwitch" checked>
+        }
+        <span class="slider"></span>
+    </label>
+    <span>Кыр</span>
+</div>

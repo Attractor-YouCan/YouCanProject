@@ -33,15 +33,7 @@
                             <img src="~/landingIcons/YouCanLogo.png" alt="logo">
                             <span class="textLogo">youcan</span>
                         </a>
-
-                        <div class="language-switch">
-                            <span>Рус</span>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                            <span>Кыр</span>
-                        </div>
+                        @await Html.PartialAsync("_LanguageSwitch")
                     </nav>
                 </div>
                 <div class="underNavbarSection">
@@ -88,6 +80,7 @@
 
                     <div id="page2" class="authForm  form-page" style="margin-top: 50px">
                         <h1>@Localizer["Register"]</h1>
+                        
                         <form id="registerForm" asp-action="Register" asp-controller="Account" asp-anti-forgery="true"
                             enctype="multipart/form-data">
 
@@ -114,7 +107,7 @@
                                     <span class="text-danger" asp-validation-for="FirstName"></span>
                                 </label>
                                 <div class="phone-wrapper">
-                                    <input asp-for="FirstName" type="text" class="form-control" placeholder="Имя"
+                                    <input asp-for="FirstName" type="text" class="form-control" placeholder="@Localizer["FirstName"]"
                                         id="firstName">
                                 </div>
                             </div>
@@ -123,7 +116,7 @@
                                     <span class="text-danger" asp-validation-for="UserName"></span>
                                 </label>
                                 <div class="phone-wrapper">
-                                    <input asp-for="UserName" type="text" class="form-control" placeholder="Никнейм"
+                                    <input asp-for="UserName" type="text" class="form-control" placeholder="@Localizer["UserName"]"
                                         id="userName">
                                 </div>
                             </div>
@@ -132,7 +125,7 @@
                                     <span class="text-danger" asp-validation-for="District"></span>
                                 </label>
                                 <div class="phone-wrapper">
-                                    <input asp-for="District" type="text" class="form-control" placeholder="Район"
+                                    <input asp-for="District" type="text" class="form-control" placeholder="@Localizer["District"]"
                                         id="district">
                                 </div>
                             </div>
@@ -142,7 +135,7 @@
                                 </label>
                                 <div class="phone-wrapper">
                                     <input asp-for="BirthDate" type="date" class="form-control"
-                                        placeholder="Дата рождения" id="birthDate">
+                                           placeholder="@Localizer["BirthDate"]" id="birthDate">
                                 </div>
                             </div>
                             <div class="input-group">
@@ -151,11 +144,11 @@
                                 </label>
                                 <div class="phone-wrapper">
                                     <input asp-for="PhoneNumber" type="number" class="form-control"
-                                        placeholder="Номер телефона" id="phone">
+                                           placeholder="@Localizer["PhoneNumber"]" id="phone">
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <label for="file">Фото профиля</label>
+                                <label for="file">@Localizer["ProfilePhoto"]</label>
                                 <input id="file" type="file" name="uploadedFile" class="form-control"
                                     accept=".png, .jpg, .jpeg">
                             </div>
@@ -167,7 +160,7 @@
                                 <div class="password-wrapper">
                                     <input asp-for="Password" type="password"
                                         oninput="validatePassword(); checkPasswords()" name="password"
-                                        class="form-control" placeholder="Пароль" required="required" id="pass">
+                                           class="form-control" placeholder="@Localizer["Password"]" required="required" id="pass">
                                     <span class="toggle-password">
                                         <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon"
                                             id="toggle-password-icon" width="32" height="32">
@@ -181,7 +174,7 @@
                                 </label>
                                 <div class="password-wrapper">
                                     <input asp-for="ConfirmPassword" type="password" class="form-control"
-                                        placeholder="Подтвердите пароль" oninput="checkPasswords()" required="required"
+                                        placeholder="@Localizer["ConfirmPassword"]" oninput="checkPasswords()" required="required"
                                         id="confPass">
                                     <span class="toggle-password2">
                                         <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon"
@@ -190,23 +183,20 @@
                                 </div>
                             </div>
                             <button type="submit" class="loginBtn">
-                                <span class="button-text">СОЗДАТЬ АККАУНТ</span>
+                                <span class="button-text">@Localizer["CreateAccount"]</span>
                                 <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                             </button>
                             @* <button class="nextBtn next-btn">Дальше</button> *@
                         </form>
                         <p class="terms">
-                            Выполняя вход в аккаунт YouCan, вы соглашаетесь <br>
-                            с нашими <a href="#">Условиями</a> и <a href="#">Политикой конфиденциальности</a>.
+                            @Localizer.Links("FooterInfoAgreement", x => Html.ActionLink(x, "TermsOfUse", "Home"), x => Html.ActionLink(x, "PrivacyPolicy", "Home"))
                         </p>
                     </div>
                     <div id="page3" class="aboutUsRegister form-page active">
                         <div class="d-flex flex-column align-items-center">
                             <div class="d-flex justify-content-center align-items-center w-100">
                                 <h2>
-                                    На вашу почту <span id="userEmailAddress" class="text-success"></span> был отправлен
-                                    <br />
-                                    6-значный код для подтверждения
+                                    @Localizer.GetString("Sent", "<span id=\"userEmailAddress\" class=\"text - success\"></span>");
                                 </h2>
                             </div>
 
@@ -220,12 +210,13 @@
                                 <input type="text" maxlength="1" class="code-input">
                             </div>
                             <div class="d-flex flex-column align-items-center gap-5">
-                                <p class="d-flex align-items-center gap-2">Код не пришел?
-                                    <button class="resend-btn" id="resend-btn">Отправить повторно</button>
+                                <p class="d-flex align-items-center gap-2">
+                                    @Localizer["DidNotReceiveTheCode"]
+                                    <button class="resend-btn" id="resend-btn">@Localizer["Resend"]</button>
                                     <span id="timer"></span>
                                 </p>
                                 <button id="confirm-button" class="next-btn">
-                                    <span class="button-text ">ПОДТВЕРДИТЬ</span>
+                                    <span class="button-text ">@Localizer["Confirm"]</span>
                                     <img src="~/authIcons/Loader.gif" alt="Loading..." class="loader">
                                 </button>
 
@@ -252,4 +243,5 @@
     <script src="~/js/auth.js"></script>
     <script src="~/js/register-validation.js"></script>
     <script src="~/js/registerFormHandling.js"></script>
+    @await Html.PartialAsync("_LanguageSwitchScript")
 }
