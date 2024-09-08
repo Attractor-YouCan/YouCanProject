@@ -1006,7 +1006,7 @@ namespace YouCan.Repository.Migrations
                             Name = "Reading and Understanding",
                             ParentId = 2,
                             SubjectType = 1,
-                            UserTestType = 1
+                            UserTestType = 0
                         },
                         new
                         {
@@ -1025,6 +1025,131 @@ namespace YouCan.Repository.Migrations
                             ParentId = 5,
                             SubjectType = 1,
                             UserTestType = 0
+                        });
+                });
+
+            modelBuilder.Entity("YouCan.Entities.SubjectLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subtitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("SubjectLocalizations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Culture = "ru",
+                            SubjectId = 1,
+                            Title = "Математика"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Culture = "ky",
+                            SubjectId = 1,
+                            Title = "Математика"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Culture = "ru",
+                            SubjectId = 2,
+                            Title = "Русский язык"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Culture = "ky",
+                            SubjectId = 2,
+                            Title = "Орус тили"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Culture = "ru",
+                            SubjectId = 3,
+                            Title = "Математика 1"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Culture = "ky",
+                            SubjectId = 3,
+                            Title = "Математика 1"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Culture = "ru",
+                            SubjectId = 4,
+                            Title = "Русский язык"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Culture = "ky",
+                            SubjectId = 4,
+                            Title = "Орус тили"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Culture = "ru",
+                            SubjectId = 5,
+                            Title = "Аналогия"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Culture = "ru",
+                            SubjectId = 6,
+                            Title = "Грамматика"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Culture = "ru",
+                            SubjectId = 7,
+                            Title = "Чтение и понимание"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Culture = "ru",
+                            SubjectId = 8,
+                            Title = "Аналогия"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Culture = "ru",
+                            SubjectId = 9,
+                            Title = "Дополнение предложений"
                         });
                 });
 
@@ -1544,6 +1669,17 @@ namespace YouCan.Repository.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("YouCan.Entities.SubjectLocalization", b =>
+                {
+                    b.HasOne("YouCan.Entities.Subject", "Subject")
+                        .WithMany("SubjectLocalizations")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("YouCan.Entities.Test", b =>
                 {
                     b.HasOne("YouCan.Entities.Lesson", "Lesson")
@@ -1689,6 +1825,8 @@ namespace YouCan.Repository.Migrations
                     b.Navigation("Lessons");
 
                     b.Navigation("SubSubjects");
+
+                    b.Navigation("SubjectLocalizations");
                 });
 
             modelBuilder.Entity("YouCan.Entities.Tariff", b =>

@@ -5,6 +5,7 @@ using YouCan.Mvc.Areas.Train.Dto;
 using YouCan.Mvc.Services;
 using YouCan.Service;
 using YouCan.Entities;
+using System.Globalization;
 
 namespace YouCan.Mvc.Areas.Train.Controllers;
 
@@ -44,7 +45,7 @@ public class QuestionsController : Controller
                 {
                     model.Answers.Add(new AnswerDto());
                 }
-                ViewBag.Subject = subject;
+                LoadViewBag(subject);
                 return View(model);
             }
         }
@@ -100,7 +101,7 @@ public class QuestionsController : Controller
                 else if(question.Answers.Count > 4)
                 {
                     ModelState.AddModelError("", "Ваша задача должна содержать 4 вариантов ответа");
-                    ViewBag.Subject = subject;
+                    LoadViewBag(subject);
                     return View(question);
                 }
                 else
@@ -110,12 +111,20 @@ public class QuestionsController : Controller
                         question.Answers.Add(new AnswerDto());
                     }
                     ModelState.AddModelError("", "Ваша задача должна содержать 4 вариантов ответа");
-                    ViewBag.Subject = subject;
+                    LoadViewBag(subject);
                     return View(question);
                 }
             }
         }
         return RedirectToAction("Index", "Test");
+    }
+    private void LoadViewBag(Subject subject)
+    {
+        ViewBag.Subject = subject;
+        SubjectLocalization localization = (subject.SubjectLocalizations?.Where(e => e.Culture == CultureInfo.CurrentCulture.TwoLetterISOLanguageName).FirstOrDefault()) ?? (subject.SubjectLocalizations?.FirstOrDefault());
+        ViewBag.SubjectTitle = localization?.Title ?? subject.Name;
+        ViewBag.SubjectSubtitle = localization?.Subtitle;
+        ViewBag.SubjectDescription = localization?.Description;
     }
     public async Task<IActionResult> Created(int questionId)
     {

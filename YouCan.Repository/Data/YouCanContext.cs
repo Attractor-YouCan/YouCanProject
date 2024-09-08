@@ -27,13 +27,22 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<AdminAction> AdminActions { get; set; }
     public DbSet<LessonTime> LessonTimes { get; set; }
     public DbSet<UserExperience> UserExperiences { get; set; }
+    public DbSet<SubjectLocalization> SubjectLocalizations { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.EnableSensitiveDataLogging();
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<SubjectLocalization>()
+            .HasOne(t => t.Subject);
         modelBuilder.Entity<Subject>()
             .HasMany(t => t.SubSubjects)
             .WithOne(t => t.Parent)
             .HasForeignKey(t => t.ParentId);
+        modelBuilder.Entity<Subject>()
+            .HasMany(t => t.SubjectLocalizations);
         modelBuilder.Entity<OrtInstruction>()
             .HasOne(t => t.Test)
             .WithOne(o => o.OrtInstruction)

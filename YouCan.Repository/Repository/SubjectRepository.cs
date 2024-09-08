@@ -29,6 +29,7 @@ public class SubjectRepository : IRepository<Subject>
             .Include(s => s.SubSubjects)
             .Include(s => s.Lessons)
                 .ThenInclude(l => l.LessonModules)
+            .Include(s => s.SubjectLocalizations)
             .AsEnumerable();
     }
 

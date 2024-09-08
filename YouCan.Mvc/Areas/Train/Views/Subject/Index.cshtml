@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
 @inject IViewLocalizer Localizer
 
 @using YouCan.Services
@@ -54,7 +55,7 @@
                                     <img src=@subtopic.ImageUrl
                                          class="card-img-top"
                                          alt="@subtopic.Name"/>
-                                    <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                    <h5 class="card-title fs-5 mt-2">@(subtopic.SubjectLocalizations?.Where(e => e.Culture == CultureInfo.CurrentCulture.TwoLetterISOLanguageName).FirstOrDefault()?.Title ?? subtopic.SubjectLocalizations?.FirstOrDefault()?.Title ?? subtopic.Name)</h5>
                                 </div>
                             </div>
                         </a>
@@ -72,7 +73,7 @@
                                             <img src=@subtopic.ImageUrl
                                                  class="card-img-top"
                                                  alt="@subtopic.Name" />
-                                            <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                            <h5 class="card-title fs-5 mt-2">@(subtopic.SubjectLocalizations?.Where(e => e.Culture == CultureInfo.CurrentCulture.TwoLetterISOLanguageName).FirstOrDefault()?.Title ?? subtopic.SubjectLocalizations?.FirstOrDefault()?.Title ?? subtopic.Name)</h5>
                                         </div>
                                     </div>
                                 </a>
@@ -85,7 +86,7 @@
                                             <img src=@subtopic.ImageUrl
                                                  class="card-img-top"
                                                  alt="@subtopic.Name" />
-                                            <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                            <h5 class="card-title fs-5 mt-2">@(subtopic.SubjectLocalizations?.Where(e => e.Culture == CultureInfo.CurrentCulture.TwoLetterISOLanguageName).FirstOrDefault()?.Title ?? subtopic.SubjectLocalizations?.FirstOrDefault()?.Title ?? subtopic.Name)</h5>
                                         </div>
                                     </div>
                                 </a>
@@ -100,7 +101,7 @@
                                         <img src=@subtopic.ImageUrl
                                              class="card-img-top"
                                              alt="@subtopic.Name" />
-                                        <h5 class="card-title fs-5 mt-2">@subtopic.Name</h5>
+                                        <h5 class="card-title fs-5 mt-2">@(subtopic.SubjectLocalizations?.Where(e => e.Culture == CultureInfo.CurrentCulture.TwoLetterISOLanguageName).FirstOrDefault()?.Title ?? subtopic.SubjectLocalizations?.FirstOrDefault()?.Title ?? subtopic.Name)</h5>
                                     </div>
                                 </div>
                             </a>

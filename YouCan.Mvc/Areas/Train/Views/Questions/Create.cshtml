@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@using System.Globalization
 
 @model QuestionDto
 @{
@@ -19,10 +20,12 @@
             </a>
             <div class="mx-2">
                 <div class="mx-5">
-                    <h1 class="text-center fs-4">@ViewBag.Subject.Name</h1>@* Поле title для темы *@
-                    <p class="text-center fw-bold">Каждая аналогия в тесте состоит из пяти пар слов.</p>@* Поле subtitle для темы *@
+                    <h1 class="text-center fs-4">
+                        @ViewBag.SubjectTitle
+                    </h1>@* Поле title для темы *@
+                    <p class="text-center fw-bold">@ViewBag.SubjectSubtitle</p>@* Поле subtitle для темы *@
                     <p class="text-center fs-8 fw-bold text-secondary-theme">@* поле description для темы *@
-                        Первая пара выделена жирным шрифтом.
+                        @ViewBag.SubjectDescription
                     </p>
                 </div>
                 <div class="text-center mb-5 row align-items-center m-0">

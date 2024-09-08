@@ -10,4 +10,5 @@ public class Subject : EntityBase
     public List<Subject>? SubSubjects { get; set; }
     public List<Lesson>? Lessons { get; set; }
     public UserTestType UserTestType { get; set; } = UserTestType.Question;
+    public List<SubjectLocalization>? SubjectLocalizations { get; set; }
 }

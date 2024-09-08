@@ -20,16 +20,13 @@
             </a>
             <div class="mx-2">
                 <div class="mx-5">
-                    <h1 class="text-center fs-4">@ViewBag.Subject.Name</h1>@* Поле title для темы *@
-                    <p class="text-center fw-bold">
-                        @* Поле subtitle для темы *@
-                        В этом разделе оценивают умение внимательно читать различные
-                        тексты, понимать прочитанное и размышлять о нём.
-                    </p>
+                    <h1 class="text-center fs-4">
+                        @ViewBag.SubjectTitle
+                    </h1>@* Поле title для темы *@
+                    <p class="text-center fw-bold">@ViewBag.SubjectSubtitle</p>@* Поле subtitle для темы *@
                     <p class="text-center fs-8 fw-bold text-secondary-theme">
                         @* поле description для темы *@
-                        Фрагменты текста должны быть объемом от
-                        400 до 850 слов.
+                        @ViewBag.SubjectDescription
                     </p>
                 </div>
                 <input asp-for="SubjectId" class="d-none" />
