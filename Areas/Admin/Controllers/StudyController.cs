@@ -75,6 +75,8 @@ public class StudyController : Controller
         W3RootFileManager fileManager = new W3RootFileManager(_environment);
         if (model != null)
         {
+            if (_lessonService.GetAll().Any(l => l.SubjectId == model.SubjectId && l.LessonLevel == model.LessonLevel))
+                return RedirectToAction("AllLessons", new {model.SubjectId});
             Lesson lesson = new Lesson()
             {
                 Title = model.LessonTitle,
