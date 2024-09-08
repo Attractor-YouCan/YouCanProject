@@ -5,33 +5,33 @@ namespace YouCan.Mvc.ViewModels.Account;
 
 public class RegisterViewModel
 {
-    [Required(ErrorMessage = "Заполните поле Эл почта")]
-    [EmailAddress(ErrorMessage = "Некорректный адрес электронной почты")]
-    [Remote(action: "CheckEmail", controller:"Validation", areaName: "", ErrorMessage = "Данный Email уже зарегистрирован!")]
+    [Required(ErrorMessage = "EmailRequired")]
+    [EmailAddress(ErrorMessage = "EmailAddress")]
+    [Remote(action: "CheckEmail", controller:"Validation", areaName: "", ErrorMessage = "RemoteCheckEmail")]
     public string Email { get; set; }
-    [Required(ErrorMessage = "Заполните поле Номер телефона")]
-    [RegularExpression(@"^0\d{9}$", ErrorMessage = "Заполните в формате x-цифра(0-9): 0 xxx xx xx xx")]
-    [Remote(action: "CheckPhoneNumber", controller: "Validation", areaName: "", ErrorMessage = "Данный Номер телефона уже зарегистрирован!")]
+    [Required(ErrorMessage = "PhoneNumberRequired")]
+    [RegularExpression(@"^0\d{9}$", ErrorMessage = "PhoneNumberRegularExpression")]
+    [Remote(action: "CheckPhoneNumber", controller: "Validation", areaName: "", ErrorMessage = "RemoteCheckPhoneNumber")]
     public string PhoneNumber { get; set; }
-    [Required(ErrorMessage = "Заполните поле Никнейм")]
-    [Remote(action: "CheckUsername", controller: "Validation", areaName: "", ErrorMessage = "Данный Никнейм уже занят!")]
+    [Required(ErrorMessage = "UserNameRequired")]
+    [Remote(action: "CheckUsername", controller: "Validation", areaName: "", ErrorMessage = "RemoteCheckUserName")]
     [RegularExpression(@"^\S+(?:\S+)?$", ErrorMessage = "Provide with no space!")]
     public string UserName { get; set; }
-    [Required(ErrorMessage = "Заполните поле Фамилия")]
+    [Required(ErrorMessage = "LastNameRequired")]
     public string LastName { get; set; }
-    [Required(ErrorMessage = "Заполните поле Имя")]
+    [Required(ErrorMessage = "FirstNameRequired")]
     public string FirstName { get; set; }
-    [Required(ErrorMessage = "Заполните поле Пароль")]
+    [Required(ErrorMessage = "PasswordRequired")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
-    [Required(ErrorMessage = "Заполните поле Подтвердить пароль")]
+    [Required(ErrorMessage = "ConfirmPasswordRequired")]
     [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "Не совпадают пароли, попробуйте еще раз!")]
+    [Compare("Password", ErrorMessage = "ConfirmPasswordCompare")]
     public string ConfirmPassword { get; set; }
-    [Required(ErrorMessage = "Заполните поле Район!")]
+    [Required(ErrorMessage = "DistrictRequired")]
     public string District { get; set; }
-    [Required(ErrorMessage = "Заполните поле Дата рождения!")]
-    [Remote(action: "CheckBirthDate", controller: "Validation", areaName: "", ErrorMessage = "Дата рождение не может быть в будущем или не ранее 100 лет!")]
+    [Required(ErrorMessage = "BirthDateRequired")]
+    [Remote(action: "CheckBirthDate", controller: "Validation", areaName: "", ErrorMessage = "RemoteCheckBirthDate")]
     public DateTime BirthDate { get; set; }
     
 }
