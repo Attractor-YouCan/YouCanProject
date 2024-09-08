@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="YourCode" xml:space="preserve">
+    <value>Сиздин кодуңуз</value>
+  </data>
+  <data name="WrongCode" xml:space="preserve">
+    <value>Туура эмес код!</value>
+  </data>
+  <data name="Wrong" xml:space="preserve">
+    <value>Бир нерсе туура эмес! Маалыматты текшериңиз</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Колдонуучу табылган жок!</value>
+  </data>
+  <data name="EnterCode" xml:space="preserve">
+    <value>Кодду киргизиңиз!</value>
+  </data>
+</root>
