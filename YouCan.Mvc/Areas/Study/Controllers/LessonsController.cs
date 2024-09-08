@@ -16,7 +16,7 @@ public class LessonsController : Controller
     private ICrudService<UserLessons> _userLessonService;
     private UserManager<User> _userManager;
     private ICrudService<LessonTime> _lessonTimeService;
-    private IStringLocalizer<AccountController> _localizer;
+    private IStringLocalizer<LessonsController> _localizer;
     public LessonsController(ICrudService<Lesson> lessonService,
         ICrudService<UserLessons> userLessonService,
         ICrudService<LessonTime> lessonTimeService,
