@@ -1,17 +1,17 @@
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model List<League>
 
 @{
-ViewBag.Title = "Combined Rating Page";
-Layout = "_NavBar";
+    ViewBag.Title = Localizer["CombinedRatingPage"];
+    Layout = "_NavBar";
 }
 
 <link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" />
-<link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-<div class="container  rating-main">
+<div class="container rating-main">
     <!-- Header Section -->
     <div class="header">
 
@@ -27,9 +27,8 @@ Layout = "_NavBar";
         </div>
     </div>
 
-
     <main class="main">
-        <div class="swiper swiper1 ">
+        <div class="swiper swiper1">
             <div class="swiper-wrapper">
                 @foreach (var league in Model)
                 {
@@ -42,108 +41,98 @@ Layout = "_NavBar";
         </div>
     </main>
 
+    <div class="league-title">@Localizer[$"League{Model.First().LeagueName}"]</div>
 
+    <div class="leaderboard"></div>
 
-   
-    <div class="league-title">Бронзовая лига</div>
-
-    
-    <div class="leaderboard">
-     
-    </div>
-
-    
     <div class="footer-button">
-        <button class="floating-button">Где я?</button>
+        <button class="floating-button">@Localizer["WhereAmIButton"]</button>
     </div>
-
 </div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    const leagueNames = {
-        bronze: "Бронзовая лига",
-        silver: "Серебряная лига",
-        gold: "Золотая лига",
-        platinum: "Платиновая лига",
-        diamond: "Алмазная лига"
-    };
+        const leagueNames = {
+            bronze: "@Localizer["LeagueBronze"]",
+            silver: "@Localizer["LeagueSilver"]",
+            gold: "@Localizer["LeagueGold"]",
+            platinum: "@Localizer["LeaguePlatinum"]",
+            diamond: "@Localizer["LeagueDiamond"]"
+        };
 
-    $(document).ready(function () {
-        var debounceTimeout;
+        $(document).ready(function () {
+            var debounceTimeout;
 
-        function updateLeagueAndUsers() {
-            clearTimeout(debounceTimeout);
+            function updateLeagueAndUsers() {
+                clearTimeout(debounceTimeout);
 
-            debounceTimeout = setTimeout(function () {
-                var activeSlide = $('.swiper-slide.swiper-slide-active');
-                var leagueName = activeSlide.find('img').data('league');
+                debounceTimeout = setTimeout(function () {
+                    var activeSlide = $('.swiper-slide.swiper-slide-active');
+                    var leagueName = activeSlide.find('img').data('league');
 
-                $('.league-title').text(leagueNames[leagueName]);
+                    $('.league-title').text(leagueNames[leagueName]);
 
-                $.ajax({
-                    url: '@Url.Action("GetUsersByLeague", "League")',
-                    type: 'GET',
-                    data: { leagueName: leagueName },
-                    success: function (data) {
-                        $(".loader").hide(); 
+                    $.ajax({
+                        url: '@Url.Action("GetUsersByLeague", "League")',
+                        type: 'GET',
+                        data: { leagueName: leagueName },
+                        success: function (data) {
+                            $(".loader").hide();
 
-                        console.log("Received data:", data);
+                            console.log("Received data:", data);
 
-                     
-                        var users = data.$values;
+                            var users = data.$values;
 
-                        if (Array.isArray(users)) {
-                            var leaderboardHtml = '';
-                            $.each(users, function (index, user) {
-                                leaderboardHtml += `
-                            <div class="row">
-                                <div class="col-1 position">${index + 1}</div>
-                                <div class="col-7 user-info">
-                                    <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
-                                    <span>${user.fullName}</span>
-                                </div>
-                                <div class="col-2 score">${user.userLessonScore} очков</div>
-                            </div>`;
-                            });
-                            $('.leaderboard').html(leaderboardHtml);
-                        } else {
-                            console.error("Unexpected data format received from server.");
+                            if (Array.isArray(users)) {
+                                var leaderboardHtml = '';
+                                $.each(users, function (index, user) {
+                                    leaderboardHtml += `
+                                    <div class="row">
+                                        <div class="col-1 position">${index + 1}</div>
+                                        <div class="col-7 user-info">
+                                            <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
+                                            <span>${user.fullName}</span>
+                                        </div>
+                                        <div class="col-2 score">${user.userLessonScore} очков</div>
+                                    </div>`;
+                                });
+                                $('.leaderboard').html(leaderboardHtml);
+                            } else {
+                                console.error("Unexpected data format received from server.");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $(".loader").hide();
+                            console.error("An error occurred while fetching the users: ", error);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        $(".loader").hide(); 
-                        console.error("An error occurred while fetching the users: ", error);
-                    }
-                });
-            }, 300); 
-        }
-
-     
-        var swiper = new Swiper(".swiper", {
-            slidesPerView: 'auto',
-            effect: "coverflow",
-            grabCursor: true,
-            centeredSlides: true,
-            slideToClickedSlide: true,
-            coverflowEffect: {
-                rotate: 0,
-                stretch: -10,
-                depth: 150,
-                modifier: 5,
-                slideShadows: true
-            },
-            loop: true,
-            on: {
-                slideChange: function () {
-                    updateLeagueAndUsers();
-                }
+                    });
+                }, 300);
             }
-        });
 
-     
-        updateLeagueAndUsers();
-    });
-</script>
+            var swiper = new Swiper(".swiper", {
+                slidesPerView: 'auto',
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slideToClickedSlide: true,
+                coverflowEffect: {
+                    rotate: 0,
+                    stretch: -10,
+                    depth: 150,
+                    modifier: 5,
+                    slideShadows: true
+                },
+                loop: true,
+                on: {
+                    slideChange: function () {
+                        updateLeagueAndUsers();
+                    }
+                }
+            });
+
+            updateLeagueAndUsers();
+        });
+    </script>
 }
