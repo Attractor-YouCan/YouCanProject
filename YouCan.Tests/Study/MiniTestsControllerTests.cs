@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Study.Controllers;
-using YouCan.Areas.Study.ViewModels;
+using YouCan.Mvc.Areas.Study.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
-using YouCan.Tests.Services;
+using YouCan.Service;
+using YouCan.Mvc.Areas.Ort.ViewModels;
 
 namespace YouCan.Tests;
 

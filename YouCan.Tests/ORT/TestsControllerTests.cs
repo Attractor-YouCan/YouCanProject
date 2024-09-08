@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.ORT.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 using System.Security.Claims;
-using YouCan.Areas.Study.ViewModels;
-using YouCan.ViewModels;
-using YouCan.ViewModels.Account;
+using YouCan.Mvc.Areas.Ort.Controllers;
+using YouCan.Mvc.Areas.Ort.ViewModels;
 
 namespace YouCan.Tests.ORT
 {

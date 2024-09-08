@@ -2,11 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
-using YouCan.Areas.Train.Dto;
+using YouCan.Mvc.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.Dto;
 using YouCan.Entities;
-using YouCan.Service.Service;
-using YouCan.Services;
+using YouCan.Service;
 using YouCan.Tests.Services;
 
 namespace YouCan.Tests.Train;
@@ -40,7 +39,7 @@ public class QuestionsControllerTests
     {
         // Arrange
         var subjectId = 1;
-        var subject = new Subject { Id = subjectId, SubjectType = SubjectType.Child, UserTestType = Entites.Models.UserTestType.Test };
+        var subject = new Subject { Id = subjectId, SubjectType = SubjectType.Child, UserTestType = Entities.UserTestType.Test };
 
         _subjectCrudServiceMock.Setup(s => s.GetById(subjectId)).ReturnsAsync(subject);
 

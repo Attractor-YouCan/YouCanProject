@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
-using YouCan.Areas.Train.Dto;
+using YouCan.Mvc.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.Dto;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 
 namespace YouCan.Tests.Train;
@@ -40,7 +40,7 @@ public class QuestionsWithTextControllerTests
         {
             Id = subjectId,
             SubjectType = SubjectType.Child,
-            UserTestType = Entites.Models.UserTestType.Question
+            UserTestType = Entities.UserTestType.Question
         };
 
         _subjectCrudServiceMock.Setup(s => s.GetById(subjectId)).ReturnsAsync(subject);
@@ -49,7 +49,7 @@ public class QuestionsWithTextControllerTests
         var result = await _controller.CreateAsync(subjectId);
 
         // Assert
-        if (subject.UserTestType == Entites.Models.UserTestType.Question)
+        if (subject.UserTestType == Entities.UserTestType.Question)
         {
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Create", redirectResult.ActionName);
@@ -97,7 +97,7 @@ public class QuestionsWithTextControllerTests
             }
         };
 
-        var subject = new Subject { Id = 1, SubjectType = SubjectType.Child, UserTestType = Entites.Models.UserTestType.Test };
+        var subject = new Subject { Id = 1, SubjectType = SubjectType.Child, UserTestType = Entities.UserTestType.Test };
         _subjectCrudServiceMock.Setup(s => s.GetById(testDto.SubjectId)).ReturnsAsync(subject);
         _userManagerMock.Setup(um => um.GetUserId(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns("1");
 
@@ -129,7 +129,7 @@ public class QuestionsWithTextControllerTests
             }
         };
 
-        var subject = new Subject { Id = 1, SubjectType = SubjectType.Child, UserTestType = Entites.Models.UserTestType.Test };
+        var subject = new Subject { Id = 1, SubjectType = SubjectType.Child, UserTestType = Entities.UserTestType.Test };
         _subjectCrudServiceMock.Setup(s => s.GetById(testDto.SubjectId)).ReturnsAsync(subject);
 
         // Act

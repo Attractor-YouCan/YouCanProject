@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using YouCan.Areas.Admin.Controllers;
-using YouCan.Areas.Admin.ViewModels;
+using YouCan.Mvc.Areas.Admin.Controllers;
+using YouCan.Mvc.Areas.Admin.ViewModels;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests.Admin;
 

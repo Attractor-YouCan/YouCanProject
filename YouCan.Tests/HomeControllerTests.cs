@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using YouCan.Controllers;
+using YouCan.Mvc.Controllers;
 
 namespace YouCan.Tests;
 

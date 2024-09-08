@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using YouCan.Entites.Models;
 using YouCan.Entities;
-using YouCan.Mvc;
-using YouCan.Service.Service;
-using YouCan.Tests.Services;
-using YouCan.ViewModels;
+using YouCan.Mvc.Controllers;
+using YouCan.Mvc.Services.Email;
+using YouCan.Mvc.ViewModels.Account;
+using YouCan.Service;
 
 public class AccountControllerTests
 {
-    private readonly Mock<IUserCRUD> _userServiceMock;
+    private readonly Mock<IUserCrud> _userServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<SignInManager<User>> _signInManagerMock;
     private readonly Mock<IWebHostEnvironment> _environmentMock;
@@ -26,7 +25,7 @@ public class AccountControllerTests
 
     public AccountControllerTests()
     {
-        _userServiceMock = new Mock<IUserCRUD>();
+        _userServiceMock = new Mock<IUserCrud>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null);

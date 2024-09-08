@@ -2,9 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.ORT.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
+using YouCan.Mvc.Areas.Ort.Controllers;
 
 namespace YouCan.Tests.ORT;
 
