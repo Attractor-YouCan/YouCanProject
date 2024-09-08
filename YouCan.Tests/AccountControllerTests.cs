@@ -8,7 +8,6 @@ using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Service.Service;
-using YouCan.Tests.Services;
 using YouCan.ViewModels;
 
 public class AccountControllerTests
@@ -189,7 +188,8 @@ public class AccountControllerTests
             twoFactorService,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
-            _tariffsMock.Object);
+            _tariffsMock.Object,
+            _userExperienceMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
         {

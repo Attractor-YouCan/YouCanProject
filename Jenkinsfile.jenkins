@@ -1,21 +1,22 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()
-    }
+
     environment {
         DB_USER = credentials('dbUser')
         DB_PASSWORD = credentials('passwordDb')
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Attractor-YouCan/YouCanProject.git'
+                git url: 'https://github.com/Attractor-YouCan/YouCanProject.git', branch: 'main'
             }
         }
+
         stage('Prepare Environment') {
             steps {
                 script {
+                    // Создаем файл с переменными окружения для Docker Compose
                     sh """
                         echo "DB_USER=${DB_USER}" > variables.env
                         echo "DB_PASSWORD=${DB_PASSWORD}" >> variables.env
@@ -23,65 +24,65 @@ pipeline {
                 }
             }
         }
+
+        stage('Update Configuration') {
+            steps {
+                script {
+                    // Выполняем обновление appsettings.json
+                    sh '''
+                        echo "Updating appsettings.json files with environment variables"
+
+                        # Убедимся, что переменные окружения установлены
+                        if [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then
+                          echo "Error: DB_USER and DB_PASSWORD must be set"
+                          exit 1
+                        fi
+
+                        # Обновление всех appsettings.json файлов в проекте
+                        find . -name "appsettings.json" -exec sed -i "s/\\\${DB_USER}/${DB_USER}/g" {} \\;
+                        find . -name "appsettings.json" -exec sed -i "s/\\\${DB_PASSWORD}/${DB_PASSWORD}/g" {} \\;
+
+                        echo "Update complete"
+                    '''
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
-                    sh 'docker-compose down || true'
-                    sh 'docker-compose build --no-cache'
-                    sh 'docker-compose up -d'
-                    sh 'docker-compose ps'
-                    sh 'docker-compose logs web'
+                    sh 'docker-compose build'
                 }
             }
         }
         stage('Run Tests') {
             steps {
                 script {
-                    sh '''
-                    # Запуск тестов в контейнере, который содержит .NET SDK
-                    docker-compose run --rm test
-                    if [ $? -ne 0 ]; then
-                        echo "Ошибка при выполнении тестов"
-                        exit 1
-                    fi
-                    '''
+                    // Выполняем unit-тесты
+                    sh 'dotnet test YouCan.Tests/YouCan.Tests.csproj --logger:trx'
                 }
             }
         }
         stage('Deploy') {
-            when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
-            }
             steps {
                 script {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no user@188.166.120.70 '
-                    cd /var/lib/jenkins/workspace/YouCanN1
-                    docker-compose down
-                    docker-compose pull
-                    docker-compose up -d
-                    docker exec web printenv
-                    '
-                    '''
+                    sh 'docker-compose up -d'
                 }
             }
         }
     }
     post {
-        always {
-            echo 'Процесс завершен.'
-            script {
-                sh 'docker-compose down'
-            }
+        success {
+            echo 'Build and deployment successful!'
         }
         failure {
-            echo 'Процесс завершился с ошибкой.'
+            echo 'Build or deployment failed.'
         }
-        success {
-            echo 'Процесс завершился успешно.'
+        always {
+            script {
+                // Очищаем только неиспользуемые Docker образы и остановленные контейнеры
+                sh 'docker image prune -f'
+                sh 'docker container prune -f'
+            }
         }
     }
 }
-
