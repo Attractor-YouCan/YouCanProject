@@ -17,6 +17,7 @@ services:
       - webnet
     depends_on:
       - postgresDb
+    command: []
 
   postgresDb:
     image: postgres:latest
@@ -38,7 +39,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - web
     networks:
