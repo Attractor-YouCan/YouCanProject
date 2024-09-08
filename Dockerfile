@@ -28,5 +28,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
+# Указание порта, который будет использоваться
+EXPOSE 80
+
 # Запуск приложения
 ENTRYPOINT ["dotnet", "YouCan.Mvc.dll"]
