@@ -31,20 +31,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - webnet
-
-  migrations:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: migrations
-    entrypoint: ["dotnet", "ef", "database", "update", "--project", "/app/YouCan.Repository/YouCan.Repository.csproj"]
-    depends_on:
-      - postgresDb
-    env_file:
-      - variables.env
-    networks:
-      - webnet
-
+    
   nginx:
     image: nginx:latest
     container_name: nginx
