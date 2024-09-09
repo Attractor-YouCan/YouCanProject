@@ -20,7 +20,7 @@ public class AccountControllerTests
     private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
     private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
     private readonly Mock<ICRUDService<Tariff>> _tariffsMock;
-    private readonly TwoFactorService _twoFactorService;  
+    private readonly Mock<TwoFactorService> _twoFactorServiceMock;  
     private readonly AccountController _controller;
     private readonly Mock<ICRUDService<UserExperience>> _userExperienceMock;
 
@@ -38,15 +38,16 @@ public class AccountControllerTests
         _environmentMock = new Mock<IWebHostEnvironment>();
         _userLevelMock = new Mock<ICRUDService<UserLevel>>();
         _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
+        _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
         _tariffsMock = new Mock<ICRUDService<Tariff>>();
-        _twoFactorService = new TwoFactorService();  
+        _twoFactorServiceMock = new Mock<TwoFactorService>();  
 
         _controller = new AccountController(
             _userServiceMock.Object,
             _userManagerMock.Object,
             _signInManagerMock.Object,
             _environmentMock.Object,
-            _twoFactorService,
+            _twoFactorServiceMock.Object,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,
@@ -189,7 +190,8 @@ public class AccountControllerTests
             twoFactorService,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
-            _tariffsMock.Object);
+            _tariffsMock.Object,
+            _userExperienceMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
         {
