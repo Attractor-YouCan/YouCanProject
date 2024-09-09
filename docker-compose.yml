@@ -17,7 +17,7 @@ services:
       - webnet
     depends_on:
       - postgresDb
-    command: ["dotnet", "ef", "database update", "--project", "YouCan.Repository/YouCan.Repository.csproj", "--startup-project", "YouCan.Mvc.csproj"]
+    entrypoint: ["sh", "-c", "dotnet ef database update --project YouCan.Repository/YouCan.Repository.csproj --startup-project YouCan.Mvc.csproj && dotnet YouCan.Mvc.dll"]
 
   postgresDb:
     image: postgres:latest
@@ -32,7 +32,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - webnet
-  
+
   nginx:
     image: nginx:latest
     container_name: nginx
