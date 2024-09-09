@@ -17,8 +17,7 @@ services:
       - webnet
     depends_on:
       - postgresDb
-    command: >
-      sh -c "dotnet ef database update --project YouCan.Repository/YouCan.Repository.csproj --startup-project YouCan.Mvc.csproj && dotnet YouCan.Mvc.dll"
+    command: ["dotnet", "ef", "database update", "--project", "YouCan.Repository/YouCan.Repository.csproj", "--startup-project", "YouCan.Mvc.csproj"]
 
   postgresDb:
     image: postgres:latest
