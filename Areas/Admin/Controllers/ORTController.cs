@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Drawing;
 using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entities;
@@ -33,6 +34,25 @@ public class ORTController : Controller
         _answerManager = answerManager;
     }
     public IActionResult Index() => View(_ortManager.GetAll().ToList());
+
+    [HttpGet]
+    public IActionResult CreateOrt()
+    {
+        ViewBag.MaxOrtLevel = _ortManager.GetAll().Max(o => o.OrtLevel);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrt(OrtTest ort)
+    {
+        if (ModelState.IsValid)
+        {
+            await _ortManager.Insert(ort);
+            return RedirectToAction("Index");   
+        }
+        return BadRequest();
+    }
+
     public async Task<IActionResult> Details(int ortId)
     {
         var ort = await  _ortManager.GetById(ortId);
