@@ -11,12 +11,22 @@
         <div class="creationPage">
             <input asp-for="TestId" type="hidden" value="@Model.TestId" />
             <h1 class="mt-4">
-                <label for="lessonTitle">Описание теста</label>
+                <label class="" for="lessonTitle">Описание теста</label>
                 <input asp-for="Text" type="text" class="form-control-lg" id="lessonTitle" placeholder="Описание теста"/>
             </h1>
-            <p class="subtitle mt-3">
-                <label for="lessonTitle2">Длительность в минутах</label>
+            <p class="subtitle mt-3 mb-3">
+                <label class="form-label" for="lessonTitle2">Длительность в минутах</label>
                 <textarea asp-for="TimeForTestInMin" class="form-control" id="lessonTitle2" placeholder="" style="height: 50px" >@Model.TimeForTestInMin</textarea>
+            </p>
+            <p class="subtitle mt-3 mb-3">
+                <label class="form-label" for="lessonTitle2">Выберите предмет теста</label>
+                <select asp-for="SubjectId" class="form-select">
+                    <option></option>
+                    @foreach (var subject in (List<Subject>)ViewBag.Subjects)
+                    {
+                        <option value="@subject.Id">@subject.Name</option>
+                    }
+                </select>
             </p>
         </div>
         <div class="creationPage">
@@ -169,8 +179,9 @@
             const formData = new FormData();
 
             const textEl = document.querySelector('input[name="Text"]');
-            const timeForTestEl = document.querySelector('input[name="TimeForTestInMin"]');
+            const timeForTestEl = document.querySelector('textarea[name="TimeForTestInMin"]');
             const testIdEl = document.querySelector('input[name="TestId"]');
+            const subjectEl = document.querySelector('select[name="SubjectId"]');
 
 
             if (textEl) {
@@ -181,6 +192,9 @@
             }
             if (testIdEl) {
                 formData.append('TestId', testIdEl.value);
+            }
+            if (subjectEl) {
+                formData.append('SubjectId', subjectEl.value);
             }
 
             const questionForms = document.querySelectorAll('.question');

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Drawing;
 using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entities;
@@ -33,6 +34,25 @@ public class ORTController : Controller
         _answerManager = answerManager;
     }
     public IActionResult Index() => View(_ortManager.GetAll().ToList());
+
+    [HttpGet]
+    public IActionResult CreateOrt()
+    {
+        ViewBag.MaxOrtLevel = _ortManager.GetAll().Max(o => o.OrtLevel);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrt(OrtTest ort)
+    {
+        if (ModelState.IsValid)
+        {
+            await _ortManager.Insert(ort);
+            return RedirectToAction("Index");   
+        }
+        return BadRequest();
+    }
+
     public async Task<IActionResult> Details(int ortId)
     {
         var ort = await  _ortManager.GetById(ortId);
@@ -86,6 +106,14 @@ public class ORTController : Controller
             await _instructionsManager.Insert(instruction);
             test.OrtInstructionId = instruction.Id;
             await _testsManager.Update(test);
+
+            var ort = await _ortManager.GetById(test.OrtTestId.Value);
+            if (ort != null)
+            {
+                ort.TimeForTestInMin += test.TimeForTestInMin;
+                await _ortManager.Update(ort);
+            }
+
             return RedirectToAction("Details", new { ortId = test.OrtTestId });
         }
         return BadRequest();
@@ -146,84 +174,6 @@ public class ORTController : Controller
         }
         return NotFound();
     }
-    [HttpGet]
-    public async Task<IActionResult> EditQuestion(int questionId)
-    {
-        var question = await _questionManager.GetById(questionId);
-
-        if (question == null)
-        {
-            return NotFound();
-        }
-
-        QuestionModel questionModel = new()
-        {
-            QuestionId = questionId,
-            Instruction = question.Instruction,
-            Text = question.Content,
-            QuestionExistsPhotoUrlElement = question.ImageUrl,
-            Answers = question.Answers.Select(a => new AnswerModel
-            {
-                AnswerId = a.Id,
-                AnswerText = a.Content,
-                IsCorrect = a.IsCorrect
-            }).ToList() ?? new List<AnswerModel>()
-        };
-        ViewBag.QuestionId = questionId;
-        return View(questionModel);
-    }
-    [HttpPost]
-    public async Task<IActionResult> EditQuestion([FromForm] QuestionModel model)
-    {
-        var question = await _questionManager.GetById(model.QuestionId.Value);
-
-        if (question == null)
-        {
-            return NotFound("Вопрос не был найден");
-        }
-
-        question.Instruction = model.Instruction;
-        question.Content = model.Text;
-
-        if (model.Image != null)
-        {
-            W3RootFileManager fileManager = new(_env);
-            var newFileName = await fileManager.SaveFormFileAsync("ortTestResourses", model.Image);
-            question.ImageUrl = newFileName;
-        }
-
-        await _questionManager.Update(question);
-
-        
-        foreach (var answerModel in model.Answers)
-        {
-            if (answerModel.AnswerId.HasValue)
-            {
-                var answer = await _answerManager.GetById(answerModel.AnswerId.Value);
-                if (answer != null)
-                {
-                    answer.IsCorrect = answerModel.IsCorrect;
-                    answer.Content = answerModel.AnswerText;
-                    await _answerManager.Update(answer);
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            else
-            {
-                Answer newAnswer = new()
-                {
-                    Content = answerModel.AnswerText,
-                    IsCorrect = answerModel.IsCorrect,
-                    QuestionId = model.QuestionId.Value
-                };
-                await _answerManager.Insert(newAnswer);
-            }
-        }
-        return RedirectToAction("Details", new { ortId = question.Test.OrtTestId });
-    }
 
     [HttpGet]
     public async Task<IActionResult> EditTest(int testId)
@@ -249,6 +199,7 @@ public class ORTController : Controller
                 }).ToList()
             }).ToList()
         };
+        ViewBag.Subjects = _subjectManager.GetAll().ToList();
         ViewBag.OrtId = test.OrtTestId;
         return View(testModel);
     }
@@ -259,12 +210,27 @@ public class ORTController : Controller
     {
         W3RootFileManager fileManager = new W3RootFileManager(_env);
         Test test = await _testsManager.GetById(model.TestId);
+
+        var ort = await _ortManager.GetById(test.OrtTestId.Value);
+
         if (model != null)
         {
             test.Text = model.Text;
+            test.OrtInstruction.Description = model.Text;
+
+            if (ort != null)
+            {
+                ort.TimeForTestInMin -= test.TimeForTestInMin;
+                ort.TimeForTestInMin += model.TimeForTestInMin;
+                await _ortManager.Update(ort);
+            }
+
             test.TimeForTestInMin = model.TimeForTestInMin;
             test.OrtInstruction.TimeInMin = model.TimeForTestInMin;
-            test.OrtInstruction.Description = model.Text;
+            if (!String.IsNullOrEmpty(model.SubjectId.ToString()))
+            {
+                test.SubjectId = model.SubjectId;
+            }
 
             await _testsManager.Update(test);
 
@@ -312,7 +278,8 @@ public class ORTController : Controller
                 }
                 
             }
-            await _testsManager.Update(test);
+            await _testsManager.Update(test);   
+
             return RedirectToAction("Index");
         }
         return NotFound("Теста не был найден");
