@@ -47,6 +47,7 @@
                             <input type="text" value="@question.QuestionId" name="questionId" hidden/>
                             <input type="text" value="@question.Instruction" class="form-control" placeholder="Введите инструкцию к вопросу" name="instruction" />
                             <input type="text" value="@question.Text" class="form-control mt-3" placeholder="Введите вопрос" name="text"/>
+                            <input type="number" value="@question.Point" class="form-control mt-3" placeholder="Введите вопрос" name="point" />
                             @if (question.QuestionExistsPhotoUrlElement != null)
                             {
                                 <input name="questionExistsPhotoUrlElement" value="@question.QuestionExistsPhotoUrlElement" type="hidden" />
@@ -203,6 +204,7 @@
                 const textElement = form.querySelector('input[name="text"]');
                 const questionExistsPhotoUrlElement = form.querySelector('input[name="questionExistsPhotoUrlElement"]');
                 const imageElement = form.querySelector('input[name="image"]');
+                const pointEl = form.querySelector('input[name="point"]');
 
 
                 if (instructionElement) formData.append(`Questions[${index}].Instruction`, instructionElement.value);
@@ -210,6 +212,9 @@
                 if (questionExistsPhotoUrlElement) formData.append(`Questions[${index}].QuestionExistsPhotoUrlElement`, questionExistsPhotoUrlElement.value);
                 if (imageElement && imageElement.files && imageElement.files.length > 0) {
                     formData.append(`Questions[${index}].Image`, imageElement.files[0]);
+                }
+                if (pointEl) {
+                    formData.append(`Questions[${index}].Point`, pointEl.value);
                 }
 
                 const answerForms = form.querySelectorAll('.answers .answer');

@@ -33,6 +33,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Language)
         </dd>
+        <dt class="col-sm-2">
+            Кол-во баллов
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Tests.Sum(t => t.Questions.Sum(q => q.Point ?? 0)))
+        </dd>
     </dl>
     <div class="mt-3 ms-3">
         <div class="d-flex row justify-content-between mb-3">
@@ -68,6 +74,12 @@
                         </dt>
                         <dd class="col-sm-10">
                             @tests.OrtInstruction.QuestionsCount
+                        </dd>
+                        <dt class="col-sm-2">
+                            Кол-во баллов
+                        </dt>
+                        <dd class="col-sm-10">
+                            @(tests.Questions.Sum(q => q.Point ?? 0))
                         </dd>
                     </dl>
 

@@ -191,6 +191,7 @@ public class ORTController : Controller
                 Text = a.Content,
                 QuestionExistsPhotoUrlElement = a.ImageUrl,
                 Instruction = a.Instruction,
+                Point = a.Point,
                 Answers = a.Answers.Select(g => new AnswerModel()
                 {
                     AnswerText = g.Content,
@@ -260,7 +261,7 @@ public class ORTController : Controller
                     Content = question.Text,
                     ImageUrl = questionFileName,
                     IsPublished = true,
-                    Point = 1,
+                    Point = question.Point,
                     TestId = test.Id
                 };
 

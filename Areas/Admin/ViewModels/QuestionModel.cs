@@ -13,6 +13,7 @@ public class QuestionModel
     public IFormFile? Image { get; set; }
     [JsonPropertyName("questionExistsPhotoUrlElement")]
     public string? QuestionExistsPhotoUrlElement { get; set; }
+    public int? Point { get; set; }
     public List<AnswerModel> Answers { get; set; }
 
     public QuestionModel()
