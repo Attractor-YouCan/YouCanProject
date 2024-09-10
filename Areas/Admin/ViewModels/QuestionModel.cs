@@ -4,6 +4,7 @@ namespace YouCan.Areas.Admin.ViewModels;
 
 public class QuestionModel
 {
+    public int? QuestionId { get; set; }
     [JsonPropertyName("instruction")]
     public string Instruction { get; set; }
     [JsonPropertyName("text")]
@@ -13,5 +14,10 @@ public class QuestionModel
     [JsonPropertyName("questionExistsPhotoUrlElement")]
     public string? QuestionExistsPhotoUrlElement { get; set; }
     public List<AnswerModel> Answers { get; set; }
-   
+
+    public QuestionModel()
+    {
+        Answers = new List<AnswerModel>();
+    }
+
 }

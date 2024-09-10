@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using YouCan.Areas.Admin.ViewModels;
 using YouCan.Entities;
 using YouCan.Service.Service;
@@ -144,5 +145,176 @@ public class ORTController : Controller
             }
         }
         return NotFound();
+    }
+    [HttpGet]
+    public async Task<IActionResult> EditQuestion(int questionId)
+    {
+        var question = await _questionManager.GetById(questionId);
+
+        if (question == null)
+        {
+            return NotFound();
+        }
+
+        QuestionModel questionModel = new()
+        {
+            QuestionId = questionId,
+            Instruction = question.Instruction,
+            Text = question.Content,
+            QuestionExistsPhotoUrlElement = question.ImageUrl,
+            Answers = question.Answers.Select(a => new AnswerModel
+            {
+                AnswerId = a.Id,
+                AnswerText = a.Content,
+                IsCorrect = a.IsCorrect
+            }).ToList() ?? new List<AnswerModel>()
+        };
+        ViewBag.QuestionId = questionId;
+        return View(questionModel);
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditQuestion([FromForm] QuestionModel model)
+    {
+        var question = await _questionManager.GetById(model.QuestionId.Value);
+
+        if (question == null)
+        {
+            return NotFound("Вопрос не был найден");
+        }
+
+        question.Instruction = model.Instruction;
+        question.Content = model.Text;
+
+        if (model.Image != null)
+        {
+            W3RootFileManager fileManager = new(_env);
+            var newFileName = await fileManager.SaveFormFileAsync("ortTestResourses", model.Image);
+            question.ImageUrl = newFileName;
+        }
+
+        await _questionManager.Update(question);
+
+        
+        foreach (var answerModel in model.Answers)
+        {
+            if (answerModel.AnswerId.HasValue)
+            {
+                var answer = await _answerManager.GetById(answerModel.AnswerId.Value);
+                if (answer != null)
+                {
+                    answer.IsCorrect = answerModel.IsCorrect;
+                    answer.Content = answerModel.AnswerText;
+                    await _answerManager.Update(answer);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                Answer newAnswer = new()
+                {
+                    Content = answerModel.AnswerText,
+                    IsCorrect = answerModel.IsCorrect,
+                    QuestionId = model.QuestionId.Value
+                };
+                await _answerManager.Insert(newAnswer);
+            }
+        }
+        return RedirectToAction("Details", new { ortId = question.Test.OrtTestId });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> EditTest(int testId)
+    {
+        var test = await _testsManager.GetById(testId);
+
+        TestsModel testModel = new()
+        {
+            TestId = testId,
+            Text = test.Text,
+            TimeForTestInMin = test.TimeForTestInMin,
+            Questions = test.Questions.Select(a => new QuestionModel()
+            {
+                QuestionId = a.Id,
+                Text = a.Content,
+                QuestionExistsPhotoUrlElement = a.ImageUrl,
+                Instruction = a.Instruction,
+                Answers = a.Answers.Select(g => new AnswerModel()
+                {
+                    AnswerText = g.Content,
+                    AnswerId = g.Id,
+                    IsCorrect = g.IsCorrect
+                }).ToList()
+            }).ToList()
+        };
+        ViewBag.OrtId = test.OrtTestId;
+        return View(testModel);
+    }
+
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> EditTest([FromForm] TestsModel model)
+    {
+        W3RootFileManager fileManager = new W3RootFileManager(_env);
+        Test test = await _testsManager.GetById(model.TestId);
+        if (model != null)
+        {
+            test.Text = model.Text;
+            test.TimeForTestInMin = model.TimeForTestInMin;
+            test.OrtInstruction.TimeInMin = model.TimeForTestInMin;
+            test.OrtInstruction.Description = model.Text;
+
+            await _testsManager.Update(test);
+
+            test.Questions.Clear();
+            foreach (var question in test.Questions)
+            {
+                fileManager.DeleteFile(question.ImageUrl);
+                question.Answers.Clear();
+                await _questionManager.Update(question);
+                foreach (var answer in question.Answers)
+                {
+                    await _answerManager.DeleteById(answer.Id);
+                }
+                await _questionManager.DeleteById(question.Id);
+            }
+            foreach (var question in model.Questions)
+            {
+                string? questionFileName = question.QuestionExistsPhotoUrlElement;
+                if (question.Image != null)
+                {
+                    questionFileName = await fileManager.SaveFormFileAsync("ortTestResources", question.Image);
+                }
+
+                Question newQuestion = new Question()
+                {
+                    Instruction = question.Instruction,
+                    Content = question.Text,
+                    ImageUrl = questionFileName,
+                    IsPublished = true,
+                    Point = 1,
+                    TestId = test.Id
+                };
+
+                await _questionManager.Insert(newQuestion);
+
+                foreach (var answer in question.Answers)
+                {
+                    Answer newAnswer = new Answer()
+                    {
+                        Content = answer.AnswerText,
+                        IsCorrect = answer.IsCorrect,
+                        QuestionId = newQuestion.Id
+                    };
+                    await _answerManager.Insert(newAnswer);
+                }
+                
+            }
+            await _testsManager.Update(test);
+            return RedirectToAction("Index");
+        }
+        return NotFound("Теста не был найден");
     }
 }

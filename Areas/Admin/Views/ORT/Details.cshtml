@@ -72,10 +72,13 @@
                     </dl>
 
                     <div class="d-flex row justify-content-between mb-5">
-                        <a id="questions_link@(tests.Id)" class="link mb-3 col-9" onclick="showQuestions(@tests.Id)">
+                        <a id="questions_link@(tests.Id)" class="link mb-3 col-7" onclick="showQuestions(@tests.Id)">
                             <h5>Вопросы</h5>
                         </a>
-                        <a asp-action="CreateQuestions" asp-route-testId="@tests.Id" class="btn btn-primary col-2 me-5">Добавить вопрос</a>
+                        <div class="col-4 me-5 row d-flex justify-content-between">
+                            <a asp-action="CreateQuestions" asp-route-testId="@tests.Id" class="btn btn-primary btn-sm col-5">Добавить вопрос</a>
+                            <a asp-action="EditTest" asp-route-testId="@tests.Id" class="btn btn-warning btn-sm col-5">Редактировать тест</a>
+                        </div>
                     </div>
                     <div class="mt-3" id="questions@(tests.Id)" style="display: none;">
                         @if (tests.Questions == null || tests.Questions.Count == 0)
@@ -86,7 +89,7 @@
                         {
                             @foreach (var question in tests.Questions)
                             {
-                                <div class="ms-3 mt-3 border border-1 border-dark mb-3">
+                                <div class="ms-3 mt-3 border border-1 mb-3">
                                     <dl class="row p-3">
                                         <dt class="col-sm-2">
                                             Вопрос

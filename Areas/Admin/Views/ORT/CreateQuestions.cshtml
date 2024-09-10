@@ -96,28 +96,6 @@
             }
 
             $answerContainer.append($newAnswerForm);
-
-            // Update input type based on selected format
-            /*function updateAnswerFormat() {
-                const selectedFormat = $(`#${formId} .format-selection input:checked`).val();
-                if (selectedFormat === 'text') {
-                    $(`#${formId} .answer-content`).each(function () {
-                        $(this).find('input[data-answer-input-type="text"]').removeClass('d-none');
-                        $(this).find('input[data-answer-input-type="image"]').addClass('d-none');
-                    });
-                } else {
-                    $(`#${formId} .answer-content`).each(function () {
-                        $(this).find('input[data-answer-input-type="text"]').addClass('d-none');
-                        $(this).find('input[data-answer-input-type="image"]').removeClass('d-none');
-                    });
-                }
-            }*/
-
-            // Attach the change event listener for format radio buttons
-            //$(`#${formId} .format-selection input`).change(updateAnswerFormat);
-
-            // Initialize the format based on the selected radio button
-            //updateAnswerFormat();
         }
 
 
