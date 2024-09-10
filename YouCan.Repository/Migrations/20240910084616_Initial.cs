@@ -76,6 +76,20 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Statistics",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Streak = table.Column<int>(type: "integer", nullable: true),
+                    StudyMinutes = table.Column<TimeSpan>(type: "interval", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statistics", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
@@ -170,12 +184,15 @@ namespace YouCan.Repository.Migrations
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Disctrict = table.Column<string>(type: "text", nullable: false),
+                    ImpactModeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ImpactModeEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     TariffId = table.Column<int>(type: "integer", nullable: true),
                     TariffStartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TariffEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LeagueId = table.Column<int>(type: "integer", nullable: true),
                     Rank = table.Column<int>(type: "integer", nullable: false),
                     UserLessonScore = table.Column<int>(type: "integer", nullable: false),
+                    StatisticId = table.Column<int>(type: "integer", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -198,6 +215,11 @@ namespace YouCan.Repository.Migrations
                         name: "FK_AspNetUsers_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Statistics_StatisticId",
+                        column: x => x.StatisticId,
+                        principalTable: "Statistics",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Tariffs_TariffId",
@@ -363,28 +385,6 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Statistics",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Streak = table.Column<int>(type: "integer", nullable: false),
-                    TotalExperience = table.Column<int>(type: "integer", nullable: false),
-                    StudyMinutes = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Statistics", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Statistics_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tests",
                 columns: table => new
                 {
@@ -428,6 +428,27 @@ namespace YouCan.Repository.Migrations
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserExperiences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExperiencePoints = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserExperiences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserExperiences_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -798,6 +819,11 @@ namespace YouCan.Repository.Migrations
                 column: "LeagueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_StatisticId",
+                table: "AspNetUsers",
+                column: "StatisticId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_TariffId",
                 table: "AspNetUsers",
                 column: "TariffId");
@@ -864,12 +890,6 @@ namespace YouCan.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Statistics_UserId",
-                table: "Statistics",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Subjects_ParentId",
                 table: "Subjects",
                 column: "ParentId");
@@ -898,6 +918,11 @@ namespace YouCan.Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Tests_UserId",
                 table: "Tests",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserExperiences_UserId",
+                table: "UserExperiences",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -973,7 +998,7 @@ namespace YouCan.Repository.Migrations
                 name: "QuestionReports");
 
             migrationBuilder.DropTable(
-                name: "Statistics");
+                name: "UserExperiences");
 
             migrationBuilder.DropTable(
                 name: "UserLessons");
@@ -1007,6 +1032,9 @@ namespace YouCan.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Leagues");
+
+            migrationBuilder.DropTable(
+                name: "Statistics");
 
             migrationBuilder.DropTable(
                 name: "Tariffs");
