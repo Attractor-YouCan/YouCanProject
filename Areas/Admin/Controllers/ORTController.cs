@@ -151,7 +151,7 @@ public class ORTController : Controller
                             Content = question.Text,
                             ImageUrl = questionFileName,
                             IsPublished = true,
-                            Point = 1,
+                            Point = question.Point ?? 1,
                             TestId = model.TestId,
                             SubjectId = test.SubjectId
                         };

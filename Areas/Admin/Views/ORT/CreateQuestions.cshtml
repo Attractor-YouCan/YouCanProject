@@ -35,6 +35,7 @@
                                 <h5>Вопрос №${questionCounter - 1}</h5>
                                 <input type="text" class="form-control" placeholder="Введите инструкцию к вопросу" name="instruction" required/>
                                 <input type="text" class="form-control mt-3" placeholder="Введите вопрос" name="text" required/>
+                                <input type="number" class="form-control mt-3" placeholder="Введите баллы за вопрос" value="1" name="point"/>
                                 <input type="file" class="form-control mt-3" name="image" />
 
                                 <div class="answers mt-3">
@@ -115,11 +116,15 @@
                 const instructionElement = form.querySelector('input[name="instruction"]');
                 const textElement = form.querySelector('input[name="text"]');
                 const imageElement = form.querySelector('input[name="image"]');
+                const pointEl = form.querySelector('input[name="point"]');
 
                 if (instructionElement) formData.append(`Questions[${index}].Instruction`, instructionElement.value);
                 if (textElement) formData.append(`Questions[${index}].Text`, textElement.value);
                 if (imageElement && imageElement.files && imageElement.files.length > 0) {
                     formData.append(`Questions[${index}].Image`, imageElement.files[0]);
+                }
+                if (pointEl) {
+                    formData.append(`Questions[${index}].Point`, pointEl.value);
                 }
 
                 const answerForms = form.querySelectorAll('.answers .answer');
