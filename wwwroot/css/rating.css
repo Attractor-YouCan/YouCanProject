@@ -1,7 +1,20 @@
 ﻿body {
     font-family: Montserrat, sans-serif;
 }
-
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
+.rating-main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 36px;
+    margin-bottom: 52px;
+    padding: 30px 48px 30px 30px;
+    width: 100%;
+    position: relative;
+}
 .header {
     display: flex;
     flex-wrap: nowrap;
@@ -10,7 +23,6 @@
     padding: 10px 20px;
 }
 
-    .header .time-left,
     .header .score-info {
         display: flex;
         align-items: center;
@@ -98,9 +110,10 @@
 }
 
 .leaderboard {
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     max-width: 100%;
     padding: 0 15px;
+    transition: 0.3s ease-in;
 }
 
     .leaderboard .row {
@@ -187,19 +200,74 @@
     margin-bottom: 30px;
 }
 
+
+
+.main {
+    position: relative;
+    /*width: calc(min(90rem, 60%));*/
+    width: 28%;
+    margin: 0 auto;
+    column-gap: 3rem;
+    padding-block: min(20vh, 3rem);
+}
+
+.swiper {
+    width: 100%;
+    padding-top: 3.125rem;
+}
+.swiper-slide{
+    width: fit-content!important;
+    height: 100px!important;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: self-start;
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    margin: auto 2.5px;
+    overflow: hidden;
+}
+
+.swiper-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+@media screen and (min-width: 48rem) {
+    .main {
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 93.75rem) {
+    .swiper {
+        width: 85%;
+    }
+}
+@media (max-width: 1024px) {
+    .main{
+        width: 45%;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         align-items: flex-start;
     }
 
-        .header .time-left {
-            font-size: 8px;
-        }
+    .header .time-left {
+        font-size: 8px;
+    }
 
-        .header .score-info {
-            margin-bottom: 10px;
-            font-size: 12px;
-        }
+    .header .score-info {
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
 
     .league-title {
         font-size: 18px;
@@ -216,6 +284,9 @@
     .change img {
         width: 12px;
         height: 12px;
+    }
+    .main {
+        width: 60%;
     }
 }
 
@@ -234,19 +305,19 @@
         font-size: 10px;
     }
 
-        .leaderboard .position img {
-            width: 15px;
-            height: 20px;
-        }
+    .leaderboard .position img {
+        width: 15px;
+        height: 20px;
+    }
 
     .leaderboard .user-info {
         font-size: 10px;
     }
 
-        .leaderboard .user-info img {
-            width: 20px;
-            height: 20px;
-        }
+    .leaderboard .user-info img {
+        width: 20px;
+        height: 20px;
+    }
 
     .leaderboard .score {
         font-size: 10px;
@@ -264,14 +335,14 @@
         margin-right: 12px;
     }
 
-        .change .change-value {
-            font-size: 7px;
-        }
+    .change .change-value {
+        font-size: 7px;
+    }
 
-        .change .changeImg {
-            width: 8px;
-            height: 8px;
-        }
+    .change .changeImg {
+        width: 8px;
+        height: 8px;
+    }
 }
 
 .leaderboard .change {
@@ -288,11 +359,12 @@
     margin-left: 10px;
 }
 
-    .change img {
-        width: 16px;
-        height: 16px;
-    }
+.change img {
+    width: 16px;
+    height: 16px;
+}
 
-    .change .change-value {
-        margin-left: 5px;
-    }
+.change .change-value {
+    margin-left: 5px;
+}
+

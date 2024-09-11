@@ -1,35 +1,31 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace YouCan.Repository.Repository;
-
-public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
+public class UserExperianceRepository : IRepository<UserExperience>
 {
     private readonly YouCanContext _context;
-    private DbSet<T> entitis;
+    private DbSet<UserExperience> entitis;
 
-
-    public UserRepository(YouCanContext context)
+    public UserExperianceRepository(YouCanContext context)
     {
         _context = context;
-        entitis = _context.Set<T>();
+        entitis = _context.Set<UserExperience>();
     }
 
-    public IEnumerable<T> GetAll()
+    public IEnumerable<UserExperience> GetAll()
     {
-        return entitis.Include("Statistic").Include("UserExperiences").AsEnumerable();
+        return entitis.AsEnumerable();
     }
-
-    public async Task<T> Get(int id)
+    public async Task<UserExperience> Get(int id)
     {
-        return await entitis.Include("Statistic").Include("UserExperiences").Include("League").SingleOrDefaultAsync(x => x.Id == id);
+        return await entitis.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task Insert(T entity)
+    public async Task Insert(UserExperience entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -37,7 +33,7 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public async Task Update(UserExperience entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -45,7 +41,7 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(T entity)
+    public async Task Delete(UserExperience entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -53,7 +49,7 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
         await _context.SaveChangesAsync();
     }
 
-    public void Remove(T entity)
+    public void Remove(UserExperience entity)
     {
         if (entity == null)
             throw new ArgumentNullException("entity");
@@ -65,3 +61,4 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
         await _context.SaveChangesAsync();
     }
 }
+

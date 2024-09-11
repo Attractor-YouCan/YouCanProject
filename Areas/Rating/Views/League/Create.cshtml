@@ -1,0 +1,30 @@
+@model YouCan.Entities.League
+
+@{
+    ViewData["Title"] = "Create League";
+}
+
+<h2>Create League</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="LeagueName" class="control-label"></label>
+        <input asp-for="LeagueName" class="form-control" />
+        <span asp-validation-for="LeagueName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MinPoints" class="control-label"></label>
+        <input asp-for="MinPoints" class="form-control" />
+        <span asp-validation-for="MinPoints" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxPoints" class="control-label"></label>
+        <input asp-for="MaxPoints" class="form-control" />
+        <span asp-validation-for="MaxPoints" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Index">Back to List</a>

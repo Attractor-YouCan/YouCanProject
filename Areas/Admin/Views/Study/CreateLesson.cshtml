@@ -11,7 +11,7 @@
         <h3 class="text-white p-4 bg-danger rounded-3">ОБРАТИТЕ ВНИМАНИЕ ЧТО ВЫ ВСЕ ЗАПОЛНИЛИ!</h3>
         <div class="creationPage">
             <label for="lessonLevel">Доступный Уровень Урока</label>
-            <input asp-for="SubjectId" type="number"  value="@ViewBag.SubjectId" id="subjectId" hidden/>
+            <input asp-for="SubjectId" type="number"  value="@ViewData["SubjectId"]" id="subjectId" hidden/>
             <input asp-for="LessonLevel" type="number" class="form-control" value="@ViewBag.AvailableLevel" id="lessonLevel" disabled/>
             <h1 class="mt-4">
                 <label for="lessonTitle">Здесь будет: Тема Урока</label>
@@ -178,7 +178,7 @@
                 $('.add-question-button').click(function () {
                     addQuestion();
                 });
-        
+                          
             function addModule() {
                 moduleCounter++;
                 const formId = `module-form-${moduleCounter}`;
