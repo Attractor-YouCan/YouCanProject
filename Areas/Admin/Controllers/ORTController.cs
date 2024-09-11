@@ -285,4 +285,21 @@ public class ORTController : Controller
         }
         return NotFound("Теста не был найден");
     }
+
+    public async Task<IActionResult> DeleteTest(int testId)
+    {
+        var test = await _testsManager.GetById(testId);
+        if (test == null)
+        {
+            return BadRequest();
+        }
+        var ort = await _ortManager.GetById(test.OrtTestId.Value);
+        if (ort != null)
+        {
+            ort.TimeForTestInMin -= test.TimeForTestInMin;
+            await _ortManager.Update(ort);
+        }
+        await _testsManager.DeleteById(test.Id);
+        return RedirectToAction("Details", new {ortId = ort.Id});
+    }
 }
