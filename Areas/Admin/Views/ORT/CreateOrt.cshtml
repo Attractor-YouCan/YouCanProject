@@ -1,0 +1,20 @@
+﻿@model OrtTest
+
+@{
+    Layout = "_Admin";
+}
+
+<form asp-action="CreateOrt" method="post">
+    <div class="mb-3">
+        <label class="form-label">Уровень (По умолчанию максимальный)</label>
+        <input class="form-control" asp-for="OrtLevel" value="@(ViewBag.MaxOrtLevel + 1)" type="text"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Язык</label>
+        <select asp-for="Language" class="form-select">
+            <option value="Русский">Русский</option>
+            <option value="Кыргызский">Кыргызский</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Создать орт</button>
+</form>

@@ -15,7 +15,7 @@ public class User : IdentityUser<int>
     public DateTime? ImpactModeEnd { get; set; }
     public int? TariffId { get; set; }
     public Tariff? Tariff { get; set; }
-    public DateTime TariffStartDate { get; set; }
+    public DateTime TariffStartDate { get; set; } = DateTime.UtcNow;
     public DateTime? TariffEndDate { get; set; }
     
     public int? LeagueId { get; set; }
