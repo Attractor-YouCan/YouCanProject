@@ -950,7 +950,7 @@ namespace YouCan.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Streak")
+                    b.Property<int?>("Streak")
                         .HasColumnType("integer");
 
                     b.Property<TimeSpan>("StudyMinutes")
