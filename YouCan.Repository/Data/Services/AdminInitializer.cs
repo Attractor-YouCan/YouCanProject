@@ -26,7 +26,9 @@ public class AdminInitializer
                 FullName = fullName,
                 BirthDate = DateTime.UtcNow,
                 Disctrict = "",
-                PhoneNumber = "0"
+                PhoneNumber = "0",
+                TariffStartDate = DateTime.UtcNow,
+                TariffId = 1
             };
             IdentityResult result = await _userManager.CreateAsync(superadmin, adminPassword);
             if (result.Succeeded)
@@ -45,7 +47,10 @@ public class AdminInitializer
             PhoneNumber = "1",
             Rank = 1,
             UserLessonScore = 1200,  // Silver League
-            LeagueId = 2
+            LeagueId = 2,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user2 = new User()
@@ -59,7 +64,10 @@ public class AdminInitializer
             PhoneNumber = "2",
             Rank = 2,
             UserLessonScore = 300,  // Bronze League
-            LeagueId = 1
+            LeagueId = 1,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user3 = new User()
@@ -73,7 +81,10 @@ public class AdminInitializer
             PhoneNumber = "3",
             Rank = 3,
             UserLessonScore = 2500,  // Gold League
-            LeagueId = 3
+            LeagueId = 3,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user4 = new User()
@@ -87,7 +98,10 @@ public class AdminInitializer
             PhoneNumber = "4",
             Rank = 4,
             UserLessonScore = 1800,  // Silver League
-            LeagueId = 2
+            LeagueId = 2,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user5 = new User()
@@ -101,7 +115,10 @@ public class AdminInitializer
             PhoneNumber = "5",
             Rank = 5,
             UserLessonScore = 3500,  // Platinum League
-            LeagueId = 4
+            LeagueId = 4,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user6 = new User()
@@ -115,7 +132,10 @@ public class AdminInitializer
             PhoneNumber = "6",
             Rank = 6,
             UserLessonScore = 4100,  // Diamond League
-            LeagueId = 5
+            LeagueId = 5,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user7 = new User()
@@ -129,7 +149,10 @@ public class AdminInitializer
             PhoneNumber = "7",
             Rank = 7,
             UserLessonScore = 2700,  // Gold League
-            LeagueId = 3
+            LeagueId = 3,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         User user8 = new User()
@@ -143,7 +166,10 @@ public class AdminInitializer
             PhoneNumber = "8",
             Rank = 8,
             UserLessonScore = 900,  // Bronze League
-            LeagueId = 1
+            LeagueId = 1,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
         User profileTest = new User()
         {
@@ -174,7 +200,10 @@ public class AdminInitializer
             },
             Rank = 7,
             UserLessonScore = 2700,  // Gold League
-            LeagueId = 3
+            LeagueId = 3,
+            TariffStartDate = DateTime.UtcNow,
+            TariffId = 1
+
         };
 
         List<User> users = new List<User>() { user1, user2, user3, user4, user5, user6, user7, user8, profileTest };
