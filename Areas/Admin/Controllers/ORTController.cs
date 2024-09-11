@@ -289,10 +289,12 @@ public class ORTController : Controller
     public async Task<IActionResult> DeleteTest(int testId)
     {
         var test = await _testsManager.GetById(testId);
+
         if (test == null)
         {
             return BadRequest();
         }
+
         var ort = await _ortManager.GetById(test.OrtTestId.Value);
         if (ort != null)
         {
@@ -301,5 +303,22 @@ public class ORTController : Controller
         }
         await _testsManager.DeleteById(test.Id);
         return RedirectToAction("Details", new {ortId = ort.Id});
+    }
+
+    public async Task<IActionResult> DeleteQuestion(int questionId)
+    {
+        var question = await _questionManager.GetById(questionId);
+
+        if (question == null)
+        {
+            return BadRequest();
+        }
+
+        var test = await _testsManager.GetById(question.TestId.Value);
+        
+        await _questionManager.DeleteById(question.Id);
+
+        return RedirectToAction("Details", new { ortId = test.OrtTestId });
+
     }
 }
