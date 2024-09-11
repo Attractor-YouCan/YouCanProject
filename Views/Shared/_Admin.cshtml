@@ -39,6 +39,14 @@
                     <img src="~/adminIcons/testing.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
                     <span class="nav_name">Обучение</span>
                 </a>
+                <a class="nav_link mx-auto" asp-action="Subject" asp-controller="TrainQuestionAndReport" asp-area="Admin">
+                    <img src="~/adminIcons/testing.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
+                    <span class="nav_name">Вопросы тренировок</span>
+                </a>
+                <a class="nav_link mx-auto" asp-action="Report" asp-controller="TrainQuestionAndReport" asp-area="Admin">
+                    <img src="~/adminIcons/testing.png" style="width: 20px; height: 20px" alt="..." class="bx bx-grid-alt nav_icon">
+                    <span class="nav_name">Жалобы</span>
+                </a>
                 </div>
             @* </div> *@
         </nav>
@@ -58,7 +66,7 @@
 
             <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js'></script>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            @RenderBody();
+            @RenderBody()
         </div>
 
         

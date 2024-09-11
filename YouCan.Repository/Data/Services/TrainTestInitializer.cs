@@ -19,11 +19,11 @@ public class TrainTestInitializer
         );
 
         _modelBuilder.Entity<Question>().HasData(
-            new Question(){Id = 7, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком слове вместо точек следует вставить букву с?"},
-            new Question(){Id = 8, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?"},
-            new Question(){Id = 9, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком слове вместо точек следует вставить букву з?"},
-            new Question(){Id = 10, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово употреблено в правильной форме?"},
-            new Question(){Id = 11, TestId = 3, Instruction = "Какое слово следует вставить вместо точек в предложение?", Content = "Задание, ... нами, не вызывает особых затруднений."},
+            new Question(){Id = 7, SubjectId = 6, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком слове вместо точек следует вставить букву с?"},
+            new Question(){Id = 8, SubjectId = 6, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?"},
+            new Question(){Id = 9, SubjectId = 6, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком слове вместо точек следует вставить букву з?"},
+            new Question(){Id = 10, SubjectId = 6, TestId = 3, Instruction = "Выберите правильный вариант", Content = "В каком предложении подчеркнутое слово употреблено в правильной форме?"},
+            new Question(){Id = 11, SubjectId = 6, TestId = 3, Instruction = "Какое слово следует вставить вместо точек в предложение?", Content = "Задание, ... нами, не вызывает особых затруднений."},
 
             new Question(){Id = 12, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово является синонимом к слову 'красивый'?"},
             new Question(){Id = 13, TestId = 3, Instruction = "Выберите правильный вариант", Content = "Какое слово является антонимом к слову 'высокий'?"},
