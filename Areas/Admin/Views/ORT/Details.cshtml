@@ -84,12 +84,13 @@
                     </dl>
 
                     <div class="d-flex row justify-content-between mb-5">
-                        <a id="questions_link@(tests.Id)" class="link mb-3 col-7" onclick="showQuestions(@tests.Id)">
+                        <a id="questions_link@(tests.Id)" class="link mb-3 col-6" onclick="showQuestions(@tests.Id)">
                             <h5>Вопросы</h5>
                         </a>
-                        <div class="col-4 me-5 row d-flex justify-content-between">
-                            <a asp-action="CreateQuestions" asp-route-testId="@tests.Id" class="btn btn-primary btn-sm col-5">Добавить вопрос</a>
-                            <a asp-action="EditTest" asp-route-testId="@tests.Id" class="btn btn-warning btn-sm col-5">Редактировать тест</a>
+                        <div class="col-5 me-2 row d-flex justify-content-between">
+                            <a asp-action="CreateQuestions" asp-route-testId="@tests.Id" class="btn btn-primary btn-sm col-4 me-2">Добавить вопросы</a>
+                            <a asp-action="EditTest" asp-route-testId="@tests.Id" class="btn btn-warning btn-sm col-4 me-2">Редактировать тест</a>
+                            <a asp-action="DeleteTest" asp-route-testId="@tests.Id" class="btn btn-danger btn-sm col-3">Удалить тест</a>
                         </div>
                     </div>
                     <div class="mt-3" id="questions@(tests.Id)" style="display: none;">
