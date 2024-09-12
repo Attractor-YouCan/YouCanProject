@@ -38,7 +38,7 @@ public class ORTController : Controller
     [HttpGet]
     public IActionResult CreateOrt()
     {
-        ViewBag.MaxOrtLevel = _ortManager.GetAll().Max(o => o.OrtLevel);
+        ViewBag.MaxOrtLevel = _ortManager.GetAll().Max(o => o.OrtLevel) ?? 0;
         return View();
     }
 
