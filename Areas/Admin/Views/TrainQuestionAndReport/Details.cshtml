@@ -10,7 +10,7 @@
     <strong>Instruction:</strong> @Model.Instruction
 </div>
 <div>
-    <strong>Subject:</strong> @Model.Subject.Name
+    <strong>Subject:</strong> @Model.Subject?.Name
 </div>
 <div>
     <strong>Content:</strong> @Model.Content
@@ -46,4 +46,8 @@
 <form asp-action="Delete" method="post" onsubmit="return confirm('Are you sure you want to delete this question?');">
     <input type="hidden" name="id" value="@Model.Id" />
     <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+<form asp-action="Edit" method="get">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">Edit</button>
 </form>

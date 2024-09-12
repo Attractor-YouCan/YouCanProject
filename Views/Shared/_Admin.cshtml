@@ -72,8 +72,8 @@
         
 
     </main>
-    
-   </body>
+    @await RenderSectionAsync("Scripts", required: false)
+  </body>
 </html>
 
 @section Scripts {

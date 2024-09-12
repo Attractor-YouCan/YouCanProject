@@ -1,0 +1,83 @@
+@model YouCan.Entities.Question
+@{
+    ViewBag.Title = "Редактировать вопрос";
+    Layout = "_Admin";
+}
+
+<h2>Редактировать вопрос</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="Content">Контент</label>
+        <textarea class="form-control" id="Content" name="Content">@Model.Content</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="Instruction">Инструкция</label>
+        <textarea class="form-control" id="Instruction" name="Instruction">@Model.Instruction</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="SubjectId">Предмет</label>
+        <select class="form-control" id="SubjectId" name="SubjectId">
+            @foreach (var subject in ViewBag.Subjects)
+            {
+                <option value="@subject.Id">
+                    @subject.Name
+                </option>
+            }
+        </select>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="ImageUrl">URL изображения</label>
+        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+    </div>
+
+    <h3>Ответы</h3>
+    <ul>
+        @for (int i = 0; i < Model.Answers.Count; i++)
+        {
+            <li>
+                <div class="form-group">
+                    <label for="Answers_@(i)__Content">Ответ @(i + 1)</label>
+                    <textarea class="form-control" id="Answers_@(i)__Content" name="Answers[@(i)].Content">@Model.Answers[i].Content</textarea>
+                </div>
+
+                <div class="form-check">
+                    <input type="hidden" name="Answers[@(i)].IsCorrect" value="false" />
+                    <input type="checkbox" class="form-check-input" id="Answers_@(i)__IsCorrect" name="Answers[@(i)].IsCorrect" value="true" @(Model.Answers[i].IsCorrect ? "checked" : "") />
+                    <label class="form-check-label" for="Answers_@(i)__IsCorrect">Правильный ответ</label>
+                </div>
+            </li>
+            
+
+        }
+    </ul>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+@section Scripts{
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let correctCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="Answers"]');
+
+            correctCheckboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        correctCheckboxes.forEach(function (box) {
+                            if (box !== checkbox) {
+                                box.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

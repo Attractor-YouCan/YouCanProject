@@ -22,7 +22,7 @@
         <td>
             @if (report.Question != null)
             {
-            <a href="@Url.Action("Details", "Question", new { id = report.Question.Id })">
+            <a href="@Url.Action("Details", "TrainQuestionAndReport", new { id = report.Question.Id })">
                 @report.Question.Content
             </a>
             }
@@ -31,7 +31,7 @@
             <span>Вопрос удалён</span>
             }
         </td>
-        <td>@report.User?.UserName ?? "Неизвестный пользователь"</td>
+        <td>@(!string.IsNullOrEmpty(report.User?.UserName) ? report.User.UserName : "Неизвестный пользователь")</td>
     </tr>
     }
     </tbody>
