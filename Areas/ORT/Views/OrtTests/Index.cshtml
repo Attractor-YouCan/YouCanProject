@@ -30,7 +30,7 @@ else
     <div class="col-8 mx-auto tests mt-5">
         @foreach (var ortTest in Model)
         {
-            if (ViewBag.CurrentOrtTestLevel+1 >= ortTest.OrtLevel)
+            if (ViewBag.UserRoles.Contains("admin") || ViewBag.UserRoles.Contains("prouser"))
             {
                 <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
                     <div class="ort-trial-block-paddings border border-1 text-success fw-bold text-center rounded-3 border-success mt-3">
@@ -40,9 +40,20 @@ else
             }
             else
             {
-                <div style="color: #C4C4C4" class="ort-trial-block-paddings border border-1 rounded-3 te fw-bold text-center border-light-subtle mt-3">
-                    <span>Пробный тест № @ortTest.OrtLevel</span>
-                </div>
+                if (ortTest.OrtLevel == 0 || ortTest.OrtLevel == 1)
+                {
+                    <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
+                        <div class="ort-trial-block-paddings border border-1 text-success fw-bold text-center rounded-3 border-success mt-3">
+                            <span>Пробный тест № @ortTest.OrtLevel</span>
+                        </div> 
+                    </a>
+                }
+                else
+                {
+                    <div style="color: #C4C4C4" class="ort-trial-block-paddings border border-1 rounded-3 te fw-bold text-center border-light-subtle mt-3">
+                        <span>Пробный тест № @ortTest.OrtLevel</span>
+                    </div>
+                }
             }
         }
     </div>
