@@ -96,6 +96,9 @@ builder.Services.AddTransient<ICRUDService<LessonTime>, CRUDService<LessonTime>>
 builder.Services.AddTransient<IRepository<UserExperience>, UserExperianceRepository>();
 builder.Services.AddTransient<ICRUDService<UserExperience>, CRUDService<UserExperience>>();
 
+builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>();
+builder.Services.AddTransient<ICRUDService<Announcement>, CRUDService<Announcement>>();
+
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();

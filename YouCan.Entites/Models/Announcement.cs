@@ -2,7 +2,7 @@
 
 namespace YouCan.Entites.Models;
 
-public class Announcements : EntityBase
+public class Announcement : EntityBase
 {
     public string Title { get; set; }
     public string Description { get; set; }
