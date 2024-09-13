@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Drawing;
@@ -9,6 +10,7 @@ using YouCan.Services;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles = "admin, manager")]
 public class ORTController : Controller
 {
     private readonly ICRUDService<OrtTest> _ortManager;

@@ -44,7 +44,13 @@
                 Заблокирован
             </th>
             <th>
-
+                Уроки
+            </th>
+            <th>
+                Пройдено
+            </th>
+            <th>
+                Действия
             </th>
         </tr>
     </thead>
@@ -125,6 +131,12 @@
                 </td>
                 <td>
                     @(user.LockoutEnabled && user.LockoutEnd != null)
+                </td>
+                <td>
+                    @user.Lessons.Count
+                </td>
+                <td>
+                    @user.Lessons.Count(u => u.IsPassed == true)
                 </td>
                 <td>
                     @if (User.IsInRole("admin"))
