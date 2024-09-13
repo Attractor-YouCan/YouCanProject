@@ -433,5 +433,25 @@ public class AccountController : Controller
         return userId;
     }
 
+    [HttpPost]
+    public async Task<IActionResult> LogTime([FromBody] long timeSpent)
+    {
+        var currentUser = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
+        if (currentUser == null)
+            return Unauthorized();
+
+        TimeSpan timeSpentTimeSpan = TimeSpan.FromMilliseconds(timeSpent);
+
+        currentUser.Statistic.StudyMinutes += timeSpentTimeSpan;
+
+        // Сохраняем изменения в базе данных
+        var result = await _userManager.UpdateAsync(currentUser);
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка при обновлении данных пользователя.");
+        }
+
+        return Ok(new { message = "Время успешно сохранено" });
+    }
 
 }

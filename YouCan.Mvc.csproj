@@ -171,6 +171,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="wwwroot\js\time-tracker.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\js\time-tracker.js" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="YouCan.Service\YouCan.Service.csproj" />
     </ItemGroup>
 

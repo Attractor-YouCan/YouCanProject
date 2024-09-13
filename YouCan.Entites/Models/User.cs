@@ -36,6 +36,7 @@ public class User : IdentityUser<int>
         Lessons = new List<UserLessons>();
         UserLevels = new List<UserLevel>();
         UserExperiences = new List<UserExperience>();
+        Statistic = new Statistic();
         Tests = new();
     }
 }

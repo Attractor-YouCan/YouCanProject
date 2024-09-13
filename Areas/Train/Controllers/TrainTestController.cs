@@ -141,7 +141,7 @@ public class TrainTestController : Controller
         bool isCorrect = selectedAnswer.IsCorrect;
         if (isCorrect)
         {
-            user.UserExperiences.Add(new UserExperience { UserId = user.Id, Date = DateTime.UtcNow, ExperiencePoints = 5 });
+            user.UserExperiences.Add(new UserExperience { UserId = user.Id, Date = DateTime.UtcNow, ExperiencePoints = 1 });
             await _userManager.UpdateAsync(user);
         }
         return Json(new { isCorrect });

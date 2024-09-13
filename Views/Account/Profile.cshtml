@@ -75,7 +75,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-study-time">
                 <img src="@Url.Content("/profileIcons/league.png")" alt="clock-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@((Model.User?.Statistic?.StudyMinutes.TotalMinutes ?? 0))</p>
+                    <p class="stat-card-title mb-0">@((int)Math.Floor(Model.User?.Statistic?.StudyMinutes.TotalMinutes ?? 0))</p>
                     <p class="stat-card-subtitle mb-0">Минуты за учебой</p>
                 </div>
             </div>
@@ -205,7 +205,7 @@
 
             let currentDate = new Date();
 
-            // Установим точное время для начала и конца периода heatwave
+            // Tочное время для начала и конца периода heatwave
             const heatwaveStart = new Date('@(Model.User.Statistic?.ImpactModeStart.HasValue ?? false ? String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.Statistic.ImpactModeStart) : "")');
             const heatwaveEnd = new Date('@(Model.User.Statistic?.ImpactModeEnd.HasValue ?? false ? String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.Statistic.ImpactModeEnd) : "")');
 
