@@ -3,7 +3,7 @@ using YouCan.Entites.Models;
 using YouCan.Service.Service;
 
 namespace YouCan.Areas.Admin.Controllers;
-
+[Area("Admin")]
 public class AnnouncementsController : Controller
 {
 	private readonly ICRUDService<Announcement> _announcements;
@@ -11,7 +11,19 @@ public class AnnouncementsController : Controller
     {
         _announcements = announcements;
     }
-    public IActionResult Index() => View(_announcements.GetAll().ToList());
+    public IActionResult Index() => View(_announcements.GetAll().OrderBy(e => e.Id).ToList());
+    [HttpGet]
+    public IActionResult Create() => View();
+    [HttpPost]
+    public async Task<IActionResult> Create(Announcement announ)
+    {
+        if (ModelState.IsValid)
+        {
+            await _announcements.Insert(announ);
+            return RedirectToAction("Index");
+        }
+        return NotFound();
+    }
     public async Task<IActionResult> Details(int announId)
     {
         var announ = await _announcements.GetById(announId);
@@ -32,7 +44,7 @@ public class AnnouncementsController : Controller
         {
             return NotFound();
         }
-
+        ViewBag.AnnounId = announId;
         return View(announ);
     }
     [HttpPost]
