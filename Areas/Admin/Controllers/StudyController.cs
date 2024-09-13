@@ -199,67 +199,78 @@ public class StudyController : Controller
             lesson.Description = model.Description;
             lesson.Lecture = model.Lecture;
             lesson.VideoUrl = model.LessonVideo;
+
             Test? test = await _testService.GetById(lesson.Tests.First().Id);
-            lesson.LessonModules.Clear();
-            await _lessonService.Update(lesson);
-            foreach (var module in lesson.LessonModules)
+
+            if (model.Modules != null)
             {
-                fileManager.DeleteFile(module.PhotoUrl);
-                await _lessonModuleService.DeleteById(module.Id);
-            }
-            foreach (var module in model.Modules)
-            {
-                string? moduleFileName = module.ExistsPhotoUrl;
-                if (module.ModulePhoto != null)
-                    moduleFileName = await fileManager.SaveFormFileAsync("lessonResources", module.ModulePhoto);
-                LessonModule newModule = new LessonModule()
-                {
-                    Title = module.ModuleTitle,
-                    Content = module.ModuleContent,
-                    PhotoUrl = moduleFileName,
-                    LessonId = lesson.Id
-                };
-                await _lessonModuleService.Insert(newModule);
+                lesson.LessonModules.Clear();
                 await _lessonService.Update(lesson);
-            }
-            test.Questions.Clear();
-            await _testService.Update(test);
-            foreach (var question in test.Questions)
-            {
-                fileManager.DeleteFile(question.ImageUrl);
-                question.Answers.Clear();
-                await _questionService.Update(question);
-                foreach (var answer in question.Answers)
-                    await _answerService.DeleteById(answer.Id);
-                await _questionService.DeleteById(question.Id);
-            }
-            foreach (var question in model.Questions)
-            {
-                string? questionFileName = question.QuestionExistsPhotoUrlElement;
-                if (question.Image != null)
-                    questionFileName = await fileManager.SaveFormFileAsync("lessonResources", question.Image);
-                Question newQuestion = new Question()
+
+                foreach (var module in lesson.LessonModules)
                 {
-                    Instruction = question.Instruction,
-                    Content = question.Text, 
-                    ImageUrl = questionFileName,
-                    IsPublished = true,
-                    Point = 1,
-                    SubjectId = lesson.SubjectId,
-                    TestId = test.Id
-                };
-                await _questionService.Insert(newQuestion);
-                await _testService.Update(test);
-                foreach (var answer in question.Answers)
+                    fileManager.DeleteFile(module.PhotoUrl);
+                    await _lessonModuleService.DeleteById(module.Id);
+                }
+
+                foreach (var module in model.Modules)
                 {
-                    Answer newAnswer = new Answer()
+                    string? moduleFileName = module.ExistsPhotoUrl;
+                    if (module.ModulePhoto != null)
+                        moduleFileName = await fileManager.SaveFormFileAsync("lessonResources", module.ModulePhoto);
+                    LessonModule newModule = new LessonModule()
                     {
-                        Content = answer.AnswerText,
-                        IsCorrect = answer.IsCorrect,
-                        QuestionId = newQuestion.Id
+                        Title = module.ModuleTitle,
+                        Content = module.ModuleContent,
+                        PhotoUrl = moduleFileName,
+                        LessonId = lesson.Id
                     };
-                    await _answerService.Insert(newAnswer);
-                    await _questionService.Update(newQuestion);
+                    await _lessonModuleService.Insert(newModule);
+                    await _lessonService.Update(lesson);
+                }
+            }
+
+            if (model.Questions != null)
+            {
+                test.Questions.Clear();
+                await _testService.Update(test);
+                foreach (var question in test.Questions)
+                {
+                    fileManager.DeleteFile(question.ImageUrl);
+                    question.Answers.Clear();
+                    await _questionService.Update(question);
+                    foreach (var answer in question.Answers)
+                        await _answerService.DeleteById(answer.Id);
+                    await _questionService.DeleteById(question.Id);
+                }
+                foreach (var question in model.Questions)
+                {
+                    string? questionFileName = question.QuestionExistsPhotoUrlElement;
+                    if (question.Image != null)
+                        questionFileName = await fileManager.SaveFormFileAsync("lessonResources", question.Image);
+                    Question newQuestion = new Question()
+                    {
+                        Instruction = question.Instruction,
+                        Content = question.Text, 
+                        ImageUrl = questionFileName,
+                        IsPublished = true,
+                        Point = 1,
+                        SubjectId = lesson.SubjectId,
+                        TestId = test.Id
+                    };
+                    await _questionService.Insert(newQuestion);
+                    await _testService.Update(test);
+                    foreach (var answer in question.Answers)
+                    {
+                        Answer newAnswer = new Answer()
+                        {
+                            Content = answer.AnswerText,
+                            IsCorrect = answer.IsCorrect,
+                            QuestionId = newQuestion.Id
+                        };
+                        await _answerService.Insert(newAnswer);
+                        await _questionService.Update(newQuestion);
+                    }
                 }
             }
             await _lessonService.Update(lesson);
