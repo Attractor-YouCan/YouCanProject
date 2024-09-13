@@ -7,35 +7,33 @@
 <h2>Редактировать вопрос</h2>
 
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
-        <label for="Content">Контент</label>
-        <textarea class="form-control" id="Content" name="Content">@Model.Content</textarea>
+        <label asp-for="Content">Контент</label>
+        <textarea class="form-control" asp-for="Content"></textarea>
     </div>
 
     <div class="form-group">
-        <label for="Instruction">Инструкция</label>
-        <textarea class="form-control" id="Instruction" name="Instruction">@Model.Instruction</textarea>
+        <label asp-for="Instruction">Инструкция</label>
+        <textarea class="form-control" asp-for="Instruction"></textarea>
     </div>
 
     <div class="form-group">
-        <label for="SubjectId">Предмет</label>
-        <select class="form-control" id="SubjectId" name="SubjectId">
+        <label asp-for="SubjectId">Предмет</label>
+        <select class="form-control" asp-for="SubjectId">
             @foreach (var subject in ViewBag.Subjects)
             {
-                <option value="@subject.Id">
+                <option value="@subject.Id" >
                     @subject.Name
                 </option>
             }
         </select>
     </div>
 
-
-
     <div class="form-group">
-        <label for="ImageUrl">URL изображения</label>
-        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+        <label asp-for="ImageUrl">URL изображения</label>
+        <input type="text" class="form-control" asp-for="ImageUrl" />
     </div>
 
     <h3>Ответы</h3>
@@ -44,25 +42,22 @@
         {
             <li>
                 <div class="form-group">
-                    <label for="Answers_@(i)__Content">Ответ @(i + 1)</label>
-                    <textarea class="form-control" id="Answers_@(i)__Content" name="Answers[@(i)].Content">@Model.Answers[i].Content</textarea>
+                    <label asp-for="Answers[i].Content">Ответ @(i + 1)</label>
+                    <textarea class="form-control" asp-for="Answers[i].Content"></textarea>
                 </div>
 
                 <div class="form-check">
-                    <input type="hidden" name="Answers[@(i)].IsCorrect" value="false" />
-                    <input type="checkbox" class="form-check-input" id="Answers_@(i)__IsCorrect" name="Answers[@(i)].IsCorrect" value="true" @(Model.Answers[i].IsCorrect ? "checked" : "") />
-                    <label class="form-check-label" for="Answers_@(i)__IsCorrect">Правильный ответ</label>
+                    <input type="checkbox" class="form-check-input" asp-for="Answers[i].IsCorrect" />
+                    <label class="form-check-label" asp-for="Answers[i].IsCorrect">Правильный ответ</label>
                 </div>
             </li>
-            
-
         }
     </ul>
 
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
+
 @section Scripts{
-    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let correctCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="Answers"]');
