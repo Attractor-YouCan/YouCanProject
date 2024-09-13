@@ -15,5 +15,4 @@ public class UserOrtTest : EntityBase
     public int? Points { get; set; }
     public int? PassedTimeInMin { get; set; }
 
-
 }

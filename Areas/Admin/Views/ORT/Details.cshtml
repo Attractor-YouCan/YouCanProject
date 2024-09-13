@@ -9,9 +9,11 @@
 <div>
     <div class="row d-flex justify-content-between">
         <h4 class="col-9">OrtTest</h4>
-        <a class="col-2 btn btn-warning me-5" asp-action="Edit" asp-route-ortId="@Model.Id">
-            Редактировать
-        </a>
+        <div class="row d-flex justify-content-between col-2 me-3">
+            <a class="col-5 btn btn-warning me-5" asp-action="Edit" asp-route-ortId="@Model.Id">
+                Редактировать
+            </a>
+        </div>
     </div>
     <hr />
     <dl class="row">
