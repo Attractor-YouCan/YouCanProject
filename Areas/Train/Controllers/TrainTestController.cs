@@ -43,21 +43,16 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
 
-        Test? test = _testService.GetAll()
-            .FirstOrDefault(t => t.SubjectId == subSubjectId);
+        var subjectId = subSubjectId;
 
-        if (test == null)
-            return NotFound("No Test!");
-
-        var subjectId = test.SubjectId;
 
         var answeredQuestionIds = _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
-            .Select(pq => pq.QuestionId)
+            .Select(pq => pq.QuestionId)     
             .ToList();
 
-        var questions = test.Questions
-            .Where(q => !answeredQuestionIds.Contains(q.Id))
+        var questions = _questionService.GetAll()
+            .Where(q => !answeredQuestionIds.Contains(q.Id) && q.SubjectId == subSubjectId && q.IsPublished)
             .OrderBy(q => q.Id)
             .ToList();
 

@@ -1,0 +1,78 @@
+@model YouCan.Entities.Question
+@{
+    ViewBag.Title = "Редактировать вопрос";
+    Layout = "_Admin";
+}
+
+<h2>Редактировать вопрос</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Content">Контент</label>
+        <textarea class="form-control" asp-for="Content"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Instruction">Инструкция</label>
+        <textarea class="form-control" asp-for="Instruction"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubjectId">Предмет</label>
+        <select class="form-control" asp-for="SubjectId">
+            @foreach (var subject in ViewBag.Subjects)
+            {
+                <option value="@subject.Id" >
+                    @subject.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageUrl">URL изображения</label>
+        <input type="text" class="form-control" asp-for="ImageUrl" />
+    </div>
+
+    <h3>Ответы</h3>
+    <ul>
+        @for (int i = 0; i < Model.Answers.Count; i++)
+        {
+            <li>
+                <div class="form-group">
+                    <label asp-for="Answers[i].Content">Ответ @(i + 1)</label>
+                    <textarea class="form-control" asp-for="Answers[i].Content"></textarea>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="Answers[i].IsCorrect" />
+                    <label class="form-check-label" asp-for="Answers[i].IsCorrect">Правильный ответ</label>
+                </div>
+            </li>
+        }
+    </ul>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let correctCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="Answers"]');
+
+            correctCheckboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        correctCheckboxes.forEach(function (box) {
+                            if (box !== checkbox) {
+                                box.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
