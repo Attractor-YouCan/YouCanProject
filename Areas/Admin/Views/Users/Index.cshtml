@@ -17,37 +17,37 @@
     <thead>
         <tr>
             <th>
-                Id
+                <a asp-action="Index" asp-route-order="@ViewData["IdSort"]">Id</a>
             </th>
             <th>
-                Имя
+                <a asp-action="Index" asp-route-order="@ViewData["NameSort"]">Имя</a>
             </th>
             <th>
-                Почта
+                <a asp-action="Index" asp-route-order="@ViewData["EmailSort"]">Почта</a>
             </th>
             <th>
-                Роль
+                <a asp-action="Index" asp-route-order="@ViewData["RoleSort"]">Роль</a>
             </th>
             <th>
                 Права доступа
             </th>
             <th>
-                Тариф
+                <a asp-action="Index" asp-route-order="@ViewData["TariffSort"]">Тариф</a>
+                
             </th>
             <th>
-                Дата окончания тарифа
+                <a asp-action="Index" asp-route-order="@ViewData["TariffEndDateSort"]">Дата окончания тарифа</a>
             </th>
             <th>
-                Смена тарифа
             </th>
             <th>
-                Активный
+                <a asp-action="Index" asp-route-order="@ViewData["ActiveSort"]">Активность</a>
             </th>
             <th>
-                Уроки
+                <a asp-action="Index" asp-route-order="@ViewData["LessonsCountSort"]">Уроки</a>
             </th>
             <th>
-                Пройдено
+                <a asp-action="Index" asp-route-order="@ViewData["LessonsFinishedCountSort"]">Пойдено</a>
             </th>
             <th>
                 Действия
