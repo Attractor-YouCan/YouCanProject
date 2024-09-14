@@ -43,12 +43,6 @@ public class TrainTestController : Controller
         if (user == null)
             return Unauthorized();
 
-        /*Test? test =  _testService.GetAll()
-            .FirstOrDefault(t => t.SubjectId == subSubjectId);
-
-        if (test == null)
-            return NotFound("No Test!");*/
-
         var subjectId = subSubjectId;
 
         var answeredQuestionIds =  _passedQuestionService.GetAll()
