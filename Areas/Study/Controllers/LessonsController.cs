@@ -92,7 +92,7 @@ public class LessonsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var lesson = _lessonService.GetById(model.LessonId);
+            var lesson = await _lessonService.GetById(model.LessonId);
             if (lesson is null)
             {
                 return NotFound($"Lesson with id: {model.LessonId} not found");

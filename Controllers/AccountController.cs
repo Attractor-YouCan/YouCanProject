@@ -444,7 +444,6 @@ public class AccountController : Controller
 
         currentUser.Statistic.StudyMinutes += timeSpentTimeSpan;
 
-        // Сохраняем изменения в базе данных
         var result = await _userManager.UpdateAsync(currentUser);
         if (!result.Succeeded)
         {
