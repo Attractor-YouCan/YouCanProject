@@ -53,11 +53,11 @@ public class TrainTestController : Controller
 
         var answeredQuestionIds =  _passedQuestionService.GetAll()
             .Where(pq => pq.UserId == user.Id)
-            .Select(pq => pq.QuestionId)
+            .Select(pq => pq.QuestionId)     
             .ToList();
 
         var questions = _questionService.GetAll()
-            .Where(q => !answeredQuestionIds.Contains(q.Id) && q.SubjectId == subSubjectId /*&& q.IsPublished*/)
+            .Where(q => !answeredQuestionIds.Contains(q.Id) && q.SubjectId == subSubjectId && q.IsPublished)
             .OrderBy(q => q.Id)
             .ToList();
 
