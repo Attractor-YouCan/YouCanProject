@@ -8,10 +8,10 @@
     Layout = "_Admin";
 }
 
-<h1>Index</h1>
+<h1>Список пользователей</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать пользователя</a>
 </p>
 <table class="table">
     <thead>
@@ -20,10 +20,10 @@
                 Id
             </th>
             <th>
-                Username
+                Имя
             </th>
             <th>
-                Email
+                Почта
             </th>
             <th>
                 Роль
@@ -41,7 +41,7 @@
                 Смена тарифа
             </th>
             <th>
-                Заблокирован
+                Активный
             </th>
             <th>
                 Уроки
@@ -79,7 +79,7 @@
                     {
                         <form asp-action="ChangeRole" method="post">
                             <input type="hidden" name="Id" value="@user.Id"/>
-                            <select name="role">
+                            <select name="role" class="form-select form-select-sm">
                                 <option value=""></option>
                                 @if (!await manager.IsInRoleAsync(user, "manager"))
                                 {
@@ -90,7 +90,7 @@
                                     <option value="user">user</option>
                                 }
                             </select>
-                            <button type="submit" class="btn btn-primary">Поменять права</button>
+                            <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Поменять права</button>
                         </form>
                     }
                 }
@@ -114,7 +114,7 @@
                         {
                             <form asp-action="ChangeTariff" method="post">
                                 <input type="hidden" name="id" value="@user.Id" />
-                                <select name="tariffId">
+                                <select name="tariffId" class="form-select form-select-sm">
                                     <option value=""></option>
                                     @foreach (var tariff in (List<Tariff>)ViewBag.Tariffs)
                                     {
@@ -124,13 +124,20 @@
                                         }
                                     }
                                 </select>
-                                <button type="submit" class="btn btn-primary">Поменять тариф</button>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Поменять тариф</button>
                             </form>
                         }
                     }
                 </td>
                 <td>
-                    @(user.LockoutEnabled && user.LockoutEnd != null)
+                    @if (user.LockoutEnabled && user.LockoutEnd != null)
+                    {
+                        <i class="bi bi-x text-danger fs-1"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-check2 text-success fs-1"></i>
+                    }
                 </td>
                 <td>
                     @user.Lessons.Count
@@ -141,16 +148,19 @@
                 <td>
                     @if (User.IsInRole("admin"))
                     {
-                        <a class="btn btn-primary btn-sm m-1" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
-                        <a class="btn btn-warning btn-sm m-1" asp-action="Details" asp-route-id="@user.Id">Details</a>
-                        <a class="btn btn-danger btn-sm m-1" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                        <a class="btn btn-primary btn-sm m-1" asp-action="Edit" asp-route-id="@user.Id">Редактировать</a>
+                        <a class="btn btn-warning btn-sm m-1" asp-action="Details" asp-route-id="@user.Id">Подробно</a>
+                        @if (!await manager.IsInRoleAsync(user, "admin"))
+                        {
+                            <a class="btn btn-danger btn-sm m-1" asp-action="Delete" asp-route-id="@user.Id">Удалить</a>
+                        }
                         @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
                         {
-                            <a class="btn btn-primary btn-sm m-1" asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                            <a class="btn btn-primary btn-sm m-1" asp-action="UnBlock" asp-route-id="@user.Id">Разблокировать</a>
                         }
                         else
                         {
-                            <a class="btn btn-danger btn-sm m-1" asp-action="Block" asp-route-id="@user.Id">Block</a>
+                            <a class="btn btn-danger btn-sm m-1" asp-action="Block" asp-route-id="@user.Id">Заблокировать</a>
                         }
                     }
                 </td>
