@@ -1,6 +1,5 @@
-
-
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Text.Json
 @model YouCan.ViewModels.UserProfileViewModel
 
 @{
@@ -10,7 +9,8 @@
 
 <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
 
-<div class="container ps-5  pb-6rem">
+
+<div class="container">
     <h1 class="d-md-none text-center profile-title">Профиль</h1>
     <hr class="d-md-none">
     <div class="row row-cols-1 row-cols-lg-2">
@@ -21,8 +21,8 @@
                         <p class="profile-text-primary">@Model.User.FullName</p>
                         <p class="profile-text-secondary">@Model.User.PhoneNumber</p>
                         <div class="d-flex flex-row align-items-center">
-                            <img class="clock-img d-block" src="@Url.Content("~/profileIcons/oclock.png")"></img>
-                            <p class="profile-text-secondary ms-1">Регистрация -</p>
+                            <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img>
+                            <p class="profile-text-secondary ms-1">Регистрация - @Model.User.CreatedAt?.ToString("MMMM yyyy")</p>
                         </div>
                     </div>
                     <div class="">
@@ -39,33 +39,258 @@
             </a>
             <hr>
         </div>
-        <div class="row">
-            <div class="col">
-                <h3>Your Levels</h3>
-                <ul>
-                    @foreach (var level in Model.UserLevels)
-                    {
-                        <li>
-                            Subject: @level.Subject?.Name - Level: @level.Level
-                        </li>
-                    }
-                </ul>
+    </div>
+
+    @* Статистика *@
+    <h2 class="mb-3 mt-4">Статистика</h2>
+    <div class="row row-cols-2 row-cols-md-2 g-2 statistic">
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-shock-mode">
+                <img src="@Url.Content("/profileIcons/fire.png")" alt="fire-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">@((Model.User?.Statistic?.Streak ?? 0))</p>
+                    <p class="stat-card-subtitle mb-0">Ударный режим</p>
+                </div>
             </div>
-            <div class="col">
-                <h3>Achievements</h3>
-                <ul>
-                    @foreach (var lesson in Model.UserLessons)
-                    {
-                        <li>
-                            <strong>@lesson.Title</strong> - Passed Level: @lesson.PassedLevel, Required Level: @lesson.RequiredLevel
-                        </li>
-                    }
-                </ul>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-experience">
+                <img src="@Url.Content("/profileIcons/coin.png")" alt="experience-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">@((Model.User.UserExperiences?.Sum(e => e.ExperiencePoints) ?? 0))</p>
+                    <p class="stat-card-subtitle mb-0">Очки опыта</p>
+                </div>
             </div>
-            <div class="col">
-                <h3>Your Score</h3>
-                <p>@ViewBag.UserScore</p>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-current-league">
+                <img src="@Url.Content("/profileIcons/league.png")" alt="league-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">@((Model.User.League?.LeagueName ?? "-"))</p>
+                    <p class="stat-card-subtitle mb-0">Текущая лига</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="profile-stat-card d-flex align-items-center p-2 color-study-time">
+                <img src="@Url.Content("/profileIcons/league.png")" alt="clock-icon">
+                <div class="ms-2">
+                    <p class="stat-card-title mb-0">@((Model.User.Statistic?.StudyMinutes.TotalMinutes ?? 0))</p>
+                    <p class="stat-card-subtitle mb-0">Минуты за учебой</p>
+                </div>
             </div>
         </div>
     </div>
+
+
+    @* график *@
+    <h2 class="mb-3 mt-4">Опыт за неделю</h2>
+    
+    <canvas class="chart" id="myStyledBarChart" ></canvas>
+
+    @* календарь *@
+    <h2 class="mb-3 mt-4">Ударный режим</h2>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button class="prev-month">&lt;</button>
+            <span class="month-year"></span>
+            <button class="next-month">&gt;</button>
+        </div>
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                    <th>Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="tariff-plan mt-4">
+        <div class="tariff-card">
+            <div class="icon">
+                <img src="@Url.Content("/profileIcons/calendar.png")" alt="Calendar">
+            </div>
+            <div class="tariff-info">
+                <h3>Тарифный план</h3>
+                <p>Активно до: @((Model.User.TariffEndDate?.ToString("dd.MM.yyyy") ?? "-"))</p>
+                <button class="extend-btn">Продлить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="privacy-policy mt-4 mb-4">
+        <button class="policy-btn">Политика конфиденциальности</button>
+    </div>
+    <div class="privacy-policy mt-4 mb-4">
+        <a asp-action="Index" asp-controller="Announcement">
+            <button class="policy-btn">Объявления</button>
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let data = {
+            labels: @Html.Raw(JsonSerializer.Serialize(Model.WeeklyExperience.Select(e => e.Date.ToString("ddd")))),
+        datasets: [{
+            label: 'Опыт за неделю',
+                data: @Html.Raw(JsonSerializer.Serialize(Model.WeeklyExperience.Select(e => e.ExperiencePoints))),
+            backgroundColor: [
+                'rgba(255, 165, 0, 0.7)',
+                'rgba(50, 205, 50, 0.7)',
+                'rgba(135, 206, 235, 0.7)',
+                'rgba(255, 69, 0, 0.7)',
+                'rgba(255, 165, 0, 0.7)',
+                'rgba(135, 206, 250, 0.7)',
+                'rgba(50, 205, 50, 0.7)'
+            ],
+            borderColor: [
+                'rgba(255, 165, 0, 1)',
+                'rgba(50, 205, 50, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(255, 69, 0, 1)',
+                'rgba(255, 165, 0, 1)',
+                'rgba(135, 206, 250, 1)',
+                'rgba(50, 205, 50, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 10,
+            barPercentage: 0.5,
+            categoryPercentage: 0.5,
+            hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
+            hoverBorderColor: 'rgba(255, 99, 132, 1)'
+        }]
+    };
+
+    let options = {
+        responsive: false,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    stepSize: 25
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    };
+
+    let ctx = document.getElementById('myStyledBarChart').getContext('2d');
+    let myStyledBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarContainer = document.querySelector('.calendar');
+            const monthYearElement = document.querySelector('.month-year');
+            const prevMonthButton = document.querySelector('.prev-month');
+            const nextMonthButton = document.querySelector('.next-month');
+
+            let currentDate = new Date();
+
+            // Установим точное время для начала и конца периода heatwave
+            const heatwaveStart = new Date('@String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.ImpactModeStart)');
+            const heatwaveEnd = new Date('@String.Format("{0:yyyy-MM-ddTHH:mm:ssZ}", Model.User.ImpactModeEnd)');
+
+            function normalizeDate(date) {
+                return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            }
+
+            function renderCalendar(date) {
+                const month = date.getMonth();
+                const year = date.getFullYear();
+
+                const monthName = date.toLocaleString('ru-RU', { month: 'long' });
+                monthYearElement.textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1) + ' ' + year;
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                calendarContainer.querySelector('tbody').innerHTML = '';
+                let row = document.createElement('tr');
+
+                // Заполнение дней предыдущего месяца
+                for (let i = 1; i < (firstDayOfMonth === 0 ? 7 : firstDayOfMonth); i++) {
+                    let cell = document.createElement('td');
+                    row.appendChild(cell);
+                }
+
+                // Заполнение дней текущего месяца
+                for (let day = 1; day <= daysInMonth; day++) {
+                    if (row.children.length === 7) {
+                        calendarContainer.querySelector('tbody').appendChild(row);
+                        row = document.createElement('tr');
+                    }
+                    let cell = document.createElement('td');
+                    cell.textContent = day;
+
+                    const cellDate = normalizeDate(new Date(year, month, day));
+
+                    // Применение класса heatwave
+                    if (cellDate >= normalizeDate(heatwaveStart) && cellDate <= normalizeDate(heatwaveEnd)) {
+                        // Если начало периода
+                        if (cellDate.getTime() === normalizeDate(heatwaveStart).getTime() || row.children.length === 0) {
+                            cell.classList.add('heatwave', 'start');
+                        }
+
+                        // Если конец периода или последний день строки
+                        if (cellDate.getTime() === normalizeDate(heatwaveEnd).getTime() || row.children.length === 6) {
+                            cell.classList.add('heatwave', 'end');
+                        }
+
+                        if (!cell.classList.contains('start') && !cell.classList.contains('end')) {
+                            cell.classList.add('heatwave', 'full');
+                        }
+                    }
+
+                    row.appendChild(cell);
+                }
+
+                // Заполнение дней следующего месяца
+                while (row.children.length < 7) {
+                    let cell = document.createElement('td');
+                    row.appendChild(cell);
+                }
+
+                calendarContainer.querySelector('tbody').appendChild(row);
+            }
+
+            prevMonthButton.addEventListener('click', function () {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+
+            nextMonthButton.addEventListener('click', function () {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+
+            renderCalendar(currentDate);
+        });
+
+
+    </script>
+
 </div>

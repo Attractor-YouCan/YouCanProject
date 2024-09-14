@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 using YouCan.Repository;
+using YouCan.Service.Service;
 using YouCan.ViewModels;
 
 
@@ -12,10 +13,11 @@ namespace YouCan.Areas.Rating.Controllers
     [Area("Rating")]
     public class LeagueController : Controller
     {
-        private readonly LeagueRepository _leagueRepository;
+        private readonly ICRUDService<League> _leagueRepository;
+        //private readonly LeagueRepository _leagueRepository;
         private UserManager<User> _userManager;
 
-        public LeagueController(LeagueRepository leagueRepository, UserManager<User> userManager)
+        public LeagueController(ICRUDService<League> leagueRepository, UserManager<User> userManager)
         {
             _leagueRepository = leagueRepository;
             _userManager = userManager;
@@ -40,10 +42,10 @@ namespace YouCan.Areas.Rating.Controllers
             {
                 return null;
             }
-            var users = await _userManager.Users
+            var users =  _userManager.Users
                 .Include(u => u.League)
                 .OrderByDescending(u => u.Rank)
-                .ToListAsync();
+                .ToList();
 
             var leagueUsers = new List<User>();
             foreach (var user in users)
@@ -102,7 +104,7 @@ namespace YouCan.Areas.Rating.Controllers
         // GET: Rating/League/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var league = await _leagueRepository.Get(id);
+            var league = await _leagueRepository.GetById(id);
             if (league == null)
             {
                 return NotFound();
@@ -128,7 +130,7 @@ namespace YouCan.Areas.Rating.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (await _leagueRepository.Get(league.Id) == null)
+                    if (await _leagueRepository.GetById(league.Id) == null)
                     {
                         return NotFound();
                     }
@@ -145,7 +147,7 @@ namespace YouCan.Areas.Rating.Controllers
         // GET: Rating/League/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var league = await _leagueRepository.Get(id);
+            var league = await _leagueRepository.GetById(id);
             if (league == null)
             {
                 return NotFound();
@@ -159,10 +161,10 @@ namespace YouCan.Areas.Rating.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var league = await _leagueRepository.Get(id);
+            var league = await _leagueRepository.GetById(id);
             if (league != null)
             {
-                await _leagueRepository.Delete(league);
+                await _leagueRepository.DeleteById(id);
             }
 
             return RedirectToAction(nameof(Index));
