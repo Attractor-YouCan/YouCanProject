@@ -168,3 +168,20 @@
 }
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@(ViewBag.CurrentPage - 1)">Назад</a>
+        </li>
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@i">@i</a>
+            </li>
+        }
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@(ViewBag.CurrentPage + 1)">Вперед</a>
+        </li>
+    </ul>
+</nav>

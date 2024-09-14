@@ -36,8 +36,10 @@ public class UsersController : Controller
         _tariffManager = tariffManager;
     }
 
-    public async Task<IActionResult> Index(UserSortOrder order = IdAsc)
+    public async Task<IActionResult> Index(UserSortOrder order = IdAsc, int page = 1)
     {
+        int pageSize = 10;
+
         ViewData["IdSort"] = order == IdAsc ? IdDesc : IdAsc;
         ViewData["NameSort"] = order == NameAsc ? NameDesc : NameAsc;
         ViewData["EmailSort"] = order == EmailAsc ? EmailDesc : EmailAsc;
@@ -59,8 +61,18 @@ public class UsersController : Controller
 
         users = SortUsers(users, order);
 
+        var totalUsers = users.Count;
+        users = users
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
         ViewBag.Roles =  _roleManager.Roles.ToList();
         ViewBag.Tariffs = _tariffManager.GetAll().ToList();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+        ViewData["CurrentSort"] = order;
 
         return View(users);
     }
