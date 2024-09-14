@@ -30,7 +30,7 @@ else
     <div class="col-8 mx-auto tests mt-5">
         @foreach (var ortTest in Model)
         {
-            if (ViewBag.UserRoles.Contains("admin") || ViewBag.UserRoles.Contains("prouser"))
+            if (ViewBag.UserRoles.Contains("admin") || ViewBag.UserRoles.Contains("prouser") || ViewBag.UserRoles.Contains("manager"))
             {
                 <a asp-action="Details" asp-route-ortTestId="@ortTest.Id">
                     <div class="ort-trial-block-paddings border border-1 text-success fw-bold text-center rounded-3 border-success mt-3">

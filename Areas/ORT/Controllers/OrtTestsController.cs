@@ -28,10 +28,16 @@ public class OrtTestsController : Controller
         User? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null)
             RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(currUser.Id);
+        UserOrtTest? userOrtTest = _userOrtTestService.GetAll().FirstOrDefault(t => t.UserId == currUser.Id);
         if (userOrtTest == null)
         {
-            userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false, PassedLevel = 0, OrtTestId = null};
+            userOrtTest = new UserOrtTest()
+            {
+                UserId = currUser.Id, 
+                IsPassed = false, 
+                PassedLevel = 0, 
+                OrtTestId = null
+            };
             await _userOrtTestService.Insert(userOrtTest);
         }
         if (userOrtTest.OrtTest == null)
