@@ -64,6 +64,8 @@ public class ORTController : Controller
                 Details = $"{admin.UserName} создал новый орт тест ID: {ort.Id}"
             };
 
+            await _adminActions.Update(log);
+
             return RedirectToAction("Index");   
         }
         return BadRequest();
@@ -103,6 +105,7 @@ public class ORTController : Controller
                 Action = "Редактирование орт теста",
                 Details = $"{admin.UserName} изменил орт тест ID: {ort.Id}"
             };
+            await _adminActions.Update(log);
 
             return RedirectToAction("Details", new {ortId = ort.Id});   
         }
@@ -148,6 +151,8 @@ public class ORTController : Controller
                 Action = "Создание подтеста",
                 Details = $"{admin.UserName} создал новый подтест Id: {test.Id} к орт тесту Id: {ort.Id}"
             };
+
+            await _adminActions.Update(log);
 
             return RedirectToAction("Details", new { ortId = test.OrtTestId });
         }
@@ -212,6 +217,8 @@ public class ORTController : Controller
                         Action = "Создание вопросов",
                         Details = $"{admin.UserName} добавил вопросы в подтест Id: {test.Id} у орт теста Id: {test.OrtTestId}"
                     };
+
+                    await _adminActions.Update(log);
 
                     return RedirectToAction("Details", new {ortId = test.OrtTestId});
                 }
@@ -335,6 +342,8 @@ public class ORTController : Controller
                 Details = $"{admin.UserName} изменил подтест Id: {test.Id} у орт теста Id: {ort.Id}"
             };
 
+            await _adminActions.Update(log);
+
             return RedirectToAction("Index");
         }
         return NotFound("Теста не был найден");
@@ -364,6 +373,8 @@ public class ORTController : Controller
             Action = "Удаление подтеста",
             Details = $"{admin.UserName} удалил подтест Id: {test.Id} у орт теста Id: {ort.Id}"
         };
+
+        await _adminActions.Update(log);
 
         await _testsManager.DeleteById(test.Id);
         return RedirectToAction("Details", new {ortId = ort.Id});

@@ -127,6 +127,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="YouCan.Entites\YouCan.Entites.csproj" />
       <ProjectReference Include="YouCan.Service\YouCan.Service.csproj" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
@@ -168,6 +169,16 @@
       <None Remove="YouCan.Service\**" />
       <None Remove="YouCan.Repository\**" />
       <None Remove="YouCan.Entites\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Areas\Admin\Views\ORT\CreateOrt.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\CreateQuestions.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\CreateTest.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\Details.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\Edit.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\EditTest.cshtml" />
+      <None Include="Areas\Admin\Views\ORT\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

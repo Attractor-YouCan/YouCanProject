@@ -40,6 +40,8 @@ public class AnnouncementsController : Controller
                 Details = $"{admin.UserName} создал новое объявление {announ.Title}"
             };
 
+            await _adminActions.Update(log);
+
             return RedirectToAction("Index");
         }
         return NotFound();
@@ -83,6 +85,8 @@ public class AnnouncementsController : Controller
                 Details = $"{admin.UserName} изменил объявление {announ.Title}"
             };
 
+            await _adminActions.Update(log);
+
             return RedirectToAction("Index");
         }
         return View(announ);
@@ -104,6 +108,8 @@ public class AnnouncementsController : Controller
             Action = "Удаление объявления",
             Details = $"{admin.UserName} удалил объявление {announ.Title}"
         };
+
+        await _adminActions.Update(log);
 
         await _announcements.DeleteById(announ.Id);
         return RedirectToAction("Index");
