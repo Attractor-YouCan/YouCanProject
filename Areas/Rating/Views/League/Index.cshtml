@@ -72,7 +72,8 @@ Layout = "_NavBar";
 
     $(document).ready(function () {
         var debounceTimeout;
-
+        
+        
         function updateLeagueAndUsers() {
             clearTimeout(debounceTimeout);
 
@@ -87,25 +88,26 @@ Layout = "_NavBar";
                     type: 'GET',
                     data: { leagueName: leagueName },
                     success: function (data) {
-                        $(".loader").hide(); 
+                        $(".loader").hide();
 
                         console.log("Received data:", data);
 
-                     
                         var users = data.$values;
 
                         if (Array.isArray(users)) {
                             var leaderboardHtml = '';
                             $.each(users, function (index, user) {
+                                var maskedUsername = obfuscateUsername(user.fullName); // Obfuscate the username here
+
                                 leaderboardHtml += `
-                            <div class="row">
-                                <div class="col-1 position">${index + 1}</div>
-                                <div class="col-7 user-info">
-                                    <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
-                                    <span>${user.fullName}</span>
-                                </div>
-                                <div class="col-2 score">${user.userLessonScore} очков</div>
-                            </div>`;
+                <div class="row">
+                    <div class="col-1 position">${index + 1}</div>
+                    <div class="col-7 user-info">
+                        <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
+                        <span>${maskedUsername}</span>
+                    </div>
+                    <div class="col-2 score">${user.userLessonScore} очков</div>
+                </div>`;
                             });
                             $('.leaderboard').html(leaderboardHtml);
                         } else {
@@ -118,6 +120,13 @@ Layout = "_NavBar";
                     }
                 });
             }, 300); 
+        }
+        function obfuscateUsername(username) {
+            if (username.length <= 4) {
+                return username;
+            }
+
+            return username.substring(0, 4) + '*****';
         }
 
      
