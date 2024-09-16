@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
-using YouCan.Repository;
 using YouCan.Service.Service;
 using YouCan.ViewModels;
 

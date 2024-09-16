@@ -127,6 +127,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="YouCan.Entites\YouCan.Entites.csproj" />
       <ProjectReference Include="YouCan.Service\YouCan.Service.csproj" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />

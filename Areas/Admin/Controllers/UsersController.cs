@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using YouCan.Areas.Admin.Services;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Service.Service;
+using static YouCan.Areas.Admin.Services.UserSortOrder;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -19,22 +22,38 @@ public class UsersController : Controller
     private readonly ICRUDService<AdminAction> _adminActions;
     private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly ICRUDService<Tariff> _tariffManager;
+    private readonly ICRUDService<PassedQuestion> _passedQuestionManager;
 
     public UsersController(UserManager<User> userManager, 
         IWebHostEnvironment env, 
         ICRUDService<AdminAction> adminActions, 
         RoleManager<IdentityRole<int>> roleManager,
-        ICRUDService<Tariff> tariffManager)
+        ICRUDService<Tariff> tariffManager,
+        ICRUDService<PassedQuestion> passedQuestionManager)
     {
         _userManager = userManager;
         _env = env;
         _adminActions = adminActions;
         _roleManager = roleManager;
         _tariffManager = tariffManager;
+        _passedQuestionManager = passedQuestionManager;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(UserSortOrder order = IdAsc, int page = 1)
     {
+        int pageSize = 10;
+
+        ViewData["IdSort"] = order == IdAsc ? IdDesc : IdAsc;
+        ViewData["NameSort"] = order == NameAsc ? NameDesc : NameAsc;
+        ViewData["EmailSort"] = order == EmailAsc ? EmailDesc : EmailAsc;
+        ViewData["RoleSort"] = order == RoleAsc ? RoleDesc : RoleAsc;
+        ViewData["TariffSort"] = order == TariffAsc ? TariffDesc : TariffAsc;
+        ViewData["TariffEndDateSort"] = order == TariffEndDateAsc ? TariffEndDateDesc : TariffEndDateAsc;
+        ViewData["ActiveSort"] = order == ActiveAsc ? ActiveDesc : ActiveAsc;
+        ViewData["LessonsCountSort"] = order == LessonsCountAsc ? LessonsCountDesc : LessonsCountAsc;
+        ViewData["LessonsFinishedCountSort"] = order == LessonsFinishedCountAsc ? LessonsFinishedCountDesc : LessonsFinishedCountAsc;
+
+
         var users =  _userManager.Users
             .Include(u => u.Tariff)
             .Include(u => u.Statistic)
@@ -43,11 +62,60 @@ public class UsersController : Controller
             .OrderBy(u => u.Id)
             .ToList();
 
+        users = SortUsers(users, order);
+
+        var totalUsers = users.Count;
+        users = users
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
         ViewBag.Roles =  _roleManager.Roles.ToList();
         ViewBag.Tariffs = _tariffManager.GetAll().ToList();
 
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+        ViewData["CurrentSort"] = order;
+
         return View(users);
     }
+    [NonAction]
+    public List<User> SortUsers(List<User> users, UserSortOrder order)
+    {
+        users = order switch
+        {
+            IdAsc => users.OrderBy(u => u.Id).ToList(),
+            IdDesc => users.OrderByDescending(u => u.Id).ToList(),
+
+            NameAsc => users.OrderBy(u => u.UserName).ToList(),
+            NameDesc => users.OrderByDescending(u => u.UserName).ToList(),
+
+            EmailAsc => users.OrderBy(u => u.Email).ToList(),
+            EmailDesc => users.OrderByDescending(u => u.Email).ToList(),
+
+            RoleAsc => users.OrderBy(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+            RoleDesc => users.OrderByDescending(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+
+            TariffAsc => users.OrderBy(u => u.TariffId).ToList(),
+            TariffDesc => users.OrderByDescending(u => u.TariffId).ToList(),
+
+            TariffEndDateAsc => users.OrderBy(u => u.TariffEndDate).ToList(),
+            TariffEndDateDesc => users.OrderByDescending(u => u.TariffEndDate).ToList(),
+
+            ActiveAsc => users.OrderByDescending(u => !(u.LockoutEnabled && u.LockoutEnd != null)).ToList(),
+            ActiveDesc => users.OrderByDescending(u => u.LockoutEnabled && u.LockoutEnd != null).ToList(),
+
+            LessonsCountAsc => users.OrderBy(u => u.Lessons.Count).ToList(),
+            LessonsCountDesc => users.OrderByDescending(u => u.Lessons.Count).ToList(),
+
+            LessonsFinishedCountAsc => users.OrderBy(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+            LessonsFinishedCountDesc => users.OrderByDescending(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+
+            _ => users.OrderBy(u => u.Id).ToList(), // Default sorting
+        };
+        return users;
+    }
+
     [HttpPost]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> ChangeRole(int id, string? role)
@@ -184,14 +252,24 @@ public class UsersController : Controller
     {
         User user = await _userManager.Users
             .Include(u => u.Lessons)
-            .ThenInclude(l => l.Lesson)
+                .ThenInclude(l => l.Lesson)
             .Include(u => u.Tests)
-            .ThenInclude(l => l.OrtTest)
+                .ThenInclude(l => l.OrtTest)
             .Include(u => u.Questions)
             .Include(u => u.Statistic)
+            .Include(u => u.UserExperiences)
+            .Include(u => u.League)
+            .Include(u => u.Tariff)
             .FirstOrDefaultAsync(u => u.Id == id);
+
         if (user != null)
         {
+            var passedQuestions = _passedQuestionManager.GetAll()
+                .Where(u => u.UserId == user.Id)
+                .ToList();
+
+            ViewBag.PassedCount = passedQuestions.Count;
+
             return View(user);
         }
         return NotFound();

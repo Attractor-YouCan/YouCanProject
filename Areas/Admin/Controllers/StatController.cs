@@ -58,6 +58,7 @@ public class StatController : Controller
 
         return View(svm);
     }
+    [NonAction]
     public double CalculateAllNewUsers()
     {
         var users = _userManager.Users.ToList();
@@ -69,6 +70,7 @@ public class StatController : Controller
         double percent = newUsersCount / usersCount * 100;
         return percent;
     }
+    [NonAction]
     public double CalcualteStartUsers()
     {
         double usersCount = _userManager.Users.Count();
@@ -82,6 +84,7 @@ public class StatController : Controller
         double percent = startCount / usersCount * 100;
         return percent;
     }
+    [NonAction]
     public double CalculateProUsers()
     {
         double usersCount = _userManager.Users.Count();
@@ -95,6 +98,7 @@ public class StatController : Controller
         double percent = proCount / usersCount * 100;
         return percent;
     }
+    [NonAction]
     public double CalculatePremiumUsers()
     {
         double usersCount = _userManager.Users.Count();
