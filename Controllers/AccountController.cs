@@ -21,12 +21,12 @@ public class AccountController : Controller
     private readonly ICRUDService<Tariff> _tariffs;
 
 
-    public AccountController(IUserCRUD userService, 
+    public AccountController(IUserCRUD userService,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IWebHostEnvironment environment,
         TwoFactorService twoFactorService,
-        ICRUDService<UserLevel> userLevel, 
+        ICRUDService<UserLevel> userLevel,
         ICRUDService<UserLessons> userLessonService,
         ICRUDService<Tariff> tariffs,
         ICRUDService<UserExperience> userExperiance)
@@ -432,6 +432,25 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-   
+
+    [HttpPost]
+    public async Task<IActionResult> LogTime([FromBody] long timeSpent)
+    {
+        var currentUser = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
+        if (currentUser == null)
+            return Unauthorized();
+
+        TimeSpan timeSpentTimeSpan = TimeSpan.FromMilliseconds(timeSpent);
+
+        currentUser.Statistic.StudyMinutes += timeSpentTimeSpan;
+
+        var result = await _userManager.UpdateAsync(currentUser);
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка при обновлении данных пользователя.");
+        }
+
+        return Ok(new { message = "Время успешно сохранено" });
+    }
 
 }

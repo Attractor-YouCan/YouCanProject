@@ -401,6 +401,11 @@ body {
     border-radius: 14px;
     cursor: pointer;
 }
+@media (min-width: 1280px) {
+    .container {
+        margin-left: 140px;
+    }
+}
 @media (max-width: 1280px) {
     .container{
         margin-left: 140px;
