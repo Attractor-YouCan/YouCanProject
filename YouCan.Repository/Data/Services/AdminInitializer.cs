@@ -180,23 +180,28 @@ public class AdminInitializer
             BirthDate = DateTime.Today.ToUniversalTime(),
             Disctrict = "qweqweqeq",
             PhoneNumber = "4",
-            Statistic = new Statistic { Id = 1, Streak = 5, StudyMinutes = new TimeSpan(2, 30, 0) },
+            Statistic = new Statistic
+            {
+                Streak = 5,
+                StudyMinutes = new TimeSpan(2, 30, 0),
+                ImpactModeStart = new DateTime(2024, 9, 5, 0, 0, 0, DateTimeKind.Utc),
+                ImpactModeEnd = new DateTime(2024, 9, 13, 0, 0, 0, DateTimeKind.Utc)
+            },
             StatisticId = 1,
-            ImpactModeStart = new DateTime(2024, 8, 6, 0, 0, 0, DateTimeKind.Utc),
-            ImpactModeEnd = new DateTime(2024, 9, 05, 0, 0, 0, DateTimeKind.Utc),
             UserExperiences = {
-            new UserExperience {Id = 1, UserId = 5, Date = new DateTime(2024, 8, 30, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
-            new UserExperience {Id = 2, UserId = 5, Date = new DateTime(2024, 8, 31, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 },
-            new UserExperience {Id = 3, UserId = 5, Date = new DateTime(2024, 9, 05, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 10 },
-            new UserExperience {Id = 4, UserId = 5, Date = new DateTime(2024, 9, 04, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 50 },
-            new UserExperience {Id = 5, UserId = 5, Date = new DateTime(2024, 9, 03, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
-            new UserExperience {Id = 6, UserId = 5, Date = new DateTime(2024, 9, 02, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 35 },
-            new UserExperience {Id = 7, UserId = 5, Date = new DateTime(2024, 9, 01, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 }
+            new UserExperience {Id = 1, UserId = 5, Date = new DateTime(2024, 9, 13, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
+            new UserExperience {Id = 2, UserId = 5, Date = new DateTime(2024, 9, 12, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 },
+            new UserExperience {Id = 3, UserId = 5, Date = new DateTime(2024, 9, 11, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 10 },
+            new UserExperience {Id = 4, UserId = 5, Date = new DateTime(2024, 9, 10, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 50 },
+            new UserExperience {Id = 5, UserId = 5, Date = new DateTime(2024, 9, 09, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
+            new UserExperience {Id = 6, UserId = 5, Date = new DateTime(2024, 9, 08, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 35 },
+            new UserExperience {Id = 7, UserId = 5, Date = new DateTime(2024, 9, 07, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 }
             },
             Rank = 7,
             UserLessonScore = 2700,  // Gold League
             LeagueId = 3,
             TariffStartDate = DateTime.UtcNow,
+            TariffEndDate = new DateTime(2024, 10, 13, 0, 0, 0, DateTimeKind.Utc),
             TariffId = 1
 
         };

@@ -977,6 +977,12 @@ namespace YouCan.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("ImpactModeEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ImpactModeStart")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("Streak")
                         .HasColumnType("integer");
 
@@ -1199,12 +1205,6 @@ namespace YouCan.Repository.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("ImpactModeEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ImpactModeStart")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("LeagueId")
                         .HasColumnType("integer");
