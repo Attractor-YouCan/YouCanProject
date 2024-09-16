@@ -16,7 +16,7 @@ public class TestsController : Controller
     private ICRUDService<UserOrtTest> _userOrtTestService;
     private UserManager<User> _userManager;
 
-    public TestsController(ICRUDService<OrtTest> ortTestService, 
+    public TestsController(ICRUDService<OrtTest> ortTestService,
         ICRUDService<UserOrtTest> userOrtTestService,
         UserManager<User> userManager)
     {
@@ -66,7 +66,7 @@ public class TestsController : Controller
                     equals selectedAnswerLINQ.AnswerId
                 select selectedAnswer
             ).Count();
-            
+
             int? testPoints = (
                 from question in test.Questions
                 from answer in question.Answers.Where(a => a.IsCorrect)
@@ -96,12 +96,12 @@ public class TestsController : Controller
         userOrtTest.PassedTimeInMin = passedTimeInMin;
         userOrtTest.PassedDateTime = DateTime.UtcNow;
         int? totalPoints = ortTest.Tests.SelectMany(t => t.Questions).Sum(q => q.Point);
-        if (testPointSum >= totalPoints/2 && passedTimeInMin < passingTimeInMin)
+        if (testPointSum >= totalPoints / 2 && passedTimeInMin < passingTimeInMin)
             userOrtTest.IsPassed = true;
         else
             userOrtTest.IsPassed = false;
         await _userOrtTestService.Update(userOrtTest);
-        
+
         // Return the result data in the response
         return Ok(new { ortTestResultModels });
     }
@@ -111,9 +111,5 @@ public class TestsController : Controller
     {
         return View(ortTestResultModels);
     }
-
-
-
-    
 
 }

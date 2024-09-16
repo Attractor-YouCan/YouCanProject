@@ -22,18 +22,21 @@ public class UsersController : Controller
     private readonly ICRUDService<AdminAction> _adminActions;
     private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly ICRUDService<Tariff> _tariffManager;
+    private readonly ICRUDService<PassedQuestion> _passedQuestionManager;
 
     public UsersController(UserManager<User> userManager, 
         IWebHostEnvironment env, 
         ICRUDService<AdminAction> adminActions, 
         RoleManager<IdentityRole<int>> roleManager,
-        ICRUDService<Tariff> tariffManager)
+        ICRUDService<Tariff> tariffManager,
+        ICRUDService<PassedQuestion> passedQuestionManager)
     {
         _userManager = userManager;
         _env = env;
         _adminActions = adminActions;
         _roleManager = roleManager;
         _tariffManager = tariffManager;
+        _passedQuestionManager = passedQuestionManager;
     }
 
     public async Task<IActionResult> Index(UserSortOrder order = IdAsc, int page = 1)
@@ -249,14 +252,24 @@ public class UsersController : Controller
     {
         User user = await _userManager.Users
             .Include(u => u.Lessons)
-            .ThenInclude(l => l.Lesson)
+                .ThenInclude(l => l.Lesson)
             .Include(u => u.Tests)
-            .ThenInclude(l => l.OrtTest)
+                .ThenInclude(l => l.OrtTest)
             .Include(u => u.Questions)
             .Include(u => u.Statistic)
+            .Include(u => u.UserExperiences)
+            .Include(u => u.League)
+            .Include(u => u.Tariff)
             .FirstOrDefaultAsync(u => u.Id == id);
+
         if (user != null)
         {
+            var passedQuestions = _passedQuestionManager.GetAll()
+                .Where(u => u.UserId == user.Id)
+                .ToList();
+
+            ViewBag.PassedCount = passedQuestions.Count;
+
             return View(user);
         }
         return NotFound();

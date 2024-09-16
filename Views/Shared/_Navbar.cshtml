@@ -53,7 +53,7 @@
             {
                 if (User.IsInRole("admin") || User.IsInRole("manager"))
                 {
-                    <a asp-area="Admin" asp-controller="AdminAction" asp-action="Index" class="nav_link">
+                    <a asp-area="Admin" asp-controller="Stat" asp-action="Stat" class="nav_link">
                         <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
                         <span class="nav_name">ЕЩЕ</span>
                     </a>
@@ -89,7 +89,7 @@
         </div>
     </nav>
 
-    <main role="main">
+    <main role="main" class="mb-5 pb-5">
         @RenderBody()
     </main>
     <!-- jQuery -->
