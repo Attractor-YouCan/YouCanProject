@@ -48,7 +48,7 @@
             <div class="profile-stat-card d-flex align-items-center p-2 color-shock-mode">
                 <img src="@Url.Content("/profileIcons/fire.png")" alt="fire-icon">
                 <div class="ms-2">
-                    <p class="stat-card-title mb-0">@((Model.User?.Statistic?.Streak ?? 0))</p>
+                    <p class="stat-card-title mb-0">@((@Model.User?.Statistic?.ImpactModeDays ?? 0))</p>
                     <p class="stat-card-subtitle mb-0">Ударный режим</p>
                 </div>
             </div>
