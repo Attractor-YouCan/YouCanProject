@@ -81,6 +81,20 @@
             </div>
         </div>
     </div>
+    @if (ViewBag.Countdown != null)
+    {
+        <div class="row g-2 statistic mt-1">
+            <div class="col">
+                <div class="profile-stat-card d-flex align-items-center p-2 color-experience">
+                    <img src="@Url.Content("/profileIcons/timer.png")" alt="clock-icon">
+                    <div class="ms-2">
+                        <p class="stat-card-title mb-0">@ViewBag.Countdown дн. осталось</p>
+                        <p class="stat-card-subtitle mb-0">до ОРТ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
 
     @* график *@
