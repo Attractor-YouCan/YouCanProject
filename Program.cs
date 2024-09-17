@@ -100,6 +100,7 @@ builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>
 builder.Services.AddTransient<ICRUDService<Announcement>, CRUDService<Announcement>>();
 
 builder.Services.AddScoped<TwoFactorService>();
+builder.Services.AddScoped<IImpactModeService, ImpactModeService>();
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
