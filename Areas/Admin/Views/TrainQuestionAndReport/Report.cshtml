@@ -1,0 +1,38 @@
+@model IEnumerable<YouCan.Entities.QuestionReport>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Admin";
+}
+
+<h2>Список жалоб</h2>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Текст жалобы</th>
+        <th>Вопрос</th>
+        <th>Пользователь</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var report in Model)
+    {
+    <tr>
+        <td>@report.Text</td>
+        <td>
+            @if (report.Question != null)
+            {
+            <a href="@Url.Action("Details", "TrainQuestionAndReport", new { id = report.Question.Id })">
+                @report.Question.Content
+            </a>
+            }
+            else
+            {
+            <span>Вопрос удалён</span>
+            }
+        </td>
+        <td>@(!string.IsNullOrEmpty(report.User?.UserName) ? report.User.UserName : "Неизвестный пользователь")</td>
+    </tr>
+    }
+    </tbody>
+</table>

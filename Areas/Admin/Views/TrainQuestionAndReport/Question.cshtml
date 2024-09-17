@@ -1,0 +1,28 @@
+@model IEnumerable<YouCan.Entities.Question>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Admin";
+}
+
+<h2>Неопубликованные вопросы</h2>
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Content</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var question in Model)
+    {
+        <tr>
+            <td>@question.Content</td>
+            <td>
+                <a href="@Url.Action("Details", new { id = question.Id })">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

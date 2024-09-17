@@ -8,6 +8,12 @@
 }
 <link rel="stylesheet" href="~/css/ortTest.css">
 
+<div class="container ort-trial-block">
+    <img class="align-self-center" src="~/ortIcons/logo.svg" alt="logo-youcan"/>
+    <p>Пробный тест</p>
+</div>
+<hr/>
+
 <div class="container mx-auto ort-trial-test_details-block">
     <div class="ort-trial-test_details-block_title">
         <a asp-action="Index" asp-controller="OrtTests">
@@ -41,8 +47,8 @@
                     <div class="accordion-body">
                         <p>@test.OrtInstruction.Description</p>
                         <p>
-                            <span> Количество заданий: @test.OrtInstruction.QuestionsCount</span> <br/>
-                            <span> Время: @test.OrtInstruction.TimeInMin минут</span>
+                            <span> Количество заданий: @test.Questions.Count</span> <br/>
+                            <span> Время: @test.TimeForTestInMin минут</span>
                         </p>
                     </div>
                 </div>

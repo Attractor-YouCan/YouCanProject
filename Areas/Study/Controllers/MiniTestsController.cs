@@ -18,17 +18,19 @@ public class MiniTestsController : Controller
     private ICRUDService<Test> _testService;
     private ICRUDService<UserLevel> _userLevel;
     private UserManager<User> _userManager;
+    private readonly IImpactModeService _impactModeService;
 
     public MiniTestsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Test> testService,ICRUDService<UserLevel> userLevel,
-        UserManager<User> userManager)
+        ICRUDService<Test> testService, ICRUDService<UserLevel> userLevel,
+        UserManager<User> userManager, IImpactModeService impactModeService)
     {
         _testService = testService;
         _lessonService = lessonService;
         _userLessonService = userLessonService;
         _userManager = userManager;
         _userLevel = userLevel;
+        _impactModeService = impactModeService;
     }
 
     public async Task<IActionResult> Index(int lessonId)
@@ -46,8 +48,13 @@ public class MiniTestsController : Controller
         User? currentUser = await _userManager.GetUserAsync(User);
         Test? test = await _testService.GetById(selectedAnswers[0].TestId);
         Lesson? lesson = await _lessonService.GetById((int)test.LessonId!);
-        UserLessons? userLesson = _userLessonService.GetAll()
+        UserLevel? userLevels = _userLevel.GetAll()
             .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
+
+        UserLessons? userLesson = _userLessonService.GetAll()
+            .FirstOrDefault(ul => ul.UserId == currentUser.Id && 
+                ul.SubjectId == lesson.SubjectId && 
+                ul.LessonId == lesson.Id);
 
         int passingCount = (
             from question in test.Questions
@@ -55,27 +62,22 @@ public class MiniTestsController : Controller
             join selectedAnswer in selectedAnswers on answer.Id equals selectedAnswer.AnswerId
             select selectedAnswer
         ).Count();
-        if (passingCount >= 2)
-        {
-            userLesson.PassedLevel = lesson.LessonLevel;
-            userLesson.IsPassed = true;
-            userLesson.LessonId = lesson.Id;
-        
-            UserLevel userLevel = new UserLevel()
+        bool result = (double)passingCount / test.Questions.Count >= 0.8;
+        if (result)
+            if (userLevels.Level <= lesson.LessonLevel)
             {
-                Level = lesson.LessonLevel,
-                UserId = currentUser.Id,
-                User = currentUser,
-                SubjectId = lesson.SubjectId,
-                Subject = lesson.Subject
-            };
-            await _userLevel.Update(userLevel);
-            // await _userManager.UpdateAsync(currentUser);
-            await _userLessonService.Update(userLesson);
-        }
+                userLevels.Level = lesson.LessonLevel;
+                userLesson.IsPassed = true;
+                currentUser.UserExperiences.Add(new UserExperience { UserId = currentUser.Id, Date = DateTime.UtcNow, ExperiencePoints = 5 });
+                await _userManager.UpdateAsync(currentUser);
+                await _impactModeService.UpdateImpactMode(currentUser.StatisticId);
+                await _userLevel.Update(userLevels);
+                await _userLessonService.Update(userLesson);
+            }
+        
         var testResult = new
         {
-            isPassed = passingCount>=2,
+            isPassed = result,
             lessonId = lesson.Id,
             subtopicId = lesson.SubjectId
         };
@@ -85,8 +87,8 @@ public class MiniTestsController : Controller
     [HttpGet]
     public IActionResult Result(bool isPassed, int lessonId, int subtopicId)
     {
-        ViewBag.LessonId = lessonId;
-        ViewBag.SubtopicId = subtopicId;
+        ViewData["LessonId"] = lessonId;
+        ViewData["SubtopicId"] = subtopicId;
         return View(isPassed);
     }
 }

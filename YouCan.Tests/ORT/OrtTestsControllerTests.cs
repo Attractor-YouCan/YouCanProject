@@ -95,6 +95,7 @@ public class OrtTestsControllerTests
         var result = await _controller.Details(1);
 
         // Assert
-        Assert.IsType<ViewResult>(result); 
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Index", redirectResult.ActionName);
     }
 }

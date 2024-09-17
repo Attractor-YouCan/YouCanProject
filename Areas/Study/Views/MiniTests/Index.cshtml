@@ -29,7 +29,7 @@
                 <div class="question mt-4">
                     @question.Content
                 </div>
-                @foreach (var answer in question.Answers)
+                @foreach (var answer in question.Answers.OrderBy( a => a.Id))
                 {
                     <label class="answer mt-4" role="button">
                         <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">
@@ -49,6 +49,7 @@
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="~/js/time-tracker.js" asp-append-version="true"></script>
     <script>
     
    
@@ -180,6 +181,8 @@
                 
                    // Initial render
                 renderQuestions();
+
+                trackTime();
             });
     </script>
 }

@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace YouCan.Repository.Repository;
 
@@ -21,12 +21,12 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 
     public IEnumerable<T> GetAll()
     {
-        return entitis.AsEnumerable();
+        return entitis.Include("Statistic").Include("UserExperiences").Include("League").Include("Tariff").AsEnumerable();
     }
 
     public async Task<T> Get(int id)
     {
-        return await entitis.SingleOrDefaultAsync(x => x.Id == id);
+        return await entitis.Include("Statistic").Include("UserExperiences").Include("League").Include("Tariff").SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task Insert(T entity)

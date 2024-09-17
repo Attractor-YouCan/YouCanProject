@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/YouCan.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/YouCan.styles.css" asp-append-version="true" /> *@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -39,7 +41,7 @@
                 <img src="~/navbar_icons/board.png" alt="..." class="bx bx-grid-alt nav_icon board">
                 <span class="nav_name">ТЕСТ</span>
             </a>
-            <a asp-area="@null" asp-controller="Account" asp-action="Rating" class="nav_link" data-area="@null" data-controller="Account">
+            <a asp-area="Rating" asp-controller="League" asp-action="Index" class="nav_link" data-area="Rating" data-controller="League">
                 <img src="~/navbar_icons/star.png" alt="..." class="bx bx-grid-alt nav_icon star">
                 <span class="nav_name">РЕЙТИНГ</span>
             </a>
@@ -47,16 +49,29 @@
                 <img src="~/navbar_icons/profile.png" alt="..." class="bx bx-grid-alt nav_icon profile">
                 <span class="nav_name">ПРОФИЛЬ</span>
             </a>
-            <a href="#" class="nav_link">
-                <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
-                <span class="nav_name">ЕЩЕ</span>
-            </a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("admin") || User.IsInRole("manager"))
+                {
+                    <a asp-area="Admin" asp-controller="Stat" asp-action="Stat" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">ЕЩЕ</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="#" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">ЕЩЕ</span>
+                    </a>
+                }
+            }
         </div>
     </nav>
 </div>
     <nav class="navbar navbar-expand navbar-bottom navbar-light border border-1 justify-content-evenly" id="bottom-navbar">
         <div class="container mx-0">
-            <a class="col-2 nav-link" href="#">
+            <a class="col-2 nav-link" asp-area="ORT" asp-controller="OrtTests" asp-action="Index">
                 <img class="img-fluid" src="~/navbar_icons/board.png" alt="...">
             </a>
             <a class="col-2 nav-link" asp-area="Train" asp-controller="Test" asp-action="Index">
@@ -65,19 +80,18 @@
             <a class="col-2 nav-link" asp-area="Study" asp-controller="Subtopics" asp-action="Index">
                 <img class="img-fluid" src="~/navbar_icons/book.png" alt="...">
             </a>
-            <a class="col-2 nav-link" asp-area="@null" asp-controller="Account" asp-action="Rating">
+            <a class="col-2 nav-link" asp-area="Rating" asp-controller="League" asp-action="Index">
                 <img class="img-fluid" src="~/navbar_icons/star.png" alt="...">
             </a>
-            <a class="col-2 nav-link" asp-area="@null" asp-controller="Account" asp-action="Profile" >
+            <a class="col-2 nav-link" asp-area="@null"  asp-controller="Account" asp-action="Profile" >
                 <img class="img-fluid" src="~/navbar_icons/profile.png" alt="">
             </a>
         </div>
     </nav>
 
-    <main role="main">
+    <main role="main" class="mb-5 pb-5">
         @RenderBody()
     </main>
-
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 

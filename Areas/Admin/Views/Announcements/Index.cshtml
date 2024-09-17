@@ -1,0 +1,48 @@
+﻿@model List<YouCan.Entites.Models.Announcement>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Admin";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Заголовок
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-announId="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-announId="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-announId="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
