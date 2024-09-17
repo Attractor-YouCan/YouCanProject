@@ -4,5 +4,5 @@ namespace YouCan.Entites.Models;
 
 public class RealOrtTest : EntityBase
 {
-    public DateTime? TimeUntilOrtTest { get; set; }
+    public DateTime? OrtTestDate { get; set; }
 }

@@ -23,11 +23,12 @@ public class ORTController : Controller
     private readonly ICRUDService<Question> _questionManager;
     private readonly ICRUDService<Answer> _answerManager;
     private readonly ICRUDService<AdminAction> _adminActions;
+    private readonly ICRUDService<RealOrtTest> _realOrtTestManager;
     public ORTController(UserManager<User> userManager, ICRUDService<Test> testManager,
                          ICRUDService<OrtInstruction> instructionsManager, ICRUDService<OrtTest> ortManager,
                          ICRUDService<Subject> subjectManager, IWebHostEnvironment env,
                          ICRUDService<Question> questionManager, ICRUDService<Answer> answerManager,
-                         ICRUDService<AdminAction> adminActions)
+                         ICRUDService<AdminAction> adminActions, ICRUDService<RealOrtTest> realOrtTestManager)
     {
         _userManager = userManager;
         _testsManager = testManager;
@@ -38,8 +39,22 @@ public class ORTController : Controller
         _questionManager = questionManager;
         _answerManager = answerManager;
         _adminActions = adminActions;
+        _realOrtTestManager = realOrtTestManager;
     }
-    public IActionResult Index() => View(_ortManager.GetAll().ToList());
+    public IActionResult Index()
+    {
+        var realOrtTest = _realOrtTestManager.GetAll().FirstOrDefault();
+        if (realOrtTest.OrtTestDate != null)
+        {
+            var days = (realOrtTest.OrtTestDate.Value - DateTime.UtcNow).Days;
+            ViewBag.Days = days;
+        }
+        else
+        {
+            ViewBag.Days = null;
+        }
+        return View(_ortManager.GetAll().ToList());
+    }
 
     [HttpGet]
     public IActionResult CreateOrt()
@@ -394,6 +409,31 @@ public class ORTController : Controller
         await _questionManager.DeleteById(question.Id);
 
         return RedirectToAction("Details", new { ortId = test.OrtTestId });
+    }
 
+    [HttpGet]
+    public IActionResult SetOrtTestDate()
+    {
+        var realOrtTest = _realOrtTestManager.GetAll().FirstOrDefault();
+        if (realOrtTest != null)
+        {
+            ViewBag.Id = realOrtTest.Id;
+            return View(realOrtTest);
+        }
+        return NotFound();
+    }
+    [HttpPost]
+    public async Task<IActionResult> SetOrtTestDate(RealOrtTest realOrtTest)
+    {
+        if (realOrtTest.OrtTestDate != null)
+        {
+            realOrtTest.OrtTestDate = realOrtTest.OrtTestDate.Value.ToUniversalTime();
+        }
+        if (ModelState.IsValid)
+        {
+            await _realOrtTestManager.Update(realOrtTest);
+            return RedirectToAction("Index");
+        }
+        return View(realOrtTest);
     }
 }
