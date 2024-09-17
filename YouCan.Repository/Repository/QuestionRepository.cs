@@ -35,6 +35,7 @@ public class QuestionRepository : IRepository<Question>
             .Include(q => q.Test)
             .ThenInclude(t=> t.Subject)
             .Include(q => q.User)
+            .Include(q => q.Subject)
             .SingleOrDefaultAsync(q => q.Id == id);
     }
 

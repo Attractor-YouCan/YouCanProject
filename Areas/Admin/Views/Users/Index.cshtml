@@ -5,46 +5,52 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "_Layout";
+    Layout = "_Admin";
 }
 
-<h1>Index</h1>
+<h1>Список пользователей</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать пользователя</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Id
+                <a asp-action="Index" asp-route-order="@ViewData["IdSort"]">Id</a>
             </th>
             <th>
-                Username
+                <a asp-action="Index" asp-route-order="@ViewData["NameSort"]">Имя</a>
             </th>
             <th>
-                Email
+                <a asp-action="Index" asp-route-order="@ViewData["EmailSort"]">Почта</a>
             </th>
             <th>
-                Роль
+                <a asp-action="Index" asp-route-order="@ViewData["RoleSort"]">Роль</a>
             </th>
             <th>
                 Права доступа
             </th>
             <th>
-                Тариф
+                <a asp-action="Index" asp-route-order="@ViewData["TariffSort"]">Тариф</a>
+                
             </th>
             <th>
-                Дата окончания тарифа
+                <a asp-action="Index" asp-route-order="@ViewData["TariffEndDateSort"]">Дата окончания тарифа</a>
             </th>
             <th>
-                Смена тарифа
             </th>
             <th>
-                Заблокирован
+                <a asp-action="Index" asp-route-order="@ViewData["ActiveSort"]">Активность</a>
             </th>
             <th>
-
+                <a asp-action="Index" asp-route-order="@ViewData["LessonsCountSort"]">Уроки</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-order="@ViewData["LessonsFinishedCountSort"]">Пойдено</a>
+            </th>
+            <th>
+                Действия
             </th>
         </tr>
     </thead>
@@ -73,7 +79,7 @@
                     {
                         <form asp-action="ChangeRole" method="post">
                             <input type="hidden" name="Id" value="@user.Id"/>
-                            <select name="role">
+                            <select name="role" class="form-select form-select-sm">
                                 <option value=""></option>
                                 @if (!await manager.IsInRoleAsync(user, "manager"))
                                 {
@@ -84,7 +90,7 @@
                                     <option value="user">user</option>
                                 }
                             </select>
-                            <button type="submit" class="btn btn-primary">Поменять права</button>
+                            <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Поменять права</button>
                         </form>
                     }
                 }
@@ -108,7 +114,7 @@
                         {
                             <form asp-action="ChangeTariff" method="post">
                                 <input type="hidden" name="id" value="@user.Id" />
-                                <select name="tariffId">
+                                <select name="tariffId" class="form-select form-select-sm">
                                     <option value=""></option>
                                     @foreach (var tariff in (List<Tariff>)ViewBag.Tariffs)
                                     {
@@ -118,27 +124,43 @@
                                         }
                                     }
                                 </select>
-                                <button type="submit" class="btn btn-primary">Поменять тариф</button>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Поменять тариф</button>
                             </form>
                         }
                     }
                 </td>
                 <td>
-                    @user.LockoutEnabled
+                    @if (user.LockoutEnabled && user.LockoutEnd != null)
+                    {
+                        <i class="bi bi-x text-danger fs-1"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-check2 text-success fs-1"></i>
+                    }
+                </td>
+                <td>
+                    @user.Lessons.Count
+                </td>
+                <td>
+                    @user.Lessons.Count(u => u.IsPassed == true)
                 </td>
                 <td>
                     @if (User.IsInRole("admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@user.Id">Edit |</a>
-                        <a asp-action="Details" asp-route-id="@user.Id">Details |</a>
-                        <a asp-action="Delete" asp-route-id="@user.Id">Delete |</a>
+                        <a class="btn btn-primary btn-sm m-1" asp-action="Edit" asp-route-id="@user.Id">Редактировать</a>
+                        <a class="btn btn-warning btn-sm m-1" asp-action="Details" asp-route-id="@user.Id">Подробно</a>
+                        @if (!await manager.IsInRoleAsync(user, "admin"))
+                        {
+                            <a class="btn btn-danger btn-sm m-1" asp-action="Delete" asp-route-id="@user.Id">Удалить</a>
+                        }
                         @if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
                         {
-                            <a asp-action="UnBlock" asp-route-id="@user.Id">Unblock</a>
+                            <a class="btn btn-primary btn-sm m-1" asp-action="UnBlock" asp-route-id="@user.Id">Разблокировать</a>
                         }
                         else
                         {
-                            <a asp-action="Block" asp-route-id="@user.Id">Block</a>
+                            <a class="btn btn-danger btn-sm m-1" asp-action="Block" asp-route-id="@user.Id">Заблокировать</a>
                         }
                     }
                 </td>
@@ -146,3 +168,20 @@
 }
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@(ViewBag.CurrentPage - 1)">Назад</a>
+        </li>
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@i">@i</a>
+            </li>
+        }
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-order="@ViewData["CurrentSort"]" asp-route-page="@(ViewBag.CurrentPage + 1)">Вперед</a>
+        </li>
+    </ul>
+</nav>

@@ -16,7 +16,7 @@ public class TestsController : Controller
     private ICRUDService<UserOrtTest> _userOrtTestService;
     private UserManager<User> _userManager;
 
-    public TestsController(ICRUDService<OrtTest> ortTestService, 
+    public TestsController(ICRUDService<OrtTest> ortTestService,
         ICRUDService<UserOrtTest> userOrtTestService,
         UserManager<User> userManager)
     {
@@ -30,14 +30,11 @@ public class TestsController : Controller
     {
         User? curUser = await _userManager.GetUserAsync(User);
         if (curUser == null)
-            RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account");
         OrtTest? ortTest = await _ortTestService.GetById(ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
         ViewBag.OrtTestId = ortTest.Id;
-        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(curUser.Id);
-        if (userOrtTest.PassedLevel + 1 < ortTest.OrtLevel)
-            return RedirectToAction("Index", "OrtTests");
         return View(ortTest.Tests);
     }
 
@@ -49,7 +46,9 @@ public class TestsController : Controller
             return BadRequest("No OrtTest Id!");
 
         User? currentUser = await _userManager.GetUserAsync(User);
-        UserOrtTest userOrtTest = await _userOrtTestService.GetById(currentUser.Id);
+        UserOrtTest? userOrtTest =  _userOrtTestService
+            .GetAll()
+            .FirstOrDefault(u => u.UserId == currentUser.Id);
         List<TestAnswersModel> selectedAnswer = testSubmissionModel.SelectedAnswers;
         List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
         List<Test>? tests = ortTest.Tests;
@@ -66,7 +65,7 @@ public class TestsController : Controller
                     equals selectedAnswerLINQ.AnswerId
                 select selectedAnswer
             ).Count();
-            
+
             int? testPoints = (
                 from question in test.Questions
                 from answer in question.Answers.Where(a => a.IsCorrect)
@@ -90,18 +89,18 @@ public class TestsController : Controller
             });
         }
 
-        userOrtTest!.OrtTestId = ortTest.Id;
+        userOrtTest.OrtTestId = userOrtTest.OrtTestId == null ? ortTest.Id : userOrtTest.OrtTestId;
         userOrtTest.PassedLevel = ortTest.OrtLevel;
         userOrtTest.Points = testPointSum;
         userOrtTest.PassedTimeInMin = passedTimeInMin;
         userOrtTest.PassedDateTime = DateTime.UtcNow;
         int? totalPoints = ortTest.Tests.SelectMany(t => t.Questions).Sum(q => q.Point);
-        if (testPointSum >= totalPoints/2 && passedTimeInMin < passingTimeInMin)
+        if (testPointSum >= totalPoints / 2 && passedTimeInMin < passingTimeInMin)
             userOrtTest.IsPassed = true;
         else
             userOrtTest.IsPassed = false;
         await _userOrtTestService.Update(userOrtTest);
-        
+
         // Return the result data in the response
         return Ok(new { ortTestResultModels });
     }
@@ -111,9 +110,5 @@ public class TestsController : Controller
     {
         return View(ortTestResultModels);
     }
-
-
-
-    
 
 }

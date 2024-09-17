@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YouCan.Entites.Models;
 using YouCan.Entities;
-using YouCan.Repository;
 using YouCan.Service.Service;
 using YouCan.Services.Email;
 using YouCan.ViewModels;
@@ -17,15 +15,21 @@ public class AccountController : Controller
     private SignInManager<User> _signInManager;
     private IWebHostEnvironment _environment;
     private ICRUDService<UserLevel> _userLevel;
+    private ICRUDService<UserExperience> _userExperiance;
     private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
     private readonly ICRUDService<Tariff> _tariffs;
 
 
-    public AccountController(IUserCRUD userService, UserManager<User> userManager,
-        SignInManager<User> signInManager, IWebHostEnvironment environment,
-        TwoFactorService twoFactorService, ICRUDService<UserLevel> userLevel, ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Tariff> tariffs)
+    public AccountController(IUserCRUD userService,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IWebHostEnvironment environment,
+        TwoFactorService twoFactorService,
+        ICRUDService<UserLevel> userLevel,
+        ICRUDService<UserLessons> userLessonService,
+        ICRUDService<Tariff> tariffs,
+        ICRUDService<UserExperience> userExperiance)
     {
         _userService = userService;
         _userManager = userManager;
@@ -35,6 +39,7 @@ public class AccountController : Controller
         _userLevel = userLevel;
         _userLessonService = userLessonService;
         _tariffs = tariffs;
+        _userExperiance = userExperiance;
     }
 
 
@@ -69,8 +74,23 @@ public class AccountController : Controller
                     RequiredLevel = ul.Lesson?.RequiredLevel ?? 0
                 }).ToList();
 
-           
+
             int userScore = userLessons.Sum(ul => ul.PassedLevel ?? 0);
+
+            var last7Days = Enumerable.Range(0, 7)
+            .Select(i => DateTime.UtcNow.AddDays(-i).Date)
+            .ToList();
+            List<UserExperience> weeklyExperience = _userExperiance.GetAll()
+            .Where(ue => ue.Date >= last7Days.Min() && ue.UserId == user.Id)
+            .GroupBy(ue => ue.Date.Date)
+            .Select(g => new UserExperience
+            {
+                Date = g.Key,
+                ExperiencePoints = g.Sum(ue => ue.ExperiencePoints)
+            }).ToList();
+            weeklyExperience = last7Days
+            .Select(day => weeklyExperience.FirstOrDefault(we => we.Date == day) ?? new UserExperience { Date = day, ExperiencePoints = 0 })
+            .OrderBy(we => we.Date).ToList();
 
             ViewBag.EditAccess = adminUser || isOwner;
             ViewBag.DeleteAccess = adminUser;
@@ -82,7 +102,8 @@ public class AccountController : Controller
             {
                 User = user,
                 UserLevels = userLevels,
-                UserLessons = userLessons
+                UserLessons = userLessons,
+                WeeklyExperience = weeklyExperience
             };
 
             return View(model);
@@ -187,6 +208,7 @@ public class AccountController : Controller
 
                 var startTariff = _tariffs.GetAll().FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow;
                 user.TariffEndDate = null;
                 await _userManager.UpdateAsync(user);
 
@@ -317,11 +339,11 @@ public class AccountController : Controller
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
         await _signInManager.SignInAsync(user, true);
-        
 
-        return Json(new { success = true, userId = user.Id  });
+
+        return Json(new { success = true, userId = user.Id });
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> ResendCode([FromBody] ResendCodeRequest model)
     {
@@ -337,11 +359,11 @@ public class AccountController : Controller
         }
         var (subject, message) = GenerateEmailConfirmationContentAsync(user, user.UserName);
         EmailSender emailSender = new EmailSender();
-         emailSender.SendEmail(user.Email, subject, message);
+        emailSender.SendEmail(user.Email, subject, message);
 
         return Json(new { success = true });
     }
-    
+
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -410,11 +432,25 @@ public class AccountController : Controller
         var userId = int.Parse(_userManager.GetUserId(User));
         return userId;
     }
-    
-    [Authorize]
-    public async Task<IActionResult> Rating()
+
+    [HttpPost]
+    public async Task<IActionResult> LogTime([FromBody] long timeSpent)
     {
-        return View();
+        var currentUser = await _userService.GetById(int.Parse(_userManager.GetUserId(User)));
+        if (currentUser == null)
+            return Unauthorized();
+
+        TimeSpan timeSpentTimeSpan = TimeSpan.FromMilliseconds(timeSpent);
+
+        currentUser.Statistic.StudyMinutes += timeSpentTimeSpan;
+
+        var result = await _userManager.UpdateAsync(currentUser);
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка при обновлении данных пользователя.");
+        }
+
+        return Ok(new { message = "Время успешно сохранено" });
     }
 
 }

@@ -14,7 +14,7 @@ public class Question : EntityBase
     public User? User { get; set; }
     public bool AnswersIsImage { get; set; }
     public int? SubjectId { get; set; }
-    public Subject Subject { get; set; }
+    public Subject? Subject { get; set; }
     public List<Answer> Answers { get; set; }
     public Question()
     {

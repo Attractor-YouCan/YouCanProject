@@ -12,11 +12,9 @@ public class QuestionsWithTextController : Controller
 {
     private readonly ICRUDService<Subject> _subjectCrudService;
     private readonly ICRUDService<Test> _testCrudService;
-    private readonly W3RootFileManager _w3RootFileManager;
     private readonly UserManager<User> _userManager;
     public QuestionsWithTextController(ICRUDService<Test> testCrudService, ICRUDService<Subject> subjectCrudService, W3RootFileManager w3RootFileManager, UserManager<User> userManager)
     {
-        _w3RootFileManager = w3RootFileManager;
         _userManager = userManager;
         _subjectCrudService = subjectCrudService;
         _testCrudService = testCrudService;

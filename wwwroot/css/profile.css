@@ -166,7 +166,7 @@ body {
 
 .profile-title {
     font-size: 16px;
-    font-weight: 600px;
+    font-weight: 600;
     color: var(--secondary-text-color);
     margin-top: 9px;
 }
@@ -175,127 +175,252 @@ body {
     margin-left: 7px;
     margin-right: 21px;
 }
+/*Статистика*/
 
-.btn-test {
-    width: 140px;
-    height: 48px;
-}
-
-.btn-test-square {
-    height: 48px;
-    width: 48px;
-    color: #C4C4C4;
-    border: 2px solid #C4C4C4;
-    background-color: white;
+.profile-stat-card {
+    height: 64px;
+    width: 100%;
     border-radius: 8px;
-    transition-duration: 0.25s;
+}
+.statistic{
+    width: 450px;
+}
+.profile-stat-card img {
+    height: 30px;
+    width: 30px;
 }
 
-    .btn-test-square:hover {
-        color: white;
-        background-color: #C4C4C4;
-    }
 
-.btn-send {
-    background-color: #FF5C00;
+.stat-card-title {
+    font-size: 18px;
+    font-weight: bold;
     color: white;
 }
 
-    .btn-send:hover {
-        background-color: #FF5C00;
-        color: white;
-    }
-
-.btn-delete {
-    background-color: #9D9D9D;
+.stat-card-subtitle {
+    font-size: 14px;
     color: white;
+    opacity: 0.7;
 }
 
-    .btn-delete:hover {
-        background-color: #9D9D9D;
-        color: white;
-    }
-
-.text-secondary-theme {
-    color: #9C9C9C;
+.color-shock-mode {
+    background-color: #0078FF;
 }
 
-.btn-math {
-    border: 1.5px solid #C4C4C4;
-    width: 99px;
-    height: 86px;
-    border-radius: 8px;
-    font-size: 40px;
-    font-weight: 400;
-    color: #C4C4C4;
-    background-color: white;
+.color-experience {
+    background-color: #9C34C2;
 }
 
-    .btn-math ~ input:checked {
-        border-color: #58CC02;
-        color: #58CC02;
-    }
-
-.btn-add-image {
-    width: 241px;
-    height: 44px;
-    border-radius: 4px;
-    background-color: #58CC02;
+.color-current-league {
+    background-color: #0D3D8D;
 }
 
-    .btn-add-image img {
-        width: 24px;
-        height: 24px;
-    }
-
-.img-to-load {
-    border: 1.5px solid #58CC02;
+.color-study-time {
+    background-color: #4C0068;
 }
 
-.btn-add-question {
-    width: 179px;
-    height: 34px;
-    background-color: #D9D9D9;
-    border-radius: 8px;
-    border: none;
+/*График*/
+.chart {
+    all: unset;
+    border: solid 2px #C4C4C4;
+    border-radius: 14px;
+    padding: 25px;
+    width: 440px;
+    height: 240px;
+
 }
 
-/* Стили для квадратного radio button */
-.custom-radio {
-    display: inline-block;
+/*календарь*/
+.calendar td {
     position: relative;
-    cursor: pointer;
+    padding: 10px;
+    overflow: hidden;
 }
 
-    .custom-radio input {
+    .calendar td.heatwave.start::before {
+        content: '';
         position: absolute;
-        opacity: 0;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(0, 167, 255, 0.3);
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+    }
+
+    .calendar td.heatwave.end::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(0, 167, 255, 0.3);
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+    }
+
+    .calendar td.heatwave.full::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(0, 167, 255, 0.3);
+    }
+
+.calendar td {
+    position: relative;
+    padding: 10px;
+}
+
+.calendar .heatwave {
+   
+}
+
+.calendar td.active {
+    background-color: #26a6d7;
+    color: #fff;
+    font-weight: bold;
+}
+
+.calendar td:hover {
+    background-color: #e6f7ff;
+}
+
+.calendar .active:hover {
+    background-color: #1e90ff;
+}
+
+.calendar-container {
+    width: 440px;
+    border: solid 2px #C4C4C4;
+    padding: 25px;
+    border-radius: 14px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+    .calendar-header button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+.month-year {
+    font-size: 16px;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .calendar th,
+    .calendar td {
+        text-align: center;
+        padding: 10px;
         cursor: pointer;
     }
 
-.checkmark {
-    display: block;
-    padding: auto;
-    border: 1.5px solid #C4C4C4;
-    width: 99px;
-    height: 86px;
-    border-radius: 8px;
-    font-size: 40px;
-    font-weight: 400;
-    color: #C4C4C4;
-    background-color: white;
-    align-items: center;
-    justify-content: center;
+    .calendar th {
+        font-weight: normal;
+        color: #666;
+    }
+
+
+
+.tariff-plan {
+    width: 440px;
+    border: 2px solid #C4C4C4;
+    border-radius: 14px;
+    padding: 0px 20px;
+}
+
+.tariff-card {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.custom-radio input:checked ~ .checkmark {
-    border-color: #58CC02;
-    color: #58CC02;
+.icon img {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
 }
 
-.checkmark:after {
-    font-size: 16px;
+.tariff-info {
+    text-align: left;
+}
+
+    .tariff-info h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .tariff-info p {
+        margin: 5px 0;
+        white-space: nowrap;
+        color: #666;
+    }
+
+.extend-btn {
+    padding: 5px 20px;
+    background-color: #4caf50;
     color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+.policy-btn {
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 2px solid #C4C4C4;
+    width: 440px;
+    height: 70px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19.5px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+@media (min-width: 1280px) {
+    .container {
+        margin-left: 140px;
+    }
+}
+@media (max-width: 1280px) {
+    .container{
+        margin-left: 140px;
+    }   
+}
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0px;
+    }
+    .chart {
+        padding: 15px;
+        width: 330px;
+        height: 180px;
+    }
+    .policy-btn {
+        margin-bottom: 70px;
+    }
 }

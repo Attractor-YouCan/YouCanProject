@@ -1,0 +1,42 @@
+﻿@model Test
+@{
+    Layout = "_Admin";
+}
+<div class="container">
+    <h2>Создание теста</h2>
+    <form asp-action="CreateTest" method="post">
+        <div class="mb-3">
+            <label for="" class="form-label">
+                Баллы
+            </label>
+            <input class="form-control" asp-for="GainingExperience" type="text">
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">
+                Время на тест
+            </label>
+            <input class="form-control" asp-for="TimeForTestInMin" type="text">
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">
+                Предмет
+            </label>
+            <select class="form-select" asp-for="SubjectId">
+                <option></option>
+                @foreach (var subject in (List<Subject>)ViewData["Subjects"])
+                {
+                    <option value="@subject.Id">@subject.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">
+                Описание
+            </label>
+            <textarea class="form-control" name="description" type="text"></textarea>
+        </div>
+        <input type="hidden" asp-for="OrtTestId" value="@ViewBag.ortId" />
+        <input type="hidden" asp-for="IsPublished" value="true"/>
+        <button class="btn btn-primary" type="submit">Создать</button>
+    </form>
+</div>

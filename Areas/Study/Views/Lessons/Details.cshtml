@@ -43,7 +43,10 @@
     <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">Пройти тест</a>
 </div>
 @section Scripts{
+    <script src="~/js/time-tracker.js" asp-append-version="true"></script>
     <script>
+
+        trackTime();
         let startTime = Date.now();
 
         window.addEventListener("beforeunload", function () {

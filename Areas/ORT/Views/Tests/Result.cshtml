@@ -3,20 +3,35 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Navbar";
-}
-
-<h2>title</h2>
-
-@foreach(var result in Model)
-{
-    <p class="border border-success">
-        <h5>Правильные ответы :  @result.RightsCount</h5>
-            <h5>Общее количество ответов : @result.QuestionCount</h5>
-            <h5>ID теста : @result.TestId</h5>
-            <h5>Минут потраченных : @result.SpentTimeInMin</h5>
-            <h5>Количество баллов теста : @result.TestPoints</h5>
-            <h5>Общее Количество баллов : @result.PointsSum</h5>
-    </p>
     
+    var totalPoints = Model.Sum(result => result.TestPoints);
 }
+
+<link rel="stylesheet" href="~/css/ortTest.css" asp-append-version="true"/>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <div class="total-points text-white py-3 rounded">
+            <h1>Ваш результат: <br class="total-points-br"/> @totalPoints баллов</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @foreach (var result in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card border-primary shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>Правильные ответы:</strong> @result.RightsCount <br />
+                            <strong>Количество вопросов:</strong> @result.QuestionCount <br />
+                            <strong>Минут потрачено:</strong> @Math.Round(result.SpentTimeInMin ?? 0, 2) <br />
+                            <strong>Количество баллов:</strong> @result.TestPoints <br />
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 

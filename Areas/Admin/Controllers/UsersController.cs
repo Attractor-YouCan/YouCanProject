@@ -2,41 +2,120 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using YouCan.Areas.Admin.Services;
 using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Service.Service;
+using static YouCan.Areas.Admin.Services.UserSortOrder;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]
 [Authorize(Roles = "admin, manager")]
 public class UsersController : Controller
 {
-    private readonly YouCanContext _context;
     private readonly UserManager<User> _userManager;
     private readonly IWebHostEnvironment _env;
     private readonly ICRUDService<AdminAction> _adminActions;
-    public UsersController(YouCanContext context, UserManager<User> userManager, IWebHostEnvironment env, ICRUDService<AdminAction> adminActions)
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
+    private readonly ICRUDService<Tariff> _tariffManager;
+    private readonly ICRUDService<PassedQuestion> _passedQuestionManager;
+
+    public UsersController(UserManager<User> userManager, 
+        IWebHostEnvironment env, 
+        ICRUDService<AdminAction> adminActions, 
+        RoleManager<IdentityRole<int>> roleManager,
+        ICRUDService<Tariff> tariffManager,
+        ICRUDService<PassedQuestion> passedQuestionManager)
     {
-        _context = context;
         _userManager = userManager;
         _env = env;
         _adminActions = adminActions;
+        _roleManager = roleManager;
+        _tariffManager = tariffManager;
+        _passedQuestionManager = passedQuestionManager;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(UserSortOrder order = IdAsc, int page = 1)
     {
-        var users = await _context.Users.Include(u => u.Tariff)
-            .OrderBy(u => u.Id)
-            .ToListAsync();
+        int pageSize = 10;
 
-        ViewBag.Roles = await _context.Roles.ToListAsync();
-        ViewBag.Tariffs = await _context.Tariffs.ToListAsync();
+        ViewData["IdSort"] = order == IdAsc ? IdDesc : IdAsc;
+        ViewData["NameSort"] = order == NameAsc ? NameDesc : NameAsc;
+        ViewData["EmailSort"] = order == EmailAsc ? EmailDesc : EmailAsc;
+        ViewData["RoleSort"] = order == RoleAsc ? RoleDesc : RoleAsc;
+        ViewData["TariffSort"] = order == TariffAsc ? TariffDesc : TariffAsc;
+        ViewData["TariffEndDateSort"] = order == TariffEndDateAsc ? TariffEndDateDesc : TariffEndDateAsc;
+        ViewData["ActiveSort"] = order == ActiveAsc ? ActiveDesc : ActiveAsc;
+        ViewData["LessonsCountSort"] = order == LessonsCountAsc ? LessonsCountDesc : LessonsCountAsc;
+        ViewData["LessonsFinishedCountSort"] = order == LessonsFinishedCountAsc ? LessonsFinishedCountDesc : LessonsFinishedCountAsc;
+
+
+        var users =  _userManager.Users
+            .Include(u => u.Tariff)
+            .Include(u => u.Statistic)
+            .Include(u => u.Lessons)
+            .Include(u => u.Tests)
+            .OrderBy(u => u.Id)
+            .ToList();
+
+        users = SortUsers(users, order);
+
+        var totalUsers = users.Count;
+        users = users
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        ViewBag.Roles =  _roleManager.Roles.ToList();
+        ViewBag.Tariffs = _tariffManager.GetAll().ToList();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+        ViewData["CurrentSort"] = order;
 
         return View(users);
     }
+    [NonAction]
+    public List<User> SortUsers(List<User> users, UserSortOrder order)
+    {
+        users = order switch
+        {
+            IdAsc => users.OrderBy(u => u.Id).ToList(),
+            IdDesc => users.OrderByDescending(u => u.Id).ToList(),
+
+            NameAsc => users.OrderBy(u => u.UserName).ToList(),
+            NameDesc => users.OrderByDescending(u => u.UserName).ToList(),
+
+            EmailAsc => users.OrderBy(u => u.Email).ToList(),
+            EmailDesc => users.OrderByDescending(u => u.Email).ToList(),
+
+            RoleAsc => users.OrderBy(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+            RoleDesc => users.OrderByDescending(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+
+            TariffAsc => users.OrderBy(u => u.TariffId).ToList(),
+            TariffDesc => users.OrderByDescending(u => u.TariffId).ToList(),
+
+            TariffEndDateAsc => users.OrderBy(u => u.TariffEndDate).ToList(),
+            TariffEndDateDesc => users.OrderByDescending(u => u.TariffEndDate).ToList(),
+
+            ActiveAsc => users.OrderByDescending(u => !(u.LockoutEnabled && u.LockoutEnd != null)).ToList(),
+            ActiveDesc => users.OrderByDescending(u => u.LockoutEnabled && u.LockoutEnd != null).ToList(),
+
+            LessonsCountAsc => users.OrderBy(u => u.Lessons.Count).ToList(),
+            LessonsCountDesc => users.OrderByDescending(u => u.Lessons.Count).ToList(),
+
+            LessonsFinishedCountAsc => users.OrderBy(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+            LessonsFinishedCountDesc => users.OrderByDescending(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+
+            _ => users.OrderBy(u => u.Id).ToList(), // Default sorting
+        };
+        return users;
+    }
+
     [HttpPost]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> ChangeRole(int id, string? role)
@@ -72,18 +151,18 @@ public class UsersController : Controller
     {
         if (tariffId.HasValue)
         {
-            var user = await _context.Users.Include(u => u.Tariff).FirstOrDefaultAsync(u => u.Id == id);
+            var user =  _userManager.Users.Include(u => u.Tariff).FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
                 user.TariffId = tariffId;
-                var tariff = await _context.Tariffs.FindAsync(tariffId);
+                var tariff = await _tariffManager.GetById((int)tariffId); //_context.Tariffs.FindAsync(tariffId);
                 var admin = await _userManager.GetUserAsync(User);
                 if (tariff != null)
                 {
                     if (tariff.Duration.HasValue)
                     {
                         user.TariffEndDate = DateTime.UtcNow.AddMonths((int)tariff.Duration);
-
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "user"))
                         {
                             await _userManager.AddToRoleAsync(user, "prouser");
@@ -93,6 +172,7 @@ public class UsersController : Controller
                     else
                     {
                         user.TariffEndDate = null;
+                        user.TariffStartDate = DateTime.UtcNow;
                         if (await _userManager.IsInRoleAsync(user, "prouser"))
                         {
                             await _userManager.AddToRoleAsync(user, "user");
@@ -109,8 +189,7 @@ public class UsersController : Controller
                     await _adminActions.Insert(log);
                 }
 
-                _context.Update(user);
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user); //_context.Update(user);
                 return RedirectToAction("Index");
             }
             return NotFound();
@@ -149,7 +228,7 @@ public class UsersController : Controller
         User user = await _userManager.FindByIdAsync(id.ToString());
         if (user != null)
         {
-            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
+            var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, null);
             var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
 
             var admin = await _userManager.GetUserAsync(User);
@@ -171,9 +250,26 @@ public class UsersController : Controller
     }
     public async Task<IActionResult> Details(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        User user = await _userManager.Users
+            .Include(u => u.Lessons)
+                .ThenInclude(l => l.Lesson)
+            .Include(u => u.Tests)
+                .ThenInclude(l => l.OrtTest)
+            .Include(u => u.Questions)
+            .Include(u => u.Statistic)
+            .Include(u => u.UserExperiences)
+            .Include(u => u.League)
+            .Include(u => u.Tariff)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
         if (user != null)
         {
+            var passedQuestions = _passedQuestionManager.GetAll()
+                .Where(u => u.UserId == user.Id)
+                .ToList();
+
+            ViewBag.PassedCount = passedQuestions.Count;
+
             return View(user);
         }
         return NotFound();
@@ -219,12 +315,12 @@ public class UsersController : Controller
                 await _userManager.AddToRoleAsync(user, "user");
                 await _userManager.SetLockoutEnabledAsync(user, false);
 
-                var startTariff = _context.Tariffs.FirstOrDefault(t => t.Name == "Start");
+                var startTariff = _tariffManager.GetAll().FirstOrDefault(t => t.Name == "Start"); //_context.Tariffs.FirstOrDefault(t => t.Name == "Start");
                 user.TariffId = startTariff.Id;
+                user.TariffStartDate = DateTime.UtcNow; 
                 user.TariffEndDate = null;
 
-                _context.Update(user);
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);  //_context.Update(user);
 
                 var log = new AdminAction
                 {
@@ -301,7 +397,7 @@ public class UsersController : Controller
     }
     public async Task<IActionResult> Delete(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _userManager.FindByIdAsync(id.ToString()); //await _context.Users.FindAsync(id);
         var admin = await _userManager.GetUserAsync(User);
         if (user != null)
         {
@@ -313,9 +409,8 @@ public class UsersController : Controller
                 Details = $"{admin.UserName} удалил пользователя {user.UserName}"
             };
             await _adminActions.Insert(log);
-            _context.Remove(user);
+            await _userManager.DeleteAsync(user);
         }
-        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 }
