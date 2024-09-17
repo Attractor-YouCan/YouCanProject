@@ -63,7 +63,7 @@ public class MiniTestsController : Controller
             select selectedAnswer
         ).Count();
         bool result = (double)passingCount / test.Questions.Count >= 0.8;
-        if ( result)
+        if (result)
             if (userLevels.Level <= lesson.LessonLevel)
             {
                 userLevels.Level = lesson.LessonLevel;

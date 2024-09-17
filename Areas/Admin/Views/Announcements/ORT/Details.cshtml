@@ -47,7 +47,7 @@
             <a id="tests_link" class="link col-9">
                 <h4>Тесты</h4>
             </a>
-            <a asp-action="CreateTest" asp-route-ortId="@Model.Id" class="btn btn-primary me-5 col-2">Создать тест</a>
+            <a asp-action="CreateTest" asp-controller="ORT" asp-route-ortId="@Model.Id" class="btn btn-primary me-5 col-2">Создать тест</a>
         </div>
         <div id="tests" style="display: none;">
             @if (Model.Tests == null || Model.Tests.Count == 0)
@@ -90,9 +90,9 @@
                             <h5>Вопросы</h5>
                         </a>
                         <div class="col-5 me-2 row d-flex justify-content-between">
-                            <a asp-action="CreateQuestions" asp-route-testId="@tests.Id" class="btn btn-primary btn-sm col-4 me-2">Добавить вопросы</a>
-                            <a asp-action="EditTest" asp-route-testId="@tests.Id" class="btn btn-warning btn-sm col-4 me-2">Редактировать тест</a>
-                            <a asp-action="DeleteTest" asp-route-testId="@tests.Id" class="btn btn-danger btn-sm col-3">Удалить тест</a>
+                            <a asp-action="CreateQuestions" asp-controller="ORT" asp-route-testId="@tests.Id" class="btn btn-primary btn-sm col-4 me-2">Добавить вопросы</a>
+                            <a asp-action="EditTest" asp-controller="ORT" asp-route-testId="@tests.Id" class="btn btn-warning btn-sm col-4 me-2">Редактировать тест</a>
+                            <a asp-action="DeleteTest" asp-controller="ORT" asp-route-testId="@tests.Id" class="btn btn-danger btn-sm col-3">Удалить тест</a>
                         </div>
                     </div>
                     <div class="mt-3" id="questions@(tests.Id)" style="display: none;">
@@ -127,7 +127,7 @@
                                             </dd>
                                         </dl>
                                         <div class="col-2">
-                                            <a style="height: 50px;" asp-action="DeleteQuestion" asp-route-questionId="@question.Id" class="btn btn-danger btn-sm">Удалить вопрос</a>
+                                            <a style="height: 50px;" asp-action="DeleteQuestion" asp-controller="ORT" asp-route-questionId="@question.Id" class="btn btn-danger btn-sm">Удалить вопрос</a>
                                         </div>
                                     </div>
 
