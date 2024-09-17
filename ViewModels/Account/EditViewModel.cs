@@ -16,4 +16,5 @@ public class EditViewModel
     [Remote(action: "CheckBirthDate", controller: "Validation", ErrorMessage = "Дата рождения не может быть в будущем или не ранее 100 лет!")]
     public DateOnly BirthDate { get; set; }
     public IFormFile? UploadedFile { get; set; }
+    public DateTime? CreatedAt { get; set; }
 }

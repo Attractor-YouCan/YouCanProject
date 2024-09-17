@@ -128,6 +128,7 @@ public class AccountController : Controller
             District = user.Disctrict,
             FullName = user.FullName,
             PhoneNumber = user.PhoneNumber,
+            CreatedAt = user.CreatedAt
         };
 
         return View(viewModel);
