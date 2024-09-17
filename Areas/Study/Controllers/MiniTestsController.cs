@@ -16,17 +16,19 @@ public class MiniTestsController : Controller
     private ICRUDService<Test> _testService;
     private ICRUDService<UserLevel> _userLevel;
     private UserManager<User> _userManager;
+    private readonly IImpactModeService _impactModeService;
 
     public MiniTestsController(ICRUDService<Lesson> lessonService,
         ICRUDService<UserLessons> userLessonService,
         ICRUDService<Test> testService, ICRUDService<UserLevel> userLevel,
-        UserManager<User> userManager)
+        UserManager<User> userManager, IImpactModeService impactModeService)
     {
         _testService = testService;
         _lessonService = lessonService;
         _userLessonService = userLessonService;
         _userManager = userManager;
         _userLevel = userLevel;
+        _impactModeService = impactModeService;
     }
 
     public async Task<IActionResult> Index(int lessonId)
@@ -66,7 +68,7 @@ public class MiniTestsController : Controller
 
             currentUser.UserExperiences.Add(new UserExperience { UserId = currentUser.Id, Date = DateTime.UtcNow, ExperiencePoints = 5 });
             await _userManager.UpdateAsync(currentUser);
-
+            await _impactModeService.UpdateImpactMode(currentUser.StatisticId);
             await _userLevel.Update(userLevels);
             // await _userManager.UpdateAsync(currentUser);
             await _userLessonService.Update(userLesson);
