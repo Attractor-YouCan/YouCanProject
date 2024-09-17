@@ -41,6 +41,10 @@
     box-sizing: border-box
 }
 
+main{
+    padding-bottom: 150px;
+}
+
 body {
     position: relative;
     margin: var(--header-height) 0 0 0;
