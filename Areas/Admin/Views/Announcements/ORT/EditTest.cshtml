@@ -1,0 +1,247 @@
+﻿@using YouCan.Areas.Admin.ViewModels
+@model TestsModel
+
+@{
+    Layout = "_Admin";
+}
+
+<link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
+<form asp-action="EditTest" asp-controller="ORT" method="post" enctype="multipart/form-data">
+    <div class="container content">
+        <div class="creationPage">
+            <input asp-for="TestId" type="hidden" value="@Model.TestId" />
+            <h1 class="mt-4">
+                <label class="" for="lessonTitle">Описание теста</label>
+                <input asp-for="Text" type="text" class="form-control-lg" id="lessonTitle" placeholder="Описание теста"/>
+            </h1>
+            <p class="subtitle mt-3 mb-3">
+                <label class="form-label" for="lessonTitle2">Длительность в минутах</label>
+                <textarea asp-for="TimeForTestInMin" class="form-control" id="lessonTitle2" placeholder="" style="height: 50px" >@Model.TimeForTestInMin</textarea>
+            </p>
+            <p class="subtitle mt-3 mb-3">
+                <label class="form-label" for="lessonTitle2">Выберите предмет теста</label>
+                <select asp-for="SubjectId" class="form-select">
+                    <option></option>
+                    @foreach (var subject in (List<Subject>)ViewBag.Subjects)
+                    {
+                        <option value="@subject.Id">@subject.Name</option>
+                    }
+                </select>
+            </p>
+        </div>
+        <div class="creationPage">
+            <input type="hidden" asp-for="Questions" id="questionsObjs" />
+            <h5>Редактирование вопросов теста</h5>
+            <div id="question-container" class="mt-4 col-6 mx-auto">
+                @if (Model.Questions.Count == 0 || Model.Questions == null)
+                {
+                    <h5>Вопросов еще нет!</h5>
+                }
+                else
+                {
+                    for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        var question = Model.Questions[i];
+                        <div class="question border border-secondary rounded-3 my-4 p-3" id="question-form-@i">
+                            <h5>Вопрос №@(i + 1)</h5>
+                            <input type="text" value="@question.QuestionId" name="questionId" hidden/>
+                            <input type="text" value="@question.Instruction" class="form-control" placeholder="Введите инструкцию к вопросу" name="instruction" />
+                            <input type="text" value="@question.Text" class="form-control mt-3" placeholder="Введите вопрос" name="text"/>
+                            <input type="number" value="@question.Point" class="form-control mt-3" placeholder="Введите вопрос" name="point" />
+                            @if (question.QuestionExistsPhotoUrlElement != null)
+                            {
+                                <input name="questionExistsPhotoUrlElement" value="@question.QuestionExistsPhotoUrlElement" type="hidden" />
+                                <img class="h-100" src="@Url.Content(question.QuestionExistsPhotoUrlElement)" />
+                            }
+
+                            <input type="file" class="form-control mt-3" name="image" />
+                            <div class="answers mt-3">
+                                @foreach (var answer in question.Answers)
+                                {
+                                    <div class="answer align-items-center justify-content-between mb-3">
+                                        <div class="col-auto">
+                                            <label for="isCorrect-question-form-@i-@DateTime.Now">Нажмите если это правильный ответ</label>
+                                            <input id="isCorrect-question-form-@i-@DateTime.Now" class="form-check isCorrect" type="radio" name="isCorrect-question-form-@i" @(answer.IsCorrect ? "checked" : "") />
+                                        </div>
+                                        <div class="col p-0 answer-content">
+                                            <input data-answer-input-type="text" name="answerText" value="@answer.AnswerText" class="form-control" placeholder="Введите текст ответа" required />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" id="add_answer" class="btn btn-primary add-answer-button mt-3">Добавить Ответ</button>
+                            <button type="button" class="btn btn-light mt-4 module-cancel-button">Отмена</button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-warning" id="finish">Изменить тест</button>
+    </div>
+</form>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentPage = 1;
+        const totalPages = document.querySelectorAll('.creationPage').length;
+        let questionCounter = '@(Model.Questions.Count - 1)';
+        $('#add_answer').on('click', function () {
+            const formId = $(this).closest('.question').attr('id');
+            addAnswer(formId, true);
+        });
+        // $(document).on('click', '.add-answer-button', function () {
+        //     const formId = $(this).closest('.question').attr('id');
+        //     addAnswer(formId, true);
+        // });
+
+        // Делегирование события для удаления вопроса
+        $(document).on('click', '.module-cancel-button', function () {
+            $(this).closest('.question').remove();
+        });
+        function addQuestion() {
+            questionCounter++;
+            const formId = `question-form-${questionCounter}`;
+
+            const questionFormHtml = `
+                                        <div class="question border border-secondary rounded-3 my-4 p-3" id="${formId}">
+                                            <h5>Вопрос №${questionCounter + 1}</h5>
+                                            <input type="text" class="form-control" placeholder="Введите инструкцию к вопросу" name="instruction"/>
+                                            <input type="text" class="form-control mt-3" placeholder="Введите вопрос" name="text"/>
+                                            <input type="file" class="form-control mt-3" name="image" />
+
+                                            <div class="answers mt-3">
+                                                <!-- Answers will be added here dynamically -->
+                                            </div>
+                                            <button type="button" class="btn btn-primary add-answer-button mt-3">Добавить Ответ</button>
+                                            <button type="button" class="btn btn-light mt-4 module-cancel-button">Отмена</button>
+                                        </div>`;
+
+            $('#question-container').append(questionFormHtml);
+
+            // Automatically add 4 answers, with the first answer's isCorrect radio checked by default
+            for (let i = 0; i < 4; i++) {
+                addAnswer(formId, false, i === 0);
+            }
+
+            // Event listener for adding answers
+
+
+            // Initialize answer inputs based on the default format
+            $(`#${formId} .format-selection input:checked`).change();
+        }
+
+
+        function addAnswer(formId, withCancelButton, isCorrectDefault = false) {
+            const uniqueRadioId = `isCorrect-${formId}-${Date.now()}`; // Unique ID for each radio button
+            const radioName = `isCorrect-${formId}`; // Name attribute for grouping radios
+
+            const cancelButtonHtml = withCancelButton ? `
+                                        <div class="col-auto">
+                                            <button type="button" class="btn btn-danger cancel-answer-button">Отмена</button>
+                                        </div>` : '';
+
+            const answerFormHtml = `
+                                        <div class="answer align-items-center justify-content-between mb-3">
+                                            <div class="col-auto">
+                                                <label for="${uniqueRadioId}">Нажмите если это правильный ответ</label>
+                                                <input id="${uniqueRadioId}" class="form-check isCorrect" type="radio" name="${radioName}" ${isCorrectDefault ? 'checked' : ''} />
+                                            </div>
+                                            <div class="col p-0 answer-content">
+                                                <input data-answer-input-type="text" name="answerText" class="form-control" placeholder="Введите текст ответа" required/>
+                                            </div>
+                                            ${cancelButtonHtml}
+                                        </div>`;
+
+            const $answerContainer = $(`#${formId} .answers`);
+            const $newAnswerForm = $(answerFormHtml);
+
+            if (withCancelButton) {
+                $newAnswerForm.find('.cancel-answer-button').click(function () {
+                    $newAnswerForm.remove();
+                });
+            }
+
+            $answerContainer.append($newAnswerForm);
+
+        }
+
+
+        $('.add-question-button').click(function () {
+            addQuestion();
+        });
+
+        $('#finish').on('click', function () {
+
+            const formData = new FormData();
+
+            const textEl = document.querySelector('input[name="Text"]');
+            const timeForTestEl = document.querySelector('textarea[name="TimeForTestInMin"]');
+            const testIdEl = document.querySelector('input[name="TestId"]');
+            const subjectEl = document.querySelector('select[name="SubjectId"]');
+
+
+            if (textEl) {
+                formData.append('Text', textEl.value);
+            }
+            if (timeForTestEl) {
+                formData.append('TimeForTestInMin', timeForTestEl.value);
+            }
+            if (testIdEl) {
+                formData.append('TestId', testIdEl.value);
+            }
+            if (subjectEl) {
+                formData.append('SubjectId', subjectEl.value);
+            }
+
+            const questionForms = document.querySelectorAll('.question');
+            questionForms.forEach((form, index) => {
+                const instructionElement = form.querySelector('input[name="instruction"]');
+                const textElement = form.querySelector('input[name="text"]');
+                const questionExistsPhotoUrlElement = form.querySelector('input[name="questionExistsPhotoUrlElement"]');
+                const imageElement = form.querySelector('input[name="image"]');
+                const pointEl = form.querySelector('input[name="point"]');
+
+
+                if (instructionElement) formData.append(`Questions[${index}].Instruction`, instructionElement.value);
+                if (textElement) formData.append(`Questions[${index}].Text`, textElement.value);
+                if (questionExistsPhotoUrlElement) formData.append(`Questions[${index}].QuestionExistsPhotoUrlElement`, questionExistsPhotoUrlElement.value);
+                if (imageElement && imageElement.files && imageElement.files.length > 0) {
+                    formData.append(`Questions[${index}].Image`, imageElement.files[0]);
+                }
+                if (pointEl) {
+                    formData.append(`Questions[${index}].Point`, pointEl.value);
+                }
+
+                const answerForms = form.querySelectorAll('.answers .answer');
+                answerForms.forEach((answerForm, answerIndex) => {
+                    const answerTextElement = answerForm.querySelector('input[name="answerText"]');
+                    const answerImageElement = answerForm.querySelector('input[name="answerImage"]');
+                    const isCorrectElement = answerForm.querySelector('input.isCorrect'); // Use class selector
+
+                    if (answerTextElement) formData.append(`Questions[${index}].Answers[${answerIndex}].AnswerText`, answerTextElement.value);
+                    if (answerImageElement && answerImageElement.files && answerImageElement.files.length > 0) {
+                        formData.append(`Questions[${index}].Answers[${answerIndex}].AnswerImage`, answerImageElement.files[0]);
+                    }
+                    if (isCorrectElement) formData.append(`Questions[${index}].Answers[${answerIndex}].IsCorrect`, isCorrectElement.checked);
+                });
+            });
+
+            axios.post('/Admin/ORT/EditTest', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(function (response) {
+                    window.location.href = `@Url.Action("Details", "ORT", new {ortId = ViewBag.OrtId})`;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>

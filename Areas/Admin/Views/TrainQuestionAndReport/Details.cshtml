@@ -1,0 +1,53 @@
+@model YouCan.Entities.Question
+@{
+    ViewBag.Title = "title";
+    Layout = "_Admin";
+}
+
+<h2>@Model.Content</h2>
+
+<div>
+    <strong>Instruction:</strong> @Model.Instruction
+</div>
+<div>
+    <strong>Subject:</strong> @Model.Subject?.Name
+</div>
+<div>
+    <strong>Content:</strong> @Model.Content
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ImageUrl))
+{
+    <div>
+        <img src="@Model.ImageUrl" alt="Question Image" />
+    </div>
+}
+
+<h3>Answers</h3>
+<ul>
+    @foreach (var answer in Model.Answers)
+    {
+        if (answer.IsCorrect)
+        {
+            <li style="font-weight:bold; color:green;">@answer.Content (Correct)</li>
+        }
+        else
+        {
+            <li>@answer.Content</li>
+        }
+    }
+</ul>
+
+<form asp-action="Publish" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">Publish</button>
+</form>
+
+<form asp-action="Delete" method="post" onsubmit="return confirm('Are you sure you want to delete this question?');">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+<form asp-action="Edit" method="get">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">Edit</button>
+</form>

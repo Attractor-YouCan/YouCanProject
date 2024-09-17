@@ -5,7 +5,6 @@ using YouCan.Areas.Study.Controllers;
 using YouCan.Areas.Study.ViewModels;
 using YouCan.Entities;
 using YouCan.Service.Service;
-using YouCan.Tests.Services;
 
 namespace YouCan.Tests;
 
@@ -16,6 +15,7 @@ public class MiniTestsControllerTests
     private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
     private readonly Mock<ICRUDService<Test>> _testServiceMock;
     private readonly Mock<ICRUDService<UserLevel>> _userLevelServiceMock;
+    private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly MiniTestsController _controller;
 
@@ -25,6 +25,7 @@ public class MiniTestsControllerTests
         _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
         _testServiceMock = new Mock<ICRUDService<Test>>();
         _userLevelServiceMock = new Mock<ICRUDService<UserLevel>>();
+        _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
@@ -33,7 +34,8 @@ public class MiniTestsControllerTests
             _userLessonServiceMock.Object,
             _testServiceMock.Object,
             _userLevelServiceMock.Object,
-            _userManagerMock.Object
+            _userManagerMock.Object,
+            _impactModeServiceMock.Object
         );
     }
 

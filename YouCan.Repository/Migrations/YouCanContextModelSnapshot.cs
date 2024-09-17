@@ -233,6 +233,33 @@ namespace YouCan.Repository.Migrations
                     b.ToTable("AdminActions");
                 });
 
+            modelBuilder.Entity("YouCan.Entites.Models.Announcement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Announcements");
+                });
+
             modelBuilder.Entity("YouCan.Entites.Models.LessonTime", b =>
                 {
                     b.Property<int>("Id")
@@ -838,7 +865,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "В каком слове вместо точек следует вставить букву с?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -847,7 +875,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -856,7 +885,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "В каком слове вместо точек следует вставить букву з?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -865,7 +895,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "В каком предложении подчеркнутое слово употреблено в правильной форме?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -874,7 +905,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "Задание, ... нами, не вызывает особых затруднений.",
                             Instruction = "Какое слово следует вставить вместо точек в предложение?",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -883,7 +915,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "Какое слово является синонимом к слову 'красивый'?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -892,7 +925,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "Какое слово является антонимом к слову 'высокий'?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -901,7 +935,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "Какое слово является глаголом?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         },
                         new
@@ -910,7 +945,8 @@ namespace YouCan.Repository.Migrations
                             AnswersIsImage = false,
                             Content = "Какое слово обозначает предмет?",
                             Instruction = "Выберите правильный вариант",
-                            IsPublished = false,
+                            IsPublished = true,
+                            SubjectId = 6,
                             TestId = 3
                         });
                 });
@@ -949,6 +985,15 @@ namespace YouCan.Repository.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ImpactModeEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ImpactModeStart")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastStudyDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("Streak")
                         .HasColumnType("integer");
@@ -996,7 +1041,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 1,
                             ImageUrl = "/topicImages/mathematics1icon.png",
-                            Name = "Mathematics",
+                            Name = "Математика",
                             SubjectType = 0,
                             UserTestType = 0
                         },
@@ -1004,7 +1049,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 2,
                             ImageUrl = "/topicImages/grammarIcon.png",
-                            Name = "Russian",
+                            Name = "Русский",
                             SubjectType = 0,
                             UserTestType = 0
                         },
@@ -1012,7 +1057,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 3,
                             ImageUrl = "/topicImages/mathematics1icon.png",
-                            Name = "Mathematics1",
+                            Name = "Математика 1",
                             ParentId = 1,
                             SubjectType = 1,
                             UserTestType = 0
@@ -1021,7 +1066,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 4,
                             ImageUrl = "/topicImages/mathematics2icon.png",
-                            Name = "Mathematics2",
+                            Name = "Математика 2",
                             ParentId = 1,
                             SubjectType = 1,
                             UserTestType = 0
@@ -1030,7 +1075,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 5,
                             ImageUrl = "/topicImages/analogyIcon.png",
-                            Name = "Analogy",
+                            Name = "Аналогия",
                             ParentId = 2,
                             SubjectType = 0,
                             UserTestType = 0
@@ -1039,7 +1084,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 6,
                             ImageUrl = "/topicImages/grammarIcon.png",
-                            Name = "Grammar",
+                            Name = "Грамматика",
                             ParentId = 2,
                             SubjectType = 1,
                             UserTestType = 0
@@ -1048,7 +1093,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 7,
                             ImageUrl = "/topicImages/readUnderstIcon.png",
-                            Name = "Reading and Understanding",
+                            Name = "Чтение и понимание",
                             ParentId = 2,
                             SubjectType = 1,
                             UserTestType = 1
@@ -1057,7 +1102,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 8,
                             ImageUrl = "/topicImages/analogyIcon.png",
-                            Name = "Analogy",
+                            Name = "Аналогия",
                             ParentId = 5,
                             SubjectType = 1,
                             UserTestType = 0
@@ -1066,7 +1111,7 @@ namespace YouCan.Repository.Migrations
                         {
                             Id = 9,
                             ImageUrl = "/topicImages/readUnderstIcon.png",
-                            Name = "Addition of Offers",
+                            Name = "Дополнение предложений",
                             ParentId = 5,
                             SubjectType = 1,
                             UserTestType = 0
@@ -1173,12 +1218,6 @@ namespace YouCan.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("ImpactModeEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ImpactModeStart")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int?>("LeagueId")
                         .HasColumnType("integer");
 
@@ -1211,7 +1250,7 @@ namespace YouCan.Repository.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<int?>("StatisticId")
+                    b.Property<int>("StatisticId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("TariffEndDate")
@@ -1581,7 +1620,9 @@ namespace YouCan.Repository.Migrations
 
                     b.HasOne("YouCan.Entities.Statistic", "Statistic")
                         .WithMany()
-                        .HasForeignKey("StatisticId");
+                        .HasForeignKey("StatisticId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("YouCan.Entites.Models.Tariff", "Tariff")
                         .WithMany("Users")

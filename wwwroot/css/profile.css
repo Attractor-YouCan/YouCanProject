@@ -72,7 +72,7 @@ body {
 }
 
 .profile-text-secondary {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--secondary-text-color);
     padding: 0px;
@@ -400,6 +400,11 @@ body {
     line-height: 19.5px;
     border-radius: 14px;
     cursor: pointer;
+}
+@media (min-width: 1280px) {
+    .container {
+        margin-left: 140px;
+    }
 }
 @media (max-width: 1280px) {
     .container{
