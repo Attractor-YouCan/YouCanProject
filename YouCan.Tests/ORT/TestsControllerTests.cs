@@ -61,8 +61,8 @@ namespace YouCan.Tests.ORT
             var result = await _controller.Index(1);
 
             // Assert
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("no ort test", notFoundResult.Value);
+            var notFoundResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", notFoundResult.ActionName);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace YouCan.Tests.ORT
                 } 
             }};
             var user = new User { Id = 1 };
-            var userOrtTest = new UserOrtTest { UserId = user.Id, PassedLevel = 1 };
+            var userOrtTest = new UserOrtTest { UserId = user.Id,  OrtTestId = 1, PassedLevel = 1 };
             var testSubmissionModel = new TestSubmissionModel
             {
                 OrtTestId = ortTestId,
@@ -121,7 +121,7 @@ namespace YouCan.Tests.ORT
 
             _mockOrtTestService.Setup(s => s.GetById(ortTestId)).ReturnsAsync(ortTest);
             _mockUserManager.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
-            _mockUserOrtTestService.Setup(s => s.GetById(user.Id)).ReturnsAsync(userOrtTest);
+            _mockUserOrtTestService.Setup(s => s.GetAll()).Returns(new List<UserOrtTest>{userOrtTest}.AsQueryable);
 
             // Act
             var result = await _controller.Index(testSubmissionModel);

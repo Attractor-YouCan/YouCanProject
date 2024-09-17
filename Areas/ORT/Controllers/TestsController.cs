@@ -89,7 +89,6 @@ public class TestsController : Controller
             });
         }
 
-        userOrtTest.OrtTestId = ortTest.Id;
         userOrtTest.OrtTestId = userOrtTest.OrtTestId == null ? ortTest.Id : userOrtTest.OrtTestId;
         userOrtTest.PassedLevel = ortTest.OrtLevel;
         userOrtTest.Points = testPointSum;
