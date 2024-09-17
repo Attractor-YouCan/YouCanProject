@@ -49,10 +49,23 @@
                 <img src="~/navbar_icons/profile.png" alt="..." class="bx bx-grid-alt nav_icon profile">
                 <span class="nav_name">ПРОФИЛЬ</span>
             </a>
-            <a href="#" class="nav_link">
-                <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
-                <span class="nav_name">ЕЩЕ</span>
-            </a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("admin") || User.IsInRole("manager"))
+                {
+                    <a asp-area="Admin" asp-controller="Stat" asp-action="Stat" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">ЕЩЕ</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="#" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">ЕЩЕ</span>
+                    </a>
+                }
+            }
         </div>
     </nav>
 </div>
@@ -76,7 +89,7 @@
         </div>
     </nav>
 
-    <main role="main">
+    <main role="main" class="mb-5 pb-5">
         @RenderBody()
     </main>
     <!-- jQuery -->

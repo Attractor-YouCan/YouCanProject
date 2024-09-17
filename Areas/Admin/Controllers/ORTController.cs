@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Drawing;
 using YouCan.Areas.Admin.ViewModels;
+using YouCan.Entites.Models;
 using YouCan.Entities;
 using YouCan.Service.Service;
 using YouCan.Services;
@@ -21,10 +22,12 @@ public class ORTController : Controller
     private readonly IWebHostEnvironment _env;
     private readonly ICRUDService<Question> _questionManager;
     private readonly ICRUDService<Answer> _answerManager;
+    private readonly ICRUDService<AdminAction> _adminActions;
     public ORTController(UserManager<User> userManager, ICRUDService<Test> testManager,
                          ICRUDService<OrtInstruction> instructionsManager, ICRUDService<OrtTest> ortManager,
                          ICRUDService<Subject> subjectManager, IWebHostEnvironment env,
-                         ICRUDService<Question> questionManager, ICRUDService<Answer> answerManager)
+                         ICRUDService<Question> questionManager, ICRUDService<Answer> answerManager,
+                         ICRUDService<AdminAction> adminActions)
     {
         _userManager = userManager;
         _testsManager = testManager;
@@ -34,6 +37,7 @@ public class ORTController : Controller
         _env = env;
         _questionManager = questionManager;
         _answerManager = answerManager;
+        _adminActions = adminActions;
     }
     public IActionResult Index() => View(_ortManager.GetAll().ToList());
 
@@ -50,6 +54,18 @@ public class ORTController : Controller
         if (ModelState.IsValid)
         {
             await _ortManager.Insert(ort);
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "Создание орт теста",
+                Details = $"{admin.UserName} создал новый орт тест ID: {ort.Id}"
+            };
+
+            await _adminActions.Update(log);
+
             return RedirectToAction("Index");   
         }
         return BadRequest();
@@ -80,6 +96,17 @@ public class ORTController : Controller
         if (ModelState.IsValid)
         {
             await _ortManager.Update(ort);
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "Редактирование орт теста",
+                Details = $"{admin.UserName} изменил орт тест ID: {ort.Id}"
+            };
+            await _adminActions.Update(log);
+
             return RedirectToAction("Details", new {ortId = ort.Id});   
         }
         return BadRequest();
@@ -115,6 +142,17 @@ public class ORTController : Controller
                 ort.TimeForTestInMin += test.TimeForTestInMin;
                 await _ortManager.Update(ort);
             }
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "Создание подтеста",
+                Details = $"{admin.UserName} создал новый подтест Id: {test.Id} к орт тесту Id: {ort.Id}"
+            };
+
+            await _adminActions.Update(log);
 
             return RedirectToAction("Details", new { ortId = test.OrtTestId });
         }
@@ -170,6 +208,18 @@ public class ORTController : Controller
                             await _answerManager.Insert(newAnswer);
                         }
                     }
+
+                    var admin = await _userManager.GetUserAsync(User);
+
+                    var log = new AdminAction()
+                    {
+                        UserId = admin.Id,
+                        Action = "Создание вопросов",
+                        Details = $"{admin.UserName} добавил вопросы в подтест Id: {test.Id} у орт теста Id: {test.OrtTestId}"
+                    };
+
+                    await _adminActions.Update(log);
+
                     return RedirectToAction("Details", new {ortId = test.OrtTestId});
                 }
             }
@@ -281,7 +331,18 @@ public class ORTController : Controller
                 }
                 
             }
-            await _testsManager.Update(test);   
+            await _testsManager.Update(test);
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "Редактирование подтеста",
+                Details = $"{admin.UserName} изменил подтест Id: {test.Id} у орт теста Id: {ort.Id}"
+            };
+
+            await _adminActions.Update(log);
 
             return RedirectToAction("Index");
         }
@@ -303,6 +364,18 @@ public class ORTController : Controller
             ort.TimeForTestInMin -= test.TimeForTestInMin;
             await _ortManager.Update(ort);
         }
+
+        var admin = await _userManager.GetUserAsync(User);
+
+        var log = new AdminAction()
+        {
+            UserId = admin.Id,
+            Action = "Удаление подтеста",
+            Details = $"{admin.UserName} удалил подтест Id: {test.Id} у орт теста Id: {ort.Id}"
+        };
+
+        await _adminActions.Update(log);
+
         await _testsManager.DeleteById(test.Id);
         return RedirectToAction("Details", new {ortId = ort.Id});
     }
