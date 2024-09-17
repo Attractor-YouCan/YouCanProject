@@ -20,7 +20,7 @@
                 <p class="profile-text-primary">@ViewBag.User.FullName</p>
                 <p class="profile-text-secondary">@ViewBag.User.PhoneNumber</p>
                 <div class="d-flex flex-row align-items-center">
-                    <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/oclock.png")"></img>
+                    <img class="clock-img d-block" src="@Url.Content($"~/profileIcons/clock.png")">
                     <p class="profile-text-secondary ms-1">Регистрация -</p>
                 </div>
             </div>
@@ -35,32 +35,59 @@
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Аккаунт</label>
             <button class="col-auto btn btn-save">Сохранить изменения</button>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Фото профиля</label>
             <label asp-for="UploadedFile" class="col-auto btn btn-load">Выбрать файл</label>
-            <input asp-for="UploadedFile" class="d-none"/>
+            <input asp-for="UploadedFile" class="d-none" />
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <p class="col-3 col-sm-2 col-lg-1 text-end p-0"></p>
             <p id="input-file-text" class="p-0 fs-8 form-width">Максимальный размер изображения — 1 Мб</p>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">ФИО</label>
-            <input asp-for="FullName" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <input asp-for="FullName" class="form-control-theme" />
+            </div>
+            <div class="col-12 text-center">
+                <span class="text-danger" asp-validation-for="FullName"></span>
+            </div>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Номер телефона</label>
-            <input asp-for="PhoneNumber" type="number" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <input asp-for="PhoneNumber" type="number" class="form-control-theme" />
+            </div>
+            <div class="col-12 text-center">
+                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+            </div>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Регион</label>
-            <input asp-for="District" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <input asp-for="District" class="form-control-theme" />
+            </div>
+            <div class="col-12 text-center">
+                <span class="text-danger" asp-validation-for="District"></span>
+            </div>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">Дата рождения</label>
-            <input asp-for="BirthDate" type="date" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <input asp-for="BirthDate" type="date" class="form-control-theme" />
+            </div>
+            <div class="col-12 text-center">
+                <span class="text-danger" asp-validation-for="BirthDate"></span>
+            </div>
         </div>
     </form>
+
     <form class="d-flex justify-content-center" asp-action="LogOut" asp-controller="Account">
         <button type="submit" class="border-0 bg-transparent p-0 text-center d-block fw-bold text-decoration-none link-theme-secondary">Выйти</button>
     </form>
@@ -70,6 +97,9 @@
 </div>
 
 @section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $('input[type=file]').on('change', function () {
             console.log("ABOBA");
