@@ -45,8 +45,7 @@ h1 {
     border-radius:20px;
 }
 .formula-box img {
-    max-width: 100%;
-    height: auto; 
+    height: 400px;
     display: block; 
     margin: 0 auto; 
 }

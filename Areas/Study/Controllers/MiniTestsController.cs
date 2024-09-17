@@ -60,19 +60,19 @@ public class MiniTestsController : Controller
             join selectedAnswer in selectedAnswers on answer.Id equals selectedAnswer.AnswerId
             select selectedAnswer
         ).Count();
-        if (passingCount >= 2)
-        {
-            userLevels.Level = lesson.LessonLevel;
-
-            userLesson.IsPassed = true;
-
-            await _userLevel.Update(userLevels);
-            // await _userManager.UpdateAsync(currentUser);
-            await _userLessonService.Update(userLesson);
-        }
+        bool result = (double)passingCount / test.Questions.Count >= 0.8;
+        if ( result)
+            if (userLevels.Level <= lesson.LessonLevel)
+            {
+                userLevels.Level = lesson.LessonLevel;
+                userLesson.IsPassed = true;
+                await _userLevel.Update(userLevels);
+                await _userLessonService.Update(userLesson);
+            }
+        
         var testResult = new
         {
-            isPassed = passingCount>=2,
+            isPassed = result,
             lessonId = lesson.Id,
             subtopicId = lesson.SubjectId
         };
