@@ -8,11 +8,9 @@
 <link rel="stylesheet" href="~/css/lesson-test.css" asp-append-version="true"/>
 <link rel="stylesheet" href="~/css/ortTest.css" asp-append-version="true"/>
 
-<div class="top-layout">
     <a class="close-button" href="javascript:history.back()">
         <img src="~/topicImages/exitButton.svg">
     </a>
-</div>
 
 <div class="row row-cols-3 px-4 text-center mb-4 w-100 fixed-time-table">
     <div class="col-3" id="countdown">
@@ -124,6 +122,26 @@
         let currentPage = 1;
         let totalTestTime = 0;
         let selectionCounts = {};
+       
+        function confirmExit(event) {
+            event.preventDefault();
+            event.returnValue = 'Ваши результаты будут аннулированы! Вы точно хотите выйти из теста?'
+            return 'Ваши результаты будут аннулированы! Вы точно хотите выйти из теста?';
+        }       
+        
+        const closeButton = document.querySelector('.close-button');
+        closeButton.addEventListener('click', function (event) {
+            if(!confirm('Ваши результаты будут аннулированы! Вы точно хотите выйти из теста?')) {
+                event.preventDefault();
+            }
+        });
+        
+        window.addEventListener('beforeunload', confirmExit);
+        
+        const finishButton = document.getElementById('next-page');
+        finishButton.addEventListener('click', function () {
+            window.removeEventListener('beforeunload', confirmExit)
+        });
     
         function initializeTimers() {
             totalTestTime = 0;
