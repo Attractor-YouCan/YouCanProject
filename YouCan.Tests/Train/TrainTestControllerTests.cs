@@ -16,7 +16,7 @@ public class TrainTestControllerTests
     private readonly Mock<ICRUDService<Question>> _questionServiceMock;
     private readonly Mock<ICRUDService<QuestionReport>> _questionReportServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
-    private readonly Mock<ImpactModeService> _impactModeServiceMock;
+    private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly TrainTestController _controller;
 
     public TrainTestControllerTests()
@@ -26,7 +26,7 @@ public class TrainTestControllerTests
         _testServiceMock = new Mock<ICRUDService<Test>>();
         _questionServiceMock = new Mock<ICRUDService<Question>>();
         _questionReportServiceMock = new Mock<ICRUDService<QuestionReport>>();
-        _impactModeServiceMock = new Mock<ImpactModeService>();
+        _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null
@@ -60,7 +60,7 @@ public class TrainTestControllerTests
         {
             new PassedQuestion { UserId = user.Id, QuestionId = 2 } // вопрос, который пользователь уже ответил
         };
-        
+
         _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
         _questionServiceMock.Setup(qs => qs.GetAll()).Returns(new List<Question> { question }.AsQueryable());
         _subjectServiceMock.Setup(ss => ss.GetAll()).Returns(new List<Subject> { subject }.AsQueryable());

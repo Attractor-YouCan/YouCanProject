@@ -16,7 +16,7 @@ namespace YouCan.Tests.ORT
         private readonly Mock<ICRUDService<OrtTest>> _mockOrtTestService;
         private readonly Mock<ICRUDService<UserOrtTest>> _mockUserOrtTestService;
         private readonly Mock<UserManager<User>> _mockUserManager;
-        private readonly Mock<ImpactModeService> _mockImpactModeService;
+        private readonly Mock<IImpactModeService> _mockImpactModeService;
         private readonly TestsController _controller;
 
         public TestsControllerTests()
@@ -25,7 +25,7 @@ namespace YouCan.Tests.ORT
             _mockUserOrtTestService = new Mock<ICRUDService<UserOrtTest>>();
             _mockUserManager = new Mock<UserManager<User>>(
                 new Mock<IUserStore<User>>().Object, null, null, null, null, null, null, null, null);
-            _mockImpactModeService = new Mock<ImpactModeService>();
+            _mockImpactModeService = new Mock<IImpactModeService>();
             _controller = new TestsController(
                 _mockOrtTestService.Object,
                 _mockUserOrtTestService.Object,

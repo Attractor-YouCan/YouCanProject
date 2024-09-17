@@ -15,7 +15,7 @@ public class MiniTestsControllerTests
     private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
     private readonly Mock<ICRUDService<Test>> _testServiceMock;
     private readonly Mock<ICRUDService<UserLevel>> _userLevelServiceMock;
-    private readonly Mock<ImpactModeService> _impactModeServiceMock;
+    private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly MiniTestsController _controller;
 
@@ -25,7 +25,7 @@ public class MiniTestsControllerTests
         _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
         _testServiceMock = new Mock<ICRUDService<Test>>();
         _userLevelServiceMock = new Mock<ICRUDService<UserLevel>>();
-        _impactModeServiceMock = new Mock<ImpactModeService>();
+        _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
