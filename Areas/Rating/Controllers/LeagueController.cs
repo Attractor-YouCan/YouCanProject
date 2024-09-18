@@ -71,6 +71,7 @@ namespace YouCan.Areas.Rating.Controllers
             var result = users.Select(user => new
             {
                 user.Id,
+                user.UserName,
                 user.FullName,
                 user.AvatarUrl,
                 user.Rank,

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
 <form asp-action="CreateLesson" asp-controller="Study" enctype="multipart/form-data">
     <div class="container content">
+        <h3 class="text-white p-4 bg-danger rounded-3">УБЕДИТЕСЬ ЧТО ВЫ ВСЕ ЗАПОЛНИЛИ!</h3>
         <div class="creationPage">
             <label for="lessonLevel">Уровень Урока</label>
             <input asp-for="LessonLevel" type="number" class="form-control" value="@Model.LessonLevel" id="lessonLevel" disabled/>
@@ -21,11 +22,10 @@
                 <textarea asp-for="LessonTitle2" class="form-control" id="lessonTitle2" placeholder="Введите Подтему Урока"  style="height: 50px" required></textarea>
             </p>
             <div class="video-container embed-responsive embed-responsive-16by9 border border-primary rounded-3 mt-3">
-                <video class="embed-responsive-item" controls>
-                    <source src="~/lessonResources/lessonVideo.mp4" type="video/mp4" />
-                    <source src="~/lessonResources/lessonVideo.ogg" type="video/ogg" />
-                    Your browser does not support the video tag.
-                </video>
+                <div style="position: relative; padding-top: 55%; width: 100%">
+                    <iframe src="@Model.ExistsVideoUrl" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+                    </iframe>
+                </div>
                 <h5 class="section-title">Здесь будет: Видеоматериал Урока</h5>
                 <input asp-for="LessonVideo" type="url" class="mx-auto form-control my-3" placeholder="Вставьте ссылку на видеоматериал урока" required/>
             </div>
@@ -61,7 +61,7 @@
                                     @if (module.ExistsPhotoUrl != null)
                                     {
                                         <input name="existsPhotoUrl" value="@module.ExistsPhotoUrl" type="hidden"/>
-                                        <img class="h-100" src="@Url.Content(module.ExistsPhotoUrl)" />
+                                        <img class="" src="@Url.Content(module.ExistsPhotoUrl)" />
                                     }
                                     <span class="mx-auto mt-3">Выбрать другое фото модуля</span>
                                     <input type="file" class="form-control mt-3" placeholder="Выберите фото модуля" name="modulePhoto" required/>
@@ -338,9 +338,8 @@
                                 if (lessonTitle2Element) formData.append('LessonTitle2', lessonTitle2Element.value);
                                 if (descriptionElement) formData.append('Description', descriptionElement.value);
                                 if (lectureElement) formData.append('Lecture', lectureElement.value);
-                                if (lessonVideoElement && lessonVideoElement.files && lessonVideoElement.files.length > 0) {
-                                    formData.append('LessonVideo', lessonVideoElement.files[0]);
-                                }
+                                if (lessonVideoElement) formData.append('LessonVideo', lessonVideoElement.value);
+                                
                                 
                                 const moduleForms = document.querySelectorAll('.module');
                                 moduleForms.forEach((form, index) => {
