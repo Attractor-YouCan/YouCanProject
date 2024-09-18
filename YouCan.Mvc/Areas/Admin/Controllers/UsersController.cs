@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using YouCan.Entities;
+using YouCan.Mvc.Areas.Admin.Services;
 using YouCan.Mvc.ViewModels.Account;
 using YouCan.Service;
+using static YouCan.Mvc.Areas.Admin.Services.UserSortOrder;
 
 namespace YouCan.Mvc.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -17,15 +19,15 @@ public class UsersController : Controller
     private readonly IWebHostEnvironment _env;
     private readonly ICrudService<AdminAction> _adminActions;
     private readonly RoleManager<IdentityRole<int>> _roleManager;
-    private readonly ICRUDService<Tariff> _tariffManager;
-    private readonly ICRUDService<PassedQuestion> _passedQuestionManager;
+    private readonly ICrudService<Tariff> _tariffManager;
+    private readonly ICrudService<PassedQuestion> _passedQuestionManager;
 
     public UsersController(UserManager<User> userManager, 
         IWebHostEnvironment env, 
         ICrudService<AdminAction> adminActions, 
         RoleManager<IdentityRole<int>> roleManager,
-        ICRUDService<Tariff> tariffManager,
-        ICRUDService<PassedQuestion> passedQuestionManager)
+        ICrudService<Tariff> tariffManager,
+        ICrudService<PassedQuestion> passedQuestionManager)
     {
         _userManager = userManager;
         _env = env;
@@ -80,32 +82,32 @@ public class UsersController : Controller
     {
         users = order switch
         {
-            IdAsc => users.OrderBy(u => u.Id).ToList(),
-            IdDesc => users.OrderByDescending(u => u.Id).ToList(),
+            UserSortOrder.IdAsc => users.OrderBy(u => u.Id).ToList(),
+            UserSortOrder.IdDesc => users.OrderByDescending(u => u.Id).ToList(),
 
-            NameAsc => users.OrderBy(u => u.UserName).ToList(),
-            NameDesc => users.OrderByDescending(u => u.UserName).ToList(),
+            UserSortOrder.NameAsc => users.OrderBy(u => u.UserName).ToList(),
+            UserSortOrder.NameDesc => users.OrderByDescending(u => u.UserName).ToList(),
 
-            EmailAsc => users.OrderBy(u => u.Email).ToList(),
-            EmailDesc => users.OrderByDescending(u => u.Email).ToList(),
+            UserSortOrder.EmailAsc => users.OrderBy(u => u.Email).ToList(),
+            UserSortOrder.EmailDesc => users.OrderByDescending(u => u.Email).ToList(),
 
-            RoleAsc => users.OrderBy(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
-            RoleDesc => users.OrderByDescending(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+            UserSortOrder.RoleAsc => users.OrderBy(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
+            UserSortOrder.RoleDesc => users.OrderByDescending(u => _userManager.GetRolesAsync(u).Result.FirstOrDefault()).ToList(),
 
-            TariffAsc => users.OrderBy(u => u.TariffId).ToList(),
-            TariffDesc => users.OrderByDescending(u => u.TariffId).ToList(),
+            UserSortOrder.TariffAsc => users.OrderBy(u => u.TariffId).ToList(),
+            UserSortOrder.TariffDesc => users.OrderByDescending(u => u.TariffId).ToList(),
 
-            TariffEndDateAsc => users.OrderBy(u => u.TariffEndDate).ToList(),
-            TariffEndDateDesc => users.OrderByDescending(u => u.TariffEndDate).ToList(),
+            UserSortOrder.TariffEndDateAsc => users.OrderBy(u => u.TariffEndDate).ToList(),
+            UserSortOrder.TariffEndDateDesc => users.OrderByDescending(u => u.TariffEndDate).ToList(),
 
-            ActiveAsc => users.OrderByDescending(u => !(u.LockoutEnabled && u.LockoutEnd != null)).ToList(),
-            ActiveDesc => users.OrderByDescending(u => u.LockoutEnabled && u.LockoutEnd != null).ToList(),
+            UserSortOrder.ActiveAsc => users.OrderByDescending(u => !(u.LockoutEnabled && u.LockoutEnd != null)).ToList(),
+            UserSortOrder.ActiveDesc => users.OrderByDescending(u => u.LockoutEnabled && u.LockoutEnd != null).ToList(),
 
-            LessonsCountAsc => users.OrderBy(u => u.Lessons.Count).ToList(),
-            LessonsCountDesc => users.OrderByDescending(u => u.Lessons.Count).ToList(),
+            UserSortOrder.LessonsCountAsc => users.OrderBy(u => u.Lessons.Count).ToList(),
+            UserSortOrder.LessonsCountDesc => users.OrderByDescending(u => u.Lessons.Count).ToList(),
 
-            LessonsFinishedCountAsc => users.OrderBy(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
-            LessonsFinishedCountDesc => users.OrderByDescending(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+            UserSortOrder.LessonsFinishedCountAsc => users.OrderBy(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
+            UserSortOrder.LessonsFinishedCountDesc => users.OrderByDescending(u => u.Lessons.Count(l => l.IsPassed)).ToList(),
 
             _ => users.OrderBy(u => u.Id).ToList(), // Default sorting
         };

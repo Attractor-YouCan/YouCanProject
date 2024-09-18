@@ -9,17 +9,17 @@ namespace YouCan.Areas.Admin.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class TrainQuestionAndReportController : Controller
 {
-    private ICRUDService<Subject> _subjectService;
-    private ICRUDService<Question> _questionService;
-    private ICRUDService<QuestionReport> _questionReportService;
-    private ICRUDService<Answer> _answerService;
+    private ICrudService<Subject> _subjectService;
+    private ICrudService<Question> _questionService;
+    private ICrudService<QuestionReport> _questionReportService;
+    private ICrudService<Answer> _answerService;
     private UserManager<User> _userManager;
 
-    public TrainQuestionAndReportController(ICRUDService<Subject> subjectService,
+    public TrainQuestionAndReportController(ICrudService<Subject> subjectService,
         UserManager<User> userManager,
-        ICRUDService<Question> questionService,
-        ICRUDService<Answer> answerService,
-        ICRUDService<QuestionReport> questionReportService)
+        ICrudService<Question> questionService,
+        ICrudService<Answer> answerService,
+        ICrudService<QuestionReport> questionReportService)
     {
         _questionReportService = questionReportService;
         _subjectService = subjectService;

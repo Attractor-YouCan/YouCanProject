@@ -10,11 +10,11 @@ namespace YouCan.Areas.Admin.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class AnnouncementsController : Controller
 {
-	private readonly ICRUDService<Announcement> _announcements;
-    private readonly ICRUDService<AdminAction> _adminActions;
+	private readonly ICrudService<Announcement> _announcements;
+    private readonly ICrudService<AdminAction> _adminActions;
     private readonly UserManager<User> _userManager;
-    public AnnouncementsController(ICRUDService<Announcement> announcements, 
-                                   ICRUDService<AdminAction> adminActions,
+    public AnnouncementsController(ICrudService<Announcement> announcements, 
+                                   ICrudService<AdminAction> adminActions,
                                    UserManager<User> userManager)
     {
         _announcements = announcements;

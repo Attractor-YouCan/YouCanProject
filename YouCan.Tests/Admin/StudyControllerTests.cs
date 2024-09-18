@@ -20,7 +20,7 @@ public class StudyControllerTests
     private readonly Mock<ICrudService<Question>> _mockQuestionService;
     private readonly Mock<ICrudService<Answer>> _mockAnswerService;
     private readonly Mock<IWebHostEnvironment> _mockEnvironment;
-    private readonly Mock<ICRUDService<AdminAction>> _mockAdminActions;
+    private readonly Mock<ICrudService<AdminAction>> _mockAdminActions;
     private readonly Mock<UserManager<User>> _mockUserManager;
     private readonly StudyController _controller;
 
@@ -37,7 +37,7 @@ public class StudyControllerTests
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null
         );
-        _mockAdminActions = new Mock<ICRUDService<AdminAction>>();
+        _mockAdminActions = new Mock<ICrudService<AdminAction>>();
 
         _controller = new StudyController(
             _mockSubjectService.Object,

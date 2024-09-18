@@ -14,21 +14,21 @@ namespace YouCan.Areas.Admin.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class ORTController : Controller
 {
-    private readonly ICRUDService<OrtTest> _ortManager;
-    private readonly ICRUDService<Test> _testsManager;
-    private readonly ICRUDService<OrtInstruction> _instructionsManager;
+    private readonly ICrudService<OrtTest> _ortManager;
+    private readonly ICrudService<Test> _testsManager;
+    private readonly ICrudService<OrtInstruction> _instructionsManager;
     private readonly UserManager<User> _userManager;
-    private readonly ICRUDService<Subject> _subjectManager;
+    private readonly ICrudService<Subject> _subjectManager;
     private readonly IWebHostEnvironment _env;
-    private readonly ICRUDService<Question> _questionManager;
-    private readonly ICRUDService<Answer> _answerManager;
-    private readonly ICRUDService<AdminAction> _adminActions;
-    private readonly ICRUDService<RealOrtTest> _realOrtTestManager;
-    public ORTController(UserManager<User> userManager, ICRUDService<Test> testManager,
-                         ICRUDService<OrtInstruction> instructionsManager, ICRUDService<OrtTest> ortManager,
-                         ICRUDService<Subject> subjectManager, IWebHostEnvironment env,
-                         ICRUDService<Question> questionManager, ICRUDService<Answer> answerManager,
-                         ICRUDService<AdminAction> adminActions, ICRUDService<RealOrtTest> realOrtTestManager)
+    private readonly ICrudService<Question> _questionManager;
+    private readonly ICrudService<Answer> _answerManager;
+    private readonly ICrudService<AdminAction> _adminActions;
+    private readonly ICrudService<RealOrtTest> _realOrtTestManager;
+    public ORTController(UserManager<User> userManager, ICrudService<Test> testManager,
+                         ICrudService<OrtInstruction> instructionsManager, ICrudService<OrtTest> ortManager,
+                         ICrudService<Subject> subjectManager, IWebHostEnvironment env,
+                         ICrudService<Question> questionManager, ICrudService<Answer> answerManager,
+                         ICrudService<AdminAction> adminActions, ICrudService<RealOrtTest> realOrtTestManager)
     {
         _userManager = userManager;
         _testsManager = testManager;

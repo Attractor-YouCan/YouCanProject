@@ -20,11 +20,11 @@ public class TrainTestController : Controller
     private readonly IImpactModeService _impactModeService;
 
 
-    public TrainTestController(ICRUDService<PassedQuestion> passedQuestionService,
-        ICRUDService<Subject> subjectService,
-        ICRUDService<QuestionReport> questionReportService,
-        ICRUDService<Test> testService,
-        ICRUDService<Question> questionService,
+    public TrainTestController(ICrudService<PassedQuestion> passedQuestionService,
+        ICrudService<Subject> subjectService,
+        ICrudService<QuestionReport> questionReportService,
+        ICrudService<Test> testService,
+        ICrudService<Question> questionService,
         UserManager<User> userManager, IImpactModeService impactModeService)
     {
         _passedQuestionService = passedQuestionService;

@@ -21,11 +21,11 @@ public class TrainTestControllerTests
 
     public TrainTestControllerTests()
     {
-        _passedQuestionServiceMock = new Mock<ICRUDService<PassedQuestion>>();
-        _subjectServiceMock = new Mock<ICRUDService<Subject>>();
-        _testServiceMock = new Mock<ICRUDService<Test>>();
-        _questionServiceMock = new Mock<ICRUDService<Question>>();
-        _questionReportServiceMock = new Mock<ICRUDService<QuestionReport>>();
+        _passedQuestionServiceMock = new Mock<ICrudService<PassedQuestion>>();
+        _subjectServiceMock = new Mock<ICrudService<Subject>>();
+        _testServiceMock = new Mock<ICrudService<Test>>();
+        _questionServiceMock = new Mock<ICrudService<Question>>();
+        _questionReportServiceMock = new Mock<ICrudService<QuestionReport>>();
         _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,

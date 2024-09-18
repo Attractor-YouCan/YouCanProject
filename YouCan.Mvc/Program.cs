@@ -100,10 +100,10 @@ builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceReposit
 builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExperience>>();
 
 builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>();
-builder.Services.AddTransient<ICRUDService<Announcement>, CRUDService<Announcement>>();
+builder.Services.AddTransient<ICrudService<Announcement>, CRUDService<Announcement>>();
 
 builder.Services.AddTransient<IRepository<RealOrtTest>, RealOrtTestRepository>();
-builder.Services.AddTransient<ICRUDService<RealOrtTest>, CRUDService<RealOrtTest>>();
+builder.Services.AddTransient<ICrudService<RealOrtTest>, CRUDService<RealOrtTest>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 builder.Services.AddScoped<IImpactModeService, ImpactModeService>();

@@ -1,4 +1,4 @@
-﻿namespace YouCan.Areas.Admin.Services;
+﻿namespace YouCan.Mvc.Areas.Admin.Services;
 
 public enum UserSortOrder
 {

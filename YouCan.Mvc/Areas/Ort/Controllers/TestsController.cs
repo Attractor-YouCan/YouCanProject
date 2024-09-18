@@ -15,8 +15,8 @@ public class TestsController : Controller
     private UserManager<User> _userManager;
     private readonly IImpactModeService _impactModeService;
 
-    public TestsController(ICRUDService<OrtTest> ortTestService,
-        ICRUDService<UserOrtTest> userOrtTestService,
+    public TestsController(ICrudService<OrtTest> ortTestService,
+        ICrudService<UserOrtTest> userOrtTestService,
         UserManager<User> userManager,
         IImpactModeService impactModeService)
     {

@@ -19,17 +19,17 @@ public class StudyController : Controller
     private ICrudService<Answer> _answerService;
     private IWebHostEnvironment _environment;
     private readonly UserManager<User> _userManager;
-    private readonly ICRUDService<AdminAction> _adminActions;
+    private readonly ICrudService<AdminAction> _adminActions;
 
-    public StudyController(ICRUDService<Subject> subjectService, 
-        ICRUDService<Lesson> lessonService, 
-        ICRUDService<LessonModule> lessonModuleService, 
-        ICRUDService<Test> testService, 
-        ICRUDService<Question> questionService, 
-        ICRUDService<Answer> answerService,
+    public StudyController(ICrudService<Subject> subjectService, 
+        ICrudService<Lesson> lessonService, 
+        ICrudService<LessonModule> lessonModuleService, 
+        ICrudService<Test> testService, 
+        ICrudService<Question> questionService, 
+        ICrudService<Answer> answerService,
         IWebHostEnvironment environment,
         UserManager<User> userManager,
-        ICRUDService<AdminAction> adminActions)
+        ICrudService<AdminAction> adminActions)
     {
         _subjectService = subjectService;
         _lessonService = lessonService;

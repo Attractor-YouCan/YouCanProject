@@ -1,17 +1,17 @@
-@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
-
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model List<League>
 
 @{
-    ViewBag.Title = Localizer["CombinedRatingPage"];
-    Layout = "_NavBar";
+ViewBag.Title = "Combined Rating Page";
+Layout = "_NavBar";
 }
 
 <link rel="stylesheet" href="~/css/rating.css" asp-append-version="true" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
-<div class="container rating-main">
+<div class="container  rating-main">
     <!-- Header Section -->
     <div class="header">
 
@@ -27,8 +27,9 @@
         </div>
     </div>
 
+
     <main class="main">
-        <div class="swiper swiper1">
+        <div class="swiper swiper1 ">
             <div class="swiper-wrapper">
                 @foreach (var league in Model)
                 {
@@ -41,98 +42,170 @@
         </div>
     </main>
 
-    <div class="league-title">@Localizer[$"League{Model.First().LeagueName}"]</div>
 
-    <div class="leaderboard"></div>
 
-    <div class="footer-button">
-        <button class="floating-button">@Localizer["WhereAmIButton"]</button>
+   
+    <div class="league-title">Бронзовая лига</div>
+
+    
+    <div class="leaderboard">
+     
     </div>
-</div>
 
+    
+    <div class="footer-button">
+        <button class="floating-button">Где я?</button>
+    </div>
+
+</div>
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        const leagueNames = {
-            bronze: "@Localizer["LeagueBronze"]",
-            silver: "@Localizer["LeagueSilver"]",
-            gold: "@Localizer["LeagueGold"]",
-            platinum: "@Localizer["LeaguePlatinum"]",
-            diamond: "@Localizer["LeagueDiamond"]"
-        };
 
-        $(document).ready(function () {
-            var debounceTimeout;
+<script>
+    const leagueNames = {
+        bronze: "Бронзовая лига",
+        silver: "Серебряная лига",
+        gold: "Золотая лига",
+        platinum: "Платиновая лига",
+        diamond: "Алмазная лига"
+    };
 
-            function updateLeagueAndUsers() {
-                clearTimeout(debounceTimeout);
+    $(document).ready(function () {
+        var debounceTimeout;
+        var currentUser = '@User.Identity.Name';
+        var currentUserLeague = null;
+        var currentUserRank = null;
 
-                debounceTimeout = setTimeout(function () {
-                    var activeSlide = $('.swiper-slide.swiper-slide-active');
-                    var leagueName = activeSlide.find('img').data('league');
+        function updateLeagueAndUsers(callback) {
+            clearTimeout(debounceTimeout);
 
-                    $('.league-title').text(leagueNames[leagueName]);
+            debounceTimeout = setTimeout(function () {
+                var activeSlide = $('.swiper-slide.swiper-slide-active');
+                var leagueName = activeSlide.find('img').data('league');
 
-                    $.ajax({
-                        url: '@Url.Action("GetUsersByLeague", "League")',
-                        type: 'GET',
-                        data: { leagueName: leagueName },
-                        success: function (data) {
-                            $(".loader").hide();
+                $('.league-title').text(leagueNames[leagueName]);
 
-                            console.log("Received data:", data);
+                $.ajax({
+                    url: '@Url.Action("GetUsersByLeague", "League")',
+                    type: 'GET',
+                    data: { leagueName: leagueName },
+                    success: function (data) {
+                        $(".loader").hide();
+                        var users = data.$values;
 
-                            var users = data.$values;
+                        if (Array.isArray(users)) {
+                            var leaderboardHtml = '';
+                            var foundCurrentUser = false;
 
-                            if (Array.isArray(users)) {
-                                var leaderboardHtml = '';
-                                $.each(users, function (index, user) {
-                                    leaderboardHtml += `
-                                    <div class="row">
+                            $.each(users, function (index, user) {
+                                var maskedUsername = obfuscateUsername(user.fullName);
+                                var isCurrentUser = (user.userName === currentUser);
+
+                                if (isCurrentUser) {
+                                    foundCurrentUser = true; 
+                                    currentUserLeague = leagueName;
+                                    currentUserRank = index + 1;
+                                }
+
+                                leaderboardHtml += `
+                                    <div class="row ${isCurrentUser ? 'highlight-user' : ''}">
                                         <div class="col-1 position">${index + 1}</div>
                                         <div class="col-7 user-info">
                                             <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
-                                            <span>${user.fullName}</span>
+                                            <span>${maskedUsername}</span>
                                         </div>
                                         <div class="col-2 score">${user.userLessonScore} очков</div>
                                     </div>`;
-                                });
-                                $('.leaderboard').html(leaderboardHtml);
-                            } else {
-                                console.error("Unexpected data format received from server.");
+                            });
+
+                            if (!foundCurrentUser) {
+                                currentUserLeague = null;
+                                currentUserRank = null;
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            $(".loader").hide();
-                            console.error("An error occurred while fetching the users: ", error);
+
+                            $('.leaderboard').html(leaderboardHtml);
+
+                            if (currentUserRank) {
+                                var $leaderboard = $('.leaderboard');
+                                var $userRow = $leaderboard.find('.highlight-user');
+                                if ($userRow.length) {
+                                    $leaderboard.scrollTop($userRow.offset().top - $leaderboard.offset().top + $leaderboard.scrollTop());
+                                }
+                            }
+
+                            if (typeof callback === 'function') callback();
+                        } else {
+                            console.error("Unexpected data format received from server.");
                         }
-                    });
-                }, 300);
-            }
-
-            var swiper = new Swiper(".swiper", {
-                slidesPerView: 'auto',
-                effect: "coverflow",
-                grabCursor: true,
-                centeredSlides: true,
-                slideToClickedSlide: true,
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: -10,
-                    depth: 150,
-                    modifier: 5,
-                    slideShadows: true
-                },
-                loop: true,
-                on: {
-                    slideChange: function () {
-                        updateLeagueAndUsers();
+                    },
+                    error: function (xhr, status, error) {
+                        $(".loader").hide();
+                        console.error("An error occurred while fetching the users: ", error);
                     }
-                }
-            });
+                });
+            }, 300);
+        }
 
-            updateLeagueAndUsers();
+        function obfuscateUsername(username) {
+            if (username.length <= 4) {
+                return username;
+            }
+            return username.substring(0, 4) + '*****';
+        }
+
+        var swiper = new Swiper(".swiper", {
+            slidesPerView: 'auto',
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slideToClickedSlide: true,
+            coverflowEffect: {
+                rotate: 0,
+                stretch: -10,
+                depth: 150,
+                modifier: 5,
+                slideShadows: true
+            },
+            loop: true,
+            on: {
+                slideChange: function () {
+                    updateLeagueAndUsers();
+                }
+            }
         });
-    </script>
+
+        $('.floating-button').on('click', function () {
+            if (currentUserLeague) {
+                var foundSlide = false;
+                $('.swiper-slide').each(function (index, element) {
+                    if ($(element).find('img').data('league') === currentUserLeague) {
+                        swiper.slideToLoop(index);
+
+                        updateLeagueAndUsers(function () {
+                            if (currentUserRank) {
+                                var $leaderboard = $('.leaderboard');
+                                var $userRow = $leaderboard.find('.highlight-user');
+                                if ($userRow.length) {
+                                    $leaderboard.scrollTop($userRow.offset().top - $leaderboard.offset().top + $leaderboard.scrollTop());
+                                }
+                            }
+                        });
+
+                        foundSlide = true; 
+                        return false;  
+                    }
+                });
+
+                
+                if (!foundSlide) {
+                    console.log("Current user's league slide not found.");
+                }
+            }
+        });
+
+        updateLeagueAndUsers();
+    });
+</script>
+
 }

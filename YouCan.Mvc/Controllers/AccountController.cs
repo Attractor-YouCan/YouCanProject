@@ -36,7 +36,7 @@ public class AccountController : Controller
         ICrudService<UserExperience> userExperiance,
         IStringLocalizer<AccountController> localizer,
         IRazorTemplateEngine razorTemplateEngine,
-        ICRUDService<RealOrtTest> realOrtTestManager)
+        ICrudService<RealOrtTest> realOrtTestManager)
     {
         _userService = userService;
         _userManager = userManager;

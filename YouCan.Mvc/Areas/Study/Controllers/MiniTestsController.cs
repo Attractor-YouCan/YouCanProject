@@ -18,9 +18,9 @@ public class MiniTestsController : Controller
     private UserManager<User> _userManager;
     private readonly IImpactModeService _impactModeService;
 
-    public MiniTestsController(ICRUDService<Lesson> lessonService,
-        ICRUDService<UserLessons> userLessonService,
-        ICRUDService<Test> testService, ICRUDService<UserLevel> userLevel,
+    public MiniTestsController(ICrudService<Lesson> lessonService,
+        ICrudService<UserLessons> userLessonService,
+        ICrudService<Test> testService, ICrudService<UserLevel> userLevel,
         UserManager<User> userManager, IImpactModeService impactModeService)
     {
         _testService = testService;

@@ -6,8 +6,8 @@ namespace YouCan.Controllers;
 
 public class AnnouncementController : Controller
 {
-    private readonly ICRUDService<Announcement> _annoucements;
-    public AnnouncementController(ICRUDService<Announcement> announcements)
+    private readonly ICrudService<Announcement> _annoucements;
+    public AnnouncementController(ICrudService<Announcement> announcements)
     {
         _annoucements = announcements;
     }
