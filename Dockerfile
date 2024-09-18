@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Копируем файлы решения и проекты
 COPY ["YouCan.sln", "./"]
-COPY ["YouCan.Mvc.csproj", "./"]
+COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
 COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Service/YouCan.Service.csproj", "YouCan.Service/"]
@@ -21,7 +21,7 @@ COPY . .
 RUN dotnet build "YouCan.sln" -c Release -o /app/build
 
 # Публикация приложения
-RUN dotnet publish "YouCan.Mvc.csproj" -c Release -o /app/publish
+RUN dotnet publish "YouCan.Mvc/YouCan.Mvc.csproj" -c Release -o /app/publish
 
 # Этап выполнения: используем официальный образ ASP.NET Core Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
