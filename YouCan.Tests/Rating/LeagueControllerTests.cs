@@ -62,8 +62,8 @@ public class LeagueControllerTests
         // Expected anonymous objects
         var expectedUsers = new List<object>
         {
-            new { Id = 2, FullName = "User 2", AvatarUrl = (string)null, Rank = 2, UserLessonScore = 300 },
-            new { Id = 1, FullName = "User 1", AvatarUrl = (string)null, Rank = 1, UserLessonScore = 150 }
+            new { Id = 2, UserName = (string)null!, FullName = "User 2", AvatarUrl = (string)null!, Rank = 2, UserLessonScore = 300 },
+            new { Id = 1, UserName = (string)null!, FullName = "User 1", AvatarUrl = (string)null!, Rank = 1, UserLessonScore = 150 }
         };
 
         // Act
