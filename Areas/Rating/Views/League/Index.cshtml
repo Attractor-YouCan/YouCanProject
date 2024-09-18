@@ -61,7 +61,8 @@ Layout = "_NavBar";
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+
+<script>
     const leagueNames = {
         bronze: "Бронзовая лига",
         silver: "Серебряная лига",
@@ -72,8 +73,11 @@ Layout = "_NavBar";
 
     $(document).ready(function () {
         var debounceTimeout;
+        var currentUser = '@User.Identity.Name';
+        var currentUserLeague = null;
+        var currentUserRank = null;
 
-        function updateLeagueAndUsers() {
+        function updateLeagueAndUsers(callback) {
             clearTimeout(debounceTimeout);
 
             debounceTimeout = setTimeout(function () {
@@ -87,40 +91,69 @@ Layout = "_NavBar";
                     type: 'GET',
                     data: { leagueName: leagueName },
                     success: function (data) {
-                        $(".loader").hide(); 
-
-                        console.log("Received data:", data);
-
-                     
+                        $(".loader").hide();
                         var users = data.$values;
 
                         if (Array.isArray(users)) {
                             var leaderboardHtml = '';
+                            var foundCurrentUser = false;
+
                             $.each(users, function (index, user) {
+                                var maskedUsername = obfuscateUsername(user.fullName);
+                                var isCurrentUser = (user.userName === currentUser);
+
+                                if (isCurrentUser) {
+                                    foundCurrentUser = true; 
+                                    currentUserLeague = leagueName;
+                                    currentUserRank = index + 1;
+                                }
+
                                 leaderboardHtml += `
-                            <div class="row">
-                                <div class="col-1 position">${index + 1}</div>
-                                <div class="col-7 user-info">
-                                    <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
-                                    <span>${user.fullName}</span>
-                                </div>
-                                <div class="col-2 score">${user.userLessonScore} очков</div>
-                            </div>`;
+                                    <div class="row ${isCurrentUser ? 'highlight-user' : ''}">
+                                        <div class="col-1 position">${index + 1}</div>
+                                        <div class="col-7 user-info">
+                                            <img src="${user.avatarUrl}" alt="User" width="40" height="40" />
+                                            <span>${maskedUsername}</span>
+                                        </div>
+                                        <div class="col-2 score">${user.userLessonScore} очков</div>
+                                    </div>`;
                             });
+
+                            if (!foundCurrentUser) {
+                                currentUserLeague = null;
+                                currentUserRank = null;
+                            }
+
                             $('.leaderboard').html(leaderboardHtml);
+
+                            if (currentUserRank) {
+                                var $leaderboard = $('.leaderboard');
+                                var $userRow = $leaderboard.find('.highlight-user');
+                                if ($userRow.length) {
+                                    $leaderboard.scrollTop($userRow.offset().top - $leaderboard.offset().top + $leaderboard.scrollTop());
+                                }
+                            }
+
+                            if (typeof callback === 'function') callback();
                         } else {
                             console.error("Unexpected data format received from server.");
                         }
                     },
                     error: function (xhr, status, error) {
-                        $(".loader").hide(); 
+                        $(".loader").hide();
                         console.error("An error occurred while fetching the users: ", error);
                     }
                 });
-            }, 300); 
+            }, 300);
         }
 
-     
+        function obfuscateUsername(username) {
+            if (username.length <= 4) {
+                return username;
+            }
+            return username.substring(0, 4) + '*****';
+        }
+
         var swiper = new Swiper(".swiper", {
             slidesPerView: 'auto',
             effect: "coverflow",
@@ -142,8 +175,37 @@ Layout = "_NavBar";
             }
         });
 
-     
+        $('.floating-button').on('click', function () {
+            if (currentUserLeague) {
+                var foundSlide = false;
+                $('.swiper-slide').each(function (index, element) {
+                    if ($(element).find('img').data('league') === currentUserLeague) {
+                        swiper.slideToLoop(index);
+
+                        updateLeagueAndUsers(function () {
+                            if (currentUserRank) {
+                                var $leaderboard = $('.leaderboard');
+                                var $userRow = $leaderboard.find('.highlight-user');
+                                if ($userRow.length) {
+                                    $leaderboard.scrollTop($userRow.offset().top - $leaderboard.offset().top + $leaderboard.scrollTop());
+                                }
+                            }
+                        });
+
+                        foundSlide = true; 
+                        return false;  
+                    }
+                });
+
+                
+                if (!foundSlide) {
+                    console.log("Current user's league slide not found.");
+                }
+            }
+        });
+
         updateLeagueAndUsers();
     });
 </script>
+
 }
