@@ -12,7 +12,7 @@
 
 <div class="container">
     <h1 class="d-md-none text-center profile-title">Профиль</h1>
-    <hr class="d-md-none">
+    <hr class="d-md-none hr-profile">
     <div class="row row-cols-1 row-cols-lg-2">
         <div class="col">
             <div class="mt-md-5 mx-lg-0">
@@ -25,7 +25,7 @@
                             <p class="profile-text-secondary ms-1">Регистрация - @Model.User.CreatedAt?.ToString("MMMM yyyy")</p>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="profile-img-div">
                         <img class="profile-img" src="@Url.Content($"~{Model.User.AvatarUrl}")" alt="avatar">
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     <img class="arrow-img" src="@Url.Content("/profileIcons/arrow.png")">
                 </div>
             </a>
-            <hr>
+            <hr class="hr-profile">
         </div>
     </div>
 
@@ -86,7 +86,7 @@
     @* график *@
     <h2 class="mb-3 mt-4">Опыт за неделю</h2>
     
-    <canvas class="chart" id="myStyledBarChart" ></canvas>
+    <canvas class="chart-profile" id="myStyledBarChart"></canvas>
 
     @* календарь *@
     <h2 class="mb-3 mt-4">Ударный режим</h2>
@@ -171,7 +171,7 @@
     };
 
     let options = {
-        responsive: false,
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
             y: {
