@@ -11,19 +11,21 @@ namespace YouCan.Tests;
 public class MiniTestsControllerTests
 {
 
-    private readonly Mock<ICrudService<Lesson>> _lessonServiceMock;
-    private readonly Mock<ICrudService<UserLessons>> _userLessonServiceMock;
-    private readonly Mock<ICrudService<Test>> _testServiceMock;
-    private readonly Mock<ICrudService<UserLevel>> _userLevelServiceMock;
+    private readonly Mock<ICRUDService<Lesson>> _lessonServiceMock;
+    private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
+    private readonly Mock<ICRUDService<Test>> _testServiceMock;
+    private readonly Mock<ICRUDService<UserLevel>> _userLevelServiceMock;
+    private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly MiniTestsController _controller;
 
     public MiniTestsControllerTests()
     {
-        _lessonServiceMock = new Mock<ICrudService<Lesson>>();
-        _userLessonServiceMock = new Mock<ICrudService<UserLessons>>();
-        _testServiceMock = new Mock<ICrudService<Test>>();
-        _userLevelServiceMock = new Mock<ICrudService<UserLevel>>();
+        _lessonServiceMock = new Mock<ICRUDService<Lesson>>();
+        _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
+        _testServiceMock = new Mock<ICRUDService<Test>>();
+        _userLevelServiceMock = new Mock<ICRUDService<UserLevel>>();
+        _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
@@ -32,7 +34,8 @@ public class MiniTestsControllerTests
             _userLessonServiceMock.Object,
             _testServiceMock.Object,
             _userLevelServiceMock.Object,
-            _userManagerMock.Object
+            _userManagerMock.Object,
+            _impactModeServiceMock.Object
         );
     }
 
@@ -90,14 +93,14 @@ public class MiniTestsControllerTests
                 }
             }
         };
-        var userLesson = new UserLessons { UserId = 1, SubjectId = 1, PassedLevel = 0 };
-
+        var userLesson = new UserLessons { UserId = 1, SubjectId = 1, PassedLevel = 0, IsPassed = true, LessonId = 1};
+        var userLevel = new UserLevel() { UserId = 1, SubjectId = 1, Level = 0 };
         _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
             .ReturnsAsync(currentUser);
         _testServiceMock.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync(test);
         _lessonServiceMock.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync(lesson);
         _userLessonServiceMock.Setup(s => s.GetAll()).Returns(new List<UserLessons> { userLesson }.AsQueryable());
-
+        _userLevelServiceMock.Setup(s => s.GetAll()).Returns(new List<UserLevel> {userLevel});
         var selectedAnswers = new List<TestAnswersModel>
         {
             new TestAnswersModel { TestId = 1, AnswerId = 1 }
@@ -110,7 +113,7 @@ public class MiniTestsControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result);
         var resultData = okResult.Value;
 
-        Assert.Equal(false, resultData.GetType().GetProperty("isPassed")?.GetValue(resultData));
+        Assert.Equal(true, resultData.GetType().GetProperty("isPassed")?.GetValue(resultData));
         Assert.Equal(lesson.Id, resultData.GetType().GetProperty("lessonId")?.GetValue(resultData));
         Assert.Equal((int?)lesson.SubjectId, resultData.GetType().GetProperty("subtopicId")?.GetValue(resultData));
     }

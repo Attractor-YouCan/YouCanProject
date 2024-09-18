@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using YouCan.Mvc.Areas.Admin.ViewModels;
 using YouCan.Mvc.Services;
@@ -17,14 +18,18 @@ public class StudyController : Controller
     private ICrudService<Question> _questionService;
     private ICrudService<Answer> _answerService;
     private IWebHostEnvironment _environment;
+    private readonly UserManager<User> _userManager;
+    private readonly ICRUDService<AdminAction> _adminActions;
 
-    public StudyController(ICrudService<Subject> subjectService, 
-        ICrudService<Lesson> lessonService, 
-        ICrudService<LessonModule> lessonModuleService, 
-        ICrudService<Test> testService, 
-        ICrudService<Question> questionService, 
-        ICrudService<Answer> answerService,
-        IWebHostEnvironment environment)
+    public StudyController(ICRUDService<Subject> subjectService, 
+        ICRUDService<Lesson> lessonService, 
+        ICRUDService<LessonModule> lessonModuleService, 
+        ICRUDService<Test> testService, 
+        ICRUDService<Question> questionService, 
+        ICRUDService<Answer> answerService,
+        IWebHostEnvironment environment,
+        UserManager<User> userManager,
+        ICRUDService<AdminAction> adminActions)
     {
         _subjectService = subjectService;
         _lessonService = lessonService;
@@ -33,6 +38,8 @@ public class StudyController : Controller
         _questionService = questionService;
         _answerService = answerService;
         _environment = environment;
+        _userManager = userManager;
+        _adminActions = adminActions;
     }
 
     public async Task<IActionResult> Index(int? subSubjectId)
@@ -141,6 +148,18 @@ public class StudyController : Controller
                         await _questionService.Update(newQuestion);
                     }
                 }
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "�������� �����",
+                Details = $"{admin.UserName} ������ ����� ���� '{lesson.Title}'"
+            };
+
+            await _adminActions.Update(log);
+
             await _lessonService.Update(lesson);
             return Ok(new {subjectId = lesson.SubjectId});
         }
@@ -273,6 +292,18 @@ public class StudyController : Controller
                     }
                 }
             }
+
+            var admin = await _userManager.GetUserAsync(User);
+
+            var log = new AdminAction()
+            {
+                UserId = admin.Id,
+                Action = "�������������� �����",
+                Details = $"{admin.UserName} ������� ���� '{lesson.Title}'"
+            };
+
+            await _adminActions.Update(log);
+
             await _lessonService.Update(lesson);
             return Ok(new {subjectId = lesson.SubjectId});
         }

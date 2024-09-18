@@ -35,7 +35,8 @@ public class AccountController : Controller
         ICrudService<Tariff> tariffs,
         ICrudService<UserExperience> userExperiance,
         IStringLocalizer<AccountController> localizer,
-        IRazorTemplateEngine razorTemplateEngine)
+        IRazorTemplateEngine razorTemplateEngine,
+        ICRUDService<RealOrtTest> realOrtTestManager)
     {
         _userService = userService;
         _userManager = userManager;
@@ -48,6 +49,7 @@ public class AccountController : Controller
         _localizer = localizer;
         _userExperiance = userExperiance;
         _razorTemplateEngine = razorTemplateEngine;
+        _realOrtTestManager = realOrtTestManager;
     }
 
     [Authorize]
@@ -113,6 +115,23 @@ public class AccountController : Controller
                 WeeklyExperience = weeklyExperience
             };
 
+            var realOrt = _realOrtTestManager.GetAll().FirstOrDefault();
+            if (realOrt != null)
+            {
+                if (realOrt.OrtTestDate != null)
+                {
+                    ViewBag.Countdown = (realOrt.OrtTestDate.Value - DateTime.UtcNow).Days;
+                }
+                else
+                {
+                    ViewBag.Countdown = null;
+                }
+            }
+            else
+            {
+                ViewBag.Countdown = null;
+            }
+
             return View(model);
         }
         return NotFound();
@@ -131,7 +150,9 @@ public class AccountController : Controller
             District = user.Disctrict,
             FullName = user.FullName,
             PhoneNumber = user.PhoneNumber,
+            CreatedAt = user.CreatedAt
         };
+
         return View(viewModel);
     }
 
@@ -163,7 +184,7 @@ public class AccountController : Controller
             }
             user.FullName = model.FullName;
             user.Disctrict = model.District;
-            user.BirthDate = model.BirthDate.ToDateTime(TimeOnly.MinValue);
+            user.BirthDate = model.BirthDate.ToDateTime(TimeOnly.MinValue).ToUniversalTime();
             user.PhoneNumber = model.PhoneNumber;
             await _userManager.UpdateAsync(user);
             return RedirectToAction("Profile");

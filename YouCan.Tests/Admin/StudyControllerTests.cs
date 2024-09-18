@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
@@ -18,6 +20,8 @@ public class StudyControllerTests
     private readonly Mock<ICrudService<Question>> _mockQuestionService;
     private readonly Mock<ICrudService<Answer>> _mockAnswerService;
     private readonly Mock<IWebHostEnvironment> _mockEnvironment;
+    private readonly Mock<ICRUDService<AdminAction>> _mockAdminActions;
+    private readonly Mock<UserManager<User>> _mockUserManager;
     private readonly StudyController _controller;
 
     public StudyControllerTests()
@@ -29,6 +33,11 @@ public class StudyControllerTests
         _mockQuestionService = new Mock<ICrudService<Question>>();
         _mockAnswerService = new Mock<ICrudService<Answer>>();
         _mockEnvironment = new Mock<IWebHostEnvironment>();
+        _mockUserManager = new Mock<UserManager<User>>(
+            new Mock<IUserStore<User>>().Object,
+            null, null, null, null, null, null, null, null
+        );
+        _mockAdminActions = new Mock<ICRUDService<AdminAction>>();
 
         _controller = new StudyController(
             _mockSubjectService.Object,
@@ -37,7 +46,9 @@ public class StudyControllerTests
             _mockTestService.Object,
             _mockQuestionService.Object,
             _mockAnswerService.Object,
-            _mockEnvironment.Object
+            _mockEnvironment.Object,
+            _mockUserManager.Object,
+            _mockAdminActions.Object
         );
     }
     
@@ -96,6 +107,8 @@ public class StudyControllerTests
     [Fact]
     public async Task CreateLesson_Post_Returns_OkResult_When_Valid()
     {
+        var user = new User { Id = 1 };
+        _mockUserManager.Setup(u => u.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
         // Arrange
         var lessonModel = new LessonModel
         {
@@ -149,6 +162,8 @@ public class StudyControllerTests
     [Fact]
     public async Task Edit_Post_Returns_OkResult_When_Valid()
     {
+        var user = new User { Id = 1 };
+        _mockUserManager.Setup(u => u.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
         // Arrange
         var lessonModel = new LessonModel
         {

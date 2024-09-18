@@ -102,7 +102,11 @@ builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExpe
 builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>();
 builder.Services.AddTransient<ICRUDService<Announcement>, CRUDService<Announcement>>();
 
+builder.Services.AddTransient<IRepository<RealOrtTest>, RealOrtTestRepository>();
+builder.Services.AddTransient<ICRUDService<RealOrtTest>, CRUDService<RealOrtTest>>();
+
 builder.Services.AddScoped<TwoFactorService>();
+builder.Services.AddScoped<IImpactModeService, ImpactModeService>();
 
 //After all the dependencies
 builder.Services.AddRazorTemplating();

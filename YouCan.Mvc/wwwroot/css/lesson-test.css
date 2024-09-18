@@ -61,12 +61,14 @@
 }
 
 .close-button {
+    position: relative;
+    top: 20px;
+    left: 20px;
     width: 49px;
     height: 49px;
     border: none;
     background: none;
     cursor: pointer;
-    padding: 0;
 }
 
 .top-layout {
@@ -94,4 +96,10 @@
     color: white;
     border-radius: 10px 0 0 10px;
     transition: width 0.5s;
+}
+
+@media (max-width: 767px) {
+    .close-button {
+        top: 50px;
+    }
 }

@@ -17,13 +17,15 @@ public class TrainTestController : Controller
     private ICrudService<Question> _questionService;
     private ICrudService<QuestionReport> _questionReportService;
     private UserManager<User> _userManager;
+    private readonly IImpactModeService _impactModeService;
 
-    public TrainTestController(ICrudService<PassedQuestion> passedQuestionService, 
-        ICrudService<Subject> subjectService, 
-        ICrudService<QuestionReport> questionReportService,
-        ICrudService<Test> testService, 
-        ICrudService<Question> questionService, 
-        UserManager<User> userManager)
+
+    public TrainTestController(ICRUDService<PassedQuestion> passedQuestionService,
+        ICRUDService<Subject> subjectService,
+        ICRUDService<QuestionReport> questionReportService,
+        ICRUDService<Test> testService,
+        ICRUDService<Question> questionService,
+        UserManager<User> userManager, IImpactModeService impactModeService)
     {
         _passedQuestionService = passedQuestionService;
         _questionReportService = questionReportService;
@@ -31,6 +33,7 @@ public class TrainTestController : Controller
         _testService = testService;
         _questionService = questionService;
         _userManager = userManager;
+        _impactModeService = impactModeService;
     }
 
     public async Task<IActionResult> Index(int subSubjectId)
@@ -136,7 +139,12 @@ public class TrainTestController : Controller
         if (isCorrect)
         {
             user.UserExperiences.Add(new UserExperience { UserId = user.Id, Date = DateTime.UtcNow, ExperiencePoints = 1 });
+
+
             await _userManager.UpdateAsync(user);
+
+            await _impactModeService.UpdateImpactMode(user.StatisticId);
+
         }
         return Json(new { isCorrect });
     }

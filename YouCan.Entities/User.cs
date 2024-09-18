@@ -21,7 +21,7 @@ public class User : IdentityUser<int>
     public int Rank { get; set; }
 
     public int UserLessonScore { get; set; }
-    public int? StatisticId { get; set; }
+    public int StatisticId { get; set; }
     public Statistic? Statistic { get; set; }
     public List<UserExperience>? UserExperiences { get; set; }
     public List<UserLessons>? Lessons { get; set; }

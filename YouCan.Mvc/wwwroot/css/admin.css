@@ -13,7 +13,7 @@
 .youcan {
     font-family: "Coiny", system-ui;
     font-weight: 400;
-    size: 40px;
+    font-size: 40px;
     line-height: 44px;
     margin-top: 61px;
     margin-left: 50px;
@@ -21,13 +21,15 @@
 
 :root {
     --header-height: 3rem;
-    --nav-width: 345px;
+    --nav-width: 345px; /* Ширина открытой панели навигации */
+    --collapsed-nav-width: 60px; /* Ширина свёрнутой панели */
+    --transition-duration: 0.5s; /* Время перехода */
     --first-color: #4723D9;
     --first-color-light: #AFA5D9;
     --white-color: #F7F6FB;
     --body-font: 'Nunito', sans-serif;
     --normal-font-size: 1rem;
-    --z-fixed: 100
+    --z-fixed: 100;
 }
 
 *,
@@ -43,6 +45,7 @@ body {
     font-size: var(--normal-font-size);
     transition: .5s;
     background-color: rgba(243, 242, 247, 1);
+    transition: margin-left var(--transition-duration) ease; /* Плавное изменение отступа */
 }
 
 a {
@@ -75,13 +78,15 @@ a {
 .l-navbar {
     position: fixed;
     top: 0;
-    left: -30%;
+    left: 0;
     width: 345px;
     height: 100vh;
-    background-color: var(--first-color);
     padding: .5rem 1rem 0 0;
-    transition: .5s;
+    transition: transform 0.5s ease;
+    transform: translateX(0); /* Панель видима */
     z-index: 1;
+    background-color: white;
+    border: 1px black;
 }
 
 .nav {
@@ -135,8 +140,13 @@ a {
     left: 0
 }
 
+.l-navbar.show {
+    transform: translateX(0);
+}
+
 .body-pd {
-    padding-left: calc(var(--nav-width) + 1rem)
+    padding-left: calc(var(--nav-width) + 1rem);
+    transition: padding-left .5s;
 }
 
 .active {
@@ -181,14 +191,11 @@ a {
     }
 
     .body-pd {
-        padding-left: calc(var(--nav-width) + 188px)
+        padding-left: calc(var(--nav-width) + 1rem);
+        transition: padding-left .5s;
     }
 }
 
-.l-navbar {
-    background-color: white;
-    border: 1px black;
-}
 
 .nav_logo-name {
     font-family: Coiny;
@@ -222,3 +229,25 @@ a {
     margin-bottom: auto;
     padding-left: 20px;
 }
+
+.btn-toggle-nav {
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+}
+
+.l-navbar.hide-navbar {
+    transform: translateX(-100%); /* Перемещает панель за пределы экрана при скрытии */
+}
+
+.body-pd {
+    padding-left: calc(var(--nav-width) + 1rem); /* Начальное значение при открытой панели навигации */
+    transition: padding-left 0.5s ease; /* Плавное изменение отступа */
+}
+
+.body-pd-expanded {
+    padding-left: 1rem; /* Отступ при скрытой панели навигации */
+}
+

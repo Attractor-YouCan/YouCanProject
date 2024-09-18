@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentPage--;
                 showPage(currentPage);
             }
+            else{
+                window.location.href = '/';
+            }
         });
     });
 

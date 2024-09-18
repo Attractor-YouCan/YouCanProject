@@ -26,6 +26,7 @@ public class AccountControllerTests
     private readonly Mock<ICrudService<UserExperience>> _userExperienceMock;
     private readonly Mock<IStringLocalizer<AccountController>> _localizerMock;
     private readonly Mock<IRazorTemplateEngine> _razorTemplateEngineMock;
+    private readonly Mock<ICRUDService<RealOrtTest>> _realOrtTestMock;
 
     public AccountControllerTests()
     {
@@ -46,6 +47,7 @@ public class AccountControllerTests
         _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
         _tariffsMock = new Mock<ICRUDService<Tariff>>();
         _twoFactorServiceMock = new Mock<TwoFactorService>();  
+        _realOrtTestMock = new Mock<ICRUDService<RealOrtTest>>();
 
         _controller = new AccountController(
             _userServiceMock.Object,
@@ -58,7 +60,8 @@ public class AccountControllerTests
             _tariffsMock.Object,
             _userExperienceMock.Object,
             _localizerMock.Object,
-            _razorTemplateEngineMock.Object);
+            _razorTemplateEngineMock.Object
+            _realOrtTestMock.Object);
     }
 
     [Fact]
@@ -200,7 +203,8 @@ public class AccountControllerTests
             _tariffsMock.Object,
             _userExperienceMock.Object,
             _localizerMock.Object,
-            _razorTemplateEngineMock.Object);
+            _razorTemplateEngineMock.Object
+            _realOrtTestMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
         {

@@ -34,36 +34,64 @@
     </div>
 
     <form class="mx-3" asp-action="Edit" asp-controller="Account" enctype="multipart/form-data">
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+        <div class="row mb-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["Account"]</label>
             <button class="col-auto btn btn-save">@Localizer["Save"]</button>
         </div>
+
         <div class="row mb-3 gap-3 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["ProfilePhoto"]</label>
             <label asp-for="UploadedFile" class="col-auto btn btn-load">@Localizer["SelectFile"]</label>
             <input asp-for="UploadedFile" class="d-none"/>
         </div>
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+
+        <div class="row mb-1 gap-3 justify-content-center align-items-center">
             <p class="col-3 col-sm-2 col-lg-1 text-end p-0"></p>
             <p id="input-file-text" class="p-0 fs-8 form-width">@Localizer["MaxFileSize"]</p>
         </div>
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+
+        <div class="row mb-1 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["FullName"]</label>
-            <input asp-for="FullName" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <!-- Сообщение об ошибке -->
+                <span class="text-danger mb-1 d-block" asp-validation-for="FullName"></span>
+                <!-- Поле ввода -->
+                <input asp-for="FullName" class="form-control-theme" style="max-width: 200px;" />
+            </div>
         </div>
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+
+        <div class="row mb-1 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["PhoneNumber"]</label>
-            <input asp-for="PhoneNumber" type="number" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <!-- Сообщение об ошибке с ограничением ширины и переносом -->
+                <span class="text-danger mb-1 d-block" asp-validation-for="PhoneNumber" style="max-width: 200px; word-wrap: break-word;"></span>
+                <!-- Поле ввода -->
+                <input asp-for="PhoneNumber" type="number" class="form-control-theme" style="max-width: 200px;" />
+            </div>
         </div>
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+
+
+        <div class="row mb-1 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["District"]</label>
-            <input asp-for="District" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <!-- Сообщение об ошибке -->
+                <span class="text-danger mb-1 d-block" asp-validation-for="District"></span>
+                <!-- Поле ввода -->
+                <input asp-for="District" class="form-control-theme" style="max-width: 200px;" />
+            </div>
         </div>
-        <div class="row mb-3 gap-3 justify-content-center align-items-center">
+
+        <div class="row mb-1 justify-content-center align-items-center">
             <label class="col-3 col-sm-2 col-lg-1 text-end p-0 fw-semibold">@Localizer["BirthDate"]</label>
-            <input asp-for="BirthDate" type="date" class="col-auto form-control-theme" />
+            <div class="col-auto">
+                <!-- Сообщение об ошибке -->
+                <span class="text-danger mb-1 d-block" asp-validation-for="BirthDate"></span>
+                <!-- Поле ввода -->
+                <input asp-for="BirthDate" type="date" class="form-control-theme" style="max-width: 200px;" />
+            </div>
         </div>
     </form>
+
     <form class="d-flex justify-content-center" asp-action="LogOut" asp-controller="Account">
         <button type="submit" class="border-0 bg-transparent p-0 text-center d-block fw-bold text-decoration-none link-theme-secondary">@Localizer["Logout"]</button>
     </form>
@@ -73,6 +101,9 @@
 </div>
 
 @section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $('input[type=file]').on('change', function () {
             let file = this.files[0];

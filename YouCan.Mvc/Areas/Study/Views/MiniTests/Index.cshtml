@@ -32,7 +32,7 @@
                 <div class="question mt-4">
                     @question.Content
                 </div>
-                @foreach (var answer in question.Answers)
+                @foreach (var answer in question.Answers.OrderBy( a => a.Id))
                 {
                     <label class="answer mt-4" role="button">
                         <input type="radio" name="answer-@question.Id" value="@answer.Id" class="answer-radio">

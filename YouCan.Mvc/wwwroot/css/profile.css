@@ -9,7 +9,9 @@
     margin-left: auto;
     margin-right: auto;
 }
-
+.hr-profile{
+    width: 90%;
+}
 .link-theme-secondary {
     color: #a6a6a6;
 }
@@ -72,7 +74,7 @@ body {
 }
 
 .profile-text-secondary {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--secondary-text-color);
     padding: 0px;
@@ -182,9 +184,7 @@ body {
     width: 100%;
     border-radius: 8px;
 }
-.statistic{
-    width: 450px;
-}
+
 .profile-stat-card img {
     height: 30px;
     width: 30px;
@@ -217,6 +217,9 @@ body {
 
 .color-study-time {
     background-color: #4C0068;
+}
+.statistic {
+    width: 450px;
 }
 
 /*График*/
@@ -342,12 +345,7 @@ body {
 
 
 
-.tariff-plan {
-    width: 440px;
-    border: 2px solid #C4C4C4;
-    border-radius: 14px;
-    padding: 0px 20px;
-}
+
 
 .tariff-card {
     display: flex;
@@ -386,8 +384,12 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
-
+.tariff-plan {
+    width: 440px;
+    border: 2px solid #C4C4C4;
+    border-radius: 14px;
+    padding: 0px 20px;
+}
 
 .policy-btn {
     padding: 10px 20px;
@@ -401,26 +403,43 @@ body {
     border-radius: 14px;
     cursor: pointer;
 }
-@media (min-width: 1280px) {
-    .container {
-        margin-left: 140px;
-    }
+.chart-profile {
+    border: 2px solid #C4C4C4;
+    padding: 12px;
+    border-radius: 14px;
+    position: relative;
+    max-height: 240px;
+    max-width: 440px
 }
-@media (max-width: 1280px) {
-    .container{
-        margin-left: 140px;
-    }   
+@media (min-width: 425px) {
+    .profile-img-div{
+        padding-right: 2rem;
+    }
 }
 @media (max-width: 768px) {
+    .statistic, .tariff-plan, .policy-btn, .calendar-container {
+        width: 100%;
+    }
+    .chart-profile {
+        max-width: 100%;
+        max-height: 300px;
+    }
+}
+@media (max-width: 425px) {
+    .profile-img-div {
+        padding-right: 2rem;
+    }
+    .chart-profile {
+        max-height: 240px;
+    }
+}
+@media (max-width: 320px) {
+    .chart-profile {
+        max-height: 200px;
+    }
+}
+@media (min-width: 1024px) {
     .container {
-        margin-left: 0px;
-    }
-    .chart {
-        padding: 15px;
-        width: 330px;
-        height: 180px;
-    }
-    .policy-btn {
-        margin-bottom: 70px;
+        margin-left: 7rem;
     }
 }

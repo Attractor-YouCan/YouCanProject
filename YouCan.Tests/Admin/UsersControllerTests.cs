@@ -16,18 +16,19 @@ public class UsersControllerTests
     private readonly Mock<ICrudService<Tariff>> _tariffManagerMock;
     private readonly Mock<IWebHostEnvironment> _envMock;
     private readonly UsersController _controller;
-
+    private readonly Mock<ICRUDService<PassedQuestion>> _passedQuestionMock;
     public UsersControllerTests()
     {
         var userStoreMock = new Mock<IUserStore<User>>();
         _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
         var roleStoreMock = new Mock<IRoleStore<IdentityRole<int>>>();
         _roleManagerMock = new Mock<RoleManager<IdentityRole<int>>>(roleStoreMock.Object, null, null, null, null);
-        _adminActionsMock = new Mock<ICrudService<AdminAction>>();
-        _tariffManagerMock = new Mock<ICrudService<Tariff>>();
+        _adminActionsMock = new Mock<ICRUDService<AdminAction>>();
+        _tariffManagerMock = new Mock<ICRUDService<Tariff>>();
+        _passedQuestionMock = new Mock<ICRUDService<PassedQuestion>>();
         _envMock = new Mock<IWebHostEnvironment>();
 
-        _controller = new UsersController(_userManagerMock.Object, _envMock.Object, _adminActionsMock.Object, _roleManagerMock.Object, _tariffManagerMock.Object);
+        _controller = new UsersController(_userManagerMock.Object, _envMock.Object, _adminActionsMock.Object, _roleManagerMock.Object, _tariffManagerMock.Object, _passedQuestionMock.Object);
     }
 
     [Fact]

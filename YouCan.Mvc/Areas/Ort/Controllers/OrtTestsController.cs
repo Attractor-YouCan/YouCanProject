@@ -28,10 +28,16 @@ public class OrtTestsController : Controller
         User? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null)
             RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(currUser.Id);
+        UserOrtTest? userOrtTest = _userOrtTestService.GetAll().FirstOrDefault(t => t.UserId == currUser.Id);
         if (userOrtTest == null)
         {
-            userOrtTest = new UserOrtTest() { UserId = currUser.Id, IsPassed = false, PassedLevel = 0, OrtTestId = null};
+            userOrtTest = new UserOrtTest()
+            {
+                UserId = currUser.Id, 
+                IsPassed = false, 
+                PassedLevel = 0, 
+                OrtTestId = null
+            };
             await _userOrtTestService.Insert(userOrtTest);
         }
         if (userOrtTest.OrtTest == null)
@@ -43,6 +49,10 @@ public class OrtTestsController : Controller
             else
                 ViewBag.CurrentOrtTestLevel = userOrtTest.OrtTest.OrtLevel - 1;
         }
+
+        var userRoles = await _userManager.GetRolesAsync(currUser);
+        ViewBag.UserRoles = userRoles;
+        
         List<OrtTest> ortTests = _ortTestService.GetAll().ToList();
         return View(ortTests);
     }
@@ -53,22 +63,6 @@ public class OrtTestsController : Controller
         OrtTest? ortTest = await _ortTestService.GetById(ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
-        User? curUser = await _userManager.GetUserAsync(User);
-        if (curUser == null)
-            RedirectToAction("Login", "Account");
-        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(curUser.Id);
-        int currentLevel = 0;
-        if (userOrtTest.OrtTest != null)
-        {
-            if (userOrtTest.IsPassed)
-                currentLevel = (int)userOrtTest.OrtTest.OrtLevel;
-            else
-                currentLevel = (int)(userOrtTest.OrtTest.OrtLevel - 1);
-            if (currentLevel + 1 >= ortTest.OrtLevel)
-                return View(ortTest);
-        }
-        else if(userOrtTest.PassedLevel + 1 >= ortTest.OrtLevel)
-            return View(ortTest);
-        return RedirectToAction("Index");
+        return View(ortTest);
     }
 }
