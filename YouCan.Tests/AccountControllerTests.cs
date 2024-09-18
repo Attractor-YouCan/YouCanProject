@@ -60,7 +60,7 @@ public class AccountControllerTests
             _tariffsMock.Object,
             _userExperienceMock.Object,
             _localizerMock.Object,
-            _razorTemplateEngineMock.Object
+            _razorTemplateEngineMock.Object,
             _realOrtTestMock.Object);
     }
 
@@ -203,7 +203,7 @@ public class AccountControllerTests
             _tariffsMock.Object,
             _userExperienceMock.Object,
             _localizerMock.Object,
-            _razorTemplateEngineMock.Object
+            _razorTemplateEngineMock.Object,
             _realOrtTestMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
