@@ -44,61 +44,61 @@ builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
 builder.Services.AddTransient<IUserCrud, UserCrud>();
 
 builder.Services.AddTransient<IRepository<Answer>, AnswerRepository>();
-builder.Services.AddTransient<ICrudService<Answer>, ICrudService<Answer>>();
+builder.Services.AddTransient<ICrudService<Answer>, CrudService<Answer>>();
 
 builder.Services.AddTransient<IRepository<Lesson>, LessonRepository>();
-builder.Services.AddTransient<ICrudService<Lesson>, ICrudService<Lesson>>();
+builder.Services.AddTransient<ICrudService<Lesson>, CrudService<Lesson>>();
 
 builder.Services.AddTransient<IRepository<LessonModule>, LessonModuleRepository>();
-builder.Services.AddTransient<ICrudService<LessonModule>, ICrudService<LessonModule>>();
+builder.Services.AddTransient<ICrudService<LessonModule>, CrudService<LessonModule>>();
 
 builder.Services.AddTransient<IRepository<OrtTest>, OrtTestRepository>();
-builder.Services.AddTransient<ICrudService<OrtTest>, ICrudService<OrtTest>>();
+builder.Services.AddTransient<ICrudService<OrtTest>, CrudService<OrtTest>>();
 
 builder.Services.AddTransient<IRepository<Question>, QuestionRepository>();
-builder.Services.AddTransient<ICrudService<Question>, ICrudService<Question>>();
+builder.Services.AddTransient<ICrudService<Question>, CrudService<Question>>();
 
 builder.Services.AddTransient<IRepository<Statistic>, Repository<Statistic>>();
-builder.Services.AddTransient<ICrudService<Statistic>, ICrudService<Statistic>>();
+builder.Services.AddTransient<ICrudService<Statistic>, CrudService<Statistic>>();
 
 builder.Services.AddTransient<IRepository<Test>, TestRepository>();
-builder.Services.AddTransient<ICrudService<Test>, ICrudService<Test>>();
+builder.Services.AddTransient<ICrudService<Test>, CrudService<Test>>();
 
 builder.Services.AddTransient<IRepository<UserLessons>, UserLessonsRepository>();
-builder.Services.AddTransient<ICrudService<UserLessons>, ICrudService<UserLessons>>();
+builder.Services.AddTransient<ICrudService<UserLessons>, CrudService<UserLessons>>();
 
 builder.Services.AddTransient<IRepository<UserLevel>, Repository<UserLevel>>();
-builder.Services.AddTransient<ICrudService<UserLevel>, ICrudService<UserLevel>>();
+builder.Services.AddTransient<ICrudService<UserLevel>, CrudService<UserLevel>>();
 
 builder.Services.AddTransient<IRepository<UserOrtTest>, UserOrtTestRepository>();
-builder.Services.AddTransient<ICrudService<UserOrtTest>, ICrudService<UserOrtTest>>();
+builder.Services.AddTransient<ICrudService<UserOrtTest>, CrudService<UserOrtTest>>();
 
 builder.Services.AddTransient<IRepository<OrtInstruction>, Repository<OrtInstruction>>();
-builder.Services.AddTransient<ICrudService<OrtInstruction>, ICrudService<OrtInstruction>>();
+builder.Services.AddTransient<ICrudService<OrtInstruction>, CrudService<OrtInstruction>>();
 
 builder.Services.AddTransient<IRepository<PassedQuestion>, PassedQuestionsRepository>();
-builder.Services.AddTransient<ICrudService<PassedQuestion>, ICrudService<PassedQuestion>>();
+builder.Services.AddTransient<ICrudService<PassedQuestion>, CrudService<PassedQuestion>>();
 
 builder.Services.AddTransient<IRepository<Subject>, SubjectRepository>();
-builder.Services.AddTransient<ICrudService<Subject>, ICrudService<Subject>>();
+builder.Services.AddTransient<ICrudService<Subject>, CrudService<Subject>>();
 
 builder.Services.AddTransient<IRepository<QuestionReport>, QuestionReportRepository>();
-builder.Services.AddTransient<ICrudService<QuestionReport>, ICrudService<QuestionReport>>();
+builder.Services.AddTransient<ICrudService<QuestionReport>, CrudService<QuestionReport>>();
 
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
-builder.Services.AddTransient<ICrudService<Tariff>, ICrudService<Tariff>>();
+builder.Services.AddTransient<ICrudService<Tariff>, CrudService<Tariff>>();
 
 builder.Services.AddTransient<IRepository<League>, LeagueRepository>();
-builder.Services.AddTransient<ICrudService<League>, ICrudService<League>>();
+builder.Services.AddTransient<ICrudService<League>, CrudService<League>>();
 
 builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
-builder.Services.AddTransient<ICrudService<AdminAction>, ICrudService<AdminAction>>();
+builder.Services.AddTransient<ICrudService<AdminAction>, CrudService<AdminAction>>();
 
 builder.Services.AddTransient<IRepository<LessonTime>, LessonTimeRepository>();
-builder.Services.AddTransient<ICrudService<LessonTime>, ICrudService<LessonTime>>();
+builder.Services.AddTransient<ICrudService<LessonTime>, CrudService<LessonTime>>();
 
 builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceRepository>();
-builder.Services.AddTransient<ICrudService<UserExperience>, ICrudService<UserExperience>>();
+builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExperience>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 
