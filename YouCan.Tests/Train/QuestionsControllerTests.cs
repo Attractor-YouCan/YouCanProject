@@ -2,27 +2,26 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
-using YouCan.Areas.Train.Dto;
+using YouCan.Mvc.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.Dto;
 using YouCan.Entities;
-using YouCan.Service.Service;
-using YouCan.Services;
+using YouCan.Service;
 using YouCan.Tests.Services;
 
 namespace YouCan.Tests.Train;
 
 public class QuestionsControllerTests
 {
-    private readonly Mock<ICRUDService<Question>> _questionCrudServiceMock;
-    private readonly Mock<ICRUDService<Subject>> _subjectCrudServiceMock;
+    private readonly Mock<ICrudService<Question>> _questionCrudServiceMock;
+    private readonly Mock<ICrudService<Subject>> _subjectCrudServiceMock;
     private readonly FakeW3RootFileManager _w3RootFileManagerFake;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly QuestionsController _controller;
 
     public QuestionsControllerTests()
     {
-        _questionCrudServiceMock = new Mock<ICRUDService<Question>>();
-        _subjectCrudServiceMock = new Mock<ICRUDService<Subject>>();
+        _questionCrudServiceMock = new Mock<ICrudService<Question>>();
+        _subjectCrudServiceMock = new Mock<ICrudService<Subject>>();
         _w3RootFileManagerFake = new FakeW3RootFileManager();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
@@ -40,7 +39,7 @@ public class QuestionsControllerTests
     {
         // Arrange
         var subjectId = 1;
-        var subject = new Subject { Id = subjectId, SubjectType = SubjectType.Child, UserTestType = Entites.Models.UserTestType.Test };
+        var subject = new Subject { Id = subjectId, SubjectType = SubjectType.Child, UserTestType = Entities.UserTestType.Test };
 
         _subjectCrudServiceMock.Setup(s => s.GetById(subjectId)).ReturnsAsync(subject);
 

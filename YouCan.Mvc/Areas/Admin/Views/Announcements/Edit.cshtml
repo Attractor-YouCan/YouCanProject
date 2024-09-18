@@ -1,0 +1,25 @@
+﻿@using YouCan.Entities
+@model Announcement
+
+@{
+    Layout = "_Admin";
+}
+
+<h2 class="ms-3 mb-3">Редактировать</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" value="@ViewBag.AnnounId"/>
+    <div class="mb-3">
+        <label class="form-label">Заголовок</label>
+        <input type="text" asp-for="Title" value="@Model.Title" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <textarea asp-for="Description" value="@Model.Description" class="form-control" rows="10"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Ссылка на изображение</label>
+        <input asp-for="ImageUrl" class="form-control" />
+    </div>
+    <button class="btn btn-success" type="submit">Изменить</button>
+</form>

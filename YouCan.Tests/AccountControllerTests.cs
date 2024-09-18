@@ -2,30 +2,35 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Moq;
 using Newtonsoft.Json;
-using YouCan.Entites.Models;
+using Razor.Templating.Core;
 using YouCan.Entities;
-using YouCan.Mvc;
-using YouCan.Service.Service;
-using YouCan.ViewModels;
+using YouCan.Mvc.Controllers;
+using YouCan.Mvc.Services.Email;
+using YouCan.Mvc.ViewModels.Account;
+using YouCan.Service;
 
 public class AccountControllerTests
 {
-    private readonly Mock<IUserCRUD> _userServiceMock;
+    private readonly Mock<IUserCrud> _userServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<SignInManager<User>> _signInManagerMock;
     private readonly Mock<IWebHostEnvironment> _environmentMock;
-    private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
-    private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
-    private readonly Mock<ICRUDService<Tariff>> _tariffsMock;
-    private readonly TwoFactorService _twoFactorService;  
+    private readonly Mock<ICrudService<UserLevel>> _userLevelMock;
+    private readonly Mock<ICrudService<UserLessons>> _userLessonServiceMock;
+    private readonly Mock<ICrudService<Tariff>> _tariffsMock;
+    private readonly Mock<TwoFactorService> _twoFactorServiceMock;  
     private readonly AccountController _controller;
-    private readonly Mock<ICRUDService<UserExperience>> _userExperienceMock;
+    private readonly Mock<ICrudService<UserExperience>> _userExperienceMock;
+    private readonly Mock<IStringLocalizer<AccountController>> _localizerMock;
+    private readonly Mock<IRazorTemplateEngine> _razorTemplateEngineMock;
+    private readonly Mock<ICrudService<RealOrtTest>> _realOrtTestMock;
 
     public AccountControllerTests()
     {
-        _userServiceMock = new Mock<IUserCRUD>();
+        _userServiceMock = new Mock<IUserCrud>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null);
@@ -35,22 +40,28 @@ public class AccountControllerTests
             new Mock<IUserClaimsPrincipalFactory<User>>().Object,
             null, null, null, null);
         _environmentMock = new Mock<IWebHostEnvironment>();
-        _userLevelMock = new Mock<ICRUDService<UserLevel>>();
-        _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
-        _tariffsMock = new Mock<ICRUDService<Tariff>>();
-        _twoFactorService = new TwoFactorService();
-        _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
+        _localizerMock = new Mock<IStringLocalizer<AccountController>>();
+        _razorTemplateEngineMock = new Mock<IRazorTemplateEngine>();
+        _userLevelMock = new Mock<ICrudService<UserLevel>>();
+        _userLessonServiceMock = new Mock<ICrudService<UserLessons>>();
+        _userExperienceMock = new Mock<ICrudService<UserExperience>>();
+        _tariffsMock = new Mock<ICrudService<Tariff>>();
+        _twoFactorServiceMock = new Mock<TwoFactorService>();  
+        _realOrtTestMock = new Mock<ICrudService<RealOrtTest>>();
 
         _controller = new AccountController(
             _userServiceMock.Object,
             _userManagerMock.Object,
             _signInManagerMock.Object,
             _environmentMock.Object,
-            _twoFactorService,
+            _twoFactorServiceMock.Object,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,
-            _userExperienceMock.Object);
+            _userExperienceMock.Object,
+            _localizerMock.Object,
+            _razorTemplateEngineMock.Object,
+            _realOrtTestMock.Object);
     }
 
     [Fact]
@@ -190,7 +201,10 @@ public class AccountControllerTests
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,
-            _userExperienceMock.Object);
+            _userExperienceMock.Object,
+            _localizerMock.Object,
+            _razorTemplateEngineMock.Object,
+            _realOrtTestMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
         {

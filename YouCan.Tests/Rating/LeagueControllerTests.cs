@@ -2,21 +2,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using YouCan.Areas.Rating.Controllers;
+using YouCan.Mvc.Areas.Rating.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests.Rating;
 
 public class LeagueControllerTests
 {
-    private readonly Mock<ICRUDService<League>> _leagueServiceMock;
+    private readonly Mock<ICrudService<League>> _leagueServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly LeagueController _controller;
 
     public LeagueControllerTests()
     {
-        _leagueServiceMock = new Mock<ICRUDService<League>>();
+        _leagueServiceMock = new Mock<ICrudService<League>>();
         var store = new Mock<IUserStore<User>>();
         _userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
         _controller = new LeagueController(_leagueServiceMock.Object, _userManagerMock.Object);
@@ -62,8 +62,8 @@ public class LeagueControllerTests
         // Expected anonymous objects
         var expectedUsers = new List<object>
         {
-            new { Id = 2, FullName = "User 2", AvatarUrl = (string)null, Rank = 2, UserLessonScore = 300 },
-            new { Id = 1, FullName = "User 1", AvatarUrl = (string)null, Rank = 1, UserLessonScore = 150 }
+            new { Id = 2, UserName = (string)null!, FullName = "User 2", AvatarUrl = (string)null!, Rank = 2, UserLessonScore = 300 },
+            new { Id = 1, UserName = (string)null!, FullName = "User 1", AvatarUrl = (string)null!, Rank = 1, UserLessonScore = 150 }
         };
 
         // Act

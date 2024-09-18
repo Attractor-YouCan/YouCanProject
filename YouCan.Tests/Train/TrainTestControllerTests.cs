@@ -1,32 +1,32 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
-using YouCan.Areas.Train.ViewModels;
+using YouCan.Mvc.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.ViewModels;
 using YouCan.Entities;
-using YouCan.Service.Service;
-using Newtonsoft.Json.Linq; 
+using YouCan.Service;
 
 namespace YouCan.Tests;
 
 public class TrainTestControllerTests
 {
-    private readonly Mock<ICRUDService<PassedQuestion>> _passedQuestionServiceMock;
-    private readonly Mock<ICRUDService<Subject>> _subjectServiceMock;
-    private readonly Mock<ICRUDService<Test>> _testServiceMock;
-    private readonly Mock<ICRUDService<Question>> _questionServiceMock;
-    private readonly Mock<ICRUDService<QuestionReport>> _questionReportServiceMock;
+    private readonly Mock<ICrudService<PassedQuestion>> _passedQuestionServiceMock;
+    private readonly Mock<ICrudService<Subject>> _subjectServiceMock;
+    private readonly Mock<ICrudService<Test>> _testServiceMock;
+    private readonly Mock<ICrudService<Question>> _questionServiceMock;
+    private readonly Mock<ICrudService<QuestionReport>> _questionReportServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
+    private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly TrainTestController _controller;
 
     public TrainTestControllerTests()
     {
-        _passedQuestionServiceMock = new Mock<ICRUDService<PassedQuestion>>();
-        _subjectServiceMock = new Mock<ICRUDService<Subject>>();
-        _testServiceMock = new Mock<ICRUDService<Test>>();
-        _questionServiceMock = new Mock<ICRUDService<Question>>();
-        _questionReportServiceMock = new Mock<ICRUDService<QuestionReport>>();
-
+        _passedQuestionServiceMock = new Mock<ICrudService<PassedQuestion>>();
+        _subjectServiceMock = new Mock<ICrudService<Subject>>();
+        _testServiceMock = new Mock<ICrudService<Test>>();
+        _questionServiceMock = new Mock<ICrudService<Question>>();
+        _questionReportServiceMock = new Mock<ICrudService<QuestionReport>>();
+        _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null
@@ -38,28 +38,31 @@ public class TrainTestControllerTests
             _questionReportServiceMock.Object,
             _testServiceMock.Object,
             _questionServiceMock.Object,
-            _userManagerMock.Object
+            _userManagerMock.Object,
+            _impactModeServiceMock.Object
         );
     }
-    
+
     [Fact]
     public async Task Index_ReturnsViewResult_WithTestViewModel()
     {
         // Arrange
         var subSubjectId = 1;
         var user = new User { Id = 1 };
-        var test = new Test
+        var question = new Question
         {
+            Id = 1,
             SubjectId = subSubjectId,
-            Questions = new List<Question>
-            {
-                new Question { Id = 1 }
-            }
+            IsPublished = true
         };
         var subject = new Subject { Id = subSubjectId, Name = "Test Subject" };
+        var passedQuestions = new List<PassedQuestion>
+        {
+            new PassedQuestion { UserId = user.Id, QuestionId = 2 } // вопрос, который пользователь уже ответил
+        };
 
         _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
-        _testServiceMock.Setup(ts => ts.GetAll()).Returns(new List<Test> { test }.AsQueryable());
+        _questionServiceMock.Setup(qs => qs.GetAll()).Returns(new List<Question> { question }.AsQueryable());
         _subjectServiceMock.Setup(ss => ss.GetAll()).Returns(new List<Subject> { subject }.AsQueryable());
         _passedQuestionServiceMock.Setup(pqs => pqs.GetAll()).Returns(new List<PassedQuestion>().AsQueryable());
 
@@ -74,7 +77,7 @@ public class TrainTestControllerTests
         Assert.NotNull(model.CurrentQuestion);
         Assert.IsType<PageViewModel>(model.PageViewModel);
     }
-    
+
     [Fact]
     public async Task GetNextQuestion_ReturnsPartialViewResult_WithQuestion()
     {

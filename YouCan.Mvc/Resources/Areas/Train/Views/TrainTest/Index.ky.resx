@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <data name="WrongQuestion" xml:space="preserve">
+    <value>Туура эмес суроо</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Жиберүү</value>
+  </data>
+  <data name="ReportTextPlaceholder" xml:space="preserve">
+    <value>Маселени сүрөттөө</value>
+  </data>
+  <data name="ReportQuestion" xml:space="preserve">
+    <value>Туура эмес суроо тууралуу билдирүү</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
+  <data name="NoQuestions" xml:space="preserve">
+    <value>Суроолор азырынча жок!</value>
+  </data>
+  <data name="NextQuestion" xml:space="preserve">
+    <value>Кийинки суроо</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Тамамдоо</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Жабуу</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Жооп берүү</value>
+  </data>
+</root>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <!-- This comment is optional and can be used to describe the contents of the RESX file. -->
+  <data name="RemoteCheckBirthDate" xml:space="preserve">
+    <value>Туулган күн келечектеги дата болбойт же 100 жылдан эрте болбошу керек!</value>
+  </data>
+  <data name="BirthDateRequired" xml:space="preserve">
+    <value>Туулган күндү киргизиңиз!</value>
+  </data>
+  <data name="ConfirmPasswordCompare" xml:space="preserve">
+    <value>Паролдор дал келбейт, кайра аракет кылыңыз!</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Паролду текшерүү талаасын толтуруңуз!</value>
+  </data>
+  <data name="DistrictRequired" xml:space="preserve">
+    <value>Район талаасын толтуруңуз!</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Электрондук почтанын дареги туура эмес</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Эл почта талаасын толтуруңуз!</value>
+  </data>
+  <data name="FirstNameRequired" xml:space="preserve">
+    <value>Исим талаасын толтуруңуз!</value>
+  </data>
+  <data name="LastNameRequired" xml:space="preserve">
+    <value>Теги талаасын толтуруңуз!</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Пароль талаасын толтуруңуз!</value>
+  </data>
+  <data name="PhoneNumberRegularExpression" xml:space="preserve">
+    <value>x-сан (0-9) форматында толтуруңуз: 0 xxx xx xx xx</value>
+  </data>
+  <data name="PhoneNumberRequired" xml:space="preserve">
+    <value>Телефон номерин толтуруңуз!</value>
+  </data>
+  <data name="RemoteCheckEmail" xml:space="preserve">
+    <value>Бул электрондук почта уже катталган!</value>
+  </data>
+  <data name="RemoteCheckPhoneNumber" xml:space="preserve">
+    <value>Бул телефон номер уже катталган!</value>
+  </data>
+  <data name="RemoteCheckUserName" xml:space="preserve">
+    <value>Бул никнейм уже алынган!</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>Никнейм талаасын толтуруңуз!</value>
+  </data>
+</root>

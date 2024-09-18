@@ -2,10 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Admin.Controllers;
-using YouCan.Entites.Models;
+using YouCan.Mvc.Areas.Admin.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests.Admin;
 
@@ -13,22 +12,23 @@ public class UsersControllerTests
 {
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<RoleManager<IdentityRole<int>>> _roleManagerMock;
-    private readonly Mock<ICRUDService<AdminAction>> _adminActionsMock;
-    private readonly Mock<ICRUDService<Tariff>> _tariffManagerMock;
+    private readonly Mock<ICrudService<AdminAction>> _adminActionsMock;
+    private readonly Mock<ICrudService<Tariff>> _tariffManagerMock;
     private readonly Mock<IWebHostEnvironment> _envMock;
     private readonly UsersController _controller;
-
+    private readonly Mock<ICrudService<PassedQuestion>> _passedQuestionMock;
     public UsersControllerTests()
     {
         var userStoreMock = new Mock<IUserStore<User>>();
         _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
         var roleStoreMock = new Mock<IRoleStore<IdentityRole<int>>>();
         _roleManagerMock = new Mock<RoleManager<IdentityRole<int>>>(roleStoreMock.Object, null, null, null, null);
-        _adminActionsMock = new Mock<ICRUDService<AdminAction>>();
-        _tariffManagerMock = new Mock<ICRUDService<Tariff>>();
+        _adminActionsMock = new Mock<ICrudService<AdminAction>>();
+        _tariffManagerMock = new Mock<ICrudService<Tariff>>();
+        _passedQuestionMock = new Mock<ICrudService<PassedQuestion>>();
         _envMock = new Mock<IWebHostEnvironment>();
 
-        _controller = new UsersController(_userManagerMock.Object, _envMock.Object, _adminActionsMock.Object, _roleManagerMock.Object, _tariffManagerMock.Object);
+        _controller = new UsersController(_userManagerMock.Object, _envMock.Object, _adminActionsMock.Object, _roleManagerMock.Object, _tariffManagerMock.Object, _passedQuestionMock.Object);
     }
 
     [Fact]

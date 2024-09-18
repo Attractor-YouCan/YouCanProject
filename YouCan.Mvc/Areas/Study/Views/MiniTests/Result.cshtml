@@ -1,0 +1,33 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@model bool
+
+@{
+    ViewBag.Title = @Localizer["PageTitle"];
+    Layout = "_Navbar";
+}
+
+<div class="col-12 col-sm-10 col-md-10 col-lg-8 mx-auto text-center px-5">
+    @if (Model)
+    {
+        <div class="col-12 mx-auto">
+            <img src="~/topicImages/testPassedCheckMark.svg"/>
+            <h5 class="mt-5 text-success">@Localizer["SuccessTitle"]</h5>
+            <img class="mt-4" src="~/topicImages/testPassedEmoji.svg"/>
+            <p class="mt-3 text-success">@Localizer["SuccessDescription"]</p>
+            <a asp-action="Index" asp-controller="Lessons" asp-route-subTopicId="@ViewData["SubtopicId"]" class="btn btn-success px-5 py-2">@Localizer["Next"]</a>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 mx-auto">
+            <img src="~/topicImages/testnotPassedCheckMark.svg"/>
+            <h5 class="mt-5 text-danger">@Localizer["NotPassedTitle"]</h5>
+            <img class="mt-4" src="~/topicImages/testNotPassedEmoji.svg"/>
+            <p class="mt-3 text-danger">@Localizer["NotPassedDescription"]</p>
+            <a asp-action="Index" asp-controller="MiniTests" asp-route-lessonId="@ViewData["LessonId"]" class="btn btn-danger px-5 py-2">@Localizer["StartAgain"]</a>
+        </div>
+    }
+</div>
+

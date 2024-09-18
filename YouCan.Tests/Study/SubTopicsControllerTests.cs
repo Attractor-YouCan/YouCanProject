@@ -1,21 +1,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Study.Controllers;
+using YouCan.Mvc.Areas.Study.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests;
 
 public class SubTopicsControllerTests
 { 
-    private readonly Mock<ICRUDService<Subject>> _subjectServiceMock;
+    private readonly Mock<ICrudService<Subject>> _subjectServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock; 
     private readonly SubTopicsController _controller;
 
     public SubTopicsControllerTests()
     {
-        _subjectServiceMock = new Mock<ICRUDService<Subject>>();
+        _subjectServiceMock = new Mock<ICrudService<Subject>>();
         _userManagerMock = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
         _controller = new SubTopicsController(_subjectServiceMock.Object, _userManagerMock.Object);
     }

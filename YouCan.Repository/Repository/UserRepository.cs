@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 {
@@ -21,12 +21,12 @@ public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 
     public IEnumerable<T> GetAll()
     {
-        return entitis.Include("Statistic").Include("UserExperiences").AsEnumerable();
+        return entitis.Include("Statistic").Include("UserExperiences").Include("League").Include("Tariff").AsEnumerable();
     }
 
     public async Task<T> Get(int id)
     {
-        return await entitis.Include("Statistic").Include("UserExperiences").Include("League").SingleOrDefaultAsync(x => x.Id == id);
+        return await entitis.Include("Statistic").Include("UserExperiences").Include("League").Include("Tariff").SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task Insert(T entity)

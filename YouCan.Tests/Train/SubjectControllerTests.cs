@@ -1,21 +1,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests;
 
 public class SubjectControllerTests
 {
      private readonly SubjectController _controller;
-     private readonly Mock<ICRUDService<Subject>> _subjectServiceMock;
+     private readonly Mock<ICrudService<Subject>> _subjectServiceMock;
      private readonly Mock<UserManager<User>> _userManagerMock;
 
      public SubjectControllerTests()
      {
-         _subjectServiceMock = new Mock<ICRUDService<Subject>>();
+         _subjectServiceMock = new Mock<ICrudService<Subject>>();
          _userManagerMock = new Mock<UserManager<User>>(
              new Mock<IUserStore<User>>().Object,
              null, null, null, null, null, null, null, null);

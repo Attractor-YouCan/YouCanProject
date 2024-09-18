@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Пробный тесттин жыйынтыгы</value>
+  </data>
+  <data name="RightAnswers" xml:space="preserve">
+    <value>Туура жооптор</value>
+  </data>
+  <data name="AmountAnswers" xml:space="preserve">
+    <value>Жалпы жооптордун саны</value>
+  </data>
+  <data name="AmountPoints" xml:space="preserve">
+    <value>Жалпы балл саны</value>
+  </data>
+  <data name="SpentTime" xml:space="preserve">
+    <value>Жумшалган мүнөттөр</value>
+  </data>
+  <data name="TestPoints" xml:space="preserve">
+    <value>Тесттин балл саны</value>
+  </data>
+  <data name="TestId" xml:space="preserve">
+    <value>Тесттин IDси</value>
+  </data>
+</root>

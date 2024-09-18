@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <data name="LeagueBronze" xml:space="preserve">
+    <value>Бронзалык лига</value>
+  </data>
+  <data name="LeagueSilver" xml:space="preserve">
+    <value>Күмүш лига</value>
+  </data>
+  <data name="LeagueGold" xml:space="preserve">
+    <value>Алтын лига</value>
+  </data>
+  <data name="LeaguePlatinum" xml:space="preserve">
+    <value>Платина лига</value>
+  </data>
+  <data name="LeagueDiamond" xml:space="preserve">
+    <value>Алмаз лига</value>
+  </data>
+  <data name="WhereAmIButton" xml:space="preserve">
+    <value>Мен кайда?</value>
+  </data>
+</root>
