@@ -15,14 +15,17 @@ public class TestsController : Controller
     private ICRUDService<OrtTest> _ortTestService;
     private ICRUDService<UserOrtTest> _userOrtTestService;
     private UserManager<User> _userManager;
+    private readonly IImpactModeService _impactModeService;
 
     public TestsController(ICRUDService<OrtTest> ortTestService,
         ICRUDService<UserOrtTest> userOrtTestService,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        IImpactModeService impactModeService)
     {
         _ortTestService = ortTestService;
         _userOrtTestService = userOrtTestService;
         _userManager = userManager;
+        _impactModeService = impactModeService;
     }
 
     [HttpGet]
@@ -107,9 +110,15 @@ public class TestsController : Controller
     }
 
     [HttpGet]
-    public IActionResult Result(List<OrtTestResultModel> ortTestResultModels)
+    public async Task<IActionResult> Result(List<OrtTestResultModel> ortTestResultModels)
     {
+        User user = await _userManager.GetUserAsync(User);
+        await _impactModeService.UpdateImpactMode(user.StatisticId);
         return View(ortTestResultModels);
     }
+
+
+
+    
 
 }

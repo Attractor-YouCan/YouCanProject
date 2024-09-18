@@ -103,6 +103,7 @@ builder.Services.AddTransient<IRepository<RealOrtTest>, RealOrtTestRepository>()
 builder.Services.AddTransient<ICRUDService<RealOrtTest>, CRUDService<RealOrtTest>>();
 
 builder.Services.AddScoped<TwoFactorService>();
+builder.Services.AddScoped<IImpactModeService, ImpactModeService>();
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();

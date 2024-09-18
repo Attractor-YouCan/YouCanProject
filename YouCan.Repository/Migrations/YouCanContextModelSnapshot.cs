@@ -1014,6 +1014,9 @@ namespace YouCan.Repository.Migrations
                     b.Property<DateTime?>("ImpactModeStart")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("LastStudyDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("Streak")
                         .HasColumnType("integer");
 
@@ -1269,7 +1272,7 @@ namespace YouCan.Repository.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<int?>("StatisticId")
+                    b.Property<int>("StatisticId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("TariffEndDate")
@@ -1639,7 +1642,9 @@ namespace YouCan.Repository.Migrations
 
                     b.HasOne("YouCan.Entities.Statistic", "Statistic")
                         .WithMany()
-                        .HasForeignKey("StatisticId");
+                        .HasForeignKey("StatisticId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("YouCan.Entites.Models.Tariff", "Tariff")
                         .WithMany("Users")

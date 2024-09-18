@@ -141,7 +141,9 @@ public class AccountController : Controller
             District = user.Disctrict,
             FullName = user.FullName,
             PhoneNumber = user.PhoneNumber,
+            CreatedAt = user.CreatedAt
         };
+
         return View(viewModel);
     }
 
@@ -173,7 +175,7 @@ public class AccountController : Controller
             }
             user.FullName = model.FullName;
             user.Disctrict = model.District;
-            user.BirthDate = model.BirthDate.ToDateTime(TimeOnly.MinValue);
+            user.BirthDate = model.BirthDate.ToDateTime(TimeOnly.MinValue).ToUniversalTime();
             user.PhoneNumber = model.PhoneNumber;
             await _userManager.UpdateAsync(user);
             return RedirectToAction("Profile");
