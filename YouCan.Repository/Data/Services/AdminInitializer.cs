@@ -186,7 +186,7 @@ public class AdminInitializer
                 StudyMinutes = new TimeSpan(2, 30, 0),
                 ImpactModeStart = new DateTime(2024, 9, 10, 0, 0, 0, DateTimeKind.Utc),
                 ImpactModeEnd = new DateTime(2024, 9, 16, 0, 0, 0, DateTimeKind.Utc),
-                LastStudyDate = new DateTime(2024, 9, 16, 0, 0, 0, DateTimeKind.Utc),
+                LastStudyDate = new DateTime(2024, 9, 17, 0, 0, 0, DateTimeKind.Utc),
             },
             StatisticId = 1,
             UserExperiences = {
@@ -195,7 +195,7 @@ public class AdminInitializer
             new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 14, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 10 },
             new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 13, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 50 },
             new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 12, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 100 },
-            new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 11, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 35 },
+            new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 18, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 35 },
             new UserExperience { UserId = 5, Date = new DateTime(2024, 9, 17, 0, 0, 0, DateTimeKind.Utc), ExperiencePoints = 75 }
             },
             Rank = 7,
