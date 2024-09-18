@@ -1,12 +1,13 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using YouCan.Mvc.Services;
-using YouCan.Mvc.Services.Email;
+using YouCan.Entities;
+using YouCan.Mvc;
 using YouCan.Repository;
 using YouCan.Service;
-using YouCan.Entities;
+using YouCan.Mvc.Services;
+using YouCan.Mvc.Services.Email;
 using YouCan.Repository.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,69 +41,70 @@ builder.Services.AddScoped<LeagueRepository>();
 builder.Services.AddHostedService<TariffCheckService>();
 
 builder.Services.AddTransient<IRepository<User>, UserRepository<User>>();
-builder.Services.AddTransient<IUserCRUD, UserCRUD>();
+builder.Services.AddTransient<IUserCrud, UserCrud>();
 
 builder.Services.AddTransient<IRepository<Answer>, AnswerRepository>();
-builder.Services.AddTransient<ICRUDService<Answer>, CRUDService<Answer>>();
+builder.Services.AddTransient<ICrudService<Answer>, ICrudService<Answer>>();
 
 builder.Services.AddTransient<IRepository<Lesson>, LessonRepository>();
-builder.Services.AddTransient<ICRUDService<Lesson>, CRUDService<Lesson>>();
+builder.Services.AddTransient<ICrudService<Lesson>, ICrudService<Lesson>>();
 
 builder.Services.AddTransient<IRepository<LessonModule>, LessonModuleRepository>();
-builder.Services.AddTransient<ICRUDService<LessonModule>, CRUDService<LessonModule>>();
+builder.Services.AddTransient<ICrudService<LessonModule>, ICrudService<LessonModule>>();
 
 builder.Services.AddTransient<IRepository<OrtTest>, OrtTestRepository>();
-builder.Services.AddTransient<ICRUDService<OrtTest>, CRUDService<OrtTest>>();
+builder.Services.AddTransient<ICrudService<OrtTest>, ICrudService<OrtTest>>();
 
 builder.Services.AddTransient<IRepository<Question>, QuestionRepository>();
-builder.Services.AddTransient<ICRUDService<Question>, CRUDService<Question>>();
+builder.Services.AddTransient<ICrudService<Question>, ICrudService<Question>>();
 
 builder.Services.AddTransient<IRepository<Statistic>, Repository<Statistic>>();
-builder.Services.AddTransient<ICRUDService<Statistic>, CRUDService<Statistic>>();
+builder.Services.AddTransient<ICrudService<Statistic>, ICrudService<Statistic>>();
 
 builder.Services.AddTransient<IRepository<Test>, TestRepository>();
-builder.Services.AddTransient<ICRUDService<Test>, CRUDService<Test>>();
+builder.Services.AddTransient<ICrudService<Test>, ICrudService<Test>>();
 
 builder.Services.AddTransient<IRepository<UserLessons>, UserLessonsRepository>();
-builder.Services.AddTransient<ICRUDService<UserLessons>, CRUDService<UserLessons>>();
+builder.Services.AddTransient<ICrudService<UserLessons>, ICrudService<UserLessons>>();
 
 builder.Services.AddTransient<IRepository<UserLevel>, Repository<UserLevel>>();
-builder.Services.AddTransient<ICRUDService<UserLevel>, CRUDService<UserLevel>>();
+builder.Services.AddTransient<ICrudService<UserLevel>, ICrudService<UserLevel>>();
 
 builder.Services.AddTransient<IRepository<UserOrtTest>, UserOrtTestRepository>();
-builder.Services.AddTransient<ICRUDService<UserOrtTest>, CRUDService<UserOrtTest>>();
+builder.Services.AddTransient<ICrudService<UserOrtTest>, ICrudService<UserOrtTest>>();
 
 builder.Services.AddTransient<IRepository<OrtInstruction>, Repository<OrtInstruction>>();
-builder.Services.AddTransient<ICRUDService<OrtInstruction>, CRUDService<OrtInstruction>>();
+builder.Services.AddTransient<ICrudService<OrtInstruction>, ICrudService<OrtInstruction>>();
 
 builder.Services.AddTransient<IRepository<PassedQuestion>, PassedQuestionsRepository>();
-builder.Services.AddTransient<ICRUDService<PassedQuestion>, CRUDService<PassedQuestion>>();
+builder.Services.AddTransient<ICrudService<PassedQuestion>, ICrudService<PassedQuestion>>();
 
 builder.Services.AddTransient<IRepository<Subject>, SubjectRepository>();
-builder.Services.AddTransient<ICRUDService<Subject>, CRUDService<Subject>>();
+builder.Services.AddTransient<ICrudService<Subject>, ICrudService<Subject>>();
 
 builder.Services.AddTransient<IRepository<QuestionReport>, QuestionReportRepository>();
-builder.Services.AddTransient<ICRUDService<QuestionReport>, CRUDService<QuestionReport>>();
+builder.Services.AddTransient<ICrudService<QuestionReport>, ICrudService<QuestionReport>>();
 
 builder.Services.AddTransient<IRepository<Tariff>, TariffRepository>();
-builder.Services.AddTransient<ICRUDService<Tariff>, CRUDService<Tariff>>();
+builder.Services.AddTransient<ICrudService<Tariff>, ICrudService<Tariff>>();
 
 builder.Services.AddTransient<IRepository<League>, LeagueRepository>();
-builder.Services.AddTransient<ICRUDService<League>, CRUDService<League>>();
+builder.Services.AddTransient<ICrudService<League>, ICrudService<League>>();
 
 builder.Services.AddTransient<IRepository<AdminAction>, AdminActionRepository>();
-builder.Services.AddTransient<ICRUDService<AdminAction>, CRUDService<AdminAction>>();
+builder.Services.AddTransient<ICrudService<AdminAction>, ICrudService<AdminAction>>();
 
 builder.Services.AddTransient<IRepository<LessonTime>, LessonTimeRepository>();
-builder.Services.AddTransient<ICRUDService<LessonTime>, CRUDService<LessonTime>>();
+builder.Services.AddTransient<ICrudService<LessonTime>, ICrudService<LessonTime>>();
 
-builder.Services.AddTransient<IRepository<UserExperience>, UserExperianceRepository>();
-builder.Services.AddTransient<ICRUDService<UserExperience>, CRUDService<UserExperience>>();
+builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceRepository>();
+builder.Services.AddTransient<ICrudService<UserExperience>, ICrudService<UserExperience>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
+
 var services = scope.ServiceProvider;
 try
 {

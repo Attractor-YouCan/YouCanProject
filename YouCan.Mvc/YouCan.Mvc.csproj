@@ -136,4 +136,8 @@
       <ProjectReference Include="..\YouCan.Service\YouCan.Service.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="appsettings.json" />
+    </ItemGroup>
+
 </Project>

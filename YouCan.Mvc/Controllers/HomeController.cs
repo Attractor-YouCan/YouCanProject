@@ -8,4 +8,14 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    public async Task<IActionResult> TermsOfUse()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> PrivacyPolicy()
+    {
+        return View();
+    }
 }
