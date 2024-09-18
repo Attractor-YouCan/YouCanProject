@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 using YouCan.Entities;
 
-namespace YouCan.Repository;
+namespace YouCan.Repository.Services;
 
 public class SubjectInitializer
 {
@@ -23,7 +21,7 @@ public class SubjectInitializer
             new Subject(){Id = 4, Name = "Математика 2", ImageUrl = "/topicImages/mathematics2icon.png", ParentId = 1, SubjectType = SubjectType.Child},
             new Subject(){Id = 5, Name = "Аналогия", ImageUrl = "/topicImages/analogyIcon.png", ParentId = 2, SubjectType = SubjectType.Parent},
             new Subject(){Id = 6, Name = "Грамматика", ImageUrl = "/topicImages/grammarIcon.png", ParentId = 2, SubjectType = SubjectType.Child},
-            new Subject(){Id = 7, Name = "Чтение и понимание", ImageUrl = "/topicImages/readUnderstIcon.png", ParentId = 2, SubjectType = SubjectType.Child, UserTestType = Entites.Models.UserTestType.Test},
+            new Subject(){Id = 7, Name = "Чтение и понимание", ImageUrl = "/topicImages/readUnderstIcon.png", ParentId = 2, SubjectType = SubjectType.Child, UserTestType = YouCan.Entities.UserTestType.Test},
             new Subject(){Id = 8, Name = "Аналогия", ImageUrl = "/topicImages/analogyIcon.png", ParentId = 5, SubjectType = SubjectType.Child},
             new Subject(){Id = 9, Name = "Дополнение предложений", ImageUrl = "/topicImages/readUnderstIcon.png", ParentId = 5, SubjectType = SubjectType.Child}
         );

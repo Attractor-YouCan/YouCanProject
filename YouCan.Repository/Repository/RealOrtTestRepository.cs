@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using YouCan.Entites.Models;
+using YouCan.Entities;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class RealOrtTestRepository : IRepository<RealOrtTest>
 {

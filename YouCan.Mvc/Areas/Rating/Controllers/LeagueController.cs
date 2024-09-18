@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 using YouCan.ViewModels;
 
 
@@ -12,11 +12,11 @@ namespace YouCan.Areas.Rating.Controllers
     [Area("Rating")]
     public class LeagueController : Controller
     {
-        private readonly ICRUDService<League> _leagueRepository;
+        private readonly ICrudService<League> _leagueRepository;
         //private readonly LeagueRepository _leagueRepository;
         private UserManager<User> _userManager;
 
-        public LeagueController(ICRUDService<League> leagueRepository, UserManager<User> userManager)
+        public LeagueController(ICrudService<League> leagueRepository, UserManager<User> userManager)
         {
             _leagueRepository = leagueRepository;
             _userManager = userManager;

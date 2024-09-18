@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YouCan.Entites.Models;
-using YouCan.Service.Service;
+using YouCan.Entities;
+using YouCan.Service;
 
 namespace YouCan.Controllers;
 

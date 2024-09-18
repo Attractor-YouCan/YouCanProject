@@ -1,6 +1,4 @@
-﻿using YouCan.Entities;
-
-namespace YouCan.Areas.Admin.ViewModels;
+﻿namespace YouCan.Mvc.Areas.Admin.ViewModels;
 
 public class TestsModel
 {

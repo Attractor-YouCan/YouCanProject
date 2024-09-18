@@ -6,8 +6,8 @@ using YouCan.Mvc.Services;
 using YouCan.Mvc.Services.Email;
 using YouCan.Repository;
 using YouCan.Service;
-using YouCan.Services;
 using YouCan.Entities;
+using YouCan.Repository.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -100,10 +100,10 @@ builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceReposit
 builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExperience>>();
 
 builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>();
-builder.Services.AddTransient<ICrudService<Announcement>, CRUDService<Announcement>>();
+builder.Services.AddTransient<ICrudService<Announcement>, CrudService<Announcement>>();
 
 builder.Services.AddTransient<IRepository<RealOrtTest>, RealOrtTestRepository>();
-builder.Services.AddTransient<ICrudService<RealOrtTest>, CRUDService<RealOrtTest>>();
+builder.Services.AddTransient<ICrudService<RealOrtTest>, CrudService<RealOrtTest>>();
 
 builder.Services.AddScoped<TwoFactorService>();
 builder.Services.AddScoped<IImpactModeService, ImpactModeService>();

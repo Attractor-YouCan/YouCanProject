@@ -1,7 +1,6 @@
-﻿namespace YouCan.Service.Service
+﻿namespace YouCan.Service;
+
+public interface IImpactModeService
 {
-    public interface IImpactModeService
-    {
-        Task UpdateImpactMode(int statisticId);
-    }
+    Task UpdateImpactMode(int statisticId);
 }

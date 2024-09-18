@@ -24,6 +24,7 @@ public class AccountController : Controller
     private readonly ICrudService<Tariff> _tariffs;
     private readonly IStringLocalizer _localizer;
     private readonly IRazorTemplateEngine _razorTemplateEngine;
+    private readonly ICrudService<RealOrtTest> _realOrtTestManager;
 
     public AccountController(IUserCrud userService, 
         UserManager<User> userManager,

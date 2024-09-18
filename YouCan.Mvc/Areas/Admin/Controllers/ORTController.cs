@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Drawing;
-using YouCan.Areas.Admin.ViewModels;
-using YouCan.Entites.Models;
 using YouCan.Entities;
-using YouCan.Service.Service;
-using YouCan.Services;
+using YouCan.Mvc.Areas.Admin.ViewModels;
+using YouCan.Mvc.Services;
+using YouCan.Service;
 
 namespace YouCan.Areas.Admin.Controllers;
 [Area("Admin")]

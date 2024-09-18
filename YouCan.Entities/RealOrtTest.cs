@@ -1,6 +1,4 @@
-﻿using YouCan.Entities;
-
-namespace YouCan.Entites.Models;
+﻿namespace YouCan.Entities;
 
 public class RealOrtTest : EntityBase
 {
