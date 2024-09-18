@@ -29,6 +29,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<LessonTime> LessonTimes { get; set; }
     public DbSet<UserExperience> UserExperiences { get; set; }
     public DbSet<Announcement> Announcements { get; set; }
+    public DbSet<RealOrtTest> RealOrtTests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -104,6 +105,13 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
         );
 
         new TrainTestInitializer(modelBuilder).Seed();
+
+        modelBuilder.Entity<RealOrtTest>()
+            .HasData(
+            new RealOrtTest()
+            {
+                Id = 1,
+            });
     }
     public YouCanContext(DbContextOptions<YouCanContext> options) : base(options) { }
 

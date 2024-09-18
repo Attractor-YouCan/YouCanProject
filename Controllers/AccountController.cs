@@ -19,6 +19,7 @@ public class AccountController : Controller
     private ICRUDService<UserLessons> _userLessonService;
     private readonly TwoFactorService _twoFactorService;
     private readonly ICRUDService<Tariff> _tariffs;
+    private readonly ICRUDService<RealOrtTest> _realOrtTestManager;
 
 
     public AccountController(IUserCRUD userService,
@@ -29,7 +30,8 @@ public class AccountController : Controller
         ICRUDService<UserLevel> userLevel,
         ICRUDService<UserLessons> userLessonService,
         ICRUDService<Tariff> tariffs,
-        ICRUDService<UserExperience> userExperiance)
+        ICRUDService<UserExperience> userExperiance,
+        ICRUDService<RealOrtTest> realOrtTestManager)
     {
         _userService = userService;
         _userManager = userManager;
@@ -40,6 +42,7 @@ public class AccountController : Controller
         _userLessonService = userLessonService;
         _tariffs = tariffs;
         _userExperiance = userExperiance;
+        _realOrtTestManager = realOrtTestManager;
     }
 
 
@@ -105,6 +108,16 @@ public class AccountController : Controller
                 UserLessons = userLessons,
                 WeeklyExperience = weeklyExperience
             };
+
+            var realOrt = _realOrtTestManager.GetAll().FirstOrDefault();
+            if (realOrt != null)
+            {
+                ViewBag.Countdown = (realOrt.OrtTestDate.Value - DateTime.UtcNow).Days;
+            }
+            else
+            {
+                ViewBag.Countdown = null;
+            }
 
             return View(model);
         }

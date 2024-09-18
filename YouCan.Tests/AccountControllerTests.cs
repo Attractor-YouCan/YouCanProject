@@ -23,6 +23,7 @@ public class AccountControllerTests
     private readonly Mock<TwoFactorService> _twoFactorServiceMock;  
     private readonly AccountController _controller;
     private readonly Mock<ICRUDService<UserExperience>> _userExperienceMock;
+    private readonly Mock<ICRUDService<RealOrtTest>> _realOrtTestMock;
 
     public AccountControllerTests()
     {
@@ -41,6 +42,7 @@ public class AccountControllerTests
         _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
         _tariffsMock = new Mock<ICRUDService<Tariff>>();
         _twoFactorServiceMock = new Mock<TwoFactorService>();  
+        _realOrtTestMock = new Mock<ICRUDService<RealOrtTest>>();
 
         _controller = new AccountController(
             _userServiceMock.Object,
@@ -51,7 +53,8 @@ public class AccountControllerTests
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,
-            _userExperienceMock.Object);
+            _userExperienceMock.Object,
+            _realOrtTestMock.Object);
     }
 
     [Fact]
@@ -191,7 +194,8 @@ public class AccountControllerTests
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,
-            _userExperienceMock.Object);
+            _userExperienceMock.Object,
+            _realOrtTestMock.Object);
 
         var result = await controller.ConfirmCode(new ConfirmCodeRequest
         {
