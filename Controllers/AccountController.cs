@@ -112,7 +112,14 @@ public class AccountController : Controller
             var realOrt = _realOrtTestManager.GetAll().FirstOrDefault();
             if (realOrt != null)
             {
-                ViewBag.Countdown = (realOrt.OrtTestDate.Value - DateTime.UtcNow).Days;
+                if (realOrt.OrtTestDate != null)
+                {
+                    ViewBag.Countdown = (realOrt.OrtTestDate.Value - DateTime.UtcNow).Days;
+                }
+                else
+                {
+                    ViewBag.Countdown = null;
+                }
             }
             else
             {
