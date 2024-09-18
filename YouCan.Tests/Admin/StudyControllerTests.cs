@@ -4,42 +4,40 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using System.Security.Claims;
-using YouCan.Areas.Admin.Controllers;
-using YouCan.Areas.Admin.ViewModels;
-using YouCan.Entites.Models;
+using YouCan.Mvc.Areas.Admin.Controllers;
+using YouCan.Mvc.Areas.Admin.ViewModels;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests.Admin;
 
 public class StudyControllerTests
 {
-    private readonly Mock<ICRUDService<Subject>> _mockSubjectService;
-    private readonly Mock<ICRUDService<Lesson>> _mockLessonService;
-    private readonly Mock<ICRUDService<LessonModule>> _mockLessonModuleService;
-    private readonly Mock<ICRUDService<Test>> _mockTestService;
-    private readonly Mock<ICRUDService<Question>> _mockQuestionService;
-    private readonly Mock<ICRUDService<Answer>> _mockAnswerService;
+    private readonly Mock<ICrudService<Subject>> _mockSubjectService;
+    private readonly Mock<ICrudService<Lesson>> _mockLessonService;
+    private readonly Mock<ICrudService<LessonModule>> _mockLessonModuleService;
+    private readonly Mock<ICrudService<Test>> _mockTestService;
+    private readonly Mock<ICrudService<Question>> _mockQuestionService;
+    private readonly Mock<ICrudService<Answer>> _mockAnswerService;
     private readonly Mock<IWebHostEnvironment> _mockEnvironment;
-    private readonly Mock<ICRUDService<AdminAction>> _mockAdminActions;
+    private readonly Mock<ICrudService<AdminAction>> _mockAdminActions;
     private readonly Mock<UserManager<User>> _mockUserManager;
     private readonly StudyController _controller;
 
     public StudyControllerTests()
     {
-        _mockSubjectService = new Mock<ICRUDService<Subject>>();
-        _mockLessonService = new Mock<ICRUDService<Lesson>>();
-        _mockLessonModuleService = new Mock<ICRUDService<LessonModule>>();
-        _mockTestService = new Mock<ICRUDService<Test>>();
-        _mockQuestionService = new Mock<ICRUDService<Question>>();
-        _mockAnswerService = new Mock<ICRUDService<Answer>>();
+        _mockSubjectService = new Mock<ICrudService<Subject>>();
+        _mockLessonService = new Mock<ICrudService<Lesson>>();
+        _mockLessonModuleService = new Mock<ICrudService<LessonModule>>();
+        _mockTestService = new Mock<ICrudService<Test>>();
+        _mockQuestionService = new Mock<ICrudService<Question>>();
+        _mockAnswerService = new Mock<ICrudService<Answer>>();
         _mockEnvironment = new Mock<IWebHostEnvironment>();
         _mockUserManager = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null
         );
-        _mockAdminActions = new Mock<ICRUDService<AdminAction>>();
+        _mockAdminActions = new Mock<ICrudService<AdminAction>>();
 
         _controller = new StudyController(
             _mockSubjectService.Object,

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using YouCan.Entities;
 
-namespace YouCan.Services;
+namespace YouCan.Repository.Services;
 
 public class AdminInitializer
 {

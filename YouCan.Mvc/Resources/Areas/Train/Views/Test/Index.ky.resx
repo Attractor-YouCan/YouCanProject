@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="TrainTestTitle" xml:space="preserve">
+    <value>Тестти өтүү</value>
+  </data>
+  <data name="TrainTestSubtitle" xml:space="preserve">
+    <value>Окуткуңуз келеби? Бул тестти өтүп, балл топтоңуз!</value>
+  </data>
+  <data name="Train" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Тренировка</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Бул жерде сиз ОРТ үчүн өз суроолоруңузду түзүп, бөлүшө аласыз, &lt;br/&gt;ошондой эле башка колдонуучулар түзгөн суроолору бар тесттерди өтө аласыз.<br />ошондой эле башка колдонуучулар түзгөн суроолору бар тесттерди өтө аласыз.</value>
+  </data>
+  <data name="CreateTestTitle" xml:space="preserve">
+    <value>Тест түзүү</value>
+  </data>
+  <data name="CreateTestSubtitle" xml:space="preserve">
+    <value>Түзүлгөн суроо үчүн балл алыңыз. Билимдериңиз менен бөлүшүңүз!</value>
+  </data>
+</root>

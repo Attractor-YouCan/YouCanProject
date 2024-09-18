@@ -1,0 +1,19 @@
+﻿<script>
+    $('#languageSwitch').on('change', function () {
+        var selectedCulture = this.checked ? 'ky' : 'ru';
+
+        var returnUrl = '@Context.Request.Path';
+
+        $.ajax({
+            url: '@Url.Action("SetLanguage", "Language")',
+            type: 'POST',
+            data: {
+                culture: selectedCulture,
+                returnUrl: returnUrl
+            },
+            success: function () {
+                window.location.href = returnUrl;
+            }
+        });
+    });
+</script>

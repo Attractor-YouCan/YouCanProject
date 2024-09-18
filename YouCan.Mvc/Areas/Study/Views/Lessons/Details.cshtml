@@ -1,0 +1,77 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@model Lesson
+
+@{
+    ViewBag.Title = @Localizer["PageTitle"];
+    Layout = "_Navbar";
+}
+<link rel="stylesheet" href="~/css/lesson-module.css" asp-append-version="true" />
+
+<div class="container content pb-6rem">
+    <h1>@Model.Title</h1>
+    <p class="subtitle">
+       @Model.SubTitle
+    </p>
+
+    <div style="position: relative; padding-top: 55%; width: 100%">
+        <iframe src="@Model.VideoUrl" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe>
+    </div>
+
+    <h2 class="section-title">@Localizer["Description"]</h2>
+    <p class="description">
+        @Model.Description
+    </p>
+
+    <h2 class="section-title">@Localizer["AboutLesson"]</h2>
+    <p class="lecture">
+        @Model.Lecture
+    </p>
+      @foreach (var module in Model.LessonModules)
+      {
+        <h2 class="section-title">@module.Title</h2>
+        <div class="formula-box">
+            @Html.Raw(module.Content)
+            @if(module.PhotoUrl != null)
+            {
+                <img src="@Url.Content(module.PhotoUrl)" />
+            }
+        </div>
+      } 
+    <a class="test-button" asp-controller="MiniTests" asp-action="Index" asp-route-lessonId="@Model.Id">@Localizer["Test"]</a>
+</div>
+@section Scripts{
+    <script src="~/js/time-tracker.js" asp-append-version="true"></script>
+    <script>
+
+        trackTime();
+        let startTime = Date.now();
+
+        window.addEventListener("beforeunload", function () {
+            let endTime = Date.now();
+            let timeSpent = endTime - startTime;
+
+            let data = {
+                timeSpent: timeSpent,
+                lessonId: @Model.Id // ID текущего урока
+            };
+            console.log(JSON.stringify(data));
+            fetch('@Url.Action("LogTime", "Lessons", new { Area = "Study" })', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                keepalive: true // Ensures the request is completed even if the page is closed
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to log time:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error logging time:', error);
+            });
+        });
+
+    </script>
+}

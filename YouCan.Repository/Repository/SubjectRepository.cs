@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class SubjectRepository : IRepository<Subject>
 {
@@ -29,6 +29,7 @@ public class SubjectRepository : IRepository<Subject>
             .Include(s => s.SubSubjects)
             .Include(s => s.Lessons)
                 .ThenInclude(l => l.LessonModules)
+            .Include(s => s.SubjectLocalizations)
             .AsEnumerable();
     }
 

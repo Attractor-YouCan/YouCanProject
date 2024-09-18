@@ -1,31 +1,31 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
-using YouCan.Areas.Train.ViewModels;
+using YouCan.Mvc.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.ViewModels;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests;
 
 public class TrainTestControllerTests
 {
-    private readonly Mock<ICRUDService<PassedQuestion>> _passedQuestionServiceMock;
-    private readonly Mock<ICRUDService<Subject>> _subjectServiceMock;
-    private readonly Mock<ICRUDService<Test>> _testServiceMock;
-    private readonly Mock<ICRUDService<Question>> _questionServiceMock;
-    private readonly Mock<ICRUDService<QuestionReport>> _questionReportServiceMock;
+    private readonly Mock<ICrudService<PassedQuestion>> _passedQuestionServiceMock;
+    private readonly Mock<ICrudService<Subject>> _subjectServiceMock;
+    private readonly Mock<ICrudService<Test>> _testServiceMock;
+    private readonly Mock<ICrudService<Question>> _questionServiceMock;
+    private readonly Mock<ICrudService<QuestionReport>> _questionReportServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly TrainTestController _controller;
 
     public TrainTestControllerTests()
     {
-        _passedQuestionServiceMock = new Mock<ICRUDService<PassedQuestion>>();
-        _subjectServiceMock = new Mock<ICRUDService<Subject>>();
-        _testServiceMock = new Mock<ICRUDService<Test>>();
-        _questionServiceMock = new Mock<ICRUDService<Question>>();
-        _questionReportServiceMock = new Mock<ICRUDService<QuestionReport>>();
+        _passedQuestionServiceMock = new Mock<ICrudService<PassedQuestion>>();
+        _subjectServiceMock = new Mock<ICrudService<Subject>>();
+        _testServiceMock = new Mock<ICrudService<Test>>();
+        _questionServiceMock = new Mock<ICrudService<Question>>();
+        _questionReportServiceMock = new Mock<ICrudService<QuestionReport>>();
         _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             new Mock<IUserStore<User>>().Object,

@@ -1,12 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Mvc", "YouCan.Mvc.csproj", "{D8744237-95F9-4A64-937A-46B5CD07AED2}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Mvc", "YouCan.Mvc\YouCan.Mvc.csproj", "{D8744237-95F9-4A64-937A-46B5CD07AED2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Entites", "YouCan.Entites\YouCan.Entites.csproj", "{89C03032-6238-49F1-8626-67F211953085}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Entities", "YouCan.Entities\YouCan.Entities.csproj", "{89C03032-6238-49F1-8626-67F211953085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Repository", "YouCan.Repository\YouCan.Repository.csproj", "{6D1647E2-5E7B-41B6-A4B4-45D93D15D0DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Repository", "YouCan.Repository\YouCan.Repository.csproj", "{6D1647E2-5E7B-41B6-A4B4-45D93D15D0DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Service", "YouCan.Service\YouCan.Service.csproj", "{8AD56F19-A321-45B2-B6C5-8FAA036DF484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouCan.Service", "YouCan.Service\YouCan.Service.csproj", "{8AD56F19-A321-45B2-B6C5-8FAA036DF484}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouCan.Tests", "YouCan.Tests\YouCan.Tests.csproj", "{EDFE53BF-F764-439A-BDE0-14163A0DB243}"
 EndProject
@@ -36,5 +39,8 @@ Global
 		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDFE53BF-F764-439A-BDE0-14163A0DB243}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

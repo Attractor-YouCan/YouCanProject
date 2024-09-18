@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\YouCan.Mvc.csproj" />
+      <ProjectReference Include="..\YouCan.Mvc\YouCan.Mvc.csproj" />
     </ItemGroup>
 
 </Project>

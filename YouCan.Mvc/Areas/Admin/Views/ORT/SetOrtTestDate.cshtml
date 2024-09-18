@@ -1,0 +1,18 @@
+﻿@using YouCan.Entities
+@model RealOrtTest
+
+@{
+    Layout = "_Admin";
+}
+
+<h1 class="mb-2 mt-2">Выставить дату ОРТ теста</h1>
+<div class="container">
+    <form asp-action="SetOrtTestDate" method="post">
+        <input asp-for="Id" type="hidden" value="@ViewBag.Id"/>
+        <div class="mb-3">
+            <label class="form-label">Выберите дату орт теста</label>
+            <input type="date" class="form-control" asp-for="OrtTestDate"/>
+        </div>
+        <button class="btn btn-success mt-3 mb-2">Назначить</button>
+    </form>
+</div>

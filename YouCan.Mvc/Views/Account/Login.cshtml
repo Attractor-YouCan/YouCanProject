@@ -1,0 +1,89 @@
+@using YouCan.Mvc.ViewModels.Account
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@model LoginViewModel
+
+@{
+    ViewBag.Title = Localizer["PageTitle"];
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/landing.css">
+    <link rel="stylesheet" href="~/css/auth.css">
+    <title>Register</title>
+</head>
+<body>
+<section class="section1">
+    <div class="background" >
+        <div class="stars"></div>
+    </div>
+    <div class="section1_container">
+        <div class="auth-main">
+           
+            <div class="navContainer">
+                <nav>
+                    <a asp-controller="Home" asp-action="Index" class="linkLogo">
+                        <img src="~/landingIcons/YouCanLogo.png" alt="logo">
+                        <span class="textLogo">youcan</span>
+                    </a>
+
+                    @await Html.PartialAsync("_LanguageSwitch")
+
+                </nav>
+            </div>
+            <div class="underNavbarSection">
+                <a asp-controller="Home" asp-action="Index" class="back-button">
+                    <img src="~/authIcons/backArrow.png" alt="">
+                </a>
+            </div>
+            <div class="authForm">
+                <h1>Вход</h1>
+                <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+                    <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
+                    
+                    <div class="input-group">
+                        <label for="email">
+                            <span class="text-danger" asp-validation-for="LoginValue"></span>
+                        </label>
+                        <div class="phone-wrapper">
+                            <input asp-for="LoginValue" type="text" class="form-control" placeholder="@Localizer["Login"]" id="email">
+                        </div>
+                    </div>
+                    <div class="input-group  password-wrapper">
+                        <label for="pass">
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </label>
+                        <div class="password-wrapper">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="@Localizer["Password"]" id="pass" aria-describedby="button-addon1">
+                            <span class="toggle-password">
+                                <img src="~/authIcons/eyes-closed.png" alt="passwordEyesIcon" id="toggle-password-icon" width="32" height="32">
+                            </span>
+                        </div>
+                    </div>
+                    <a href="#" class="forgot-password">@Localizer["ForgotPassword"]</a>
+                    <button type="submit" class="loginBtn">@Localizer["LoginButton"]</button>
+                </form>
+                <p class="terms">
+                        @Localizer.Links("TermsAgreement", x => Html.ActionLink(x, "TermsOfUse", "Home"), x => Html.ActionLink(x, "PrivacyPolicy", "Home"))
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    @section Scripts {
+        <script src="~/js/landing.js"></script>
+        <script src="~/js/auth.js"></script>
+        @await Html.PartialAsync("_LanguageSwitchScript")
+    }
+
+</body>
+</html>
+
+

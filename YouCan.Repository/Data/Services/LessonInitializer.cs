@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 
-namespace YouCan.Services;
+namespace YouCan.Repository.Services;
 
 public class LessonInitializer
 {

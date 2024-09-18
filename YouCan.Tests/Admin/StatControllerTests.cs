@@ -1,19 +1,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Admin.Controllers;
-using YouCan.Areas.Admin.ViewModels;
-using YouCan.Entites.Models;
+using YouCan.Mvc.Areas.Admin.Controllers;
+using YouCan.Mvc.Areas.Admin.ViewModels;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests.Admin;
 
 public class StatControllerTests
 {
     private readonly Mock<UserManager<User>> _userManagerMock;
-    private readonly Mock<ICRUDService<Test>> _testServiceMock;
-    private readonly Mock<ICRUDService<Tariff>> _tariffServiceMock;
+    private readonly Mock<ICrudService<Test>> _testServiceMock;
+    private readonly Mock<ICrudService<Tariff>> _tariffServiceMock;
     private readonly StatController _controller;
 
     public StatControllerTests()
@@ -22,8 +21,8 @@ public class StatControllerTests
             new Mock<IUserStore<User>>().Object,
             null, null, null, null, null, null, null, null
         );
-        _testServiceMock = new Mock<ICRUDService<Test>>();
-        _tariffServiceMock = new Mock<ICRUDService<Tariff>>();
+        _testServiceMock = new Mock<ICrudService<Test>>();
+        _tariffServiceMock = new Mock<ICrudService<Tariff>>();
 
         _controller = new StatController(_userManagerMock.Object, _testServiceMock.Object, _tariffServiceMock.Object);
     }

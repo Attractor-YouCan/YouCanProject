@@ -1,19 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Train.Controllers;
+using YouCan.Mvc.Areas.Train.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
 
 namespace YouCan.Tests;
 
 public class TestControllerTests
 {
      private readonly TestController _controller;
-     private readonly Mock<ICRUDService<Test>> _testServiceMock;
+     private readonly Mock<ICrudService<Test>> _testServiceMock;
 
      public TestControllerTests()
      {
-         _testServiceMock = new Mock<ICRUDService<Test>>();
+         _testServiceMock = new Mock<ICrudService<Test>>();
          _controller = new TestController(_testServiceMock.Object);
      }
 

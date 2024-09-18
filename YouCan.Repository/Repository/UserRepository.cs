@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class UserRepository<T> : IRepository<T> where T : IdentityUser<int>
 {

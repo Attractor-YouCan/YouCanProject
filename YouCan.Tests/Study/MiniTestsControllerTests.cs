@@ -1,30 +1,30 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using YouCan.Areas.Study.Controllers;
-using YouCan.Areas.Study.ViewModels;
+using YouCan.Mvc.Areas.Study.Controllers;
 using YouCan.Entities;
-using YouCan.Service.Service;
+using YouCan.Service;
+using YouCan.Mvc.Areas.Ort.ViewModels;
 
 namespace YouCan.Tests;
 
 public class MiniTestsControllerTests
 {
 
-    private readonly Mock<ICRUDService<Lesson>> _lessonServiceMock;
-    private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
-    private readonly Mock<ICRUDService<Test>> _testServiceMock;
-    private readonly Mock<ICRUDService<UserLevel>> _userLevelServiceMock;
+    private readonly Mock<ICrudService<Lesson>> _lessonServiceMock;
+    private readonly Mock<ICrudService<UserLessons>> _userLessonServiceMock;
+    private readonly Mock<ICrudService<Test>> _testServiceMock;
+    private readonly Mock<ICrudService<UserLevel>> _userLevelServiceMock;
     private readonly Mock<IImpactModeService> _impactModeServiceMock;
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly MiniTestsController _controller;
 
     public MiniTestsControllerTests()
     {
-        _lessonServiceMock = new Mock<ICRUDService<Lesson>>();
-        _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
-        _testServiceMock = new Mock<ICRUDService<Test>>();
-        _userLevelServiceMock = new Mock<ICRUDService<UserLevel>>();
+        _lessonServiceMock = new Mock<ICrudService<Lesson>>();
+        _userLessonServiceMock = new Mock<ICrudService<UserLessons>>();
+        _testServiceMock = new Mock<ICrudService<Test>>();
+        _userLevelServiceMock = new Mock<ICrudService<UserLevel>>();
         _impactModeServiceMock = new Mock<IImpactModeService>();
         _userManagerMock = new Mock<UserManager<User>>(
             Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);

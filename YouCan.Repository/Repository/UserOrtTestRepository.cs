@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YouCan.Entities;
 
-namespace YouCan.Repository.Repository;
+namespace YouCan.Repository;
 
 public class UserOrtTestRepository : IRepository<UserOrtTest>
 {

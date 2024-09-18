@@ -36,7 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\YouCan.Entites\YouCan.Entites.csproj" />
+        <ProjectReference Include="..\YouCan.Entities\YouCan.Entities.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,6 +45,10 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>
