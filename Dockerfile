@@ -9,7 +9,7 @@ WORKDIR /app
 # Копируем файлы решения и проекты
 COPY ["YouCan.sln", "./"]
 COPY ["YouCan.Mvc/YouCan.Mvc.csproj", "YouCan.Mvc/"]
-COPY ["YouCan.Entites/YouCan.Entites.csproj", "YouCan.Entites/"]
+COPY ["YouCan.Entities/YouCan.Entities.csproj", "YouCan.Entities/"]
 COPY ["YouCan.Repository/YouCan.Repository.csproj", "YouCan.Repository/"]
 COPY ["YouCan.Service/YouCan.Service.csproj", "YouCan.Service/"]
 COPY ["YouCan.Tests/YouCan.Tests.csproj", "YouCan.Tests/"]
