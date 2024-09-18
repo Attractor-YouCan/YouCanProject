@@ -48,8 +48,8 @@ public class MiniTestsController : Controller
             .FirstOrDefault(ul => ul.UserId == currentUser.Id && ul.SubjectId == lesson.SubjectId);
 
         UserLessons? userLesson = _userLessonService.GetAll()
-            .FirstOrDefault(ul => ul.UserId == currentUser.Id && 
-                ul.SubjectId == lesson.SubjectId && 
+            .FirstOrDefault(ul => ul.UserId == currentUser.Id &&
+                ul.SubjectId == lesson.SubjectId &&
                 ul.LessonId == lesson.Id);
 
         int passingCount = (
@@ -64,13 +64,16 @@ public class MiniTestsController : Controller
 
             userLesson.IsPassed = true;
 
+            currentUser.UserExperiences.Add(new UserExperience { UserId = currentUser.Id, Date = DateTime.UtcNow, ExperiencePoints = 5 });
+            await _userManager.UpdateAsync(currentUser);
+
             await _userLevel.Update(userLevels);
             // await _userManager.UpdateAsync(currentUser);
             await _userLessonService.Update(userLesson);
         }
         var testResult = new
         {
-            isPassed = passingCount>=2,
+            isPassed = passingCount >= 2,
             lessonId = lesson.Id,
             subtopicId = lesson.SubjectId
         };

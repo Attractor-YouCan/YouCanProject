@@ -52,6 +52,7 @@
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="~/js/time-tracker.js" asp-append-version="true"></script>
     <script>
     
    
@@ -183,6 +184,8 @@
                 
                    // Initial render
                 renderQuestions();
+
+                trackTime();
             });
     </script>
 }

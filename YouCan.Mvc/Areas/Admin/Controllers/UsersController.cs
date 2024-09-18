@@ -33,7 +33,13 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var users =  _userManager.Users.Include(u => u.Tariff).OrderBy(u => u.Id).ToList();
+        var users =  _userManager.Users
+            .Include(u => u.Tariff)
+            .Include(u => u.Statistic)
+            .Include(u => u.Lessons)
+            .Include(u => u.Tests)
+            .OrderBy(u => u.Id)
+            .ToList();
 
         ViewBag.Roles =  _roleManager.Roles.ToList();
         ViewBag.Tariffs = _tariffManager.GetAll().ToList();

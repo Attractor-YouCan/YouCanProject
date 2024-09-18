@@ -1,0 +1,39 @@
+@model List<YouCan.ViewModels.OrtTestResultModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Navbar";
+    
+    var totalPoints = Model.Sum(result => result.TestPoints);
+}
+
+<link rel="stylesheet" href="~/css/ortTest.css" asp-append-version="true"/>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <div class="total-points text-white py-3 rounded">
+            <h1>Ваш результат: <br class="total-points-br"/> @totalPoints баллов</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @foreach (var result in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card border-primary shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Тест ID: @result.TestId</h5>
+                        <p class="card-text">
+                            <strong>Правильные ответы:</strong> @result.RightsCount <br />
+                            <strong>Общее количество ответов:</strong> @result.QuestionCount <br />
+                            <strong>Минут потрачено:</strong> @result.SpentTimeInMin <br />
+                            <strong>Количество баллов за тест:</strong> @result.TestPoints <br />
+                            <strong>Общее:</strong> @result.PointsSum
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

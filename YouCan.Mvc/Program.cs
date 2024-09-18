@@ -99,6 +99,9 @@ builder.Services.AddTransient<ICrudService<LessonTime>, CrudService<LessonTime>>
 builder.Services.AddTransient<IRepository<UserExperience>, UserExperienceRepository>();
 builder.Services.AddTransient<ICrudService<UserExperience>, CrudService<UserExperience>>();
 
+builder.Services.AddTransient<IRepository<Announcement>, AnnouncementRepository>();
+builder.Services.AddTransient<ICRUDService<Announcement>, CRUDService<Announcement>>();
+
 builder.Services.AddScoped<TwoFactorService>();
 
 //After all the dependencies
@@ -157,12 +160,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

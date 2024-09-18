@@ -50,10 +50,23 @@
                 <img src="~/navbar_icons/profile.png" alt="..." class="bx bx-grid-alt nav_icon profile">
                 <span class="nav_name">@Localizer["Profile"]</span>
             </a>
-            <a href="#" class="nav_link">
-                <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
-                <span class="nav_name">@Localizer["More"]</span>
-            </a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("admin") || User.IsInRole("manager"))
+                {
+                    <a asp-area="Admin" asp-controller="AdminAction" asp-action="Index" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">@Localizer["More"]</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="#" class="nav_link">
+                        <img src="~/navbar_icons/more.png" alt="..." class="bx bx-grid-alt nav_icon more">
+                        <span class="nav_name">@Localizer["More"]</span>
+                    </a>
+                }
+            }
         </div>
     </nav>
 </div>

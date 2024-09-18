@@ -47,18 +47,20 @@ public class TrainTestControllerTests
         // Arrange
         var subSubjectId = 1;
         var user = new User { Id = 1 };
-        var test = new Test
+        var question = new Question
         {
+            Id = 1,
             SubjectId = subSubjectId,
-            Questions = new List<Question>
-            {
-                new Question { Id = 1 }
-            }
+            IsPublished = true
         };
         var subject = new Subject { Id = subSubjectId, Name = "Test Subject" };
-
+        var passedQuestions = new List<PassedQuestion>
+        {
+            new PassedQuestion { UserId = user.Id, QuestionId = 2 } // вопрос, который пользователь уже ответил
+        };
+        
         _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
-        _testServiceMock.Setup(ts => ts.GetAll()).Returns(new List<Test> { test }.AsQueryable());
+        _questionServiceMock.Setup(qs => qs.GetAll()).Returns(new List<Question> { question }.AsQueryable());
         _subjectServiceMock.Setup(ss => ss.GetAll()).Returns(new List<Subject> { subject }.AsQueryable());
         _passedQuestionServiceMock.Setup(pqs => pqs.GetAll()).Returns(new List<PassedQuestion>().AsQueryable());
 

@@ -28,6 +28,7 @@ public class YouCanContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<LessonTime> LessonTimes { get; set; }
     public DbSet<UserExperience> UserExperiences { get; set; }
     public DbSet<SubjectLocalization> SubjectLocalizations { get; set; }
+    public DbSet<Announcement> Announcements { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

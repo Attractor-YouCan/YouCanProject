@@ -5,6 +5,7 @@ using YouCan.Service;
 namespace YouCan.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = "admin, manager")]
 public class AdminActionController : Controller
 {
     private readonly ICrudService<AdminAction> _adminActions;

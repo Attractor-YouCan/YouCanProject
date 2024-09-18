@@ -18,10 +18,10 @@ public class AccountControllerTests
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<SignInManager<User>> _signInManagerMock;
     private readonly Mock<IWebHostEnvironment> _environmentMock;
-    private readonly Mock<ICrudService<UserLevel>> _userLevelMock;
-    private readonly Mock<ICrudService<UserLessons>> _userLessonServiceMock;
-    private readonly Mock<ICrudService<Tariff>> _tariffsMock;
-    private readonly TwoFactorService _twoFactorService;  
+    private readonly Mock<ICRUDService<UserLevel>> _userLevelMock;
+    private readonly Mock<ICRUDService<UserLessons>> _userLessonServiceMock;
+    private readonly Mock<ICRUDService<Tariff>> _tariffsMock;
+    private readonly Mock<TwoFactorService> _twoFactorServiceMock;  
     private readonly AccountController _controller;
     private readonly Mock<ICrudService<UserExperience>> _userExperienceMock;
     private readonly Mock<IStringLocalizer<AccountController>> _localizerMock;
@@ -39,20 +39,20 @@ public class AccountControllerTests
             new Mock<IUserClaimsPrincipalFactory<User>>().Object,
             null, null, null, null);
         _environmentMock = new Mock<IWebHostEnvironment>();
-        _userLevelMock = new Mock<ICrudService<UserLevel>>();
-        _userLessonServiceMock = new Mock<ICrudService<UserLessons>>();
-        _tariffsMock = new Mock<ICrudService<Tariff>>();
-        _twoFactorService = new TwoFactorService();
         _localizerMock = new Mock<IStringLocalizer<AccountController>>();
-        _userExperienceMock = new Mock<ICrudService<UserExperience>>();
         _razorTemplateEngineMock = new Mock<IRazorTemplateEngine>();
+        _userLevelMock = new Mock<ICRUDService<UserLevel>>();
+        _userLessonServiceMock = new Mock<ICRUDService<UserLessons>>();
+        _userExperienceMock = new Mock<ICRUDService<UserExperience>>();
+        _tariffsMock = new Mock<ICRUDService<Tariff>>();
+        _twoFactorServiceMock = new Mock<TwoFactorService>();  
 
         _controller = new AccountController(
             _userServiceMock.Object,
             _userManagerMock.Object,
             _signInManagerMock.Object,
             _environmentMock.Object,
-            _twoFactorService,
+            _twoFactorServiceMock.Object,
             _userLevelMock.Object,
             _userLessonServiceMock.Object,
             _tariffsMock.Object,

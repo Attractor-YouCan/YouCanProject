@@ -92,10 +92,10 @@ public class LessonsController : Controller
     [HttpPost]
     public async Task<IActionResult> LogTime([FromBody] LessonTimeDto model)
     {
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            var lesson = _lessonService.GetById(model.LessonId);
-            if(lesson is null)
+            var lesson = await _lessonService.GetById(model.LessonId);
+            if (lesson is null)
             {
                 return NotFound($"Lesson with id: {model.LessonId} not found");
             }
