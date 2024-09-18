@@ -33,14 +33,11 @@ public class TestsController : Controller
     {
         User? curUser = await _userManager.GetUserAsync(User);
         if (curUser == null)
-            RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account");
         OrtTest? ortTest = await _ortTestService.GetById(ortTestId);
         if (ortTest == null)
             return NotFound("no ort test");
         ViewBag.OrtTestId = ortTest.Id;
-        UserOrtTest? userOrtTest = await _userOrtTestService.GetById(curUser.Id);
-        if (userOrtTest.PassedLevel + 1 < ortTest.OrtLevel)
-            return RedirectToAction("Index", "OrtTests");
         return View(ortTest.Tests);
     }
 
@@ -52,7 +49,9 @@ public class TestsController : Controller
             return BadRequest("No OrtTest Id!");
 
         User? currentUser = await _userManager.GetUserAsync(User);
-        UserOrtTest userOrtTest = await _userOrtTestService.GetById(currentUser.Id);
+        UserOrtTest? userOrtTest =  _userOrtTestService
+            .GetAll()
+            .FirstOrDefault(u => u.UserId == currentUser.Id);
         List<TestAnswersModel> selectedAnswer = testSubmissionModel.SelectedAnswers;
         List<OrtTestModel>? timeSpent = testSubmissionModel.TimeSpent;
         List<Test>? tests = ortTest.Tests;
@@ -93,7 +92,7 @@ public class TestsController : Controller
             });
         }
 
-        userOrtTest!.OrtTestId = ortTest.Id;
+        userOrtTest.OrtTestId = userOrtTest.OrtTestId == null ? ortTest.Id : userOrtTest.OrtTestId;
         userOrtTest.PassedLevel = ortTest.OrtLevel;
         userOrtTest.Points = testPointSum;
         userOrtTest.PassedTimeInMin = passedTimeInMin;
