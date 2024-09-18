@@ -12,8 +12,8 @@ using YouCan.Repository;
 namespace YouCan.Repository.Migrations
 {
     [DbContext(typeof(YouCanContext))]
-    [Migration("20240918123000_Initial2")]
-    partial class Initial2
+    [Migration("20240918130532_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

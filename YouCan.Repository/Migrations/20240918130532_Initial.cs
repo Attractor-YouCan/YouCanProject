@@ -15,6 +15,22 @@ namespace YouCan.Repository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Announcements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Announcements", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -76,13 +92,29 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RealOrtTests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrtTestDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RealOrtTests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Statistics",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Streak = table.Column<int>(type: "integer", nullable: true),
-                    StudyMinutes = table.Column<TimeSpan>(type: "interval", nullable: false)
+                    StudyMinutes = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    ImpactModeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ImpactModeEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastStudyDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,6 +206,29 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubjectLocalizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubjectId = table.Column<int>(type: "integer", nullable: false),
+                    Culture = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Subtitle = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectLocalizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubjectLocalizations_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -184,15 +239,14 @@ namespace YouCan.Repository.Migrations
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Disctrict = table.Column<string>(type: "text", nullable: false),
-                    ImpactModeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ImpactModeEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: false),
                     TariffId = table.Column<int>(type: "integer", nullable: true),
                     TariffStartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TariffEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LeagueId = table.Column<int>(type: "integer", nullable: true),
                     Rank = table.Column<int>(type: "integer", nullable: false),
                     UserLessonScore = table.Column<int>(type: "integer", nullable: false),
-                    StatisticId = table.Column<int>(type: "integer", nullable: true),
+                    StatisticId = table.Column<int>(type: "integer", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -220,7 +274,8 @@ namespace YouCan.Repository.Migrations
                         name: "FK_AspNetUsers_Statistics_StatisticId",
                         column: x => x.StatisticId,
                         principalTable: "Statistics",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Tariffs_TariffId",
                         column: x => x.TariffId,
@@ -392,13 +447,13 @@ namespace YouCan.Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GainingExperience = table.Column<int>(type: "integer", nullable: false),
                     TimeForTestInMin = table.Column<int>(type: "integer", nullable: true),
+                    Text = table.Column<string>(type: "text", nullable: true),
+                    IsPublished = table.Column<bool>(type: "boolean", nullable: false),
                     SubjectId = table.Column<int>(type: "integer", nullable: true),
                     LessonId = table.Column<int>(type: "integer", nullable: true),
                     OrtTestId = table.Column<int>(type: "integer", nullable: true),
-                    Text = table.Column<string>(type: "text", nullable: true),
                     OrtInstructionId = table.Column<int>(type: "integer", nullable: true),
-                    UserId = table.Column<int>(type: "integer", nullable: true),
-                    IsPublished = table.Column<bool>(type: "boolean", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -676,12 +731,17 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "RealOrtTests",
+                columns: new[] { "Id", "OrtTestDate" },
+                values: new object[] { 1, null });
+
+            migrationBuilder.InsertData(
                 table: "Subjects",
                 columns: new[] { "Id", "ImageUrl", "Name", "ParentId", "SubjectType", "UserTestType" },
                 values: new object[,]
                 {
-                    { 1, "/topicImages/mathematics1icon.png", "Mathematics", null, 0, 0 },
-                    { 2, "/topicImages/grammarIcon.png", "Russian", null, 0, 0 }
+                    { 1, "/topicImages/mathematics1icon.png", "Математика", null, 0, 0 },
+                    { 2, "/topicImages/grammarIcon.png", "Русский", null, 0, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -695,17 +755,50 @@ namespace YouCan.Repository.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "SubjectLocalizations",
+                columns: new[] { "Id", "Culture", "Description", "SubjectId", "Subtitle", "Title" },
+                values: new object[,]
+                {
+                    { 1, "ru", null, 1, null, "Математика" },
+                    { 2, "ky", null, 1, null, "Математика" },
+                    { 3, "ru", null, 2, null, "Русский язык" },
+                    { 4, "ky", null, 2, null, "Орус тили" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Subjects",
                 columns: new[] { "Id", "ImageUrl", "Name", "ParentId", "SubjectType", "UserTestType" },
                 values: new object[,]
                 {
-                    { 3, "/topicImages/mathematics1icon.png", "Mathematics1", 1, 1, 0 },
-                    { 4, "/topicImages/mathematics2icon.png", "Mathematics2", 1, 1, 0 },
-                    { 5, "/topicImages/analogyIcon.png", "Analogy", 2, 0, 0 },
-                    { 6, "/topicImages/grammarIcon.png", "Grammar", 2, 1, 0 },
-                    { 7, "/topicImages/readUnderstIcon.png", "Reading and Understanding", 2, 1, 1 },
-                    { 8, "/topicImages/analogyIcon.png", "Analogy", 5, 1, 0 },
-                    { 9, "/topicImages/readUnderstIcon.png", "Addition of Offers", 5, 1, 0 }
+                    { 3, "/topicImages/mathematics1icon.png", "Математика 1", 1, 1, 0 },
+                    { 4, "/topicImages/mathematics2icon.png", "Математика 2", 1, 1, 0 },
+                    { 5, "/topicImages/analogyIcon.png", "Аналогия", 2, 0, 0 },
+                    { 6, "/topicImages/grammarIcon.png", "Грамматика", 2, 1, 0 },
+                    { 7, "/topicImages/readUnderstIcon.png", "Чтение и понимание", 2, 1, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SubjectLocalizations",
+                columns: new[] { "Id", "Culture", "Description", "SubjectId", "Subtitle", "Title" },
+                values: new object[,]
+                {
+                    { 5, "ru", null, 3, null, "Математика 1" },
+                    { 6, "ky", null, 3, null, "Математика 1" },
+                    { 7, "ru", null, 4, null, "Математика 2" },
+                    { 8, "ky", null, 4, null, "Математика 2" },
+                    { 9, "ru", null, 5, null, "Аналогия" },
+                    { 10, "ru", null, 6, null, "Грамматика" },
+                    { 11, "ru", null, 7, null, "Чтение и понимание" },
+                    { 12, "ky", null, 7, null, "Окуу жана тушунуу" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Subjects",
+                columns: new[] { "Id", "ImageUrl", "Name", "ParentId", "SubjectType", "UserTestType" },
+                values: new object[,]
+                {
+                    { 8, "/topicImages/analogyIcon.png", "Аналогия", 5, 1, 0 },
+                    { 9, "/topicImages/readUnderstIcon.png", "Дополнение предложений", 5, 1, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -718,15 +811,25 @@ namespace YouCan.Repository.Migrations
                 columns: new[] { "Id", "AnswersIsImage", "Content", "ImageUrl", "Instruction", "IsPublished", "Point", "SubjectId", "TestId", "Type", "UserId" },
                 values: new object[,]
                 {
-                    { 7, false, "В каком слове вместо точек следует вставить букву с?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 8, false, "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 9, false, "В каком слове вместо точек следует вставить букву з?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 10, false, "В каком предложении подчеркнутое слово употреблено в правильной форме?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 11, false, "Задание, ... нами, не вызывает особых затруднений.", null, "Какое слово следует вставить вместо точек в предложение?", false, null, null, 3, null, null },
-                    { 12, false, "Какое слово является синонимом к слову 'красивый'?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 13, false, "Какое слово является антонимом к слову 'высокий'?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 14, false, "Какое слово является глаголом?", null, "Выберите правильный вариант", false, null, null, 3, null, null },
-                    { 15, false, "Какое слово обозначает предмет?", null, "Выберите правильный вариант", false, null, null, 3, null, null }
+                    { 7, false, "В каком слове вместо точек следует вставить букву с?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 8, false, "В каком предложении подчеркнутое слово можно заменить словом (высохший (-ая, -ее))?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 9, false, "В каком слове вместо точек следует вставить букву з?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 10, false, "В каком предложении подчеркнутое слово употреблено в правильной форме?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 11, false, "Задание, ... нами, не вызывает особых затруднений.", null, "Какое слово следует вставить вместо точек в предложение?", true, null, 6, 3, null, null },
+                    { 12, false, "Какое слово является синонимом к слову 'красивый'?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 13, false, "Какое слово является антонимом к слову 'высокий'?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 14, false, "Какое слово является глаголом?", null, "Выберите правильный вариант", true, null, 6, 3, null, null },
+                    { 15, false, "Какое слово обозначает предмет?", null, "Выберите правильный вариант", true, null, 6, 3, null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SubjectLocalizations",
+                columns: new[] { "Id", "Culture", "Description", "SubjectId", "Subtitle", "Title" },
+                values: new object[,]
+                {
+                    { 13, "ru", null, 8, null, "Аналогия" },
+                    { 14, "ru", null, 9, null, "Дополнение предложений" },
+                    { 15, "ky", null, 9, null, "Суйломго толуктоо" }
                 });
 
             migrationBuilder.InsertData(
@@ -890,6 +993,11 @@ namespace YouCan.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubjectLocalizations_SubjectId",
+                table: "SubjectLocalizations",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subjects_ParentId",
                 table: "Subjects",
                 column: "ParentId");
@@ -968,6 +1076,9 @@ namespace YouCan.Repository.Migrations
                 name: "AdminActions");
 
             migrationBuilder.DropTable(
+                name: "Announcements");
+
+            migrationBuilder.DropTable(
                 name: "Answers");
 
             migrationBuilder.DropTable(
@@ -996,6 +1107,12 @@ namespace YouCan.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionReports");
+
+            migrationBuilder.DropTable(
+                name: "RealOrtTests");
+
+            migrationBuilder.DropTable(
+                name: "SubjectLocalizations");
 
             migrationBuilder.DropTable(
                 name: "UserExperiences");
